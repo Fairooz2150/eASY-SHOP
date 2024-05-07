@@ -76,27 +76,30 @@ module.exports={
        
         });
       },
-      getProductss: (productsIds) => {
+      getCartProducts: (userId) => {
         return new Promise(async (resolve, reject) => {
-            try {
-                console.log('productsIds:', productsIds);
-    
-                // Convert each productId to ObjectId
-                const productsObjectIds = productsIds.map(productId => objectId(productId));
-    
-                // Fetch product details using aggregation
-                let productss = await db.get().collection(collection.PRODUCT_COLLECTION).aggregate([
-                    {
-                        $match: { _id: { $in: productsObjectIds } }
+            let cartItems = await db.get().collection(collection.CART_COLLECTION).aggregate([
+                {
+                    $match: { user: objectId(userId) }
+                },
+                {
+                    $lookup: {
+                        from: collection.PRODUCT_COLLECTION,
+                        let: { prodList: '$products' },
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $in: ['$_id', '$$prodList']
+                                    },
+                                },
+                            },
+                        ],
+                        as: 'cartItem'
                     }
-                ]).toArray();
-    
-                console.log('productss:', productss);
-                resolve(productss);
-            } catch (error) {
-                console.error('Error in getProductss:', error);
-                reject(error);
-            }
+                }
+            ]).toArray();
+            resolve(cartItems[0].cartItem);
         });
     }
     
