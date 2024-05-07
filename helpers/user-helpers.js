@@ -1,6 +1,7 @@
 var db=require('../config/connection')
 var collection=require('../config/collections')
 const bcrypt=require('bcrypt')
+var objectId=require('mongodb').ObjectID
 module.exports={
     doSignup:(userData)=>{
         return new Promise(async(resolve,reject)=>{
@@ -33,5 +34,72 @@ module.exports={
                 resolve({status:false})
             }
         })
+    },
+    addToCart:(proId,userId)=>{
+        return new Promise(async (resolve,reject)=>{
+            let userCart=await db.get().collection(collection.CART_COLLECTION).findOne({user:objectId(userId)})
+            if(userCart){
+                db.get().collection(collection.CART_COLLECTION).
+                updateOne({user:objectId(userId)},
+                {
+                    
+                        $push:{products:objectId(proId)}
+                    
+                }
+            ).then((response)=>{
+             
+                resolve()
+            })    
+            }else{
+                let cartObj={
+                    user:objectId(userId),
+                    products:[objectId(proId)]
+                }
+                db.get().collection(collection.CART_COLLECTION).insertOne(cartObj).then((response)=>{
+                    resolve()
+                })
+            }
+        })
+
+    },
+    getCartProducts:(userId)=>{
+     
+        return new Promise(async(resolve,reject)=>{
+          let cartItems = await db.get().collection(collection.CART_COLLECTION).aggregate([
+            {
+                $match: { user: objectId(userId) }
+            }
+           
+        ])
+        .toArray();
+            resolve (cartItems[0].products);
+       
+        });
+      },
+      getProductss: (productsIds) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                console.log('productsIds:', productsIds);
+    
+                // Convert each productId to ObjectId
+                const productsObjectIds = productsIds.map(productId => objectId(productId));
+    
+                // Fetch product details using aggregation
+                let productss = await db.get().collection(collection.PRODUCT_COLLECTION).aggregate([
+                    {
+                        $match: { _id: { $in: productsObjectIds } }
+                    }
+                ]).toArray();
+    
+                console.log('productss:', productss);
+                resolve(productss);
+            } catch (error) {
+                console.error('Error in getProductss:', error);
+                reject(error);
+            }
+        });
     }
-}
+    
+      }
+
+       
