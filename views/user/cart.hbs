@@ -11,11 +11,11 @@
                 </tr>
             </thead>
             <tbody>
-                    
+                    {{#each products}}
                   <tr>
 
-                    <td><img src="" style="width:70px;height:70px" alt=""></td>
-                    <td></td>
+                    <td><img src="/product-images/{{this._id}}.jpg" style="width:70px;height:70px" alt=""></td>
+                    <td>{{this.Name}}</td>
                     <td>
                         <button class="cart-item-count mr-3">-</button>1<button class="cart-item-count ml-3">+</button>
                     </td>
@@ -23,7 +23,7 @@
                         <a href="" class="btn btn-danger">Remove</a>
                     </td>
                 </tr>
-                
+                {{/each}}
             </tbody>
         </table>
     </div>
