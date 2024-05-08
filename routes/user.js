@@ -61,11 +61,11 @@ router.get('/cart',verifyLogin,async (req,res)=>{
   let products=await userHelpers.getCartProducts(req.session.user._id)
 
   console.log(products);
-  res.render('user/cart')
+  res.render('user/cart',{products})
 })
 
 router.get('/add-to-cart/:id',verifyLogin,async (req,res)=>{
-    await userHelpers.addToCart(req.params._id,req.session.user._id).then(()=>{
+    await userHelpers.addToCart(req.params.id,req.session.user._id).then(()=>{
    
     res.redirect('/')
   })
