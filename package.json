@@ -23,7 +23,9 @@
     "mongodb": "^3.6.2",
     "morgan": "~1.9.1",
     "nocache": "^4.0.0",
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "razorpay": "^0.0.0",
+    "upi": "^0.0.0"
   },
   "devDependencies": {
     "@types/mongodb": "^4.0.7"
