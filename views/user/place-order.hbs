@@ -49,11 +49,12 @@
             method: 'post',
             data: $('#checkout-form').serialize(),
             success: (response) => {
-                alert(response)
+
                 if (response.codSuccess) {
                     location.href = '/order-success'
-                } else {
+                 } else {
                     razorpayPayment(response)
+                    
                 }
             }
         })
