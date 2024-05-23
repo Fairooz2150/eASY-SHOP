@@ -17,10 +17,9 @@ const verifyLogin=(req,res,next)=>{
 router.get('/', async function(req, res, next) {
  let user=req.session.user
 console.log(user);
-let cartCount=null
+var cartCount=null
 if(req.session.user) {
-  cartCount=await userHelpers.getCartCount(req.session.user._id)
-}
+  cartCount=await userHelpers.getCartCount(req.session.user._id)}
   productHelpers.getAllProducts().then((products)=>{
     
     res.render('user/view-products',{products,user,cartCount})
@@ -31,7 +30,7 @@ if(req.session.user) {
     if(req.session.user){
       res.redirect('/')}
       else{
-        res.render('user/login',{"loginErr":req.session.userLoginErr})
+        res.render('user/login',{"loginErr":req.session.userLoginErr,adminOption:true})
         req.session.userLoginErr=false
       }
   })
@@ -74,7 +73,7 @@ router.get('/cart',verifyLogin,async (req,res)=>{
 
   }
   console.log(products);
-  let user=req.session.user._id;
+  let user=req.session.user;
   res.render('user/cart',{products,user,totalValue})
 })
 

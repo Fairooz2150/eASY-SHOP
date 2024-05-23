@@ -6,7 +6,7 @@ const verifyLogin=(req,res,next)=>{
   if(req.session.adminLoggedIn){
   next()
   }else{
-    res.redirect('admin/login')
+    res.redirect('/admin/login')
   }
 }
 /* GET users listing. */
@@ -23,7 +23,7 @@ router.get('/login',(req,res)=>{
   if(req.session.admin){
     res.redirect('/admin/')}
     else{
-      res.render('admin/login',{"loginErr":req.session.adminLoginErr})
+      res.render('admin/login',{admin:true,"loginErr":req.session.adminLoginErr})
       req.session.adminLoginErr=false
     }
 })
@@ -37,18 +37,18 @@ router.post('/login',(req,res)=>{
       res.redirect('/admin/')
     }else{
       req.session.adminLoginErr="Invalid Username or Password"
-      res.redirect('/login')
+      res.redirect('/admin/login')
     }
   })
 })
 router.get('/logout',(req,res)=>{
   req.session.admin=null
   req.session.adminLoggedIn=false
-  res.redirect('/')
+  res.redirect('/admin/login')
 })
 
 router.get('/add-product',verifyLogin, function(req,res){
-  res.render('admin/add-product') 
+  res.render('admin/add-product',{admin:true}) 
 })
 router.post('/add-product',(req,res)=>{
   
@@ -58,7 +58,7 @@ router.post('/add-product',(req,res)=>{
     console.log(id)
     image.mv('./public/product-images/'+id+'.jpg',(err)=>{
       if(!err){
-        res.render("admin/add-product")
+        res.render("admin/add-product",{admin:true})
       }else{
         consoele.log(err)
       }
@@ -78,7 +78,7 @@ router.get('/delete-product/:id',verifyLogin, (req,res)=>{
 router.get('/edit-product/:id',verifyLogin, async (req,res)=>{
   let product=await productHelpers.getProductDetails(req.params.id)
  console.log(product);
-  res.render('admin/edit-product',{product})
+  res.render('admin/edit-product',{product,admin:true})
 })
 router.post('/edit-product/:id',(req,res)=>{
   let id=req.params.id

@@ -135,6 +135,7 @@ getCartCount:(userId)=>
     
         return new Promise((resolve,reject)=>{
             if(details.count==-1 && details.quantity==1){
+             
                 db.get().collection(collection.CART_COLLECTION).
             updateOne({_id:objectId(details.cart)},
             {

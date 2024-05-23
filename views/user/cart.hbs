@@ -22,9 +22,10 @@
                     
                     
                     <td>
-                        <button class="cart-item-count mr-3" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user}}',-1)">-</button>
+                       
+                        <button class="cart-item-count mr-3" onclick=" changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',-1)">-</button>
                        <span id="{{this.product._id}}">{{this.quantity}}</span> 
-                        <button class="cart-item-count ml-3" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user}}',1)">+</button>
+                        <button class="cart-item-count ml-3" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',1)">+</button>
                     </td>
                     <td>
                         <a href="" class="btn btn-danger">Remove</a>
@@ -42,6 +43,7 @@
 </section>
 
 <script>
+    
     function changeQuantity(cartId,proId,userId,count){
         let quantity=parseInt(document.getElementById(proId).innerHTML)
         count=parseInt(count)
@@ -57,6 +59,7 @@
                 quantity:quantity
             },
             method:'post',
+            
             success:(response)=>{
                 if(response.removeProduct){
                     alert("Product removed from cart")
