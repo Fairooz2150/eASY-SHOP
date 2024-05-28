@@ -1,0 +1,164 @@
+<section>
+  <div class="container">
+    <h2 class="main-heading">All Orders</h2>
+    <div id="orders-container">
+      {{#each orders}}
+      <div class="card">
+        <div class="card-header">
+          <div class="row header-content">
+            <div class="chip">
+              <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Person" width="96" height="96">
+              {{this.userDetails.First_Name}} {{this.userDetails.Last_Name}}
+            </div>
+            <div class="date">
+              <span style="font-weight:bold"> Date: </span> {{this.date}} <br>
+              <span style="font-weight:bold"> Time: </span> {{this.time}}
+            </div>
+            <div class="payment">
+              <span style="font-weight:bold">Payment: </span>
+              <br> {{this.paymentMethod}}
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="orderid">
+              <p class="card-text"><span style="font-weight:bold">Order Id: </span><br> {{this._id}}</p>
+              <p class="card-text"><span style="font-weight:bold">Order Status: </span> <span id="status-{{this._id}}">{{this.status}}</span></p>
+            </div>
+            <div class="address">
+              <span style="font-weight: bold;"> Address:</span><br>{{this.deliveryDetails.address}}
+              <br> {{this.deliveryDetails.pincode}}
+              <br> {{this.deliveryDetails.mobile}}
+            </div>
+          </div>
+          <div>
+            {{#each products}}
+            <table class="table mt-5" id="productsTable">
+              <thead>
+                <tr>
+                  <th scope="col">No</th>
+                  <th scope="col">Item</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Quantity</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">{{incrementedIndex @index}}</th>
+                  <td>
+                    <div class="row">
+                      <div>
+                        <img src="/product-images/{{this.item}}.jpg" style="width:70px;height:70px" alt="" class="product_image">
+                      </div>
+                      <div class="product_details">
+                        {{this.productName}} <br>
+                        <div class="text-muted"> Product Id {{this.item}}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>₹{{this.price}}</td>
+                  <td>{{this.quantity}}</td>
+                </tr>
+              </tbody>
+            </table>
+            {{/each}}
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="footer-content">
+            <div class="total">Total: ₹{{this.totalAmount}}</div>
+            <div id="action-buttons-{{this._id}}" class="ship">
+              {{#ifEquals this.status 'placed'}}
+                <button onclick="updateOrderStatus('{{this._id}}', 'Shipped')" class="btn btn-primary">Ship</button>
+              {{/ifEquals}}
+              {{#ifEquals this.status 'Shipped'}}
+                <button onclick="updateOrderStatus('{{this._id}}', 'Delivered')" class="btn btn-primary">Deliver</button>
+              {{/ifEquals}}
+            </div>
+          </div>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+  </div>
+</section>
+
+
+<style>
+
+    .main-heading {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .card {
+      margin-top: 65px;
+    }
+
+    .payment-header {
+      font-weight: bold;
+    }
+
+    .address {
+      margin-left: 5rem;
+    }
+
+    .chip {
+      display: inline-block;
+      padding: 0 25px;
+      height: 50px;
+      font-size: 16px;
+      line-height: 50px;
+      border-radius: 25px;
+      background-color: #f1f1f1;
+    }
+  
+    .chip img {
+      float: left;
+      margin: 0 10px 0 -25px;
+      height: 50px;
+      width: 50px;
+      border-radius: 50%;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-content {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .ship {
+      margin-left: auto;
+    }
+
+    .btn-primary {
+      margin: 0;
+    }
+
+    .date, .payment {
+      padding: 0 15px;
+    }
+    .total{
+      margin-left: auto;
+    }
+    .product_details{
+      margin-left: 10px;
+    }
+  </style>
+
+
