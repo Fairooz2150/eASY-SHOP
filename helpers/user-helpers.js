@@ -2,6 +2,7 @@ var db=require('../config/connection')
 var collection=require('../config/collections')
 const bcrypt=require('bcrypt')
 var objectId=require('mongodb').ObjectID
+const moment = require('moment');
 const Razorpay = require("razorpay");
 var instance = new Razorpay({
     key_id: 'rzp_test_Eiq5plL9zWA6bb',
@@ -195,28 +196,33 @@ getCartCount:(userId)=>
             resolve(total[0].total);
         })
     },
-    placeOrder:(order,products,total)=>{
-        return new Promise((resolve,reject)=>{
-            console.log(order,products,total);
-            let status=order['payment-method']==='COD'?'placed':'pending'
-            let orderObj={
-                deliveryDetails:{
-                    mobile:order.mobile,
-                    address:order.address,
-                    pincode:order.pincode
+    placeOrder: (order, products, total) => {
+        return new Promise((resolve, reject) => {
+            console.log(order, products, total);
+            let status = order['payment-method'] === 'COD' ? 'placed' : 'pending';
+            let orderDate = moment().format('DD MMM YYYY');
+            let orderTime = moment().format('hh:mmA');
+    
+            let orderObj = {
+                deliveryDetails: {
+                    mobile: order.mobile,
+                    address: order.address,
+                    pincode: order.pincode
                 },
-                userId:objectId(order.userId),
-                paymentMethod:order['payment-method'],
-                products:products,
-                totalAmount:total,
-                status:status,
-                date:new Date()
-            }
-            db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response)=>{
-                db.get().collection(collection.CART_COLLECTION).removeOne({user:objectId(order.userId)})
-                resolve(response.ops[0]._id)
-            })
-        })
+                userId: objectId(order.userId),
+                paymentMethod: order['payment-method'],
+                products: products,
+                totalAmount: total,
+                status: status,
+                date: orderDate,
+                time: orderTime
+            };
+    
+            db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response) => {
+                db.get().collection(collection.CART_COLLECTION).removeOne({ user: objectId(order.userId) });
+                resolve(response.ops[0]._id);
+            });
+        });
     },
     getCartProductList:(userId)=>{
         return new Promise(async(resolve,reject)=>{
