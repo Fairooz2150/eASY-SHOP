@@ -126,5 +126,37 @@ module.exports={
                 }
             });
         });
-    }
+    },
+    updateOrderStatus: (orderId, status) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.ORDER_COLLECTION).updateOne(
+                { _id: objectId(orderId) },
+                { $set: { status: status } }
+            ).then((response) => {
+                resolve(response);
+            }).catch((err) => {
+                reject(err);
+            });
+        });
+    },
+    
+  getAllOrdersAscending: () => {
+    return new Promise((resolve, reject) => {
+      db.get().collection('orders').find().sort({ date: 1 }).toArray().then((orders) => {
+        resolve(orders);
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  },
+
+  getAllOrdersDescending: () => {
+    return new Promise((resolve, reject) => {
+      db.get().collection('orders').find().sort({ date: -1 }).toArray().then((orders) => {
+        resolve(orders);
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  }
       }

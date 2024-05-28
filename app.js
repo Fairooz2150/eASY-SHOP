@@ -13,7 +13,7 @@ var fileupload = require('express-fileupload');
 var db = require('./config/connection');
 var session = require('express-session');
 
-// Register Handlebars helper and set up the view engine
+// Register Handlebars helpers and set up the view engine
 const hbsInstance = hbs.create({
   extname: 'hbs',
   defaultLayout: 'layout',
@@ -22,6 +22,9 @@ const hbsInstance = hbs.create({
   helpers: {
     incrementedIndex: function (index) {
       return index + 1;
+    },
+    ifEquals: function (arg1, arg2, options) {
+      return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
     }
   }
 });

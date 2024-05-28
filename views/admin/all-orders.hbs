@@ -1,91 +1,126 @@
 <section>
   <div class="container">
     <h2 class="main-heading">All Orders</h2>
-    {{#each orders}}
-    <div class="card">
-      <div class="card-header">
-        <div class="row header-content">
-          <div class="chip">
-            <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Person" width="96" height="96">
-            {{this.userDetails.First_Name}} {{this.userDetails.Last_Name}}
-          </div>
-
-          <div class="date">
-            <span style="font-weight:bold"> Date: </span> {{this.date}} <br>
-            <span style="font-weight:bold"> Time: </span> {{this.time}}
-          </div>
-
-          <div class="payment">
-            <span style="font-weight:bold">Payment: </span>
-            <br> {{this.paymentMethod}}
+    <div id="orders-container">
+      {{#each orders}}
+      <div class="card">
+        <div class="card-header">
+          <div class="row header-content">
+            <div class="chip">
+              <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Person" width="96" height="96">
+              {{this.userDetails.First_Name}} {{this.userDetails.Last_Name}}
+            </div>
+            <div class="date">
+              <span style="font-weight:bold"> Date: </span> {{this.date}} <br>
+              <span style="font-weight:bold"> Time: </span> {{this.time}}
+            </div>
+            <div class="payment">
+              <span style="font-weight:bold">Payment: </span>
+              <br> {{this.paymentMethod}}
+            </div>
           </div>
         </div>
-      </div>
-
-      <div class="card-body ">
-        <div class="row">
-        <div class="orderid">
-          <p class="card-text"><span style="font-weight:bold">Order Id: </span><br> {{this._id}}</p>
-        <p class="card-text"><span style="font-weight:bold">Order Status: </span> {{this.status}}</p>
-        </div>
-        <div class="address">
-         <span  style="font-weight: bold;"> Address:</span><br>{{this.deliveryDetails.address}}
-            <br> {{this.deliveryDetails.pincode}}
-            <br> {{this.deliveryDetails.mobile}}
-             
-          
-        </div>
-      </div>
-      <div>
-         {{#each products}}
-         <table class="table mt-5 " id="productsTable">
-            <thead>
+        <div class="card-body">
+          <div class="row">
+            <div class="orderid">
+              <p class="card-text"><span style="font-weight:bold">Order Id: </span><br> {{this._id}}</p>
+              <p class="card-text"><span style="font-weight:bold">Order Status: </span> <span id="status-{{this._id}}">{{this.status}}</span></p>
+            </div>
+            <div class="address">
+              <span style="font-weight: bold;"> Address:</span><br>{{this.deliveryDetails.address}}
+              <br> {{this.deliveryDetails.pincode}}
+              <br> {{this.deliveryDetails.mobile}}
+            </div>
+          </div>
+          <div>
+            {{#each products}}
+            <table class="table mt-5" id="productsTable">
+              <thead>
                 <tr>
-                    <th scope="col">No</th>
-                    <th scope="col">Item</th>           
-                    <th scope="col">Price</th>
-                    <th scope="col">Quantity</th>
-             
-
+                  <th scope="col">No</th>
+                  <th scope="col">Item</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Quantity</th>
                 </tr>
-            </thead>
-            <tbody>
-                    
-                  <tr>
-
-                    <th scope="row">{{incrementedIndex @index}}</th>
-                    <td><div class="row"><div><img src="/product-images/{{this.item}}.jpg" style="width:70px;height:70px" alt="" class="product_image"></div>  <div class="product_details">{{this.productName}} <br> <div class="text-muted"> Product Id {{this.item}}</div> </div></div></td>
-                    
-                    <td>₹{{this.price}}</td>
-                    
-                   
-                    <td>
-                      {{this.quantity}}
-                    </td>
-                   
-                    
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">{{incrementedIndex @index}}</th>
+                  <td>
+                    <div class="row">
+                      <div>
+                        <img src="/product-images/{{this.item}}.jpg" style="width:70px;height:70px" alt="" class="product_image">
+                      </div>
+                      <div class="product_details">
+                        {{this.productName}} <br>
+                        <div class="text-muted"> Product Id {{this.item}}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>₹{{this.price}}</td>
+                  <td>{{this.quantity}}</td>
                 </tr>
-                
-            </tbody>
-        </table>
-         {{/each}}
-      </div>
-      </div>
-
-      <div class="card-footer ">
-        <div class="footer-content">
-          <div class="total">Total:{{this.totalAmount}}</div>
-          <div id="ship">
-            <button class="btn btn-primary">Ship</button>
+              </tbody>
+            </table>
+            {{/each}}
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="footer-content">
+            <div class="total">Total: ₹{{this.totalAmount}}</div>
+            <div id="action-buttons-{{this._id}}" class="ship">
+              {{#ifEquals this.status 'placed'}}
+                <button onclick="updateOrderStatus('{{this._id}}', 'Shipped')" class="btn btn-primary">Ship</button>
+              {{/ifEquals}}
+              {{#ifEquals this.status 'Shipped'}}
+                <button onclick="updateOrderStatus('{{this._id}}', 'Delivered')" class="btn btn-primary">Deliver</button>
+              {{/ifEquals}}
+            </div>
           </div>
         </div>
       </div>
-       {{/each}}
+      {{/each}}
     </div>
   </div>
- 
 </section>
 
+<script>
+function updateOrderStatus(orderId, status) {
+  $.ajax({
+    url: '/admin/update-order-status',
+    method: 'POST',
+    data: { orderId: orderId, status: status },
+    success: function(response) {
+      if (response.success) {
+        alert(`Order status updated to ${status}`);
+        document.getElementById('status-' + orderId).innerText = status;
+
+        // Update button text and behavior
+        var shipButton = document.querySelector(`#action-buttons-${orderId} button[onclick*="updateOrderStatus('${orderId}', 'Shipped')"]`);
+        var deliverButton = document.querySelector(`#action-buttons-${orderId} button[onclick*="updateOrderStatus('${orderId}', 'Delivered')"]`);
+        
+        if (status === 'Shipped') {
+          // Change Ship button to Deliver button
+          shipButton.innerText = 'Deliver';
+          shipButton.setAttribute('onclick', `updateOrderStatus('${orderId}', 'Delivered')`);
+          deliverButton.style.display = 'none';
+        } else if (status === 'Delivered') {
+          // Hide Deliver button after updating status to Delivered
+          deliverButton.style.display = 'none';
+        }
+      } else {
+        alert('Failed to update order status');
+      }
+    },
+    error: function(error) {
+      console.error('Error:', error);
+      alert('An error occurred while updating the order status');
+    }
+  });
+}
+
+
+</script>
 
 <style>
 
@@ -144,7 +179,7 @@
       align-items: center;
     }
 
-    #ship {
+    .ship {
       margin-left: auto;
     }
 
