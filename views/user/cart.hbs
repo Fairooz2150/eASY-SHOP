@@ -5,7 +5,7 @@
                 <tr>
                     <th scope="col">No</th>
                     <th scope="col">Item</th>
-                    <th scope="col">Title</th>
+                   
                     <th scope="col">Price</th>
                     <th scope="col">Quantity</th>
                     <th scope="col">Remove</th>
@@ -17,16 +17,24 @@
                   <tr>
 
                     <th scope="row">{{incrementedIndex @index}}</th>
-                    <td><img src="/product-images/{{this.product._id}}.jpg" style="width:70px;height:70px" alt=""></td>
-                    <td>{{this.product.Name}}</td>
-                    <td>Rs.{{this.product.Price}}</td>
+                    <td>   <div class="row">
+                      <div>
+                        <img src="/product-images/{{this.item}}.jpg" style="width:70px;height:70px" alt="" class="product_image">
+                      </div>
+                      <div class="product_details pl-3">
+                        {{this.product.Name}} <br>
+                        
+                      </div>
+                    </div> </td>                    
+                    <td>Rs.{{this.product.Price}} </td>
                     
                     
                     <td>
-                       
+                       <div class="row">
                         <button class="cart-item-count mr-3 " style="border-radius: 5px; " onclick=" changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',-1)">-</button>
                        <span id="{{this.product._id}}">{{this.quantity}}</span> 
                         <button class="cart-item-count ml-3" style="border-radius: 5px; " onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',1)">+</button>
+                    </div>
                     </td>
                     <td>
                         <a href="" class="btn btn-danger">Remove</a>
