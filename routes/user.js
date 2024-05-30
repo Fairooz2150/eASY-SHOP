@@ -68,15 +68,16 @@ router.get('/logout',(req,res)=>{
 router.get('/cart',verifyLogin,async (req,res)=>{
   let products=await userHelpers.getCartProducts(req.session.user._id)
   let totalValue=0;
+  let placeOrder=false
   if(products.length>0){
     totalValue=await userHelpers.getTotalAmount(req.session.user._id)
-
+   placeOrder=true
   }
   if(req.session.user) {
     cartCount=await userHelpers.getCartCount(req.session.user._id)}
   console.log(products);
   let user=req.session.user;
-  res.render('user/cart',{products,user,totalValue,cartCount})
+  res.render('user/cart',{products,user,totalValue,cartCount,placeOrder})
 })
 
 router.get('/add-to-cart/:id',(req,res)=>{
@@ -85,11 +86,7 @@ router.get('/add-to-cart/:id',(req,res)=>{
 res.json({status:true})
   })
 })
-router.get('/ordersnew',verifyLogin,async (req,res)=>{
-  if(req.session.user) {
-    cartCount=await userHelpers.getCartCount(req.session.user._id)}
-  res.render('user/ordersnew',{user:req.session.user,cartCount})
-})
+
 
 router.post('/change-product-quantity',(req,res,next)=>{
   console.log(req.body);
@@ -136,10 +133,24 @@ router.post('/place-order', async (req, res) => {
 router.get('/order-success',verifyLogin,(req,res)=>{
   res.render('user/order-success',{user:req.session.user})
 })
-router.get('/orders',verifyLogin,async(req,res)=>{
-  let orders=await userHelpers.getUserOrders(req.session.user._id)
-  res.render('user/orders',{user:req.session.user,orders})
-})
+
+router.get('/orders', verifyLogin, async (req, res) => {
+  let cartCount = 0;
+  if (req.session.user) {
+      cartCount = await userHelpers.getCartCount(req.session.user._id);
+  }
+
+  userHelpers.getAllUserOrders(req.session.user._id).then((orders) => {
+      // Sort orders by date in descending order
+      orders.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      res.render('user/orders', { user: req.session.user, cartCount, orders });
+  }).catch((err) => {
+      console.error(err);
+      res.status(500).send("Internal Server Error");
+  });
+});
+
 router.get('/view-order-products/:id',verifyLogin,async(req,res)=>{
   let products=await userHelpers.getOrderProducts(req.params.id)
 res.render('user/view-order-products',{user:req.session.user,products})

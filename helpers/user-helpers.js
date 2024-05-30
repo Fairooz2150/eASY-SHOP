@@ -161,44 +161,48 @@ module.exports={
           }
       })
     },
-    getTotalAmount:(userId)=>{
+    getTotalAmount: (userId) => {
         return new Promise(async (resolve, reject) => {
             let total = await db.get().collection(collection.CART_COLLECTION).aggregate([
                 {
                     $match: { user: objectId(userId) }
                 },
                 {
-                    $unwind:'$products'
-                },{
-                    $project:{
-                        item:'$products.item',
-                        quantity:'$products.quantity'
+                    $unwind: '$products'
+                }, {
+                    $project: {
+                        item: '$products.item',
+                        quantity: '$products.quantity'
                     }
-                },{
-                    $lookup:{
-                        from:collection.PRODUCT_COLLECTION,
-                        localField:'item',
-                        foreignField:'_id',
-                        as:'product'
+                }, {
+                    $lookup: {
+                        from: collection.PRODUCT_COLLECTION,
+                        localField: 'item',
+                        foreignField: '_id',
+                        as: 'product'
                     }
-                },{
-                    $project:{
-                        item:1,
-                        quantity:1,
-                        product:{$arrayElemAt:['$product', 0]}
+                }, {
+                    $project: {
+                        item: 1,
+                        quantity: 1,
+                        product: { $arrayElemAt: ['$product', 0] }
                     }
-                },{
-                    $group:{ 
-                        _id:null, 
-                        total:{ $sum: { $multiply: [ '$quantity',{ $toInt:'$product.Price' } ] } } 
+                }, {
+                    $group: {
+                        _id: null,
+                        total: { $sum: { $multiply: ['$quantity', { $toInt: '$product.Price' }] } }
                     }
                 }
-                
             ]).toArray();
-          console.log(total);
-            resolve(total[0].total);
+    
+            if (total.length > 0 && total[0].total !== undefined) {
+                resolve(total[0].total);
+            } else {
+                resolve(0); // Return 0 if total is undefined or empty
+            }
         })
-    },
+    }
+    ,
     placeOrder: (order, products, total) => {
         return new Promise((resolve, reject) => {
             console.log(order, products, total);
@@ -243,6 +247,90 @@ module.exports={
             resolve(orders)
         })
     },
+    getAllUserOrders: (userId) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.ORDER_COLLECTION).aggregate([
+                {
+                    $match: { userId: objectId(userId) } // Filter orders by user ID
+                },
+                {
+                    $lookup: {
+                        from: collection.USER_COLLECTION,
+                        localField: 'userId',
+                        foreignField: '_id',
+                        as: 'userDetails'
+                    }
+                },
+                {
+                    $unwind: '$userDetails'
+                },
+                {
+                    $unwind: '$products'
+                },
+                {
+                    $lookup: {
+                        from: collection.PRODUCT_COLLECTION,
+                        localField: 'products.item',
+                        foreignField: '_id',
+                        as: 'productDetails'
+                    }
+                },
+                {
+                    $unwind: '$productDetails'
+                },
+                {
+                    $addFields: {
+                        'products.productName': '$productDetails.Name',
+                        'products.price': '$productDetails.Price'
+                    }
+                },
+                {
+                    $group: {
+                        _id: '$_id',
+                        totalAmount: { $first: '$totalAmount' },
+                        paymentMethod: { $first: '$paymentMethod' },
+                        status: { $first: '$status' },
+                        date: { $first: '$date' },
+                        time: { $first: '$time' },
+                        userDetails: { $first: '$userDetails' },
+                        deliveryDetails: { $first: '$deliveryDetails' },
+                        products: { 
+                            $push: {
+                                item: '$products.item',
+                                quantity: '$products.quantity',
+                                productName: '$products.productName',
+                                price: '$products.price'
+                            }
+                        }
+                    }
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        totalAmount: 1,
+                        paymentMethod: 1,
+                        status: 1,
+                        date: 1,
+                        time: 1,
+                        'userDetails._id': 1,
+                        'userDetails.First_Name': 1,
+                        'userDetails.Last_Name': 1,
+                        'userDetails.Email': 1,
+                        deliveryDetails: 1,
+                        products: 1
+                    }
+                }
+            ]).toArray((err, orders) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    console.log(JSON.stringify(orders, null, 2)); // Log the output for verification
+                    resolve(orders);
+                }
+            });
+        });
+    },
+    
     getOrderProducts:(orderId)=>{
         return new Promise(async(resolve,reject)=>{
             let orderItems=await db.get().collection(collection.ORDER_COLLECTION).aggregate([

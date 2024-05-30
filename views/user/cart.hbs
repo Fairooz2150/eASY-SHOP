@@ -36,48 +36,67 @@
             </tbody>
         </table>
         <hr>
-        <div class="float-right pr-5">
+        {{#if placeOrder}}
+        <div class="float-right pr-5" id="pop">
         <h5 class="float-left mr-5 mt-4">Total: Rs.<span id="total">{{totalValue}}</span></h5>
         <a href="/place-order" class="btn btn-success mt-3 " style="width: 100%;"><b>Place Order</b></a>
         </div>
+        {{/if}}
     </div>
 </section>
 
 <script>
+
+
+    
       $(function () {
       $('#productsTable').DataTable();  
     });
 
 
-    function changeQuantity(cartId,proId,userId,count){
-        let quantity=parseInt(document.getElementById(proId).innerHTML)
-        count=parseInt(count)
-        
+function changeQuantity(cartId, proId, userId, count) {
+    let quantity = parseInt(document.getElementById(proId).innerHTML);
+    count = parseInt(count);
 
-        $.ajax({
-            url:'/change-product-quantity',
-            data:{
-                user:userId,
-                cart:cartId,
-                product:proId,
-                count:count,
-                quantity:quantity
-            },
-            method:'post',
-            
-            success:(response)=>{
-                if(response.removeProduct){
-                    alert("Product removed from cart")
-                    location.reload()
-                }else{
-
-                    document.getElementById(proId).innerHTML=quantity+count
-                    document.getElementById('total').innerHTML=response.total
-
-                }
-                
-            }
-
-        })
+    // Check if the current quantity will become one after decreasing
+    if (quantity  === 1 && count === -1) {
+        // Display a confirmation dialog
+        let confirmRemove = confirm("Removing the item from cart. Are you sure?");
+         if(confirmRemove )
+         {location.reload();}
+        if (!confirmRemove) {
+            // If user cancels, do nothing
+            return;
+        }
     }
+
+    $.ajax({
+        url: '/change-product-quantity',
+        data: {
+            user: userId,
+            cart: cartId,
+            product: proId,
+            count: count,
+            quantity: quantity
+        },
+        method: 'post',
+        success: (response) => {
+            if (response.removeProduct) {
+                // Remove the corresponding table row
+                $(`#${proId}`).closest('tr').remove();
+                // Update total value
+                document.getElementById('total').innerHTML = response.total;
+                // Check if the total count of products becomes zero
+                if (response.cartCount === 0) {
+                    // Hide the 'Place Order' section and 'Total: Rs' div
+                    $('#placeOrderSection').hide();
+                    $('#totalSection').hide();
+                }
+            } else {
+                document.getElementById(proId).innerHTML = quantity + count;
+                document.getElementById('total').innerHTML = response.total;
+            }
+        }
+    });
+}
 </script>
