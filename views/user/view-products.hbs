@@ -23,10 +23,17 @@
 </section>
 
 <script>
+   
 document.getElementById('search-input').addEventListener('keyup', function(event) {
     const query = event.target.value;
     searchProducts(query);
 });
+//for large screen
+document.getElementById('search-inputs').addEventListener('keyup', function(event) {
+    const query = event.target.value;
+    searchProducts(query);
+});
+
 
 function searchProducts(query) {
     $.ajax({
@@ -66,7 +73,5 @@ function displaySearchResults(products) {
     });
 }
 
-function addToCart(productId) {
-    // Add to cart functionality
-}
+
 </script>

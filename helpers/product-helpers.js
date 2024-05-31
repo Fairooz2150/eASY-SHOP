@@ -49,21 +49,27 @@ module.exports={
             })
         })
     },
-    searchProducts: (query) => {
+    searchProducts: (query, category) => {
         return new Promise(async (resolve, reject) => {
             try {
-                const products = await db.get().collection(collection.PRODUCT_COLLECTION).find({
+                let filter = {
                     $or: [
                         { Name: { $regex: query, $options: 'i' } },
                         { Description: { $regex: query, $options: 'i' } },
-                        { Price: { $regex: query, $options: 'i' } }
+                        { Price: { $regex: query, $options: 'i' } },
+                        { Category: { $regex: query, $options: 'i' } }
                     ]
-                }).toArray();
+                };
+                
+               
+                const products = await db.get().collection(collection.PRODUCT_COLLECTION).find(filter).toArray();
                 resolve(products);
             } catch (error) {
                 reject(error);
             }
         });
     }
+   
+    
 
 }
