@@ -167,4 +167,19 @@ router.post('/verify-payment',(req,res)=>{
     res.json({status:false,errMsg:''})
   })
 })
+
+
+
+router.get('/search-products', async (req, res) => {
+  const query = req.query.query;
+
+  try {
+      const products = await productHelpers.searchProducts(query);
+      res.json({ products });
+  } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+  }
+});
+
 module.exports = router;

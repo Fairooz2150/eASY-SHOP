@@ -10,9 +10,9 @@
 
             <div class="mx-auto d-lg-none row">
                 {{#if user}}
-                <form class="form-inline my-2 my-lg-0">
+                <form class="form-inline my-2 my-lg-0" onsubmit="searchProducts(event)">
                     <div class="input-group">
-                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        <input class="form-control mr-sm-2" type="search" id="search-input" placeholder="Search" aria-label="Search">
                         <div class="input-group-append">
                             <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="bi bi-search"></i></button>
                         </div>
@@ -36,11 +36,11 @@
                     {{/if}}
                 </ul>
 
-                <div class="mx-auto  d-lg-block d-sm-none">
+                <div class="mx-auto d-lg-block d-sm-none">
                     {{#if user}}
-                    <form class="form-inline my-2 my-lg-0">
+                    <form class="form-inline my-2 my-lg-0" onsubmit="searchProducts(event)">
                         <div class="input-group">
-                            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                            <input class="form-control mr-sm-2" type="search" id="search-input" placeholder="Search" aria-label="Search">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-success my-2 my-sm-0 bi bi-search" type="submit"><span class="pl-2">Search</span></button>
                             </div>
@@ -54,17 +54,22 @@
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             {{#if user}}
-                            {{user.First_Name}}
+                           Hello, <b>{{user.First_Name}}</b>
                             {{else}}
-                            Account
+                           <i class="bi bi-person-circle"></i> Account
                             {{/if}}
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             {{#if user}}
-                            <a class="dropdown-item" href="/logout">Logout</a>
+                            <a class="dropdown-item" href=""><i class="bi bi-person-circle"></i> Your Account</a>
+                            <a class="dropdown-item" href=""><i class="bi bi-headset"></i> Customer Care</a>
+                             <a class="dropdown-item" href=""><i class="bi bi-info-circle-fill"></i> About Us</a>
+                              <a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-left"></i> Logout</a>
                             {{else}}
-                            <a class="dropdown-item" href="/login">Login</a>
-                            <a class="dropdown-item" href="/">Guest</a>
+                            <a class="dropdown-item" href="/login"><i class="bi bi-box-arrow-in-left"></i> Login</a>
+                            <a class="dropdown-item" href="/"><i class="bi bi-person-square"></i> Guest</a>
+                             <a class="dropdown-item" href=""><i class="bi bi-headset"></i> Customer Care</a>
+                             <a class="dropdown-item" href=""><i class="bi bi-info-circle-fill"></i> About</a>
                             <a class="dropdown-item" href="/admin/login">Admin</a>
                             {{/if}}
                         </div>

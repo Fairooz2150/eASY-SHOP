@@ -1,27 +1,72 @@
-    <section>
-        <div class="container-fluid ml-4 mr-4 mt-5">
-            <div class="row">
-                {{#each products}}
-              
-                <div class="col-md-4 col-lg-3 col-sm-6 p-3">
-                    <div class="card" style="width: 15rem; height: 23rem">
-                        <img class="card-img-top"
-                          src="/product-images/{{this._id}}.jpg"
-                            alt="Card image cap"
-                            style="height: 10rem;">
-                        <div class="card-body">
-                            <h5 class="card-title">{{this.Name}}</h5>
-                            <p class="card-text">Rs.{{this.Price}}</p>
-                            <p class="card-text">{{this.Description}}.</p>
-                            <button onclick="addToCart('{{this._id}}')" class="btn btn-primary">Add to cart</button>
-                        </div>
+<section>
+    <div class="container-fluid ml-4 mr-4 mt-5">
+        
+        <div class="row" id="product-container">
+            {{#each products}}
+            <div class="col-md-4 col-lg-3 col-sm-6 p-3">
+                <div class="card" style="width: 15rem; height: 23rem">
+                    <img class="card-img-top"
+                        src="/product-images/{{this._id}}.jpg"
+                        alt="Card image cap"
+                        style="height: 10rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{this.Name}}</h5>
+                        <p class="card-text">Rs.{{this.Price}}</p>
+                        <p class="card-text">{{this.Description}}.</p>
+                        <button onclick="addToCart('{{this._id}}')" class="btn btn-primary">Add to cart</button>
                     </div>
                 </div>
-                  {{/each}}
             </div>
+            {{/each}}
         </div>
-    </section>
+    </div>
+</section>
 
-    <script>
-    
-    </script>
+<script>
+document.getElementById('search-input').addEventListener('keyup', function(event) {
+    const query = event.target.value;
+    searchProducts(query);
+});
+
+function searchProducts(query) {
+    $.ajax({
+        url: '/search-products',
+        method: 'GET',
+        data: { query: query },
+        success: (response) => {
+            displaySearchResults(response.products);
+        }
+    });
+}
+
+function displaySearchResults(products) {
+    const productContainer = document.getElementById('product-container');
+    productContainer.innerHTML = ''; // Clear previous results
+
+    if (products.length === 0) {
+        productContainer.innerHTML = '<p>No products found.</p>';
+        return;
+    }
+
+    products.forEach(product => {
+        const productElement = document.createElement('div');
+        productElement.classList.add('col-md-4', 'col-lg-3', 'col-sm-6', 'p-3');
+        productElement.innerHTML = `
+            <div class="card" style="width: 15rem; height: 23rem">
+                <img class="card-img-top" src="/product-images/${product._id}.jpg" alt="Card image cap" style="height: 10rem;">
+                <div class="card-body">
+                    <h5 class="card-title">${product.Name}</h5>
+                    <p class="card-text">Rs.${product.Price}</p>
+                    <p class="card-text">${product.Description}</p>
+                    <button onclick="addToCart('${product._id}')" class="btn btn-primary">Add to cart</button>
+                </div>
+            </div>
+        `;
+        productContainer.appendChild(productElement);
+    });
+}
+
+function addToCart(productId) {
+    // Add to cart functionality
+}
+</script>
