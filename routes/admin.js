@@ -102,15 +102,26 @@ router.get('/edit-product/:id', verifyLogin, async (req, res) => {
 })
 
 router.post('/edit-product/:id', (req, res) => {
-  let id = req.params.id
+  let id = req.params.id;
   productHelpers.updateProduct(req.params.id, req.body).then(() => {
-    res.redirect('/admin')
-    if (req.files.Image) {
-      let image = req.files.Image
-      image.mv('./public/product-images/' + id + '.jpg')
+    if (req.files && req.files.Image) {
+      let image = req.files.Image;
+      image.mv('./public/product-images/' + id + '.jpg', (err) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).send(err);
+        }
+        res.redirect('/admin');
+      });
+    } else {
+      res.redirect('/admin');
     }
-  })
-})
+  }).catch((err) => {
+    console.error(err);
+    res.status(500).send(err);
+  });
+});
+
 
 router.post('/update-order-status', (req, res) => {
   let { orderId, status } = req.body;

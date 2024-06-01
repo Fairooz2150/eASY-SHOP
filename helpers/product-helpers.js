@@ -49,7 +49,7 @@ module.exports={
             })
         })
     },
-    searchProducts: (query, category) => {
+    searchProducts: (query) => {
         return new Promise(async (resolve, reject) => {
             try {
                 let filter = {

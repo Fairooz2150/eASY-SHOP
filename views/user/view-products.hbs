@@ -13,6 +13,7 @@
                         <h5 class="card-title">{{this.Name}}</h5>
                         <p class="card-text">Rs.{{this.Price}}</p>
                         <p class="card-text">{{this.Description}}.</p>
+                        <p hidden>{{this.Category}}</p>
                         <button onclick="addToCart('{{this._id}}')" class="btn btn-primary">Add to cart</button>
                     </div>
                 </div>
@@ -65,6 +66,7 @@ function displaySearchResults(products) {
                     <h5 class="card-title">${product.Name}</h5>
                     <p class="card-text">Rs.${product.Price}</p>
                     <p class="card-text">${product.Description}</p>
+                    <p hidden>${product.Category}</p>
                     <button onclick="addToCart('${product._id}')" class="btn btn-primary">Add to cart</button>
                 </div>
             </div>

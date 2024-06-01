@@ -74,7 +74,8 @@ router.get('/cart',verifyLogin,async (req,res)=>{
    placeOrder=true
   }
   if(req.session.user) {
-    cartCount=await userHelpers.getCartCount(req.session.user._id)}
+    cartCount=await userHelpers.getCartCount(req.session.user._id)
+  }
   console.log(products);
   let user=req.session.user;
   res.render('user/cart',{products,user,totalValue,cartCount,placeOrder})
@@ -168,6 +169,63 @@ router.post('/verify-payment',(req,res)=>{
   })
 })
 
+router.get('/your-account',verifyLogin, async(req,res)=>{
+  let user=req.session.user;
+
+  res.render('user/your-account',{user})
+})
+
+router.get('/account-info', verifyLogin, async (req, res) => {
+  let user = req.session.user;
+  let accountDetails = await userHelpers.userDetails(user);
+  res.render('user/account-info', { user, accountDetails });
+});
+
+// New routes for updating account and verifying password
+
+
+router.post('/update-account', verifyLogin, async (req, res) => {
+  const userId = req.session.user._id;
+  const { First_Name, Last_Name, Email } = req.body;
+
+  try {
+    await userHelpers.updateAccount(userId, { First_Name, Last_Name, Email });
+
+    // Update the session data
+    req.session.user.First_Name = First_Name;
+    req.session.user.Last_Name = Last_Name;
+    req.session.user.Email = Email;
+
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+
+router.post('/verify-password', verifyLogin, async (req, res) => {
+  const userId = req.session.user._id;
+  const enteredPassword = req.body.password;
+  
+  try {
+    const isValid = await userHelpers.verifyPassword(userId, enteredPassword);
+    res.json({ success: isValid });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+router.post('/delete-account', verifyLogin, async (req, res) => {
+  const userId = req.session.user._id;
+
+  try {
+    await userHelpers.deleteAccount(userId);
+    req.session.destroy();
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
 
 
 router.get('/search-products', async (req, res) => {

@@ -408,7 +408,51 @@ module.exports={
             resolve()
         })
         })
-    }
+    },
+    userDetails: (user)=>{
+            return new Promise(async (resolve,reject)=>{
+                let userId=user._id
+                let userDetails=await db.get().collection(collection.USER_COLLECTION).find({_id:objectId(userId)}).toArray()
+               resolve(userDetails)
+                console.log("ur acc:",userDetails);
+            })
+    },
+    verifyPassword: async (userId, enteredPassword)=> {
+       
+        try {
+          const user = await db.get().collection(collection.USER_COLLECTION).findOne({ _id: objectId(userId) });
+          if (!user) throw new Error('User not found');
+          return bcrypt.compare(enteredPassword, user.Password);
+        } catch (error) {
+          console.error(error);
+          throw error;
+        }
+      },
+      
+      // Update account details
+      updateAccount: (userId, updates) => {
+        return new Promise(async (resolve, reject) => {
+          try {
+            await db.get().collection(collection.USER_COLLECTION).updateOne(
+              { _id: objectId(userId) },
+              { $set: updates }
+            );
+            resolve();
+          } catch (error) {
+            reject(error);
+          }
+        });
+      },
+      // Delete account
+      deleteAccount: async (userId)=> {
+        try {
+          await db.get().collection(collection.USER_COLLECTION).deleteOne({ _id: objectId(userId) });
+        } catch (error) {
+          console.error(error);
+          throw error;
+        }
+      }
+    
 }
 
        
