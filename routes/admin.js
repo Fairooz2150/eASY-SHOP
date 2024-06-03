@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+const fs = require('fs'); 
+const path = require('path');
 const adminHelpers = require('../helpers/admin-helpers');
 const productHelpers = require('../helpers/product-helpers');
 const { log } = require('console');
@@ -73,19 +75,31 @@ router.get('/add-product', verifyLogin, function (req, res) {
   res.render('admin/add-product', { admin: true })
 })
 
+
+
 router.post('/add-product', (req, res) => {
-  productHelpers.addProduct(req.body, (id) => {
-    let image = req.files.Image
-    console.log(id)
-    image.mv('./public/product-images/' + id + '.jpg', (err) => {
-      if (!err) {
-        res.render("admin/add-product", { admin: true })
-      } else {
-        consoele.log(err)
+  let product = {
+      Name: req.body.Name,
+      Category: req.body.Category,
+      Price: req.body.Price,
+      Description: req.body.Description,
+  };
+
+  productHelpers.addProduct(product).then((productId) => {
+      if (req.files) {
+          if (Array.isArray(req.files.Image)) {
+              req.files.Image.forEach((image, index) => {
+                  image.mv(`./public/product-images/${productId}_${index}.jpg`);
+              });
+          } else {
+              req.files.Image.mv(`./public/product-images/${productId}.jpg`);
+          }
       }
-    })
-  })
-})
+      res.render("admin/add-product", { admin: true })
+  });
+});
+
+
 
 router.get('/delete-product/:id', verifyLogin, (req, res) => {
   let proId = req.params.id
@@ -95,30 +109,133 @@ router.get('/delete-product/:id', verifyLogin, (req, res) => {
   })
 })
 
+
+
 router.get('/edit-product/:id', verifyLogin, async (req, res) => {
-  let product = await productHelpers.getProductDetails(req.params.id)
-  console.log(product);
-  res.render('admin/edit-product', { product, admin: true })
-})
+  try {
+    let product = await productHelpers.getProductDetails(req.params.id);
+    res.render('admin/edit-product', { product, admin: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+});
+
 
 router.post('/edit-product/:id', (req, res) => {
   let id = req.params.id;
   productHelpers.updateProduct(req.params.id, req.body).then(() => {
     if (req.files && req.files.Image) {
       let image = req.files.Image;
-      image.mv('./public/product-images/' + id + '.jpg', (err) => {
+      image.mv('./public/product-images/' + id + '_0.jpg', (err) => {
         if (err) {
           console.error(err);
           return res.status(500).send(err);
         }
-        res.redirect('/admin');
+        res.redirect(`/admin/add-more-images/${id}`);
       });
     } else {
-      res.redirect('/admin');
+      res.redirect(`/admin/add-more-images/${id}`);
     }
   }).catch((err) => {
     console.error(err);
     res.status(500).send(err);
+  });
+});
+
+// Route to render the add more images page
+router.get('/add-more-images/:id', verifyLogin, async (req, res) => {
+  try {
+    let product = await productHelpers.getProductImages(req.params.id);
+    res.render('admin/addMoreImages', { product, admin: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+});
+// Route to handle the image upload and skip actions
+router.post('/add-more-images/:id', async (req, res) => {
+  let productId = req.params.id;
+  let uploadPromises = [];
+
+  if (req.body.skip) {
+    return res.redirect('/admin/');
+  }
+
+  if (req.files && req.files.Images) {
+    let images = req.files.Images;
+    if (!Array.isArray(images)) {
+      images = [images];
+    }
+
+    // Get the total number of existing images to determine the index for new images
+    let product = await productHelpers.getProductImages(productId);
+    let productLength = product.images.length;
+
+    images.forEach((image, index) => {
+      uploadPromises.push(new Promise((resolve, reject) => {
+        // Calculate the index for the new image
+        let newIndex = productLength + index + 1;
+        let filePath = path.join(__dirname, '../public/product-images', `${productId}_${newIndex}.jpg`);
+        
+        image.mv(filePath, (err) => {
+          if (err) {
+            return reject(err);
+          }
+          resolve();
+        });
+      }));
+    });
+  }
+
+  Promise.all(uploadPromises)
+    .then(() => {
+      res.redirect('/admin/');
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send(err);
+    });
+});
+
+
+// Route for deleting images
+router.post('/delete-image', verifyLogin, (req, res) => {
+  const { imageName, productId } = req.body;
+
+  const filePath = path.join(__dirname, '../public/product-images', imageName);
+
+  fs.unlink(filePath, (err) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send(err);
+    }
+
+    // After deletion, you might want to remove the reference from the database or perform other actions
+
+    res.sendStatus(200);
+  });
+});
+
+// Route for editing images
+router.post('/edit-image', verifyLogin, (req, res) => {
+  if (!req.files || !req.files.newImage) {
+    return res.status(400).send('No new image file uploaded.');
+  }
+
+  const newImage = req.files.newImage;
+  const { oldImageName, productId } = req.body;
+
+  const oldImagePath = path.join(__dirname, '../public/product-images', oldImageName);
+  const newImagePath = path.join(__dirname, '../public/product-images', oldImageName); // Overwrite the old image
+
+  newImage.mv(newImagePath, (err) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send(err);
+    }
+
+    res.sendStatus(200);
   });
 });
 
@@ -152,5 +269,8 @@ router.post('/sort-orders', verifyLogin, async (req, res) => {
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
 });
+
+
+
 
 module.exports = router;

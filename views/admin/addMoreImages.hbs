@@ -1,0 +1,104 @@
+<section>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-12">
+                <h2 class="text-center">Add More Images</h2>
+                <form action="/admin/add-more-images/{{product._id}}" method="post" enctype="multipart/form-data"
+                    id="addImagesForm">
+                    <div id="imageContainer">
+                        <!-- Existing Images -->
+                        {{#each product.images}}
+                        <div class="image-group mb-2">
+                            
+                            <div class="overlay-buttons position-absolute top-0 end-0 p-2">
+                                <button class="btn btn-primary btn-sm me-2"  type="button"  onclick="editImage('{{this}}')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm" type="button"  onclick="deleteImage('{{this}}')">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+
+                            <img src="/product-images/{{this}}" alt="Product Image" style="width:100px; height:auto"
+                                class="pt-3">
+
+
+                          
+                            <input type="file" name="editImages" class="form-control d-none"
+                                id="editImageInput_{{@index}}" data-image-name="{{this}}"
+                                onchange="uploadEditedImage(event, '{{this}}')" >
+                        </div>
+                        {{/each}}
+                    </div>
+                    <!-- New Images -->
+                    <div id="newImageContainer"></div>
+                                                     
+
+                    <button type="button" class="btn btn-primary mb-2" id="addImageButton">Add Images</button>
+                    <button type="submit" class="btn btn-success mt-4">Submit</button>
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .overlay-buttons {
+    display: flex;
+    gap: 0.5rem;
+    z-index: 10;
+}
+</style>
+
+<script>
+    
+
+    document.getElementById('addImageButton').addEventListener('click', function () {
+        var newImageContainer = document.getElementById('newImageContainer');
+        var imageGroup = document.createElement('div');
+        imageGroup.className = 'image-group mb-2';
+
+        var input = document.createElement('input');
+        input.type = 'file';
+        input.name = 'Images';
+        input.className = 'form-control';
+
+        imageGroup.appendChild(input);
+        newImageContainer.appendChild(imageGroup);
+    });
+
+    function deleteImage(imageName) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/admin/delete-image', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                location.reload();
+            }
+        };
+        xhr.send(JSON.stringify({ imageName: imageName, productId: '{{product._id}}' }));
+    }
+
+    function editImage(imageName) {
+        var index = Array.prototype.indexOf.call(document.querySelectorAll('button[onclick^="editImage"]'), event.target);
+        document.getElementById(`editImageInput_${index}`).click();
+    }
+
+    function uploadEditedImage(event, oldImageName) {
+        var newImageFile = event.target.files[0];
+        var formData = new FormData();
+        formData.append('newImage', newImageFile);
+        formData.append('oldImageName', oldImageName);
+        formData.append('productId', '{{product._id}}');
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/admin/edit-image', true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                location.reload();
+            }
+        };
+        xhr.send(formData);
+    }
+</script>

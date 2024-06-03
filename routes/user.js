@@ -227,6 +227,34 @@ router.post('/delete-account', verifyLogin, async (req, res) => {
   }
 });
 
+router.get('/sell-products',verifyLogin, async(req,res)=>{
+let user=req.session.user
+res.render('user/sell-products',{user})
+
+})
+
+router.post('/add-product', (req, res) => {
+  let product = {
+      Name: req.body.Name,
+      Category: req.body.Category,
+      Price: req.body.Price,
+      Description: req.body.Description,
+  };
+
+  productHelpers.addUserProduct(product).then((productId) => {
+      if (req.files) {
+          if (Array.isArray(req.files.Image)) {
+              req.files.Image.forEach((image, index) => {
+                  image.mv(`./public/product-images/${productId}_${index}.jpg`);
+              });
+          } else {
+              req.files.Image.mv(`./public/product-images/${productId}.jpg`);
+          }
+      }
+      res.redirect('/');
+  });
+});
+
 
 router.get('/search-products', async (req, res) => {
   const query = req.query.query;
