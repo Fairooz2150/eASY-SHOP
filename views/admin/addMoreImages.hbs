@@ -2,41 +2,60 @@
     <div class="container mt-4">
         <div class="row">
             <div class="col-md-12">
-                <h2 class="text-center">Add More Images</h2>
+                <h2 class="text-center pb-4">Add More Images</h2>
                 <form action="/admin/add-more-images/{{product._id}}" method="post" enctype="multipart/form-data"
                     id="addImagesForm">
-                    <div id="imageContainer">
+                    <div id="imageContainer" class="row mt-4">
                         <!-- Existing Images -->
                         {{#each product.images}}
-                        <div class="image-group mb-2">
-                            
-                            <div class="overlay-buttons position-absolute top-0 end-0 p-2">
-                                <button class="btn btn-primary btn-sm me-2"  type="button"  onclick="editImage('{{this}}')">
-                                    <i class="fas fa-edit"></i>
+                        <div class="image-group mb-2 ml-5">
+
+                            <div class="overlay-buttons position-absolute top-0 end-0 pl-2 ml-1 ">
+                                <button class="btn btn-sm me-2 bg-transparent" type="button" >
+                                    <i class="bi bi-pencil-square" onclick="editImage('{{this}}')"></i>
                                 </button>
-                                <button class="btn btn-danger btn-sm" type="button"  onclick="deleteImage('{{this}}')">
-                                    <i class="fas fa-trash-alt"></i>
+                                <button class="btn  btn-sm  ml-5 bg-transparent" type="button" onclick="deleteImage('{{this}}')">
+                                    <i class="bi bi-trash3 ml-4"></i>
                                 </button>
                             </div>
+                           
+                                <img src="/product-images/{{this}}" alt="Product Image" style="width:170px; height:190px"
+                                class="shadow-lg rounded">
+                            
+                            
+                            
+                            
 
-                            <img src="/product-images/{{this}}" alt="Product Image" style="width:100px; height:auto"
-                                class="pt-3">
 
 
-                          
-                            <input type="file" name="editImages" class="form-control d-none"
-                                id="editImageInput_{{@index}}" data-image-name="{{this}}"
-                                onchange="uploadEditedImage(event, '{{this}}')" >
+                    <input type="file" name="editImages" class="form-control d-none" id="editImageInput_{{@index}}"
+                        data-image-name="{{this}}" onchange="uploadEditedImage(event, '{{this}}')">
+
+
+
                         </div>
                         {{/each}}
                     </div>
                     <!-- New Images -->
-                    <div id="newImageContainer"></div>
-                                                     
 
-                    <button type="button" class="btn btn-primary mb-2" id="addImageButton">Add Images</button>
-                    <button type="submit" class="btn btn-success mt-4">Submit</button>
-                    
+
+
+
+                    <div id="newImageContainer"> </div>
+
+                    <div class="row">
+                        <div class="addImages">
+                            <button type="button" class="btn btn-primary mt-4 ml-3" id="addImageButton">Add Images</button>
+
+                        </div>
+                        
+                        <div class="submit ">
+                            <button type="submit" class="btn btn-success mt-4 mr-5  ">Submit</button>
+                        </div>
+
+                    </div>
+
+
                 </form>
             </div>
         </div>
@@ -44,20 +63,34 @@
 </section>
 
 <style>
+    .bi{
+        
+        color: grey;
+    }
+   
+
+    .submit{
+        margin-left: auto;
+        margin-right: 22px;
+        margin-top: 100px;
+    }
+    
+
     .overlay-buttons {
-    display: flex;
-    gap: 0.5rem;
-    z-index: 10;
-}
+        display: flex;
+        gap: 0.5rem;
+        z-index: 10;
+    }
 </style>
 
 <script>
-    
+
+
 
     document.getElementById('addImageButton').addEventListener('click', function () {
         var newImageContainer = document.getElementById('newImageContainer');
         var imageGroup = document.createElement('div');
-        imageGroup.className = 'image-group mb-2';
+        imageGroup.className = 'image-group mb-2 ml-3';
 
         var input = document.createElement('input');
         input.type = 'file';
@@ -81,7 +114,7 @@
     }
 
     function editImage(imageName) {
-        var index = Array.prototype.indexOf.call(document.querySelectorAll('button[onclick^="editImage"]'), event.target);
+        var index = Array.prototype.indexOf.call(document.querySelectorAll('i[onclick^="editImage"]'), event.target);
         document.getElementById(`editImageInput_${index}`).click();
     }
 
