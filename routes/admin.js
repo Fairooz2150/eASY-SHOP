@@ -81,7 +81,9 @@ router.post('/add-product', (req, res) => {
   let product = {
       Name: req.body.Name,
       Category: req.body.Category,
-      Price: req.body.Price,
+      Actual_Price: req.body.Actual_Price,
+      Offer_Price: req.body.Offer_Price,
+      Offer_Percentage:req.body.Offer_Percentage,
       Description: req.body.Description,
   };
 
@@ -92,10 +94,10 @@ router.post('/add-product', (req, res) => {
                   image.mv(`./public/product-images/${productId}_${index}.jpg`);
               });
           } else {
-              req.files.Image.mv(`./public/product-images/${productId}.jpg`);
+              req.files.Image.mv(`./public/product-images/${productId}_0.jpg`);
           }
       }
-      res.render("admin/add-product", { admin: true })
+      res.redirect('/admin/')
   });
 });
 

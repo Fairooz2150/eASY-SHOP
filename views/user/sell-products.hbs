@@ -1,8 +1,8 @@
 <section>
-    <div class="container mt-4">
-        <div class="row">
-            <div class="col-md-6">
-                <h2 class="text-center">Sell Your Product</h2>
+    <div class="container mt-4" >
+        <div class="row" >
+            <div class="col-md-12 ">
+                <h2 class="text-center">Sell Your Products</h2>
                 <form action="/add-product" method="post" enctype="multipart/form-data" id="productForm">
                     <label for="">Name</label>
                     <input type="text" name="Name" class="form-control">
@@ -10,19 +10,41 @@
                     <label for="">Category</label>
                     <input type="text" name="Category" class="form-control">
 
-                    <label for="">Price</label>
-                    <input type="text" name="Price" class="form-control">
+                    <div class="row">
+                        <div class="ml-3">
+                            <label for=""> Actual Price</label>
+                            <input type="text" name="Actual_Price" class="form-control ">
+                        </div>
+                         <div class="ml-3">
+                            <label for="">Offer Percentage%</label>
+                            <input type="text" name="Offer_Percentage" class="form-control ">
+                        </div>
+                        <div class="ml-3">
+                            <label for="">Offer Price</label>
+                            <input type="text" name="Offer_Price" class="form-control">
+                        </div>
+                    </div>
 
                     <label for="">Description</label>
-                    <input type="text" name="Description" class="form-control">
+                    
+                    <textarea class="form-control" type="text"  name="Description" rows="3"></textarea>
 
-                    <label for="">Images</label>
+                    <label for="">Thumbnail: </label>
                     <div id="imageContainer">
-                        <input type="file" name="Image" class="form-control mb-2">
+                         <img src="" alt="" style="width:100px; height:auto" id="imgView" class="pt-3">
+                        <input type="file" name="Image" class="form-control mb-2" onchange="viewImage(event)">
                     </div>
-                    <button type="button" class="btn btn-primary mb-2" id="addImage">Add More Images</button>
-
-                    <button type="submit" class="btn btn-success mt-4">Add Product</button>
+                    <div class="row">
+                        <div class="mt-3 ml-2">
+                            <button type="button" class="btn btn-primary mb-2" id="addImage"><i class="bi bi-plus-square"></i> Images</button>
+                        </div>
+                        <div class="ml-auto">
+                            <button type="submit" class="btn btn-success mt-4">Submit</button>
+                            
+                        </div>
+                        
+                    </div>
+                  
                 </form>
             </div>
         </div>
@@ -30,6 +52,13 @@
 </section>
 
 <script>
+
+  
+  function viewImage(event) {
+    document.getElementById('imgView').src = URL.createObjectURL(event.target.files[0]);
+  }
+
+
     document.getElementById('addImage').addEventListener('click', function() {
         var imageContainer = document.getElementById('imageContainer');
         var input = document.createElement('input');

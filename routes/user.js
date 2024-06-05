@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var productHelpers=require('../helpers/product-helpers');
+const bcrypt=require('bcrypt')
 const userHelpers=require('../helpers/user-helpers');
 const { log } = require('console');
 const verifyLogin=(req,res,next)=>{
@@ -82,7 +83,7 @@ router.get('/cart',verifyLogin,async (req,res)=>{
 })
 
 router.get('/add-to-cart/:id',(req,res)=>{
-  console.log("api call");
+ 
    userHelpers.addToCart(req.params.id,req.session.user._id).then(()=>{
 res.json({status:true})
   })
@@ -186,15 +187,18 @@ router.get('/account-info', verifyLogin, async (req, res) => {
 
 router.post('/update-account', verifyLogin, async (req, res) => {
   const userId = req.session.user._id;
-  const { First_Name, Last_Name, Email } = req.body;
+  
+  let { First_Name, Last_Name, Email, Password } = req.body;
+
 
   try {
-    await userHelpers.updateAccount(userId, { First_Name, Last_Name, Email });
+    await userHelpers.updateAccount(userId, { First_Name, Last_Name, Email, Password });
 
     // Update the session data
     req.session.user.First_Name = First_Name;
     req.session.user.Last_Name = Last_Name;
     req.session.user.Email = Email;
+    
 
     res.json({ success: true });
   } catch (error) {
@@ -237,7 +241,9 @@ router.post('/add-product', (req, res) => {
   let product = {
       Name: req.body.Name,
       Category: req.body.Category,
-      Price: req.body.Price,
+      Actual_Price: req.body.Actual_Price,
+      Offer_Price: req.body.Offer_Price,
+      Offer_Percentage:req.body.Offer_Percentage,
       Description: req.body.Description,
   };
 
@@ -248,7 +254,7 @@ router.post('/add-product', (req, res) => {
                   image.mv(`./public/product-images/${productId}_${index}.jpg`);
               });
           } else {
-              req.files.Image.mv(`./public/product-images/${productId}.jpg`);
+              req.files.Image.mv(`./public/product-images/${productId}_0.jpg`);
           }
       }
       res.redirect('/');

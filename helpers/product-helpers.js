@@ -46,8 +46,10 @@ module.exports={
                 $set:{
                     Name:proDetails.Name,
                     Description:proDetails.Description,
-                    Price:proDetails.Price,
-                    Category:proDetails.Category
+                    Actual_Price:proDetails.Actual_Price,
+                    Offer_Price:proDetails.Offer_Price,
+                    Category:proDetails.Category,
+                    Offer_Percentage:proDetails.Offer_Percentage
                 }
             }).then((response)=>{
                 resolve()
@@ -61,7 +63,7 @@ module.exports={
                     $or: [
                         { Name: { $regex: query, $options: 'i' } },
                         { Description: { $regex: query, $options: 'i' } },
-                        { Price: { $regex: query, $options: 'i' } },
+                        { Offer_Price: { $regex: query, $options: 'i' } },
                         { Category: { $regex: query, $options: 'i' } }
                     ]
                 };

@@ -1,7 +1,7 @@
 <section>
   <div class="container mt-4">
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-12">
         <h2 class="text-center">Edit Product</h2>
         <form action="/admin/edit-product/{{product._id}}" method="post" enctype="multipart/form-data">
           <label for="">Name</label>
@@ -10,11 +10,23 @@
           <label for="">Category</label>
           <input type="text" name="Category" class="form-control" value="{{product.Category}}">
 
-          <label for="">Price</label>
-          <input type="text" name="Price" class="form-control" value="{{product.Price}}">
+          <div class="row">
+                        <div class="ml-3" >
+                            <label for=""> Actual Price</label>
+                    <input type="text" name="Actual_Price" class="form-control" value="{{product.Actual_Price}}">
+                        </div>
+                        <div class="ml-3">
+                            <label for="">Offer Percentage%</label>
+                            <input type="text" name="Offer_Percentage" class="form-control " value="{{product.Offer_Percentage}}">
+                        </div>
+                        <div class="ml-3" >
+                            <label for="">Offer Price</label>
+                    <input type="text" name="Offer_Price" class="form-control" value="{{product.Offer_Price}}">
+                        </div>
+           </div>
 
           <label for="">Description</label>
-          <input type="text" name="Description" class="form-control" value="{{product.Description}}">
+          <input type="text" name="Description"  class="form-control" value="{{product.Description}}">
 
           <label for="">Thumbnail: </label>
           <img src="/product-images/{{product._id}}_0.jpg" alt="" style="width:100px; height:auto" id="imgView" class="pt-3">

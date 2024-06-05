@@ -11,7 +11,21 @@
                         style="height: 10rem;">
                     <div class="card-body">
                         <h5 class="card-title">{{this.Name}}</h5>
-                        <p class="card-text">Rs.{{this.Price}}</p>
+                        <div class="row">
+                           
+                            <div>
+                                <p class="card-text">{{this.Offer_Percentage}}%</p>
+                            </div>
+
+                            <div class="ml-2">
+                               <b class="card-text">₹{{this.Offer_Price}}</b>
+                            </div >
+
+                            <div class="ml-2">
+                               <p class="card-text text-muted " ><small> <del>₹{{this.Actual_Price}} </del></small></p>
+                            </div>
+                        </div>
+                        
                         <p class="card-text">{{this.Description}}.</p>
                         <p hidden>{{this.Category}}</p>
                         <button onclick="addToCart('{{this._id}}')" class="btn btn-primary">Add to cart</button>

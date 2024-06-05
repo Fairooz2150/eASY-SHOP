@@ -78,7 +78,7 @@ module.exports={
                 {
                     $addFields: {
                         'products.productName': '$productDetails.Name',
-                        'products.price': '$productDetails.Price'
+                        'products.price': '$productDetails.Offer_Price'
                     }
                 },
                 {

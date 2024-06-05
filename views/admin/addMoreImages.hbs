@@ -2,11 +2,13 @@
     <div class="container mt-4">
         <div class="row">
             <div class="col-md-12">
-                <h2 class="text-center pb-4">Add More Images</h2>
+                <h2 class="text-center pb-4">Images</h2>
                 <form action="/admin/add-more-images/{{product._id}}" method="post" enctype="multipart/form-data"
                     id="addImagesForm">
+                  
                     <div id="imageContainer" class="row mt-4">
                         <!-- Existing Images -->
+                       
                         {{#each product.images}}
                         <div class="image-group mb-2 ml-5">
 

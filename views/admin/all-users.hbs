@@ -5,6 +5,7 @@
                 <tr>
                     <th scope="col">No</th>
                     <th scope="col">Name</th>
+                    <th scope="col">Gender</th>
                     <th scope="col">Email</th>
                     <th scope="col">Remove</th>
                 </tr>
@@ -14,6 +15,7 @@
                 <tr>
                     <th scope="row">{{incrementedIndex @index}}</th>
                     <td>{{this.First_Name}} {{this.Last_Name}}</td>
+                    <td>{{this.Gender}}</td>
                     <td>{{this.Email}}</td>
                     <td>
                         <a href="/admin/delete-user/{{this._id}}" class="btn btn-danger" onClick="return confirm(`Do you want to permanently remove {{this.First_Name}} {{this.Last_Name}} from the system?`)">Remove</a>

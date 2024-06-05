@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <title>Account Info</title>
 </head>
+
 <body>
     <div class="row">
         <div class="col-md-6 m-auto">
@@ -16,21 +18,48 @@
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label>First Name</label>
-                            <input type="text" class="form-control" name="First_Name" value="{{user.First_Name}}" disabled>
+                            <input type="text" class="form-control" name="First_Name" value="{{user.First_Name}}"
+                                disabled>
                         </div>
                         <div class="form-group col-md-6">
                             <label>Last Name</label>
-                            <input type="text" class="form-control" name="Last_Name" value="{{user.Last_Name}}" disabled>
+                            <input type="text" class="form-control" name="Last_Name" value="{{user.Last_Name}}"
+                                disabled>
                         </div>
                     </div>
                     <div class="form-group">
                         <label>Email</label>
                         <input type="email" class="form-control" name="Email" value="{{user.Email}}" disabled>
                     </div>
+                    <div class="form-group" >
+                        <label>Gender</label>
+                        <br>
+                        <label class="radio-inline ml-2 mr-2" for="">
+                            Male<input type="radio" class="ml-2" name="Gender" value="Male" {{#ifCond
+                                user.Gender "===" "Male" }} checked {{/ifCond}} disabled>
+                        </label>
+                        <label for="" class="radio-inline ml-2 mr-2 mt-1">
+                            Female<input type="radio" class="ml-2" name="Gender" value="Female" {{#ifCond
+                                user.Gender "===" "Female" }} checked {{/ifCond}} disabled>
+                        </label>
+                        <label for="" class="radio-inline ml-2 mr-2 mt-1">
+                            Others<input type="radio" class="ml-2" name="Gender" value="Others" {{#ifCond
+                                user.Gender "===" "Others" }} checked {{/ifCond}} disabled>
+                        </label>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" class="form-control" name="Password" disabled>
+                    </div>
+
                     <div>
-                        <button type="button" class="btn btn-danger float-left" id="deleteAccountBtn">Delete Account</button>
+                        <button type="button" class="btn btn-danger float-left" id="deleteAccountBtn">Delete
+                            Account</button>
                         <button type="button" class="btn btn-primary float-right" id="editAccountBtn">Edit</button>
-                        <button type="button" class="btn btn-success float-right" id="saveAccountBtn" style="display: none;">Save</button>
+                        <button type="button" class="btn btn-success float-right" id="saveAccountBtn"
+                            style="display: none;">Save</button>
                     </div>
                 </form>
             </div>
@@ -61,30 +90,30 @@
     </div>
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Enable form fields on Edit button click
-            $('#editAccountBtn').click(function() {
+            $('#editAccountBtn').click(function () {
                 $('form input').prop('disabled', false);
                 $('#editAccountBtn').hide();
                 $('#saveAccountBtn').show();
             });
 
             // Save changes and disable fields again
-            $('#saveAccountBtn').click(function() {
+            $('#saveAccountBtn').click(function () {
                 const formData = $('#accountForm').serialize();
 
                 $.ajax({
                     url: '/update-account',
                     type: 'POST',
                     data: formData,
-                    success: function(response) {
+                    success: function (response) {
                         if (response.success) {
                             $('form input').prop('disabled', true);
                             $('#editAccountBtn').show();
                             $('#saveAccountBtn').hide();
-                            alert('Account updated successfully'); 
-                                                  
-                             window.location.href = '/your-account';
+                            alert('Account updated successfully');
+
+                            window.location.href = '/your-account';
                         } else {
                             alert('Error updating account');
                         }
@@ -93,19 +122,19 @@
             });
 
             // Show password confirmation modal on Delete Account button click
-            $('#deleteAccountBtn').click(function() {
+            $('#deleteAccountBtn').click(function () {
                 $('#passwordModal').modal('show');
             });
 
             // Handle password confirmation form submission
-            $('#passwordForm').submit(function(e) {
+            $('#passwordForm').submit(function (e) {
                 e.preventDefault();
                 const password = $('#password').val();
 
-                $.post('/verify-password', { password: password }, function(response) {
+                $.post('/verify-password', { password: password }, function (response) {
                     if (response.success) {
                         // Password verified, proceed with account deletion
-                        $.post('/delete-account', function(deleteResponse) {
+                        $.post('/delete-account', function (deleteResponse) {
                             if (deleteResponse.success) {
                                 alert('Account deleted successfully');
                                 window.location.href = '/logout'; // Redirect to logout or homepage
