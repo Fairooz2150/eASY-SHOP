@@ -237,16 +237,9 @@ res.render('user/sell-products',{user})
 
 })
 
-router.post('/add-product', (req, res) => {
-  let product = {
-      Name: req.body.Name,
-      Category: req.body.Category,
-      Actual_Price: req.body.Actual_Price,
-      Offer_Price: req.body.Offer_Price,
-      Offer_Percentage:req.body.Offer_Percentage,
-      Description: req.body.Description,
-  };
-
+router.post('/sell-product', (req, res) => {
+  let product=req.body
+  
   productHelpers.addUserProduct(product).then((productId) => {
       if (req.files) {
           if (Array.isArray(req.files.Image)) {

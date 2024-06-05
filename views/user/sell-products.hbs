@@ -3,9 +3,15 @@
         <div class="row" >
             <div class="col-md-12 ">
                 <h2 class="text-center">Sell Your Products</h2>
-                <form action="/add-product" method="post" enctype="multipart/form-data" id="productForm">
+                <form action="/sell-product" method="post" enctype="multipart/form-data" id="productForm">
                     <label for="">Name</label>
                     <input type="text" name="Name" class="form-control">
+                     <input type="text" name="Product_Owner" value="User" hidden>
+                      <input type="text" name="User_Id" value="{{user._id}}" hidden>
+                       <input type="text" name="User_First_Name" value="{{user.First_Name}}" hidden>
+                        <input type="text" name="User_Last_Name" value="{{user.Last_Name}}" hidden>
+                        <input type="text" name="Status" value="Pending" hidden>
+
 
                     <label for="">Category</label>
                     <input type="text" name="Category" class="form-control">

@@ -85,6 +85,7 @@ router.post('/add-product', (req, res) => {
       Offer_Price: req.body.Offer_Price,
       Offer_Percentage:req.body.Offer_Percentage,
       Description: req.body.Description,
+      Product_Owner:req.body.Product_Owner
   };
 
   productHelpers.addProduct(product).then((productId) => {

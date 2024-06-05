@@ -49,7 +49,9 @@ module.exports={
                     Actual_Price:proDetails.Actual_Price,
                     Offer_Price:proDetails.Offer_Price,
                     Category:proDetails.Category,
-                    Offer_Percentage:proDetails.Offer_Percentage
+                    Offer_Percentage:proDetails.Offer_Percentage,
+                    Product_Owner:proDetails.Product_Owner
+
                 }
             }).then((response)=>{
                 resolve()
@@ -78,7 +80,21 @@ module.exports={
     },
     addUserProduct: (product) => {
         return new Promise((resolve, reject) => {
-            db.get().collection(collection.PENDING_COLLECTION).insertOne(product).then((data) => {
+            let productDetails = {
+                Name: product.Name,
+                Category: product.Category,
+                Actual_Price: product.Actual_Price,
+                Offer_Price: product.Offer_Price,
+                Offer_Percentage: product.Offer_Percentage,
+                Description: product.Description,
+                User_Id: objectId(product.User_Id),
+                User_First_Name: product.User_First_Name,
+                User_Last_Name: product.User_Last_Name,
+                Status: product.Status
+          
+            };
+          
+            db.get().collection(collection.PENDING_COLLECTION).insertOne(productDetails).then((data) => {
                 resolve(data.insertedId);
                 console.log(data.insertedId);
             });
