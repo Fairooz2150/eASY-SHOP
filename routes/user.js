@@ -188,16 +188,18 @@ router.get('/account-info', verifyLogin, async (req, res) => {
 router.post('/update-account', verifyLogin, async (req, res) => {
   const userId = req.session.user._id;
   
-  let { First_Name, Last_Name, Email, Password } = req.body;
+  let { First_Name, Last_Name, Email, Phone, Gender, Password } = req.body;
 
 
   try {
-    await userHelpers.updateAccount(userId, { First_Name, Last_Name, Email, Password });
+    await userHelpers.updateAccount(userId, { First_Name, Last_Name, Email, Phone, Gender, Password });
 
     // Update the session data
     req.session.user.First_Name = First_Name;
     req.session.user.Last_Name = Last_Name;
     req.session.user.Email = Email;
+    req.session.user.Phone = Phone;
+    req.session.user.Gender = Gender;
     
 
     res.json({ success: true });

@@ -433,27 +433,33 @@ module.exports = {
     },
 
     // Update account details
-    updateAccount: (userId, updates) => {
-        return new Promise(async (resolve, reject) => {
+   
 
-            try {
-
-                if (updates.Password) {
-
-                    updates.Password = await bcrypt.hash(updates.Password, 10);
-                }
-
-                await db.get().collection(collection.USER_COLLECTION).updateOne(
-
-                    { _id: objectId(userId) },
-                    { $set: updates }
-                );
-                resolve();
-            } catch (error) {
-                reject(error);
+// Update account details
+updateAccount: (userId, updates) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // If the updates object contains a password field and it's not null
+            if (updates.Password) {
+                // Hash the password using bcrypt
+                updates.Password = await bcrypt.hash(updates.Password, 10);
+            } else {
+                // If password is null, remove it from the updates object
+                delete updates.Password;
             }
-        });
-    },
+
+            // Update the user's account details in the database
+            await db.get().collection(collection.USER_COLLECTION).updateOne(
+                { _id: objectId(userId) },
+                { $set: updates }
+            );
+            resolve();
+        } catch (error) {
+            reject(error);
+        }
+    });
+},
+
     // Delete account
     deleteAccount: async (userId) => {
         try {

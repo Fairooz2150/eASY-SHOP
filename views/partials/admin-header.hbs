@@ -1,4 +1,4 @@
-<header>
+<header >
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
       aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
@@ -17,7 +17,7 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="/admin/">Requests</a>
+          <a class="nav-link" href="/admin/product-requests">Requests</a>
         </li>
 
         <li class="nav-item">
@@ -46,10 +46,43 @@
           {{else}}
           <a class="dropdown-item" href="/admin/logout">Logout</a>
           {{/if}}
-
-
         </div>
       </div>
     </div>
   </nav>
 </header>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  var lastScrollTop = 0;
+  var header = document.querySelector("header");
+
+  window.addEventListener("scroll", function() {
+    var currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+    if (currentScroll > lastScrollTop) {
+      // Downscroll
+      header.style.top = "-60px"; // Adjust the value if the header height is different
+    } else {
+      // Upscroll
+      header.style.top = "0";
+    }
+
+    lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; // For Mobile or negative scrolling
+  }, false);
+});
+</script>
+
+  <style>
+    body {
+      padding-top: 60px; /* Adjust this value to match the height of your header */
+    }
+
+    header {
+      position: fixed;
+      background-color: #1b2994;
+      width: 100%;
+      z-index: 1;
+      top: 0;
+      transition: top 0.3s; /* Smooth transition */
+    }
+  </style>

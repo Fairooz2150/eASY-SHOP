@@ -1,0 +1,186 @@
+<section>
+  <div class="container">
+    <h2 class="main-heading">User Products</h2>
+    <div id="orders-container">
+       {{#each products}}
+      <div class="card">
+        <div class="card-header">
+          <div class="row header-content">
+            <div class="chip">
+              <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Person" width="96" height="96">
+              {{this.User_First_Name}} {{this.User_Last_Name}}
+            </div>
+            <div class="date">
+              <span style="font-weight:bold"> Date: </span> {{this.Date}} <br>
+              <span style="font-weight:bold"> Time: </span> {{this.time}}
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="Date">
+              <span style="font-weight:bold"> Date: </span> {{this.Date}} <br>
+              <span style="font-weight:bold"> Time: </span> {{this.Time}}
+              <p class="card-text mt-2"><span style="font-weight:bold">Status: </span> <span id="status-{{this._id}}">{{this.Status}}</span></p>
+            </div>
+            <div class="address">
+              <span style="font-weight: bold;"> Address:</span><br>{{this.Selling_Address}}
+              <br>Ph: {{this.User_Phone}}
+            </div>
+          </div>
+          <div>
+            <table class="table mt-5" id="productsTable">
+              <thead>
+                <tr>
+                  <th scope="col">Item</th>
+                  <th scope="col">Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="row">
+                      <div>
+                        <img src="/product-images/{{this._id}}_0.jpg" style="width:100x;height:120px" alt="" class="product_image">
+                      </div>
+                      <div class="product_details ml-5">
+                        {{this.Name}} <br>
+                        {{this.Category}} <br>
+                        <div class="text-muted"> {{this.Description}}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>Actual: ₹{{this.Actual_Price}} <br> Offer: ₹{{this.Offer_Price}} </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="footer-content">
+            <div id="action-buttons-{{this._id}}" class="approval row">
+              {{#ifEquals this.Status 'Pending'}}
+                <button onclick="updatePendingProdStatus('{{this._id}}', 'Declined')" class="btn btn-primary mr-3" id="decline-btn-{{this._id}}">Declined</button>
+                <button onclick="updatePendingProdStatus('{{this._id}}', 'Approved')" class="btn btn-primary" id="approve-btn-{{this._id}}">Approved</button>
+              {{else ifEquals this.Status 'Declined'}}
+                <button onclick="updatePendingProdStatus('{{this._id}}', 'Approved')" class="btn btn-primary" id="approve-btn-{{this._id}}">Approved</button>
+              {{/ifEquals}}
+            </div>
+          </div>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+  </div>
+</section>
+
+<script>
+function updatePendingProdStatus(Id, Status) {
+  $.ajax({
+    url: '/admin/update-pending-products-status',
+    method: 'POST',
+    data: { Id: Id, Status: Status },
+    success: function(response) {
+      if (response.success) {
+        alert(`Pending Product status updated to ${Status}`);
+        document.getElementById('status-' + Id).innerText = Status;
+
+        var approveBtn = document.getElementById('approve-btn-' + Id);
+        var declineBtn = document.getElementById('decline-btn-' + Id);
+
+        if (Status === 'Approved') {
+          if (approveBtn) approveBtn.style.display = 'none';
+          if (declineBtn) declineBtn.style.display = 'none';
+        } else if (Status === 'Declined') {
+          if (declineBtn) declineBtn.style.display = 'none';
+          if (approveBtn) approveBtn.style.display = 'inline-block';
+        }
+      } else {
+        alert('Failed to update pending product status');
+      }
+    },
+    error: function(error) {
+      console.error('Error:', error);
+      alert('An error occurred while updating the pending product status');
+    }
+  });
+}
+</script>
+
+<style>
+
+    .main-heading {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .card {
+      margin-top: 65px;
+    }
+
+    .payment-header {
+      font-weight: bold;
+    }
+
+    .address {
+      margin-left: 5rem;
+    }
+
+    .chip {
+      display: inline-block;
+      padding: 0 25px;
+      height: 50px;
+      font-size: 16px;
+      line-height: 50px;
+      border-radius: 25px;
+      background-color: #f1f1f1;
+    }
+  
+    .chip img {
+      float: left;
+      margin: 0 10px 0 -25px;
+      height: 50px;
+      width: 50px;
+      border-radius: 50%;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-content {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .approval {
+      margin-left: auto;
+    }
+
+    .btn-primary {
+      margin: 0;
+    }
+
+    .date, .payment {
+      padding: 0 15px;
+    }
+    .total{
+      margin-left: auto;
+    }
+    .product_details{
+      margin-left: 10px;
+    }
+  </style>
+
+

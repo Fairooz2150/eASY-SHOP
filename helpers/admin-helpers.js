@@ -117,7 +117,7 @@ module.exports={
                         products: 1
                     }
                 }
-            ]).toArray((err, orders) => {
+            ]).sort({ Date: -1, time: -1 }).toArray((err, orders) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -133,6 +133,7 @@ module.exports={
                 { _id: objectId(orderId) },
                 { $set: { status: status } }
             ).then((response) => {
+               
                 resolve(response);
             }).catch((err) => {
                 reject(err);
@@ -140,6 +141,58 @@ module.exports={
         });
     },
     
+
+
+    updatePendingProdStatus : (Id, Status) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.PENDING_COLLECTION).updateOne(
+                { _id: objectId(Id) },
+                { $set: { Status: Status } }
+            ).then(async (response) => {
+                if (Status === "Approved") {
+                    try {
+                        // Find the document in PENDING_COLLECTION
+                        const product = await db.get().collection(collection.PENDING_COLLECTION).findOne({ _id: objectId(Id) });
+    
+                        if (product) {
+                            // Create the product data with the same _id
+                            const productData = {
+                                _id: objectId(product._id), // Same _id as in PENDING_COLLECTION
+                                Name: product.Name,
+                                Category: product.Category,
+                                Actual_Price: product.Actual_Price,
+                                Offer_Price: product.Offer_Price,
+                                Offer_Percentage: product.Offer_Percentage,
+                                Description: product.Description,
+                                User_Id: product.User_Id,
+                                User_First_Name: product.User_First_Name,
+                                User_Last_Name: product.User_Last_Name,
+                                User_Phone: product.User_Phone,
+                                Selling_Address: product.Selling_Address,
+                                Status: "Approved",
+                                Date: product.Date,
+                                Time: product.Time
+                               
+                            };
+    
+                            // Insert the product data into PRODUCT_COLLECTION
+                            await db.get().collection(collection.PRODUCT_COLLECTION).insertOne(productData);
+                        }
+    
+                        resolve(response);
+                    } catch (error) {
+                        reject(error);
+                    }
+                } else {
+                    resolve(response);
+                }
+            }).catch((err) => {
+                reject(err);
+            });
+        });
+    },
+    
+
   getAllOrdersAscending: () => {
     return new Promise((resolve, reject) => {
       db.get().collection('orders').find().sort({ date: 1 }).toArray().then((orders) => {

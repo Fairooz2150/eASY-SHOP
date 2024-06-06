@@ -253,6 +253,28 @@ router.post('/update-order-status', (req, res) => {
   });
 });
 
+router.post('/update-pending-products-status', (req, res) => {
+  let { Id, Status } = req.body;
+  adminHelpers.updatePendingProdStatus(Id, Status).then(() => {
+    res.json({ success: true });
+  }).catch((err) => {
+    console.error('Error updating pending products status:', err);
+    res.json({ success: false });
+  });
+});
+
+
+
+router.get('/product-requests', verifyLogin, async (req, res) => {
+  try {
+    let products = await productHelpers.getAllUserProducts();
+    res.render('admin/product-requests', { admin: true, products });
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    res.status(500).send('Server error');
+  }
+});
+
 router.post('/sort-orders', verifyLogin, async (req, res) => {
   try {
     const { order } = req.body;

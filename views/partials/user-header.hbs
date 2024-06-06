@@ -82,3 +82,38 @@
         </div>
     </nav>
 </header>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  var lastScrollTop = 0;
+  var header = document.querySelector("header");
+
+  window.addEventListener("scroll", function() {
+    var currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+    if (currentScroll > lastScrollTop) {
+      // Downscroll
+      header.style.top = "-60px"; // Adjust the value if the header height is different
+    } else {
+      // Upscroll
+      header.style.top = "0";
+    }
+
+    lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; // For Mobile or negative scrolling
+  }, false);
+});
+</script>
+
+  <style>
+    body {
+      padding-top: 60px; /* Adjust this value to match the height of your header */
+    }
+
+    header {
+      position: fixed;
+      
+      width: 100%;
+      z-index: 1;
+      top: 0;
+      transition: top 0.3s; /* Smooth transition */
+    }
+  </style>

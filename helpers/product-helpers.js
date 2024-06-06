@@ -1,6 +1,7 @@
 var db=require('../config/connection')
 var collection=require('../config/collections')
 const { response } = require('express')
+const moment = require('moment');
 const { log } = require('console')
 const path = require('path');
 const fs = require('fs'); 
@@ -23,6 +24,21 @@ module.exports={
             resolve(products)
         })
     },
+    
+    getAllUserProducts: () => {
+        return new Promise(async (resolve, reject) => {
+          try {
+            let products = await db.get().collection(collection.PENDING_COLLECTION)
+              .find()
+              .sort({ Date: -1, time: -1 }) // Sort by date and time in descending order
+              .toArray();
+            resolve(products);
+          } catch (error) {
+            reject(error);
+          }
+        });
+      },
+      
     deleteProduct:(prodId)=>{
         return new Promise((resolve,reject)=>{
             console.log(prodId);
@@ -80,6 +96,9 @@ module.exports={
     },
     addUserProduct: (product) => {
         return new Promise((resolve, reject) => {
+            let requestDate = moment().format('DD MMM YYYY');
+            let requestTime = moment().format('hh:mmA');
+
             let productDetails = {
                 Name: product.Name,
                 Category: product.Category,
@@ -90,8 +109,11 @@ module.exports={
                 User_Id: objectId(product.User_Id),
                 User_First_Name: product.User_First_Name,
                 User_Last_Name: product.User_Last_Name,
-                Status: product.Status
-          
+                User_Phone:product.User_Phone,            
+                Selling_Address:product.Selling_Address,
+                Status: product.Status,
+                Date: requestDate,
+                Time: requestTime
             };
           
             db.get().collection(collection.PENDING_COLLECTION).insertOne(productDetails).then((data) => {
