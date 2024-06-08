@@ -41,16 +41,23 @@
                     
                     <textarea class="form-control" type="text"  name="Selling_Address" rows="3"></textarea>
 
-                    <label for="">Thumbnail: </label>
-                    <div id="imageContainer">
-                         <img src="" alt="" style="width:100px; height:auto" id="imgView" class="pt-3">
+                    <label for="">Images: </label>
+                    
+                    <div id="imageContainer" class="col-lg-6">
+                        <!-- Input for the first image -->
                         <input type="file" name="Image" class="form-control mb-2" onchange="viewImage(event)">
+                        <!-- Placeholder for the first image -->
+                        <img src="" alt="" style="width:100px; height:auto" id="imgView" class="pt-3">
+                        
                     </div>
                     <div class="row">
-                        <div class="mt-3 ml-2">
-                            <button type="button" class="btn btn-primary mb-2" id="addImage"><i class="bi bi-plus-square"></i> Images</button>
+                        <div class="mt-3 ml-auto">
+                            <!-- Button to add more images -->
+                        <button type="button" class="btn btn-primary mb-2" id="addImage"><i class="bi bi-plus-square"></i> Images</button>
+
                         </div>
                         <div class="ml-auto">
+                            <!-- Submit button -->
                             <button type="submit" class="btn btn-success mt-4">Submit</button>
                             
                         </div>
@@ -64,19 +71,31 @@
 </section>
 
 <script>
+    function viewImage(event) {
+        // Display the thumbnail image
+        document.getElementById('imgView').src = URL.createObjectURL(event.target.files[0]);
+        // Scroll down the page to show the 'addImage' button
+        window.scrollTo(0, document.body.scrollHeight* 2);
+    }
 
-  
-  function viewImage(event) {
-    document.getElementById('imgView').src = URL.createObjectURL(event.target.files[0]);
-  }
-
-
-    document.getElementById('addImage').addEventListener('click', function() {
+    document.getElementById('addImage').addEventListener('click', function () {
         var imageContainer = document.getElementById('imageContainer');
         var input = document.createElement('input');
         input.type = 'file';
         input.name = 'Image';
         input.className = 'form-control mb-2';
         imageContainer.appendChild(input);
+        
+        // Attach onchange event listener to the new input element
+        input.addEventListener('change', function (event) {
+            var img = document.createElement('img');
+            img.src = URL.createObjectURL(event.target.files[0]);
+            img.style.width = '100px';
+            img.style.height = 'auto';
+            img.style.marginRight = '10px';
+            imageContainer.appendChild(img);
+            // Scroll down the page to show the 'addImage' button
+            window.scrollTo(0, document.body.scrollHeight* 2);
+        });
     });
 </script>

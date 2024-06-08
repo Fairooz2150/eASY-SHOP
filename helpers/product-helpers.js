@@ -113,7 +113,9 @@ module.exports={
                         { Name: { $regex: query, $options: 'i' } },
                         { Description: { $regex: query, $options: 'i' } },
                         { Offer_Price: { $regex: query, $options: 'i' } },
-                        { Category: { $regex: query, $options: 'i' } }
+                        { Category: { $regex: query, $options: 'i' } },
+                        { Actual_Price: { $regex: query, $options: 'i' } },
+                        
                     ]
                 };
                 

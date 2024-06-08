@@ -1,6 +1,5 @@
 <section>
     <div class="container-fluid ml-4 mr-4 mt-5">
-        
         <div class="row" id="product-container">
             {{#each products}}
             <div class="col-md-4 col-lg-3 col-sm-6 p-3">
@@ -12,20 +11,16 @@
                     <div class="card-body">
                         <h5 class="card-title">{{this.Name}}</h5>
                         <div class="row">
-                           
                             <div class="ml-3">
                                 <p class="card-text" style="color:green"><b> {{this.Offer_Percentage}}% </b><small>off</small></p>
                             </div>
-    
                             <div class="ml-3">
                                <b class="card-text" >₹{{this.Offer_Price}}</b>
-                            </div >
-
+                            </div>
                             <div class="ml-2">
-                               <p class="card-text text-muted " ><small> <del>₹{{this.Actual_Price}} </del></small></p>
+                               <p class="card-text text-muted"><small><del>₹{{this.Actual_Price}}</del></small></p>
                             </div>
                         </div>
-                        
                         <p class="card-text">{{this.Description}}.</p>
                         <p hidden>{{this.Category}}</p>
                         <button onclick="addToCart('{{this._id}}')" class="btn btn-primary">Add to cart</button>
@@ -38,17 +33,15 @@
 </section>
 
 <script>
-   
 document.getElementById('search-input').addEventListener('keyup', function(event) {
     const query = event.target.value;
     searchProducts(query);
 });
-//for large screen
+// For large screen
 document.getElementById('search-inputs').addEventListener('keyup', function(event) {
     const query = event.target.value;
     searchProducts(query);
 });
-
 
 function searchProducts(query) {
     $.ajax({
@@ -75,11 +68,21 @@ function displaySearchResults(products) {
         productElement.classList.add('col-md-4', 'col-lg-3', 'col-sm-6', 'p-3');
         productElement.innerHTML = `
             <div class="card" style="width: 15rem; height: 23rem">
-                <img class="card-img-top" src="/product-images/${product._id}.jpg" alt="Card image cap" style="height: 10rem;">
+                <img class="card-img-top" src="/product-images/${product._id}_0.jpg" alt="Card image cap" style="height: 10rem;">
                 <div class="card-body">
                     <h5 class="card-title">${product.Name}</h5>
-                    <p class="card-text">Rs.${product.Price}</p>
-                    <p class="card-text">${product.Description}</p>
+                    <div class="row">
+                        <div class="ml-3">
+                            <p class="card-text" style="color:green"><b> ${product.Offer_Percentage}% </b><small>off</small></p>
+                        </div>
+                        <div class="ml-3">
+                            <b class="card-text">₹${product.Offer_Price}</b>
+                        </div>
+                        <div class="ml-2">
+                            <p class="card-text text-muted"><small><del>₹${product.Actual_Price}</del></small></p>
+                        </div>
+                    </div>
+                    <p class="card-text">${product.Description}.</p>
                     <p hidden>${product.Category}</p>
                     <button onclick="addToCart('${product._id}')" class="btn btn-primary">Add to cart</button>
                 </div>
@@ -88,6 +91,4 @@ function displaySearchResults(products) {
         productContainer.appendChild(productElement);
     });
 }
-
-
 </script>
