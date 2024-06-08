@@ -5,31 +5,45 @@
                 <tr>
                     <th scope="col">No</th>
                     <th scope="col">Item</th>
-                    <th scope="col">Title</th>
+
                     <th scope="col">Price</th>
                     <th scope="col">Quantity</th>
-                    <th scope="col">Remove</th>
+                    <th scope="col">Delete</th>
 
                 </tr>
             </thead>
             <tbody>
-                    {{#each products}}
-                  <tr>
+                {{#each products}}
+                <tr>
 
                     <th scope="row">{{incrementedIndex @index}}</th>
-                    <td><img src="/product-images/{{this.product._id}}_0.jpg" style="width:70px;height:70px" alt=""></td>
-                    <td>{{this.product.Name}}</td>
-                    <td>₹{{this.product.Offer_Price}}</td>
-                    
-                    
                     <td>
-                       
-                        <button class="cart-item-count mr-3 " style="border-radius: 5px; " onclick=" changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',-1)">-</button>
-                       <span id="{{this.product._id}}">{{this.quantity}}</span> 
-                        <button class="cart-item-count ml-3" style="border-radius: 5px; " onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',1)">+</button>
+                        <div class="row">
+                            <div class="ml-2">
+                                <img src="/product-images/{{this.product._id}}_0.jpg" style="width:100px;height: 90px"
+                                    alt="">
+                            </div>
+                            <div class="ml-2">
+                                {{this.product.Name}} <br>
+                                <span class="text-muted">{{this.product.Category}}</span>
+                            </div>
+                            
+                        </div>
+                    </td>
+                    <td>₹{{this.product.Offer_Price}}</td>
+
+
+                    <td>
+
+                        <button class="cart-item-count mr-3 " style="border-radius: 5px; "
+                            onclick=" changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',-1)">-</button>
+                        <span id="{{this.product._id}}">{{this.quantity}}</span>
+                        <button class="cart-item-count ml-3" style="border-radius: 5px; "
+                            onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',1)">+</button>
                     </td>
                     <td>
-                        <a href="" class="btn btn-danger">Remove</a>
+                        <button class="btn btn-danger"
+                            onclick="deleteCartProduct('{{this.product._id}}')">Delete</button>
                     </td>
                 </tr>
                 {{/each}}
@@ -38,8 +52,8 @@
         <hr>
         {{#if placeOrder}}
         <div class="float-right pr-5" id="pop">
-        <h5 class="float-left mr-5 mt-4">Total: Rs.<span id="total">{{totalValue}}</span></h5>
-        <a href="/place-order" class="btn btn-success mt-3 " style="width: 100%;"><b>Place Order</b></a>
+            <h5 class="float-left mr-5 mt-4">Total: Rs.<span id="total">{{totalValue}}</span></h5>
+            <a href="/place-order" class="btn btn-success mt-3 " style="width: 100%;"><b>Place Order</b></a>
         </div>
         {{/if}}
     </div>
@@ -48,55 +62,75 @@
 <script>
 
 
-    
-      $(function () {
-      $('#productsTable').DataTable();  
-    });
+    function deleteCartProduct(productId) {
 
+        $.ajax({
+            url: '/delete-cart-product/' + productId,
+            method: 'DELETE',
+            success: function (response) {
+                if (response.success) {
+                    console.log('Product deleted successfully');
+                    location.reload();
+                } else {
+                    alert('Failed to delete product');
+                }
+            },
+            error: function (error) {
+                console.error('Error:', error);
+                alert('An error occurred while deleting the product');
+            }
+        });
 
-function changeQuantity(cartId, proId, userId, count) {
-    let quantity = parseInt(document.getElementById(proId).innerHTML);
-    count = parseInt(count);
-
-    // Check if the current quantity will become one after decreasing
-    if (quantity  === 1 && count === -1) {
-        // Display a confirmation dialog
-        let confirmRemove = confirm("Removing the item from cart. Are you sure?");
-         if(confirmRemove )
-         {location.reload();}
-        if (!confirmRemove) {
-            // If user cancels, do nothing
-            return;
-        }
     }
 
-    $.ajax({
-        url: '/change-product-quantity',
-        data: {
-            user: userId,
-            cart: cartId,
-            product: proId,
-            count: count,
-            quantity: quantity
-        },
-        method: 'post',
-        success: (response) => {
-            if (response.removeProduct) {
-                // Remove the corresponding table row
-                $(`#${proId}`).closest('tr').remove();
-                // Update total value
-                document.getElementById('total').innerHTML = response.total;
-                // Check if the total count of products becomes zero
-                if (response.cartCount === 0) {
-                    // Hide the 'Place Order' section and 'Total: Rs' div
-                    $('#placeOrderSection').hide();
-                    $('#totalSection').hide();
-                }
-            } else {
-                document.getElementById(proId).innerHTML = quantity + count;
-                document.getElementById('total').innerHTML = response.total;
+
+    $(function () {
+        $('#productsTable').DataTable();
+    });
+
+
+    function changeQuantity(cartId, proId, userId, count) {
+        let quantity = parseInt(document.getElementById(proId).innerHTML);
+        count = parseInt(count);
+
+        // Check if the current quantity will become one after decreasing
+        if (quantity === 1 && count === -1) {
+            // Display a confirmation dialog
+            let confirmRemove = confirm("Removing the item from cart. Are you sure?");
+            if (confirmRemove) { location.reload(); }
+            if (!confirmRemove) {
+                // If user cancels, do nothing
+                return;
             }
         }
-    });
-}
+
+        $.ajax({
+            url: '/change-product-quantity',
+            data: {
+                user: userId,
+                cart: cartId,
+                product: proId,
+                count: count,
+                quantity: quantity
+            },
+            method: 'post',
+            success: (response) => {
+                if (response.removeProduct) {
+                    // Remove the corresponding table row
+                    $(`#${proId}`).closest('tr').remove();
+                    // Update total value
+                    document.getElementById('total').innerHTML = response.total;
+                    // Check if the total count of products becomes zero
+                    if (response.cartCount === 0) {
+                        // Hide the 'Place Order' section and 'Total: Rs' div
+                        $('#placeOrderSection').hide();
+                        $('#totalSection').hide();
+                    }
+                } else {
+                    document.getElementById(proId).innerHTML = quantity + count;
+                    document.getElementById('total').innerHTML = response.total;
+                }
+            }
+        });
+    }
 </script>

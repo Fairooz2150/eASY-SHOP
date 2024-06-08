@@ -1,0 +1,104 @@
+<section>
+    <div class="container mt-4">
+         <div class="row mt-4">
+        <a href="/sell-products" class="btn btn-success ml-auto">Sell Product</a>
+      </div>
+        <table class="table mt-5" id="productsTable">
+            <thead>
+                <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Item</th>
+                  
+                    <th scope="col">Description</th>
+                    <th>Status</th>
+                    <th>Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each products}}
+                <tr>
+                    <th scope="row">{{incrementedIndex @index}}</th>
+                    <td>
+                        <div class="row">
+                            <div>
+                                <img style="width: 70px; height: 75px;" src="/product-images/{{this._id}}_0.jpg" class="ml-2"
+                                     alt="">
+                            </div>
+                        
+                        <div class="product_details ml-3">
+                            {{this.Name}} <br>
+                            <span class="text-muted">{{this.Category}}</span> 
+
+                        </div>
+                        </div>
+                    </td>
+                   
+                    <td>{{newlineToBr this.Description}}</td>
+                    <td>{{this.Status}}</td>
+                    <td>
+                         {{#ifEquals this.Status 'Approved'}}
+                        <a href="/edit-user-product/{{this._id}}" class="btn btn-primary">Edit</a>
+                        
+                        <button class="btn btn-danger" onclick="deleteUserProduct('{{this._id}}', '{{this.Name}}')">Delete</button>
+
+                           {{else}} 
+                          <a href="/edit-user-pendingprod/{{this._id}}" class="btn btn-primary">Edit</a>
+                        
+                        <button class="btn btn-danger" onclick="deletePendingProduct('{{this._id}}', '{{this.Name}}')">Joke</button>
+                        {{/ifEquals}}
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<script>
+    $(function () {
+        $('#productsTable').DataTable();
+    });
+
+    
+function deleteUserProduct(productId, productName) {
+  if (confirm(`Are you sure you want to delete ${productName}?`)) {
+    $.ajax({
+      url: '/delete-user-product/' + productId,
+      method: 'DELETE',
+      success: function(response) {
+        if (response.success) {
+          console.log('User Product deleted successfully');
+          location.reload(); // Refresh the page or update the DOM as needed
+        } else {
+          alert('Failed to delete user product');
+        }
+      },
+      error: function(error) {
+        console.error('Error:', error);
+        alert('An error occurred while deleting the product');
+      }
+    });
+  }
+}
+
+function deletePendingProduct(productId, productName) {
+  if (confirm(`Are you sure you want to delete ${productName}?`)) {
+    $.ajax({
+      url: '/delete-user-pendingprod/' + productId,
+      method: 'DELETE',
+      success: function(response) {
+        if (response.success) {
+          console.log('User pending Product deleted successfully');
+          location.reload(); // Refresh the page or update the DOM as needed
+        } else {
+          alert('Failed to delete user pending product');
+        }
+      },
+      error: function(error) {
+        console.error('Error:', error);
+        alert('An error occurred while deleting the pending product');
+      }
+    });
+  }
+}
+</script>

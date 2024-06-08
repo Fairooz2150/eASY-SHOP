@@ -24,7 +24,7 @@
               <p class="card-text mt-2"><span style="font-weight:bold">Status: </span> <span id="status-{{this._id}}">{{this.Status}}</span></p>
             </div>
             <div class="address">
-              <span style="font-weight: bold;"> Address:</span><br>{{this.Selling_Address}}
+              <span style="font-weight: bold;"> Address:</span><br>{{newlineToBr this.Selling_Address}}
               <br>Ph: {{this.User_Phone}}
             </div>
           </div>
@@ -45,12 +45,12 @@
                       </div>
                       <div class="product_details ml-5">
                         {{this.Name}} <br>
-                        {{this.Category}} <br>
-                        <div class="text-muted"> {{this.Description}}</div>
+                       <span class="text-muted">{{this.Category}}</span> <br>
+                        {{newlineToBr this.Description}}
                       </div>
                     </div>
                   </td>
-                  <td>Actual: ₹{{this.Actual_Price}} <br> Offer: ₹{{this.Offer_Price}} </td>
+                  <td>Offer Price: ₹{{this.Offer_Price}} <br>({{this.Offer_Percentage}}% off) <br> Net Price: ₹{{this.Actual_Price}} </td> 
                 </tr>
               </tbody>
             </table>
@@ -60,10 +60,10 @@
           <div class="footer-content">
             <div id="action-buttons-{{this._id}}" class="approval row">
               {{#ifEquals this.Status 'Pending'}}
-                <button onclick="updatePendingProdStatus('{{this._id}}', 'Declined')" class="btn btn-primary mr-3" id="decline-btn-{{this._id}}">Declined</button>
-                <button onclick="updatePendingProdStatus('{{this._id}}', 'Approved')" class="btn btn-primary" id="approve-btn-{{this._id}}">Approved</button>
-              {{else ifEquals this.Status 'Declined'}}
-                <button onclick="updatePendingProdStatus('{{this._id}}', 'Approved')" class="btn btn-primary" id="approve-btn-{{this._id}}">Approved</button>
+                <button onclick="updateUserProdStatus('{{this._id}}', 'Declined')" class="btn btn-primary mr-3" id="decline-btn-{{this._id}}">Declined</button>
+                <button onclick="updateUserProdStatus('{{this._id}}', 'Approved')" class="btn btn-primary" id="approve-btn-{{this._id}}">Approved</button>
+              {{else ifEquals this.Status 'Declined'}} 
+                <button onclick="updateUserProdStatus('{{this._id}}', 'Approved')" class="btn btn-primary" id="approve-btn-{{this._id}}">Approved</button>
               {{/ifEquals}}
             </div>
           </div>
@@ -75,14 +75,14 @@
 </section>
 
 <script>
-function updatePendingProdStatus(Id, Status) {
+function  updateUserProdStatus(Id, Status) {
   $.ajax({
-    url: '/admin/update-pending-products-status',
+    url: '/admin/update-user-products-status',
     method: 'POST',
     data: { Id: Id, Status: Status },
     success: function(response) {
       if (response.success) {
-        alert(`Pending Product status updated to ${Status}`);
+        alert(`User Product status updated to ${Status}`);
         document.getElementById('status-' + Id).innerText = Status;
 
         var approveBtn = document.getElementById('approve-btn-' + Id);
@@ -96,15 +96,16 @@ function updatePendingProdStatus(Id, Status) {
           if (approveBtn) approveBtn.style.display = 'inline-block';
         }
       } else {
-        alert('Failed to update pending product status');
+        alert('Failed to update user product status');
       }
     },
     error: function(error) {
       console.error('Error:', error);
-      alert('An error occurred while updating the pending product status');
+      alert('An error occurred while updating the user product status');
     }
   });
 }
+ 
 </script>
 
 <style>

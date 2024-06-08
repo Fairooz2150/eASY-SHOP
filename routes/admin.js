@@ -58,12 +58,27 @@ router.get('/all-users', verifyLogin, (req, res) => {
   });
 });
 
-router.get('/delete-user/:id', verifyLogin, (req, res) => {
+router.delete('/delete-user/:id', verifyLogin, (req, res) => {
   let userId = req.params.id
   adminHelpers.deleteUser(userId).then((response) => {
-    res.redirect('/admin/all-users')
-  })
+    res.json({ success: true });
+  }).catch((err) => {
+    console.error('Error deleting user:', err);
+    res.json({ success: false });
+  });
 })
+
+
+router.delete('/delete-product/:id', verifyLogin, (req, res) => {
+  let proId = req.params.id;
+  productHelpers.deleteProduct(proId).then((response) => {
+    res.json({ success: true });
+  }).catch((err) => {
+    console.error('Error deleting product:', err);
+    res.json({ success: false });
+  });
+});
+
 
 router.get('/all-orders', verifyLogin, (req, res) => {
   adminHelpers.getAllOrders().then((orders) => {
@@ -102,15 +117,6 @@ router.post('/add-product', (req, res) => {
   });
 });
 
-
-
-router.get('/delete-product/:id', verifyLogin, (req, res) => {
-  let proId = req.params.id
-  console.log(proId);
-  productHelpers.deleteProduct(proId).then((response) => {
-    res.redirect('/admin/')
-  })
-})
 
 
 
@@ -253,12 +259,12 @@ router.post('/update-order-status', (req, res) => {
   });
 });
 
-router.post('/update-pending-products-status', (req, res) => {
+router.post('/update-user-products-status', (req, res) => {
   let { Id, Status } = req.body;
-  adminHelpers.updatePendingProdStatus(Id, Status).then(() => {
+  adminHelpers.updateUserProdStatus(Id, Status).then(() => {
     res.json({ success: true });
   }).catch((err) => {
-    console.error('Error updating pending products status:', err);
+    console.error('Error updating user products status:', err);
     res.json({ success: false });
   });
 });

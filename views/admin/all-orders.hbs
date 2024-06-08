@@ -27,7 +27,7 @@
               <p class="card-text"><span style="font-weight:bold">Order Status: </span> <span id="status-{{this._id}}">{{this.status}}</span></p>
             </div>
             <div class="address">
-              <span style="font-weight: bold;"> Address:</span><br>{{this.deliveryDetails.address}}
+              <span style="font-weight: bold;"> Address:</span><br>{{newlineToBr this.deliveryDetails.address}}
               <br> {{this.deliveryDetails.pincode}}
               <br> {{this.deliveryDetails.mobile}}
             </div>

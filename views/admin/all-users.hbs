@@ -20,7 +20,7 @@
                     <td>{{this.Phone}}</td>
                     <td>{{this.Email}}</td>
                     <td>
-                        <a href="/admin/delete-user/{{this._id}}" class="btn btn-danger" onClick="return confirm(`Do you want to permanently remove {{this.First_Name}} {{this.Last_Name}} from the system?`)">Remove</a>
+                     <button class="btn btn-danger" onclick="deleteUser('{{this._id}}',  '{{this.First_Name}}', '{{this.Last_Name}}')">Remove</button>
                     </td>
                 </tr>
                 {{/each}}
@@ -30,7 +30,31 @@
 </section>
 
 <script>
-    $(function () {
+    
+function deleteUser(UserId, FirstName, LastName) {
+  if (confirm(`Are you sure you want to remove ${FirstName} ${LastName}?`)) {
+    $.ajax({
+      url: '/admin/delete-user/' + UserId,
+      method: 'DELETE',
+      success: function(response) {
+        if (response.success) {
+          console.log('User deleted successfully');
+          location.reload(); // Refresh the page or update the DOM as needed
+        } else {
+          alert('Failed to delete the User');
+        }
+      },
+      error: function(error) {
+        console.error('Error:', error);
+        alert('An error occurred while deleting User');
+      }
+    });
+  }
+}
+
+$(function () {
       $('#usersTable').DataTable();
     });
+
+
   </script>

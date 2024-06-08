@@ -143,21 +143,21 @@ module.exports={
     
 
 
-    updatePendingProdStatus : (Id, Status) => {
+    updateUserProdStatus : (Id, Status) => {
         return new Promise((resolve, reject) => {
-            db.get().collection(collection.PENDING_COLLECTION).updateOne(
+            db.get().collection(collection.USER_PRODUCTS_COLLECTION).updateOne(
                 { _id: objectId(Id) },
                 { $set: { Status: Status } }
             ).then(async (response) => {
                 if (Status === "Approved") {
                     try {
-                        // Find the document in PENDING_COLLECTION
-                        const product = await db.get().collection(collection.PENDING_COLLECTION).findOne({ _id: objectId(Id) });
+                        // Find the document in USER_PRODUCTS_COLLECTION
+                        const product = await db.get().collection(collection.USER_PRODUCTS_COLLECTION).findOne({ _id: objectId(Id) });
     
                         if (product) {
                             // Create the product data with the same _id
                             const productData = {
-                                _id: objectId(product._id), // Same _id as in PENDING_COLLECTION
+                                _id: objectId(product._id), // Same _id as in USER_PRODUCTS_COLLECTION
                                 Name: product.Name,
                                 Category: product.Category,
                                 Actual_Price: product.Actual_Price,

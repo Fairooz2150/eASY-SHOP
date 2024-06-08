@@ -89,6 +89,17 @@ res.json({status:true})
   })
 })
 
+router.delete('/delete-cart-product/:id', verifyLogin, (req, res) => {
+  let proId = req.params.id;
+  let userId=req.session.user._id
+  userHelpers.deleteCartProduct(proId,userId).then((response) => {
+    res.json({ success: true });
+  }).catch((err) => {
+    console.error('Error deleting product:', err);
+    res.json({ success: false });
+  });
+});
+
 
 router.post('/change-product-quantity',(req,res,next)=>{
   console.log(req.body);
@@ -233,6 +244,49 @@ router.post('/delete-account', verifyLogin, async (req, res) => {
   }
 });
 
+router.get('/your-products',verifyLogin,async(req,res)=>{
+  let user=req.session.user
+  await userHelpers.getUserRequestProds(user._id).then((products) => {
+   
+
+    res.render('user/your-products',{user,products})
+}).catch((error) => {
+   res.render('user/no-products',{error,user})
+});
+
+})
+
+router.delete('/delete-user-product/:id', verifyLogin, (req, res) => {
+  let proId = req.params.id;
+  productHelpers.deleteUserProduct(proId).then((response) => {
+    res.json({ success: true });
+  }).catch((err) => {
+    console.error('Error deleting user product:', err);
+    res.json({ success: false });
+  });
+});
+
+router.delete('/delete-user-pendingprod/:id', verifyLogin, (req, res) => {
+  let proId = req.params.id;
+  productHelpers.deletePendingProduct(proId).then((response) => {
+    res.json({ success: true });
+  }).catch((err) => {
+    console.error('Error deleting user pending product:', err);
+    res.json({ success: false });
+  });
+});
+
+router.get('/edit-user-product/:id', verifyLogin, async (req, res) => {
+  let user=req.session.user
+  try {
+    let product = await productHelpers.getProductDetails(req.params.id);
+    res.render('user/edit-user-product', { product,user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+});
+
 router.get('/sell-products',verifyLogin, async(req,res)=>{
 let user=req.session.user
 res.render('user/sell-products',{user})
@@ -255,6 +309,8 @@ router.post('/sell-product', (req, res) => {
       res.redirect('/');
   });
 });
+
+
 
 
 router.get('/search-products', async (req, res) => {

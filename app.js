@@ -25,7 +25,14 @@ const hbsInstance = hbs.create({
     },
     ifEquals: function (arg1, arg2, options) {
       return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+    },
+    newlineToBr: function (text) {
+      if (text) {
+        return new hbsInstance.handlebars.SafeString(text.replace(/\n/g, '<br>'));
+      }
+      return text;
     }
+  
   },
   runtimeOptions: {
     allowProtoPropertiesByDefault: true, // Allow access to prototype properties

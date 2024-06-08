@@ -26,11 +26,8 @@
            </div>
 
           <label for="">Description</label>
-          <input type="text" name="Description"  class="form-control" value="{{product.Description}}">
-
-          <label for="">Thumbnail: </label>
-          <img src="/product-images/{{product._id}}_0.jpg" alt="" style="width:100px; height:auto" id="imgView" class="pt-3">
-          <input type="file" name="Image" id="Image" class="form-control" onchange="viewImage(event)">
+          <textarea class="form-control" type="text" name="Description"  rows="3">{{ product.Description}}</textarea>
+      
 
           <button type="submit" class="btn btn-success mt-4">Submit</button>
         </form>

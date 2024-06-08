@@ -121,6 +121,20 @@ module.exports = {
             resolve(cartItems);
         })
     },
+    getUserRequestProds: (userId)=>{
+        return new Promise(async (resolve, reject)=>{
+           await db.get().collection(collection.USER_PRODUCTS_COLLECTION).find({ User_Id: objectId(userId) }).toArray((err, products) => {
+            if (products.length>0) {
+                resolve(products);
+               
+            } else {
+                reject("You have no products");
+                
+            }
+        });
+           
+        } )
+    },
     getCartCount: (userId) => {
         return new Promise(async (resolve, reject) => {
             let totalQuantity = 0;
@@ -163,6 +177,19 @@ module.exports = {
             }
         })
     },
+    deleteCartProduct:(prodId,userId)=>{
+        return new Promise(async (resolve,reject)=>{
+            console.log(prodId);
+            console.log(objectId(prodId));
+            await db.get().collection(collection.CART_COLLECTION).updateOne({user:objectId(userId)},{$pull: { products: { item: objectId(prodId) } }}).then((response)=>{
+               
+                resolve(response)
+            }).catch((err) => {
+                reject(err);
+              });
+        })
+    },
+   
     getTotalAmount: (userId) => {
         return new Promise(async (resolve, reject) => {
             let total = await db.get().collection(collection.CART_COLLECTION).aggregate([
