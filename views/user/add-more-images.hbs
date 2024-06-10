@@ -1,0 +1,136 @@
+<section>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-12">
+                <h2 class="text-center pb-4">Images</h2>
+                <form action="/add-more-images/{{product._id}}" method="post" enctype="multipart/form-data" id="addImagesForm">
+                    <div id="imageContainer" class="row mt-4">
+                        <!-- Existing Images -->
+                        {{#each product.images}}
+                        <div class="image-group mb-2 ml-5">
+                            <div class="overlay-buttons position-absolute top-0 end-0 pl-2 ml-1">
+                                <button class="btn btn-sm me-2 bg-transparent" type="button">
+                                    <i class="bi bi-pencil-square" onclick="editImage('{{this}}')"></i>
+                                </button>
+                                <button class="btn btn-sm ml-5 bg-transparent" type="button" onclick="deleteImage('{{this}}')">
+                                    <i class="bi bi-trash3 ml-4"></i>
+                                </button>
+                            </div>
+                            <img src="/product-images/{{this}}" alt="Product Image" style="width:170px; height:190px" class="shadow-lg rounded">
+                            <input type="file" name="editImages" class="form-control d-none" id="editImageInput_{{@index}}" data-image-name="{{this}}" onchange="uploadEditedImage(event, '{{this}}')">
+                        </div>
+                        {{/each}}
+                    </div>
+                    <!-- New Images -->
+                    <div id="newImageContainer" class="row mt-4"></div>
+                    <div class="row">
+                        <div class="addImages">
+                            <button type="button" class="btn btn-primary mt-4 ml-3" id="addImageButton">Add Images</button>
+                        </div>
+                        <div class="submit">
+                            <button type="submit" class="btn btn-success mt-4 mr-5">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .bi {
+        color: grey;
+    }
+
+    .submit {
+        margin-left: auto;
+        margin-right: 22px;
+        margin-top: 100px;
+    }
+
+    .overlay-buttons {
+        display: flex;
+        gap: 0.5rem;
+        z-index: 10;
+    }
+
+    .image-group img {
+        display: block;
+        margin: 0 auto;
+    }
+</style>
+
+<script>
+    document.getElementById('addImageButton').addEventListener('click', function () {
+        var newImageContainer = document.getElementById('newImageContainer');
+        var imageGroup = document.createElement('div');
+        imageGroup.className = 'image-group mb-2 ml-3';
+
+        var input = document.createElement('input');
+        input.type = 'file';
+        input.name = 'Images';
+        input.className = 'form-control';
+        input.onchange = previewNewImage;
+
+        imageGroup.appendChild(input);
+        newImageContainer.appendChild(imageGroup);
+        
+    });
+
+    function previewNewImage(event) {
+        var input = event.target;
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var imageGroup = document.createElement('div');
+                imageGroup.className = 'image-group';
+
+                var img = document.createElement('img');
+                img.src = e.target.result;
+                img.alt = 'New Image';
+                img.style.width = '170px';
+                img.style.height = '190px';
+                img.className = 'shadow-lg rounded';
+
+                imageGroup.appendChild(img);
+                input.parentNode.appendChild(imageGroup);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    
+    function deleteImage(imageName) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('DELETE', '/deleteuser-image', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                location.reload();
+            }
+        };
+        xhr.send(JSON.stringify({ imageName: imageName, productId: '{{product._id}}' }));
+    }
+
+    function editImage(imageName) {
+        var index = Array.prototype.indexOf.call(document.querySelectorAll('i[onclick^="editImage"]'), event.target);
+        document.getElementById(`editImageInput_${index}`).click();
+    }
+
+    function uploadEditedImage(event, oldImageName) {
+        var newImageFile = event.target.files[0];
+        var formData = new FormData();
+        formData.append('newImage', newImageFile);
+        formData.append('oldImageName', oldImageName);
+        formData.append('productId', '{{product._id}}');
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/edit-image', true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                location.reload();
+            }
+        };
+        xhr.send(formData);
+    }
+</script>

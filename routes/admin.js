@@ -164,7 +164,7 @@ router.get('/add-more-images/:id', verifyLogin, async (req, res) => {
   }
 });
 // Route to handle the image upload and skip actions
-router.post('/add-more-images/:id', async (req, res) => {
+router.post('/add-more-images/:id', verifyLogin,async (req, res) => {
   let productId = req.params.id;
   let uploadPromises = [];
 

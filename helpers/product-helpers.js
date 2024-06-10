@@ -116,13 +116,25 @@ module.exports={
               });
         })
     },
+    getUserProductDetails:(proId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.USER_PRODUCTS_COLLECTION).findOne({_id:objectId(proId)}).then((product)=>{
+                resolve(product)
+            })
+        })
+    },
 
 
     getProductDetails:(proId)=>{
         return new Promise((resolve,reject)=>{
             db.get().collection(collection.PRODUCT_COLLECTION).findOne({_id:objectId(proId)}).then((product)=>{
+                if(product==null){
+                    db.get().collection(collection.USER_PRODUCTS_COLLECTION).findOne({_id:objectId(proId)}).then((product)=>{
+                        resolve(product)
+                    })
+                }else{
                 resolve(product)
-            })
+                }})
         })
     },
     updateProduct:(proId,proDetails)=>{
@@ -137,11 +149,70 @@ module.exports={
                     Offer_Percentage:proDetails.Offer_Percentage,
                     Product_Owner:proDetails.Product_Owner,
                   
-
                 }
             }).then((response)=>{
                 resolve()
             })
+        })
+    },
+    updateUserProduct:(proId,product)=>{
+        return new Promise((resolve,reject)=>{
+            let Date = moment().format('DD MMM YYYY');
+            let Time = moment().format('hh:mmA');
+            if(product.Status==='Pending'){
+                db.get().collection(collection.USER_PRODUCTS_COLLECTION).updateOne({_id:objectId(proId)},{
+                    $set:{
+                        
+                            Name: product.Name,
+                            Category: product.Category,
+                            Actual_Price: product.Actual_Price,
+                            Offer_Price: product.Offer_Price,
+                            Offer_Percentage: product.Offer_Percentage,
+                            Description: product.Description,                              
+                            Selling_Address:product.Selling_Address,                     
+                            Carted:product.Carted,
+                            Updations:product.Updations,
+                            UpdatedDate: Date,
+                            UpdatedTime: Time               
+                    }
+                })
+    
+            }else{
+
+            db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:objectId(proId)},{
+                $set:{
+                    
+                        Name: product.Name,
+                        Category: product.Category,
+                        Actual_Price: product.Actual_Price,
+                        Offer_Price: product.Offer_Price,
+                        Offer_Percentage: product.Offer_Percentage,
+                        Description: product.Description,                              
+                        Selling_Address:product.Selling_Address,                     
+                        Carted:product.Carted,
+                        Updations:product.Updations,
+                        UpdatedDate: Date,
+                        UpdatedTime: Time
+                }
+            })
+
+            db.get().collection(collection.USER_PRODUCTS_COLLECTION).updateOne({_id:objectId(proId)},{
+                $set:{
+                    
+                        Name: product.Name,
+                        Category: product.Category,
+                        Actual_Price: product.Actual_Price,
+                        Offer_Price: product.Offer_Price,
+                        Offer_Percentage: product.Offer_Percentage,
+                        Description: product.Description,                              
+                        Selling_Address:product.Selling_Address,                     
+                        Carted:product.Carted,
+                        Updations:product.Updations,
+                        UpdatedDate: Date,
+                        UpdatedTime: Time               
+                }
+            })
+        }
         })
     },
     searchProducts: (query) => {
@@ -168,8 +239,8 @@ module.exports={
     },
     addUserProduct: (product) => {
         return new Promise((resolve, reject) => {
-            let requestDate = moment().format('DD MMM YYYY');
-            let requestTime = moment().format('hh:mmA');
+            let Date = moment().format('DD MMM YYYY');
+            let Time = moment().format('hh:mmA');
 
             let productDetails = {
                 Name: product.Name,
@@ -184,8 +255,10 @@ module.exports={
                 User_Phone:product.User_Phone,            
                 Selling_Address:product.Selling_Address,
                 Status: product.Status,
-                Date: requestDate,
-                Time: requestTime
+                Carted:product.Carted,
+                Updations:product.Updations,
+                Date: Date,
+                Time: Time
             };
           
             db.get().collection(collection.USER_PRODUCTS_COLLECTION).insertOne(productDetails).then((data) => {

@@ -37,13 +37,15 @@
                     <td>{{this.Carted}}</td>
                     <td>{{this.Status}}</td>
                     <td>
-                         {{#ifEquals this.Status 'Approved'}}
-                        <a href="/edit-user-product/{{this._id}}" class="btn btn-primary">Edit</a>
+                       
+                       
                         
+                          {{#ifEquals this.Status 'Approved'}}
+                          <a href="/edit-user-product/{{this._id}}" class="btn btn-primary">Edit</a>
                         <button class="btn btn-danger" onclick="deleteUserProduct('{{this._id}}', '{{this.Name}}')">Delete</button>
 
                            {{else}} 
-                          <a href="/edit-user-pendingprod/{{this._id}}" class="btn btn-primary">Edit</a>
+                           
                         
                         <button class="btn btn-danger" onclick="deletePendingProduct('{{this._id}}', '{{this.Name}}')">Joke</button>
                         {{/ifEquals}}

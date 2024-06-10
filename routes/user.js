@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+const path = require('path');
+const fs = require('fs');
 var productHelpers=require('../helpers/product-helpers');
 const bcrypt=require('bcrypt')
 const userHelpers=require('../helpers/user-helpers');
@@ -299,17 +301,135 @@ router.delete('/delete-user-pendingprod/:id', verifyLogin, (req, res) => {
     res.json({ success: false });
   });
 });
-
+// Route to render the edit user product page
 router.get('/edit-user-product/:id', verifyLogin, async (req, res) => {
-  let user=req.session.user
+  let user = req.session.user;
+  let prodId = req.params.id;
+ 
+
   try {
-    let product = await productHelpers.getProductDetails(req.params.id);
-    res.render('user/edit-user-product', { product,user });
+    let product = await productHelpers.getProductDetails(prodId);
+  
+    console.log("Product details:", product);
+    res.render('user/edit-user-product', { product, user });
   } catch (error) {
     console.error(error);
     res.status(500).send(error);
   }
 });
+
+// Route to handle the product update
+router.post('/edit-user-product/:id', verifyLogin, (req, res) => {
+  let id = req.params.id;
+  
+   productHelpers.updateUserProduct(req.params.id, req.body)
+   
+    
+      res.redirect(`/add-more-images/${id}`);
+    
+   
+});
+
+// Route to render the add more images page
+
+
+router.get('/add-more-images/:id', verifyLogin, async (req, res) => {
+  let user = req.session.user;
+  try {
+    let product = await productHelpers.getProductImages(req.params.id);
+    res.render('user/add-more-images', { product, user});
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+});
+
+// Route to handle the image upload and skip actions
+router.post('/add-more-images/:id', async (req, res) => {
+  let productId = req.params.id;
+  let uploadPromises = [];
+
+  if (req.body.skip) {
+    return res.redirect('/');
+  }
+
+  if (req.files && req.files.Images) {
+    let images = req.files.Images;
+    if (!Array.isArray(images)) {
+      images = [images];
+    }
+
+    // Get the total number of existing images to determine the index for new images
+    let product = await productHelpers.getProductImages(productId);
+    let productLength = product.images.length;
+
+    images.forEach((image, index) => {
+      uploadPromises.push(new Promise((resolve, reject) => {
+        // Calculate the index for the new image
+        let newIndex = productLength + index;
+        let filePath = path.join(__dirname, '../public/product-images', `${productId}_${newIndex}.jpg`);
+
+        image.mv(filePath, (err) => {
+          if (err) {
+            return reject(err);
+          }
+          resolve();
+        });
+      }));
+    });
+  }
+
+  Promise.all(uploadPromises)
+    .then(() => {
+      res.redirect('/');
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send(err);
+    });
+});
+
+// Route for deleting images
+router.delete('/deleteuser-image', verifyLogin, (req, res) => {
+  const { imageName, productId } = req.body;
+console.log(imageName);
+  const filePath = path.join(__dirname, '../public/product-images', imageName);
+
+  fs.unlink(filePath, (err) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send(err);
+    }
+
+    // After deletion, you might want to remove the reference from the database or perform other actions
+
+    res.sendStatus(200);
+  });
+});
+
+// Route for editing images
+router.post('/edit-image', verifyLogin, (req, res) => {
+  if (!req.files || !req.files.newImage) {
+    return res.status(400).send('No new image file uploaded.');
+  }
+
+  const newImage = req.files.newImage;
+  const { oldImageName, productId } = req.body;
+
+  const oldImagePath = path.join(__dirname, '../public/product-images', oldImageName);
+  const newImagePath = path.join(__dirname, '../public/product-images', oldImageName); // Overwrite the old image
+
+  newImage.mv(newImagePath, (err) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send(err);
+    }
+
+    res.sendStatus(200);
+  });
+});
+
+
 
 router.get('/sell-products',verifyLogin, async(req,res)=>{
 let user=req.session.user
