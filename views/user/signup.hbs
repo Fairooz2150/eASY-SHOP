@@ -1,9 +1,9 @@
-<div class="row">
+<div class="row ">
     <div class="col-md-6 m-auto">
-        <div class="container mt-5 pl-5">
+        <div class="container mt-5 mb-5 pl-5">
             <h2 class="text-center pb-5">Create new account</h2>
 
-            <form action="/signup" method="post">
+            <form id="signupForm" action="/signup" method="post">
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label>First Name</label>
@@ -18,34 +18,73 @@
                     <label>Email</label>
                     <input type="email" class="form-control" name="Email" placeholder="Email">
                 </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" class="form-control" name="Password" placeholder="Password">
-                </div>
+                
                 <div class="form-group">
                     <label>Phone</label>
                     <input type="phone" class="form-control" name="Phone" placeholder="Phone">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" class="form-control" id="password" name="Password" placeholder="Password">
+                    <span id="passwordHelp" class="form-text text-muted" style="color: blue;"></span>
                 </div>
 
                 <div class="form-group">
                     <label>Gender</label>
                     <br>
                     <label class="radio-inline ml-2 mr-2" for="">
-                        Male<input type="radio" class="ml-2 "  name="Gender" value="Male" checked>
-
+                        Male<input type="radio" class="ml-2" name="Gender" value="Male" checked>
                     </label>
-                    <label for="" class="radio-inline  ml-2 mr-2 mt-1">
-                        Female<input type="radio" class="ml-2 " name="Gender" value="Female">
+                    <label for="" class="radio-inline ml-2 mr-2 mt-1">
+                        Female<input type="radio" class="ml-2" name="Gender" value="Female">
                     </label>
-                    <label for="" class="radio-inline  ml-2 mr-2 mt-1">
-                        Others<input type="radio" class="ml-2 " name="Gender" value="Others">
+                    <label for="" class="radio-inline ml-2 mr-2 mt-1">
+                        Others<input type="radio" class="ml-2" name="Gender" value="Others">
                     </label>
-
                 </div>
                 <a href="/login">Already have an account ?</a>
                 <button type="submit" class="btn btn-primary float-right">Signup</button>
             </form>
-
         </div>
     </div>
 </div>
+
+<script>
+const passwordField = document.getElementById('password');
+const passwordHelp = document.getElementById('passwordHelp');
+const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,16}$/;
+
+function validatePassword() {
+    const password = passwordField.value;
+
+    if (password.length < 6 || password.length > 16) {
+        passwordHelp.textContent = 'Password must be between 6 and 16 characters.';
+        passwordHelp.style.color = 'red';
+    } else if (!password.match(/[A-Za-z]/)) {
+        passwordHelp.textContent = 'Password must contain at least one alphabetic letter.';
+        passwordHelp.style.color = 'red';
+    } else if (!password.match(/\d/)) {
+        passwordHelp.textContent = 'Password must contain at least one numeric digit.';
+        passwordHelp.style.color = 'red';
+    } else if (!password.match(/[@$!%*?&]/)) {
+        passwordHelp.textContent = 'Password must contain at least one special character.';
+        passwordHelp.style.color = 'red';
+    } else if (passwordRegex.test(password)) {
+        passwordHelp.textContent = 'Password is valid.';
+        passwordHelp.style.color = 'green';
+    } else {
+        passwordHelp.textContent = 'Password is invalid.';
+        passwordHelp.style.color = 'red';
+    }
+}
+
+passwordField.addEventListener('input', validatePassword);
+
+document.getElementById('signupForm').addEventListener('submit', function(event) {
+    const password = passwordField.value;
+
+    if (!passwordRegex.test(password)) {
+        event.preventDefault();  // Prevent form submission if password is invalid
+    }
+});
+</script>

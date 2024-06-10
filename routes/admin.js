@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const fs = require('fs'); 
+const fs = require('fs');
 const path = require('path');
 const adminHelpers = require('../helpers/admin-helpers');
 const productHelpers = require('../helpers/product-helpers');
@@ -15,9 +15,18 @@ const verifyLogin = (req, res, next) => {
 
 /* GET users listing. */
 router.get('/', verifyLogin, function (req, res, next) {
-  productHelpers.getAllProducts().then((products) => {
-    console.log(products)
-    res.render('admin/view-products', { admin: true, products })
+
+  productHelpers.getAllProducts().then((productsWoQnty) => {
+
+    productHelpers.getCartedProductQuantity().then((productQuantity) => {
+
+      productHelpers.getAllProductswithQuantity(productsWoQnty, productQuantity).then((products) => {
+        console.log(products);
+
+        res.render('admin/view-products', { admin: true, products })
+      })
+    })
+
   })
 });
 
@@ -94,26 +103,27 @@ router.get('/add-product', verifyLogin, function (req, res) {
 
 router.post('/add-product', (req, res) => {
   let product = {
-      Name: req.body.Name,
-      Category: req.body.Category,
-      Actual_Price: req.body.Actual_Price,
-      Offer_Price: req.body.Offer_Price,
-      Offer_Percentage:req.body.Offer_Percentage,
-      Description: req.body.Description,
-      Product_Owner:req.body.Product_Owner
+    Name: req.body.Name,
+    Category: req.body.Category,
+    Actual_Price: req.body.Actual_Price,
+    Offer_Price: req.body.Offer_Price,
+    Offer_Percentage: req.body.Offer_Percentage,
+    Description: req.body.Description,
+    Product_Owner: req.body.Product_Owner,
+    Carted: req.body.Carted
   };
 
   productHelpers.addProduct(product).then((productId) => {
-      if (req.files) {
-          if (Array.isArray(req.files.Image)) {
-              req.files.Image.forEach((image, index) => {
-                  image.mv(`./public/product-images/${productId}_${index}.jpg`);
-              });
-          } else {
-              req.files.Image.mv(`./public/product-images/${productId}_0.jpg`);
-          }
+    if (req.files) {
+      if (Array.isArray(req.files.Image)) {
+        req.files.Image.forEach((image, index) => {
+          image.mv(`./public/product-images/${productId}_${index}.jpg`);
+        });
+      } else {
+        req.files.Image.mv(`./public/product-images/${productId}_0.jpg`);
       }
-      res.redirect('/admin/')
+    }
+    res.redirect('/admin/')
   });
 });
 
@@ -134,18 +144,9 @@ router.get('/edit-product/:id', verifyLogin, async (req, res) => {
 router.post('/edit-product/:id', (req, res) => {
   let id = req.params.id;
   productHelpers.updateProduct(req.params.id, req.body).then(() => {
-    if (req.files && req.files.Image) {
-      let image = req.files.Image;
-      image.mv('./public/product-images/' + id + '_0.jpg', (err) => {
-        if (err) {
-          console.error(err);
-          return res.status(500).send(err);
-        }
-        res.redirect(`/admin/add-more-images/${id}`);
-      });
-    } else {
-      res.redirect(`/admin/add-more-images/${id}`);
-    }
+
+    res.redirect(`/admin/add-more-images/${id}`);
+
   }).catch((err) => {
     console.error(err);
     res.status(500).send(err);
@@ -184,9 +185,9 @@ router.post('/add-more-images/:id', async (req, res) => {
     images.forEach((image, index) => {
       uploadPromises.push(new Promise((resolve, reject) => {
         // Calculate the index for the new image
-        let newIndex = productLength + index + 1;
+        let newIndex = productLength + index;
         let filePath = path.join(__dirname, '../public/product-images', `${productId}_${newIndex}.jpg`);
-        
+
         image.mv(filePath, (err) => {
           if (err) {
             return reject(err);

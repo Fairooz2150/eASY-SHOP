@@ -7,9 +7,9 @@
             <thead>
                 <tr>
                     <th scope="col">No</th>
-                    <th scope="col">Item</th>
-                  
+                    <th scope="col">Item</th>                  
                     <th scope="col">Description</th>
+                    <th scope="col">Carted</th>
                     <th>Status</th>
                     <th>Options</th>
                 </tr>
@@ -34,6 +34,7 @@
                     </td>
                    
                     <td>{{newlineToBr this.Description}}</td>
+                    <td>{{this.Carted}}</td>
                     <td>{{this.Status}}</td>
                     <td>
                          {{#ifEquals this.Status 'Approved'}}

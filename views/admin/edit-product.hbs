@@ -6,24 +6,26 @@
         <form action="/admin/edit-product/{{product._id}}" method="post" enctype="multipart/form-data">
           <label for="">Name</label>
           <input type="text" name="Name" class="form-control" value="{{product.Name}}">
-
+          <input type="text" name="Product_Owner" value="Admin" hidden>
           <label for="">Category</label>
           <input type="text" name="Category" class="form-control" value="{{product.Category}}">
 
-          <div class="row">
-                        <div class="ml-3" >
+         <div class="row">
+                        <div class="ml-3">
                             <label for=""> Actual Price</label>
-                    <input type="text" name="Actual_Price" class="form-control" value="{{product.Actual_Price}}">
+                            <input type="number" name="Actual_Price" class="form-control "  value="{{product.Actual_Price}}">
                         </div>
                         <div class="ml-3">
-                            <label for="">Offer Percentage%</label>
-                            <input type="text" name="Offer_Percentage" class="form-control " value="{{product.Offer_Percentage}}">
+                            <label for="">Offer Percentage</label>
+                            <input type="number" name="Offer_Percentage" class="form-control " value="{{product.Offer_Percentage}}">
+                            
                         </div>
-                        <div class="ml-3" >
+                        <div class="ml-3">
                             <label for="">Offer Price</label>
-                    <input type="text" name="Offer_Price" class="form-control" value="{{product.Offer_Price}}">
+                            <input type="number" name="Offer_Price" class="form-control" value="{{product.Offer_Price}}">
                         </div>
-           </div>
+
+            </div>
 
           <label for="">Description</label>
           <textarea class="form-control" type="text" name="Description"  rows="3">{{ product.Description}}</textarea>

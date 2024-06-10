@@ -8,9 +8,10 @@
         <thead>
           <tr>
             <th scope="col">No</th>
-            <th scope="col">Item</th>           
+            <th scope="col">Items</th>           
             <th scope="col">Description</th>
-            <th class="mr-2">Price</th>
+            <th scope="col">Carted</th>
+            <th scope="col">Price</th>
            
             <th>Options</th>
           </tr>
@@ -18,7 +19,7 @@
         <tbody>
           {{#each products}}
           <tr>
-            <th scope="row">{{incrementedIndex @index}}</th>
+            <th scope="row"> <span class="mr-2">{{incrementedIndex @index}} </span></th>
                       <td>
                         <div class="row">
                             <div>
@@ -31,10 +32,21 @@
                             <span class="text-muted">{{this.Category}}</span> 
 
                         </div>
+                        
                         </div>
                     </td>            
-            <td> {{newlineToBr this.Description}}</td>
-            <td class="mr-2">{{this.Offer_Price}}</td>
+            <td> 
+                {{newlineToBr this.Description}}
+              
+             </td>
+             <td> 
+           
+              <span class="ml-4">{{this.Carted}}</span>
+          
+             </td>
+             
+
+            <td ><span class="mr-2">{{this.Offer_Price}} </span></td>
             <td>
               <a href="/admin/edit-product/{{this._id}}" class="btn btn-primary">Edit</a>
              <button class="btn btn-danger" onclick="deleteProduct('{{this._id}}', '{{this.Name}}')">Delete</button>

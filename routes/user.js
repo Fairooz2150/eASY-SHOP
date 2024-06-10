@@ -35,19 +35,32 @@ if(req.session.user) {
         req.session.userLoginErr=false
       }
   })
-router.get('/signup',(req,res)=>{
-  res.render('user/signup')
-})
-router.post('/signup',(req,res)=>{
-  userHelpers.doSignup(req.body).then((response)=>{
-    console.log(response);
-    
-    req.session.user=response
-    req.session.userLoggedIn=true
-    res.redirect('/')
 
-  })
-})
+ 
+
+  router.get('/signup', (req, res) => {
+      res.render('user/signup');
+  });
+  
+  router.post('/signup', (req, res) => {
+      const { Password } = req.body;
+      const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,16}$/;
+  
+      if (!passwordRegex.test(Password)) {
+          return res.render('user/signup', { error: 'Password must be 6-16 characters long, include at least one alphabetic letter, one numeric digit, and one special character.' });
+      }
+  
+      userHelpers.doSignup(req.body).then((response) => {
+          console.log(response);
+  
+          req.session.user = response;
+          req.session.userLoggedIn = true;
+          res.redirect('/');
+      }).catch((err) => {
+          res.render('user/signup', { error: 'Signup failed. Please try again.' });
+      });
+  });
+  
 router.post('/login',(req,res)=>{
   userHelpers.doLogin(req.body).then((response)=>{
     if(response.status){
@@ -84,9 +97,10 @@ router.get('/cart',verifyLogin,async (req,res)=>{
 
 router.get('/add-to-cart/:id',(req,res)=>{
  
-   userHelpers.addToCart(req.params.id,req.session.user._id).then(()=>{
+  userHelpers.addToCart(req.params.id,req.session.user._id).then(()=>{
+   
 res.json({status:true})
-  })
+ })
 })
 
 router.delete('/delete-cart-product/:id', verifyLogin, (req, res) => {
@@ -246,15 +260,25 @@ router.post('/delete-account', verifyLogin, async (req, res) => {
 
 router.get('/your-products',verifyLogin,async(req,res)=>{
   let user=req.session.user
-  await userHelpers.getUserRequestProds(user._id).then((products) => {
-   
+  await userHelpers.getUserRequestProds(user._id).then((productsWoQnty) => {
 
-    res.render('user/your-products',{user,products})
+    productHelpers.getCartedProductQuantity().then((productQuantity) => {
+
+      productHelpers.getAllProductswithQuantity(productsWoQnty, productQuantity).then((products) => {
+
+        console.log("userprods",products);
+        res.render('user/your-products',{user,products})
+
+      })
+    })
+
 }).catch((error) => {
    res.render('user/no-products',{error,user})
 });
 
 })
+
+
 
 router.delete('/delete-user-product/:id', verifyLogin, (req, res) => {
   let proId = req.params.id;
