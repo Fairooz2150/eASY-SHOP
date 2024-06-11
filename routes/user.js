@@ -318,6 +318,24 @@ router.get('/edit-user-product/:id', verifyLogin, async (req, res) => {
   }
 });
 
+
+router.get('/edit-pending-product/:id', verifyLogin, async (req, res) => {
+  let user = req.session.user;
+  let prodId = req.params.id;
+ 
+
+  try {
+    let product = await productHelpers.getProductDetails(prodId);
+  
+    console.log("Pending product details:", product);
+    res.render('user/edit-pending-product', { product, user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+});
+
+
 // Route to handle the product update
 router.post('/edit-user-product/:id', verifyLogin, (req, res) => {
   let id = req.params.id;
@@ -329,6 +347,19 @@ router.post('/edit-user-product/:id', verifyLogin, (req, res) => {
     
    
 });
+
+router.post('/edit-pending-product/:id', verifyLogin, (req, res) => {
+  let id = req.params.id;
+  
+   productHelpers.updateUserProduct(req.params.id, req.body)
+   console.log('pending product updated');
+    
+      res.redirect('/');
+    
+   
+});
+
+
 
 // Route to render the add more images page
 
@@ -350,82 +381,98 @@ router.post('/add-more-images/:id', async (req, res) => {
   let uploadPromises = [];
 
   if (req.body.skip) {
-    return res.redirect('/');
+     return res.redirect('/');
   }
 
   if (req.files && req.files.Images) {
-    let images = req.files.Images;
-    if (!Array.isArray(images)) {
-      images = [images];
-    }
+     let images = req.files.Images;
+     if (!Array.isArray(images)) {
+        images = [images];
+     }
 
-    // Get the total number of existing images to determine the index for new images
-    let product = await productHelpers.getProductImages(productId);
-    let productLength = product.images.length;
+     let product = await productHelpers.getProductImages(productId);
+     let productLength = product.images.length;
 
-    images.forEach((image, index) => {
-      uploadPromises.push(new Promise((resolve, reject) => {
-        // Calculate the index for the new image
-        let newIndex = productLength + index;
-        let filePath = path.join(__dirname, '../public/product-images', `${productId}_${newIndex}.jpg`);
+     images.forEach((image, index) => {
+        uploadPromises.push(new Promise((resolve, reject) => {
+           let newIndex = productLength + index;
+           let filePath = path.join(__dirname, '../public/product-images', `${productId}_${newIndex}.jpg`);
 
-        image.mv(filePath, (err) => {
-          if (err) {
-            return reject(err);
-          }
-          resolve();
-        });
-      }));
-    });
+           image.mv(filePath, (err) => {
+              if (err) {
+                 return reject(err);
+              }
+              resolve();
+           });
+        }));
+     });
   }
 
   Promise.all(uploadPromises)
-    .then(() => {
-      res.redirect('/');
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send(err);
-    });
+     .then(async () => {
+        const imageDir = path.join(__dirname, '../public/product-images');
+        let imageFiles = fs.readdirSync(imageDir).filter(file => file.startsWith(productId)).sort();
+        imageFiles = imageFiles.map((file, index) => {
+           const newFileName = `${productId}_${index}.jpg`;
+           fs.renameSync(path.join(imageDir, file), path.join(imageDir, newFileName));
+           return newFileName;
+        });
+        await productHelpers.updateProductImages(productId, imageFiles);
+        res.redirect('/');
+     })
+     .catch((err) => {
+        console.error(err);
+        res.status(500).send(err);
+     });
 });
 
+
 // Route for deleting images
-router.delete('/deleteuser-image', verifyLogin, (req, res) => {
+router.delete('/deleteuser-image', verifyLogin, async (req, res) => {
   const { imageName, productId } = req.body;
-console.log(imageName);
   const filePath = path.join(__dirname, '../public/product-images', imageName);
 
-  fs.unlink(filePath, (err) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send(err);
-    }
+  fs.unlink(filePath, async (err) => {
+     if (err) {
+        console.error(err);
+        return res.status(500).send(err);
+     }
 
-    // After deletion, you might want to remove the reference from the database or perform other actions
-
-    res.sendStatus(200);
+     try {
+        const imageDir = path.join(__dirname, '../public/product-images');
+        let imageFiles = fs.readdirSync(imageDir).filter(file => file.startsWith(productId)).sort();
+        imageFiles = imageFiles.map((file, index) => {
+           const newFileName = `${productId}_${index}.jpg`;
+           fs.renameSync(path.join(imageDir, file), path.join(imageDir, newFileName));
+           return newFileName;
+        });
+        await productHelpers.updateProductImages(productId, imageFiles);
+        res.sendStatus(200);
+     } catch (error) {
+        console.error('Error renumbering images:', error);
+        res.status(500).send(error);
+     }
   });
 });
 
+
 // Route for editing images
-router.post('/edit-image', verifyLogin, (req, res) => {
+router.post('/edit-image', verifyLogin, async (req, res) => {
   if (!req.files || !req.files.newImage) {
-    return res.status(400).send('No new image file uploaded.');
+     return res.status(400).send('No new image file uploaded.');
   }
 
   const newImage = req.files.newImage;
   const { oldImageName, productId } = req.body;
 
   const oldImagePath = path.join(__dirname, '../public/product-images', oldImageName);
-  const newImagePath = path.join(__dirname, '../public/product-images', oldImageName); // Overwrite the old image
 
-  newImage.mv(newImagePath, (err) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send(err);
-    }
-
-    res.sendStatus(200);
+  newImage.mv(oldImagePath, (err) => {
+     if (err) {
+        console.error(err);
+        return res.status(500).send(err);
+     }
+     res.sendStatus(200);
   });
 });
 

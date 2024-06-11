@@ -45,8 +45,8 @@
                         <button class="btn btn-danger" onclick="deleteUserProduct('{{this._id}}', '{{this.Name}}')">Delete</button>
 
                            {{else}} 
-                           
-                        
+                        <a href="/edit-pending-product/{{this._id}}" class="btn btn-primary">Change</a>
+
                         <button class="btn btn-danger" onclick="deletePendingProduct('{{this._id}}', '{{this.Name}}')">Joke</button>
                         {{/ifEquals}}
                     </td>
