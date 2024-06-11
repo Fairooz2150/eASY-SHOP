@@ -298,6 +298,30 @@ module.exports={
       throw error;
     } })
   },
+  
+  getPndgProductImages:(productId)=> {
+    return new Promise(async (resolve, reject) => {
+    try {
+      const productCollection = db.get().collection(collection.USER_PRODUCTS_COLLECTION); // Replace with your collection name
+      const product = await productCollection.findOne({ _id: objectId(productId) });
+  
+      if (!product) {
+        throw new Error('Pending Product not found');
+      }
+  
+      // Fetch images from the public/product-images folder
+      const imageDir = path.join(__dirname, '../public/product-images');
+      const imageFiles = fs.readdirSync(imageDir);
+  
+      // Filter images that belong to this product
+      const productImages = imageFiles.filter(file => file.startsWith(productId));
+      product.images = productImages;
+      resolve(product);
+    } catch (error) {
+      console.error('Error fetching pending product details:', error);
+      throw error;
+    } })
+  },
 
   updateProductImages: (productId, updatedImages) => {
     return new Promise((resolve, reject) => {
@@ -315,6 +339,21 @@ module.exports={
         });
     });
 },
-    
+updatePndgProductImages: (productId, updatedImages) => {
+    return new Promise((resolve, reject) => {
+        db.get().collection(collection.USER_PRODUCTS_COLLECTION).updateOne(
+            { _id: objectId(productId) },
+            {
+                $set: {
+                    images: updatedImages
+                }
+            }
+        ).then((response) => {
+            resolve(response);
+        }).catch((err) => {
+            reject(err);
+        });
+    });
+},
 
 }
