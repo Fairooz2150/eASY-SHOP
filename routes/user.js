@@ -16,6 +16,11 @@ const verifyLogin=(req,res,next)=>{
 
 /* GET home page. */
 
+router.get('/view-product',(req,res)=>{
+  let user=req.session.user
+res.render('product/view-product',{user})
+})
+
 
 router.get('/', async function(req, res, next) {
  let user=req.session.user
@@ -99,10 +104,11 @@ router.get('/cart',verifyLogin,async (req,res)=>{
 
 router.get('/add-to-cart/:id',(req,res)=>{
  
-  userHelpers.addToCart(req.params.id,req.session.user._id).then(()=>{
+    userHelpers.addToCart(req.params.id,req.session.user._id).then(()=>{
    
-res.json({status:true})
- })
+      res.json({status:true})
+       })
+  
 })
 
 router.delete('/delete-cart-product/:id', verifyLogin, (req, res) => {
@@ -319,23 +325,6 @@ router.get('/edit-user-product/:id', verifyLogin, async (req, res) => {
 });
 
 
-router.get('/edit-pending-product/:id', verifyLogin, async (req, res) => {
-  let user = req.session.user;
-  let prodId = req.params.id;
- 
-
-  try {
-    let product = await productHelpers.getProductDetails(prodId);
-  
-    console.log("Pending product details:", product);
-    res.render('user/edit-pending-product', { product, user });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send(error);
-  }
-});
-
-
 // Route to handle the product update
 router.post('/edit-user-product/:id', verifyLogin, (req, res) => {
   let id = req.params.id;
@@ -462,7 +451,22 @@ router.post('/edit-image', verifyLogin, async (req, res) => {
 });
 
 
-//Route for edit pending images
+router.get('/edit-pending-product/:id', verifyLogin, async (req, res) => {
+  let user = req.session.user;
+  let prodId = req.params.id;
+ 
+
+  try {
+    let product = await productHelpers.getProductDetails(prodId);
+  
+    console.log("Pending product details:", product);
+    res.render('user/edit-pending-product', { product, user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+});
+
 router.post('/edit-pending-product/:id', verifyLogin, (req, res) => {
   let id = req.params.id;
   

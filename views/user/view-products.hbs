@@ -2,12 +2,27 @@
     <div class="container-fluid ml-4 mr-4 mt-5">
         <div class="row" id="product-container">
             {{#each products}}
-            <div class="col-md-4 col-lg-3 col-sm-6 p-3">
+            <div class="col-lg-3 col-md-4 col-sm-6 p-3">
                 <div class="card" style="width: 15rem; height: 23rem">
-                    <img class="card-img-top"
+
+                    <div class="flip-card">
+                         <div class="flip-card-inner">
+                        <div class="flip-card-front">
+
+                   <img class="card-img-top"
                         src="/product-images/{{this._id}}_0.jpg"
                         alt="Card image cap"
                         style="height: 10rem;">
+
+                                    </div>
+                                <div class="flip-card-back">
+                                  <h1>John Doe</h1>
+                                     <p>Architect & Engineer</p>
+                              <p>We love that guy</p>
+                                        </div>
+                                             </div>
+                                            </div>
+
                     <div class="card-body">
                         <h5 class="card-title">{{this.Name}}</h5>
                         <div class="row">
@@ -23,7 +38,11 @@
                         </div>
                         <p class="card-text">{{this.Description}}.</p>
                         <p hidden>{{this.Category}}</p>
+                        {{#if ../user}}
                         <button onclick="addToCart('{{this._id}}')" class="btn btn-primary">Add to cart</button>
+                        {{else}}
+                        <a href="/login"><button  class="btn btn-primary">Add to cart</button></a>
+                        {{/if}}
                     </div>
                 </div>
             </div>
@@ -92,3 +111,50 @@ function displaySearchResults(products) {
     });
 }
 </script>
+<style>
+    .flip-card {
+  background-color: transparent;
+  
+  height: 10rem;
+  border: 1px solid #f1f1f1;
+  perspective: 1000px; /* Remove this if you don't want the 3D effect */
+}
+
+/* This container is needed to position the front and back side */
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+/* Do an horizontal flip when you move the mouse over the flip box container */
+.flip-card:hover .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+/* Position the front and back side */
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden; /* Safari */
+  backface-visibility: hidden;
+}
+
+/* Style the front side (fallback if image is missing) */
+.flip-card-front {
+  background-color: #bbb;
+  color: black;
+}
+
+/* Style the back side */
+.flip-card-back {
+  background-color: dodgerblue;
+  color: white;
+  transform: rotateY(180deg);
+}
+
+</style>

@@ -10,9 +10,19 @@
               <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Person" width="96" height="96">
               {{this.User_First_Name}} {{this.User_Last_Name}}
             </div>
-            <div class="date">
-              <span style="font-weight:bold"> Date: </span> {{this.Date}} <br>
-              <span style="font-weight:bold"> Time: </span> {{this.time}}
+            <div class="date row">
+              {{#ifEquals this.Updations 'Updated'}}
+              <div class="mr-4 mt-2">
+                <span ><b>Updated</b></span>
+              
+              </div>
+                <div>
+                  <span style="font-weight:bold"> Date: </span> {{this.UpdatedDate}} <br>
+              <span style="font-weight:bold"> Time: </span> {{this.UpdatedTime}}
+                </div>
+                  {{/ifEquals}}
+              </div>
+                
             </div>
           </div>
         </div>
@@ -68,7 +78,7 @@
             </div>
           </div>
         </div>
-      </div>
+      
       {{/each}}
     </div>
   </div>
