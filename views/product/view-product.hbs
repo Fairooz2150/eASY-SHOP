@@ -1,38 +1,44 @@
-<section>
-  <div class="container-fluid m-2">
-    <div>
-      <h2 class="text-center">pppp</h2>
-    </div>
-    <div class="row">
-      <div id="carouselExampleIndicators" class="carousel slide col-lg-5" data-ride="carousel">
-        <ol class="carousel-indicators">
-          <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-          <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-          <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-        </ol>
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <img class="d-block w-100" src="/product-images/665d76582de2af0508d0352d_0.jpg" alt="First slide">
+ <section>
+    <div class="container-fluid pl-5 pr-5" style="background-color: grey;">
+      <div class="container-fluid ml-2 mr-2" style="background-color: white;">
+        <div class="row pt-5">
+          <div class="left-content col-12 pl-5 pr-5 col-md-5">
+            <div class="card pl-2 pt-1 pr-2 text-center " style="background-color: grey;">
+              <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                  <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                  <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                  <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <img class="d-block w-100" src="/product-images/665d76582de2af0508d0352d_0.jpg" alt="First slide">
+                  </div>
+                  <div class="carousel-item">
+                    <img class="d-block w-100" src="/product-images/665d76582de2af0508d0352d_3.jpg" alt="Second slide">
+                  </div>
+                  <div class="carousel-item">
+                    <img class="d-block w-100" src="/product-images/665d76582de2af0508d0352d_4.jpg" alt="Third slide">
+                  </div>
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </div>
+              <div class=" text-center pt-4 pb-2">
+                <button type="button" class="btn btn-primary btn-lg " > <div >Add to Cart </div> </button>
+                <button type="button" class="btn btn-secondary btn-lg " > <div class="pr-3 pl-3">Buy now  </div></button>
+              </div>
+            </div>
           </div>
-          <div class="carousel-item">
-            <img class="d-block w-100" src="/product-images/665d76582de2af0508d0352d_3.jpg" alt="Second slide">
-          </div>
-          <div class="carousel-item">
-            <img class="d-block w-100" src="/product-images/665d76582de2af0508d0352d_4.jpg" alt="Third slide">
-          </div>
-        </div>
-        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="sr-only">Next</span>
-        </a>
-      </div>
 
-      <div class="col-lg-7 overflow-hidden " id="textContent">
-        <p>
+          <div class="col-md-7 overflow-hidden" id="textContent">
+            <p>
           <!-- Your paragraph content here -->
 A paragraph is a series of sentences that are organized and coherent, and are all related to a single topic. Almost every piece of writing you do that is longer than a few sentences should be organized into paragraphs. This is because paragraphs show a reader where the subdivisions of an essay begin and end, and thus help the reader see the organization of the essay and grasp its main points.
 
@@ -99,10 +105,13 @@ above, below, beyond, close, elsewhere, farther on, here, nearby, opposite, to t
 To indicate logical relationship:
 accordingly, as a result, because, consequently, for this reason, hence, if, otherwise, since, so, then, therefore, thus
 Produced by Writing Tutorial Services, Indiana University, Bloomington, IN        </p>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+
+
 
 
 <script>
@@ -114,28 +123,28 @@ Produced by Writing Tutorial Services, Indiana University, Bloomington, IN      
 <style>
 
 
-#carouselExampleIndicators {
-  width: 300px;
-  height: 300px;
- 
-}
 
-.d-block {
-  width: 300px;
-  height: 300px;
-}
 
-.overflow-hidden {
-  overflow: hidden;
-}
+   #carouselExampleIndicators {
+      width: 100%;
+      height: 100%;
+    }
 
-.overflow-auto {
-  overflow: auto;
-}
+    .carousel-inner img {
+      width: 100%;
+      height: 350px;
+    }
 
-  
-#textContent {
-  max-height: 500px;
-  overflow-y: auto;
-}
+    .overflow-hidden {
+      overflow: hidden;
+    }
+
+    .overflow-auto {
+      overflow: auto;
+    }
+
+    #textContent {
+      max-height: 585px;
+      overflow-y: auto;
+    }
 </style>
