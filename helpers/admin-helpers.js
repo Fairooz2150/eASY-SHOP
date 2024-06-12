@@ -162,6 +162,7 @@ module.exports={
                                 Category: product.Category,
                                 Actual_Price: product.Actual_Price,
                                 Offer_Price: product.Offer_Price,
+                                Product_Owner:product.Product_Owner,
                                 Offer_Percentage: product.Offer_Percentage,
                                 Description: product.Description,
                                 User_Id: product.User_Id,

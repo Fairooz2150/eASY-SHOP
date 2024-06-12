@@ -27,12 +27,69 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Confirmation Modal -->
+<div id="confirmationModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p id="modalMessage">Are you sure?</p>
+    <button id="confirmRemove" class="btn btn-danger">OK</button>
+    <button id="cancelRemove" class="btn btn-secondary">Cancel</button>
+  </div>
+</div>
+
 </section>
 
 <script>
     
+$(function () {
+      $('#usersTable').DataTable();
+    });
+
+// Function to show the confirmation modal
+function showConfirmationModal(message, confirmCallback) {
+  // Get the modal
+  var modal = document.getElementById("confirmationModal");
+
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close")[0];
+
+  // Get the confirm and cancel buttons
+  var confirmButton = document.getElementById("confirmRemove");
+  var cancelButton = document.getElementById("cancelRemove");
+
+  // Set the modal message
+  document.getElementById("modalMessage").innerText = message;
+
+  // Show the modal
+  modal.style.display = "block";
+
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  // When the user clicks on confirm button
+  confirmButton.onclick = function() {
+    modal.style.display = "none";
+    confirmCallback();
+  }
+
+  // When the user clicks on cancel button
+  cancelButton.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+}
+
 function deleteUser(UserId, FirstName, LastName) {
-  if (confirm(`Are you sure you want to remove ${FirstName} ${LastName}?`)) {
+  showConfirmationModal(`Are you sure you want to remove ${FirstName} ${LastName}?`, function() {
     $.ajax({
       url: '/admin/delete-user/' + UserId,
       method: 'DELETE',
@@ -49,12 +106,65 @@ function deleteUser(UserId, FirstName, LastName) {
         alert('An error occurred while deleting User');
       }
     });
-  }
+  });
+}
+  </script>
+<style>
+    /* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 
-$(function () {
-      $('#usersTable').DataTable();
-    });
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+  max-width: 400px; /* Maximum width */
+  text-align: center;
+}
 
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
 
-  </script>
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn {
+  padding: 10px 20px;
+  margin: 10px;
+}
+
+.btn-danger {
+  background-color: red;
+  color: white;
+  border: none;
+}
+
+.btn-secondary {
+  background-color: grey;
+  color: white;
+  border: none;
+}
+
+</style>

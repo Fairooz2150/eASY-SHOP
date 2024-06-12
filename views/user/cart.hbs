@@ -57,6 +57,17 @@
         </div>
         {{/if}}
     </div>
+
+    <!-- Confirmation Modal -->
+<div id="confirmationModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>Removing the item from the cart. Are you sure?</p>
+    <button id="confirmRemove" class="btn btn-danger">OK</button>
+    <button id="cancelRemove" class="btn btn-secondary">Cancel</button>
+  </div>
+</div>
+
 </section>
 
 <script>
@@ -90,47 +101,172 @@
 
 
     function changeQuantity(cartId, proId, userId, count) {
-        let quantity = parseInt(document.getElementById(proId).innerHTML);
-        count = parseInt(count);
+  let quantity = parseInt(document.getElementById(proId).innerHTML);
+  count = parseInt(count);
 
-        // Check if the current quantity will become one after decreasing
-        if (quantity === 1 && count === -1) {
-            // Display a confirmation dialog
-            let confirmRemove = confirm("Removing the item from cart. Are you sure?");
-            if (confirmRemove) { location.reload(); }
-            if (!confirmRemove) {
-                // If user cancels, do nothing
-                return;
+  // Check if the current quantity will become one after decreasing
+  if (quantity === 1 && count === -1) {
+    // Display the custom confirmation dialog
+    showConfirmationModal(() => {
+      // User confirmed the removal
+      $.ajax({
+        url: '/change-product-quantity',
+        data: {
+          user: userId,
+          cart: cartId,
+          product: proId,
+          count: count,
+          quantity: quantity
+        },
+        method: 'post',
+        success: (response) => {
+          if (response.removeProduct) {
+            // Remove the corresponding table row
+            $(`#${proId}`).closest('tr').remove();
+            // Update total value
+            document.getElementById('total').innerHTML = response.total;
+            // Check if the total count of products becomes zero
+            if (response.cartCount === 0) {
+              // Hide the 'Place Order' section and 'Total: Rs' div
+              $('#placeOrderSection').hide();
+              $('#totalSection').hide();
             }
+          } else {
+            document.getElementById(proId).innerHTML = quantity + count;
+            document.getElementById('total').innerHTML = response.total;
+          }
         }
+      });
+    });
+    return;
+  }
 
-        $.ajax({
-            url: '/change-product-quantity',
-            data: {
-                user: userId,
-                cart: cartId,
-                product: proId,
-                count: count,
-                quantity: quantity
-            },
-            method: 'post',
-            success: (response) => {
-                if (response.removeProduct) {
-                    // Remove the corresponding table row
-                    $(`#${proId}`).closest('tr').remove();
-                    // Update total value
-                    document.getElementById('total').innerHTML = response.total;
-                    // Check if the total count of products becomes zero
-                    if (response.cartCount === 0) {
-                        // Hide the 'Place Order' section and 'Total: Rs' div
-                        $('#placeOrderSection').hide();
-                        $('#totalSection').hide();
-                    }
-                } else {
-                    document.getElementById(proId).innerHTML = quantity + count;
-                    document.getElementById('total').innerHTML = response.total;
-                }
-            }
-        });
+  $.ajax({
+    url: '/change-product-quantity',
+    data: {
+      user: userId,
+      cart: cartId,
+      product: proId,
+      count: count,
+      quantity: quantity
+    },
+    method: 'post',
+    success: (response) => {
+      if (response.removeProduct) {
+        // Remove the corresponding table row
+        $(`#${proId}`).closest('tr').remove();
+        // Update total value
+        document.getElementById('total').innerHTML = response.total;
+        // Check if the total count of products becomes zero
+        if (response.cartCount === 0) {
+          // Hide the 'Place Order' section and 'Total: Rs' div
+          $('#placeOrderSection').hide();
+          $('#totalSection').hide();
+        }
+      } else {
+        document.getElementById(proId).innerHTML = quantity + count;
+        document.getElementById('total').innerHTML = response.total;
+      }
     }
+  });
+}
+
+function showConfirmationModal(confirmCallback) {
+  // Get the modal
+  var modal = document.getElementById("confirmationModal");
+
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close")[0];
+
+  // Get the confirm and cancel buttons
+  var confirmButton = document.getElementById("confirmRemove");
+  var cancelButton = document.getElementById("cancelRemove");
+
+  // Show the modal
+  modal.style.display = "block";
+
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  // When the user clicks on confirm button
+  confirmButton.onclick = function() {
+    modal.style.display = "none";
+    confirmCallback();
+  }
+
+  // When the user clicks on cancel button
+  cancelButton.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+}
+
 </script>
+
+<style>
+    /* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+  max-width: 400px; /* Maximum width */
+  text-align: center;
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn {
+  padding: 10px 20px;
+  margin: 10px;
+}
+
+.btn-danger {
+  background-color: red;
+  color: white;
+  border: none;
+}
+
+.btn-secondary {
+  background-color: grey;
+  color: white;
+  border: none;
+}
+
+</style>

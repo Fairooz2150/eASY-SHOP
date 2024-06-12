@@ -3,29 +3,31 @@
         <div class="row" id="product-container">
             {{#each products}}
             <div class="col-lg-3 col-md-4 col-sm-6 p-3">
-                <div class="card" style="width: 15rem; height: 23rem">
-
+              <div class="card" style="width: 15rem; height: 23rem">
+                  <a href="/view-product/{{this._id}}" >
                     <div class="flip-card">
                          <div class="flip-card-inner">
                         <div class="flip-card-front">
 
                    <img class="card-img-top"
                         src="/product-images/{{this._id}}_0.jpg"
-                        alt="Card image cap"
+                        alt="No images"
                         style="height: 10rem;">
 
                                     </div>
                                 <div class="flip-card-back">
-                                  <h1>John Doe</h1>
-                                     <p>Architect & Engineer</p>
-                              <p>We love that guy</p>
+                                  <img class="card-img-top"
+                        src="/product-images/{{this._id}}_1.jpg"
+                        alt="No more images are available"
+                        style="height: 10rem;">
                                         </div>
                                              </div>
                                             </div>
 
                     <div class="card-body">
-                        <h5 class="card-title">{{this.Name}}</h5>
-                        <div class="row">
+                        <h5 class="card-title">{{this.Name}}</h5></a>
+                        <p class="text-muted">{{this.Category}}</p> 
+                        <div class="row mb-2">
                             <div class="ml-3">
                                 <p class="card-text" style="color:green"><b> {{this.Offer_Percentage}}% </b><small>off</small></p>
                             </div>
@@ -36,10 +38,12 @@
                                <p class="card-text text-muted"><small><del>₹{{this.Actual_Price}}</del></small></p>
                             </div>
                         </div>
-                        <p class="card-text">{{this.Description}}.</p>
-                        <p hidden>{{this.Category}}</p>
+                        
+                        <p hidden>{{this.Description}}</p>
                         {{#if ../user}}
                         <button onclick="addToCart('{{this._id}}')" class="btn btn-primary">Add to cart</button>
+                        <!-- The actual snackbar -->
+                        <div id="snackbar">Product added <i class="bi bi-cart-check"></i></div>
                         {{else}}
                         <a href="/login"><button  class="btn btn-primary">Add to cart</button></a>
                         {{/if}}
@@ -156,5 +160,59 @@ function displaySearchResults(products) {
   color: white;
   transform: rotateY(180deg);
 }
+  a {
+      text-decoration: none; /* Remove underline by default */
+    }
 
+    a:hover {
+      text-decoration: none; /* Ensure underline does not appear on hover */
+    }
+
+/*For showing notification on product added to cart */
+
+    /* The snackbar - position it at the bottom and in the middle of the screen */
+#snackbar {
+  visibility: hidden; /* Hidden by default. Visible on click */
+  min-width: 250px; /* Set a default minimum width */
+  margin-left: -125px; /* Divide value of min-width by 2 */
+  background-color: #333; /* Black background color */
+  color: #fff; /* White text color */
+  text-align: center; /* Centered text */
+  border-radius: 2px; /* Rounded borders */
+  padding: 16px; /* Padding */
+  position: fixed; /* Sit on top of the screen */
+  z-index: 1; /* Add a z-index if needed */
+  left: 50%; /* Center the snackbar */
+  bottom: 30px; /* 30px from the bottom */
+}
+
+/* Show the snackbar when clicking on a button (class added with JavaScript) */
+#snackbar.show {
+  visibility: visible; /* Show the snackbar */
+  /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+  However, delay the fade out process for 2.5 seconds */
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
 </style>

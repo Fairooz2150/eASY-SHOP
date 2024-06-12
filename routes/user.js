@@ -16,9 +16,14 @@ const verifyLogin=(req,res,next)=>{
 
 /* GET home page. */
 
-router.get('/view-product',(req,res)=>{
+router.get('/view-product/:id',async(req,res)=>{
   let user=req.session.user
-res.render('product/view-product',{user})
+  let Id=req.params.id
+ let product= await productHelpers.getProductDetails(Id)
+ let prodImages = await productHelpers.getProductImages(Id);
+ let images=prodImages.images;
+ console.log("producto",images);
+res.render('product/view-product',{user,product,images})
 })
 
 
