@@ -25,8 +25,13 @@
                                             </div>
 
                     <div class="card-body">
-                        <h5 class="card-title">{{this.Name}}</h5></a>
-                        <p class="text-muted">{{this.Category}}</p> 
+                        <h5 class="card-title">{{this.Name}}</h5>
+                       <div class="row ml-2">
+                        <div><p class="text-muted">{{this.Category}}</p> </div>
+                        {{#ifEquals this.Product_Owner 'Admin'}}
+                        <div class="ml-4"><img src="/images/mol-2.png" alt="" style="height: 50px; width:100px"> </div>
+                        {{/ifEquals}}
+                       </div> 
                         <div class="row mb-2">
                             <div class="ml-3">
                                 <p class="card-text" style="color:green"><b> {{this.Offer_Percentage}}% </b><small>off</small></p>
@@ -37,25 +42,66 @@
                             <div class="ml-2">
                                <p class="card-text text-muted"><small><del>₹{{this.Actual_Price}}</del></small></p>
                             </div>
-                        </div>
+                        </div></a>
                         
                         <p hidden>{{this.Description}}</p>
                         {{#if ../user}}
                         <button onclick="addToCart('{{this._id}}')" class="btn btn-primary">Add to cart</button>
                         <!-- The actual snackbar -->
-                        <div id="snackbar">Product added <i class="bi bi-cart-check"></i></div>
+                        <div id="snackbar">Product added <img src="/images/grocery.gif" class="addcart" alt=""></div> 
                         {{else}}
-                        <a href="/login"><button  class="btn btn-primary">Add to cart</button></a>
+                        <a href="/login"><button  class="btn btn-primary">Add to cart</button>
                         {{/if}}
                     </div>
                 </div>
             </div>
             {{/each}}
         </div>
+      
+    
     </div>
+     <!-- Advertisement section -->
+         
+    <div id="popup-sidebar" class="popup-sidebar">
+        <img id="popup-image" src="/images/Easy-shop-big-sale.gif" alt="Product Advertisement" style="width: 100%; height: auto;">
+        
+    </div>
+     
 </section>
 
 <script>
+
+ // Function to handle sliding in and out the popup sidebar
+    function slidePopupSidebar() {
+        const popupSidebar = document.getElementById('popup-sidebar');
+        const popupImage = document.getElementById('popup-image');
+
+        // Array of image URLs for rotation
+        const imageUrls = [
+            "/images/Easy-shop-big-sale.gif",
+            "/images/grocery.gif"
+            // Add more image URLs here as needed
+        ];
+        let currentIndex = 0;
+
+        // Function to change image every 5 seconds
+        setInterval(() => {
+            currentIndex = (currentIndex + 1) % imageUrls.length;
+            popupImage.src = imageUrls[currentIndex];
+            // Slide in the popup sidebar
+            popupSidebar.style.right = '0';
+            // Slide out after 3 seconds
+            setTimeout(() => {
+                popupSidebar.style.right = '-300px'; // Adjust width of sidebar
+            }, 3000); // Adjust time to your preference
+        }, 5000); // Adjust time to your preference
+    }
+
+    // Call the slidePopupSidebar function when the page is loaded
+    window.onload = slidePopupSidebar;
+
+
+
 document.getElementById('search-input').addEventListener('keyup', function(event) {
     const query = event.target.value;
     searchProducts(query);
@@ -116,6 +162,37 @@ function displaySearchResults(products) {
 }
 </script>
 <style>
+ /* Styles for the pop-up sidebar */
+    .popup-sidebar {
+        position: fixed;
+        top: 50%;
+        right: -300px; /* Initially hidden off-screen */
+        width: 300px;
+        height: 100%;
+        background-color: #fff;
+        box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        transition: right 1s ease-in-out;
+        padding: 20px;
+        overflow: hidden;
+    }
+
+    .popup-sidebar img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    /* Adjustments for smaller screens */
+    @media (max-width: 768px) {
+        .popup-sidebar {
+            right: -100%; /* Completely hidden on smaller screens */
+        }
+    }
+
+
+
+
     .flip-card {
   background-color: transparent;
   
@@ -169,14 +246,29 @@ function displaySearchResults(products) {
     }
 
 /*For showing notification on product added to cart */
+.addcart{
+
+  width: 50px;
+  height: 40px;
+  
+  position: relative;
+  animation-name: mymove;
+  animation-duration: 4s;
+  
+}
+
+@keyframes mymove {
+  from {left: -10px;}
+  to {left: 60px;}
+}
 
     /* The snackbar - position it at the bottom and in the middle of the screen */
 #snackbar {
   visibility: hidden; /* Hidden by default. Visible on click */
-  min-width: 250px; /* Set a default minimum width */
+  min-width: 280px; /* Set a default minimum width */
   margin-left: -125px; /* Divide value of min-width by 2 */
-  background-color: #333; /* Black background color */
-  color: #fff; /* White text color */
+  background-color: white; /* Black background color */
+  color: black; /* White text color */
   text-align: center; /* Centered text */
   border-radius: 2px; /* Rounded borders */
   padding: 16px; /* Padding */
@@ -191,7 +283,7 @@ function displaySearchResults(products) {
   visibility: visible; /* Show the snackbar */
   /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
   However, delay the fade out process for 2.5 seconds */
-  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 3s;
   animation: fadein 0.5s, fadeout 0.5s 2.5s;
 }
 

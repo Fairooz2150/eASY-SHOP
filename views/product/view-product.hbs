@@ -1,10 +1,10 @@
 <section>
   <div class="container-fluid pl-5 pr-5" style="background-color: grey;">
     <div class="container-fluid ml-2 mr-2" style="background-color: white;">
-      <div class="row pt-5">
+      <div class="row  pt-5">
 
-        <div class="left-content col-12 pl-5 pr-5 col-md-5">
-          <div class="card pl-2 pt-1 pr-2 text-center" style="background-color: grey;">
+        <div class="left-content  col-12 pl-5 pr-5 col-md-5">
+          <div class="card pl-2 pt-1 pr-2 text-center">
             <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
               <ol class="carousel-indicators">
                 {{#each images}}
@@ -28,14 +28,33 @@
                 <span class="sr-only">Next</span>
               </a>
             </div>
+            {{#if user}}
             <div class="text-center pt-3 pb-2">
-              <button type="button" class="btn btn-primary btn-lg mt-1" style="min-width: 10rem; max-width: 15rem;">
-                <div>Add to Cart</div>
+              <button type="button" onclick="addToCart('{{product._id}}')" class="btn btn-primary btn-lg mt-1"
+                style="min-width: 10rem; max-width: 15rem;">
+                Add to Cart
               </button>
-              <button type="button" class="btn btn-secondary btn-lg mt-1" style="min-width: 10rem; max-width: 15rem;">
-                <div class="pr-3 pl-3">Buy now</div>
-              </button>
+              <!--snackbar -->
+              <div id="snackbar">Product added <img src="/images/grocery.gif" class="addcart" alt=""></div>
+              <a href="/buy-now/{{product._id}}/{{product.Offer_Price}}"><button type="button"  class="btn btn-secondary btn-lg mt-1 pr-3 pl-3"
+                style="min-width: 10rem; max-width: 15rem;">
+                Buy now
+              </button></a>
             </div>
+            {{else}}
+            <div class="text-center pt-3 pb-2">
+              <a href="/login">
+                <button type="button" class="btn btn-primary btn-lg mt-1" style="min-width: 10rem; max-width: 15rem;">
+                  Add to Cart
+                </button>
+
+                <button type="button" class="btn btn-secondary btn-lg mt-1 pr-3 pl-3"
+                  style="min-width: 10rem; max-width: 15rem;">
+                  Buy now
+                </button>
+              </a>
+            </div>
+            {{/if}}
           </div>
         </div>
 
@@ -43,10 +62,11 @@
 
 
 
-        <div class="col-md-7 overflow-hidden pl-5" id="textContent">
-          <div class="row">
+        <div class="col-md-7 mt-2 overflow-hidden pl-5" id="textContent">
+          <div>
             <div class="mb-5">
-              <h2>Product Name {{product.Name}}</h2>
+              <h2>{{product.Name}}</h2>
+              <p class="text-muted">{{product.Category}}</p>
 
               <div>
                 <span class="fa fa-star checked"></span>
@@ -55,11 +75,16 @@
                 <span class="fa fa-star checked"></span>
                 <span class="fa fa-star"></span>
               </div>
-              <img src="/images/Fassured.jpg" alt="" style="height:50px; width: 100px;">
+              {{#ifEquals product.Product_Owner 'Admin'}}
+              <div class="ml-3">
+                <img src="/images/mol-2.png" style="height: 35px; width:80px" alt="">
+              </div>
+              {{/ifEquals}}
             </div>
+
           </div>
           <div>
-            <label  style="color:green">Offer Price </label>
+            <label style="color:green">Offer Price </label>
 
             <div class="row ml-1 ">
               <div class="offer" style="font-size: x-large;">
@@ -68,16 +93,13 @@
                   ₹{{product.Offer_Price}}
                 </p>
 
-
-
+              </div>
+              <div class="ml-5 mt-1">
+                <p class="text-muted"> M.R.P: <br><span> <del>₹{{product.Actual_Price}} </del></span></p>
 
               </div>
-              <div class="ml-4 mt-1">
-                 <p class="text-muted"> M.R.P: <br><span> <del >₹{{product.Actual_Price}} </del></span></p>
-                
-              </div>
-              <div class="ml-5 ">
-                <p class="badge "> {{product.Offer_Percentage}}% Off</p>
+              <div class="ml-5 mt-1">
+                <p class="offerbadge "> {{product.Offer_Percentage}}% Off</p>
               </div>
             </div>
           </div>
@@ -201,15 +223,15 @@
     overflow-y: auto;
   }
 
-  .badge {
+  .offerbadge {
     background-color: #069c2e;
     color: white;
     padding: 12px 12px;
     text-align: center;
     font-size: larger;
-    font-family: Cursive;
+    font-family: Arial, Helvetica, sans-serif;
     border-radius: 10px;
-    animation: glow 1s ease-in-out infinite alternate;
+
   }
 
 
@@ -235,8 +257,6 @@
 
 
 
-
-
   .dody {
     font-family: Arial;
     margin: 0 auto;
@@ -256,7 +276,7 @@
   }
 
   .fa {
-    font-size: 25px;
+    font-size: 20px;
   }
 
   .checked {
@@ -338,6 +358,118 @@
     /* Hide the right column on small screens */
     .right {
       display: none;
+    }
+  }
+
+
+
+  /* The snackbar - position it at the bottom and in the middle of the screen */
+  #snackbar {
+    visibility: hidden;
+    /* Hidden by default. Visible on click */
+    min-width: 280px;
+    /* Set a default minimum width */
+    margin-left: -125px;
+    /* Divide value of min-width by 2 */
+    background-color: white;
+    /* Black background color */
+    color: black;
+    /* White text color */
+    text-align: center;
+    /* Centered text */
+    border-radius: 2px;
+    /* Rounded borders */
+    padding: 16px;
+    /* Padding */
+    position: fixed;
+    /* Sit on top of the screen */
+    z-index: 1;
+    /* Add a z-index if needed */
+    left: 50%;
+    /* Center the snackbar */
+    bottom: 30px;
+    /* 30px from the bottom */
+  }
+
+  /* Show the snackbar when clicking on a button (class added with JavaScript) */
+  #snackbar.show {
+    visibility: visible;
+    /* Show the snackbar */
+    /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+  However, delay the fade out process for 2.5 seconds */
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 3s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  }
+
+  /* Animations to fade the snackbar in and out */
+  @-webkit-keyframes fadein {
+    from {
+      bottom: 0;
+      opacity: 0;
+    }
+
+    to {
+      bottom: 30px;
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadein {
+    from {
+      bottom: 0;
+      opacity: 0;
+    }
+
+    to {
+      bottom: 30px;
+      opacity: 1;
+    }
+  }
+
+  @-webkit-keyframes fadeout {
+    from {
+      bottom: 30px;
+      opacity: 1;
+    }
+
+    to {
+      bottom: 0;
+      opacity: 0;
+    }
+  }
+
+  @keyframes fadeout {
+    from {
+      bottom: 30px;
+      opacity: 1;
+    }
+
+    to {
+      bottom: 0;
+      opacity: 0;
+    }
+  }
+
+
+  /*For showing notification on product added to cart */
+  .addcart {
+
+    width: 50px;
+    height: 40px;
+
+    position: relative;
+    animation-name: mymove;
+    animation-duration: 4s;
+
+  }
+
+  @keyframes mymove {
+    from {
+      left: -10px;
+    }
+
+    to {
+      left: 60px;
     }
   }
 </style>

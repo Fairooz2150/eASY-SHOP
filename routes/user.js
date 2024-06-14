@@ -22,8 +22,12 @@ router.get('/view-product/:id',async(req,res)=>{
  let product= await productHelpers.getProductDetails(Id)
  let prodImages = await productHelpers.getProductImages(Id);
  let images=prodImages.images;
+ let cartCount=null;
+ if(user) {
+  cartCount=await userHelpers.getCartCount(user._id)
+  }
  console.log("producto",images);
-res.render('product/view-product',{user,product,images})
+res.render('product/view-product',{user,product,images,cartCount})
 })
 
 
@@ -140,6 +144,14 @@ router.get('/place-order',verifyLogin,async (req,res)=>{
   let total=await userHelpers.getTotalAmount(req.session.user._id)
 
   res.render('user/place-order',{total,user:req.session.user})
+})
+
+router.get('/buy-now/:id/:total',verifyLogin,async(req,res)=>{
+  let user=req.session.user;
+  let prodId= req.params.id;
+  let total= req.params.total
+  console.log("producters",prodId,total);
+  res.render('user/place-order',{total,prodId,user})
 })
 
 router.post('/place-order', async (req, res) => {

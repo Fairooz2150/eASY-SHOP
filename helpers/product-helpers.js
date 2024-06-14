@@ -90,19 +90,25 @@ module.exports={
               });
         })
     },
-    deleteUserProduct:(prodId)=>{
-        return new Promise((resolve,reject)=>{
-            console.log(prodId);
-            console.log(objectId(prodId));
-            db.get().collection(collection.USER_PRODUCTS_COLLECTION).removeOne({_id:objectId(prodId)})
-            db.get().collection(collection.PRODUCT_COLLECTION).removeOne({_id:objectId(prodId)}).then((response)=>{
-               //console.log(response);
-                resolve(response)
-            }).catch((err) => {
-                reject(err);
-              });
-        })
+    deleteUserProduct: (prodId) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                console.log(prodId);
+                console.log(objectId(prodId));
+                await db.get().collection(collection.USER_PRODUCTS_COLLECTION).removeOne({_id: objectId(prodId)});
+                await db.get().collection(collection.PRODUCT_COLLECTION).removeOne({_id: objectId(prodId)});
+                await db.get().collection(collection.CART_COLLECTION).updateMany(
+                    {},
+                    { $pull: { products: { item: objectId(prodId) } } }
+                );
+                resolve();
+            } catch (error) {
+                console.error('Error deleting user product:', error);
+                reject(error);
+            }
+        });
     },
+    
     deletePendingProduct:(prodId)=>{
         return new Promise((resolve,reject)=>{
             console.log(prodId);
