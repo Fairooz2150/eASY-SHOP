@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const path = require('path');
 const fs = require('fs');
+var objectId = require('mongodb').ObjectID
 var productHelpers=require('../helpers/product-helpers');
 const bcrypt=require('bcrypt')
 const userHelpers=require('../helpers/user-helpers');
@@ -146,13 +147,41 @@ router.get('/place-order',verifyLogin,async (req,res)=>{
   res.render('user/place-order',{total,user:req.session.user})
 })
 
-router.get('/buy-now/:id/:total',verifyLogin,async(req,res)=>{
+router.get('/buy-now/:id/:price',verifyLogin,async(req,res)=>{
   let user=req.session.user;
   let prodId= req.params.id;
-  let total= req.params.total
+  let total= req.params.price
   console.log("producters",prodId,total);
-  res.render('user/place-order',{total,prodId,user})
+  res.render('user/place-product',{total,prodId,user})
 })
+
+router.post('/place-product', async (req, res) => {
+  try {
+    const userId = req.body.userId;
+    const paymentMethod = req.body['payment-method'];
+
+    // Get cart products and total price
+    const products= [{item: objectId(req.body.prodId),
+                      quantity:1}]
+    const total = req.body.total;
+
+    // Place the order
+    const orderId = await userHelpers.placeProduct(req.body, products, total);
+
+    // Handle payment method
+    if (paymentMethod === 'COD') {
+      res.json({ codSuccess: true });
+    } else {
+      const response = await userHelpers.generateRazorpay(orderId, price);
+      res.json(response);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Something went wrong, please try again later.' });
+  }
+});
+
+
 
 router.post('/place-order', async (req, res) => {
   try {
@@ -161,6 +190,7 @@ router.post('/place-order', async (req, res) => {
 
     // Get cart products and total price
     const products = await userHelpers.getCartProductList(userId);
+   
     const totalPrice = await userHelpers.getTotalAmount(userId);
 
     // Place the order
@@ -195,7 +225,7 @@ router.get('/orders', verifyLogin, async (req, res) => {
   userHelpers.getAllUserOrders(req.session.user._id).then((orders) => {
       // Sort orders by date in descending order
       orders.sort((a, b) => new Date(b.date) - new Date(a.date));
-
+      console.log("gggg",orders);
       res.render('user/orders', { user: req.session.user, cartCount, orders });
   }).catch((err) => {
       console.error(err);

@@ -280,10 +280,39 @@ module.exports = {
             });
         });
     },
+    placeProduct: (order, products, total) => {
+        return new Promise((resolve, reject) => {
+            console.log(order, products, total);
+            let status = order['payment-method'] === 'COD' ? 'placed' : 'pending';
+            let orderDate = moment().format('DD MMM YYYY');
+            let orderTime = moment().format('hh:mmA');
+
+            let orderObj = {
+                deliveryDetails: {
+                    mobile: order.mobile,
+                    address: order.address,
+                    pincode: order.pincode
+                },
+                userId: objectId(order.userId),
+                paymentMethod: order['payment-method'],
+                products: products,
+                totalAmount: total,
+                status: status,
+                date: orderDate,
+                time: orderTime
+            };
+
+            db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response) => {
+                console.log("go",response.ops[0]._id);
+                resolve(response.ops[0]._id);
+            });
+        });
+    },
     getCartProductList: (userId) => {
         return new Promise(async (resolve, reject) => {
             let cart = await db.get().collection(collection.CART_COLLECTION).findOne({ user: objectId(userId) })
-            console.log(cart);
+            console.log("productmm",cart.products);
+            
             resolve(cart.products)
         })
     },
@@ -312,6 +341,25 @@ module.exports = {
                 },
                 {
                     $unwind: '$userDetails'
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        totalAmount: 1,
+                        paymentMethod: 1,
+                        status: 1,
+                        date: 1,
+                        time: 1,
+                        userDetails: 1,
+                        deliveryDetails: 1,
+                        products: {
+                            $cond: {
+                                if: { $isArray: "$products" },
+                                then: "$products",
+                                else: [{ item: "$products", quantity: 1 }] // Adjust quantity as needed
+                            }
+                        }
+                    }
                 },
                 {
                     $unwind: '$products'
@@ -379,7 +427,8 @@ module.exports = {
             });
         });
     },
-
+    
+    
     getOrderProducts: (orderId) => {
         return new Promise(async (resolve, reject) => {
             let orderItems = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
