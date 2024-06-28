@@ -3,8 +3,8 @@
     <div class="container-fluid ml-2 mr-2" style="background-color: white;">
       <div class="row  pt-5">
 
-        <div class="left-content  col-12 pl-5 mb-3 pr-5 col-md-5">
-          <div class="card pl-2 pt-1 pr-2 text-center">
+        <div class="left-content text-center col-12 pl-5 mb-3 pr-5 col-md-5">
+          <div class="card pl-2 pt-1 pr-2 text-center" >
             <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
               <ol class="carousel-indicators">
                 {{#each images}}
@@ -30,27 +30,39 @@
             </div>
             {{#if user}}
             <div class="text-center pt-3 pb-2">
-              <button type="button" onclick="addToCart('{{product._id}}')" class="btn btn-primary btn-lg mt-1"
-                style="min-width: 10rem; max-width: 15rem;">
-                Add to Cart
+              <button type="button" onclick="addToCart('{{product._id}}')" class=" btn  btn-lg mt-1"
+                style="min-width: 10em;  transform: skew(13deg); color: white; background-color: #1ecf64;">
+               <div style="transform: skew(-15deg);">
+                   Add to Cart <i class="bi bi-cart3"></i>
+                </div>
               </button>
-              <!--snackbar -->
-              <div id="snackbar">Product added <img src="/images/grocery.gif" class="addcart" alt=""></div>
-              <a href="/buy-now/{{product._id}}/{{product.Offer_Price}}"><button type="button"  class="btn btn-secondary btn-lg mt-1 pr-3 pl-3"
-                style="min-width: 10rem; max-width: 15rem;">
-                Buy now
+              
+              <a href="/buy-now/{{product._id}}/{{product.Offer_Price}}"><button type="button"  class="btn  btn-lg mt-1 pr-3 pl-3"
+                style="min-width: 10em; transform: skew(13deg); color: white; background-color: #20b9d4">
+               <div style="transform: skew(-15deg);">
+                    Buy Now <i class="bi bi-bag-heart"></i>
+                  </div>
               </button></a>
             </div>
+            <!--snackbar -->
+              <div id="snackbar">Product added <img src="/images/grocery.gif" class="addcart" alt=""></div>
             {{else}}
             <div class="text-center pt-3 pb-2">
+            
               <a href="/login">
-                <button type="button" class="btn btn-primary btn-lg mt-1" style="min-width: 10rem; max-width: 15rem;">
-                  Add to Cart
+              
+                <button type="button" class=" btn  btn-lg mt-1" style="width: 10em; font-weight: 500; transform: skew(13deg); color: white; background-color: #1ecf64; background-image: linear-gradient(to right,  #1ecf64 , rgb(4, 231, 125));">
+                <div style="transform: skew(-13deg);">
+                   Add to Cart <i class="bi bi-cart3"></i>
+                </div>
                 </button>
 
-                <button type="button" class="btn btn-secondary btn-lg mt-1 pr-3 pl-3"
-                  style="min-width: 10rem; max-width: 15rem;">
-                  Buy now
+                <button type="button" class="btn  btn-lg mt-1 pr-3 pl-3"
+                  style="width: 10em;  transform: skew(13deg); font-weight: 500;color: white; background-color: #20b9d4;  background-image: linear-gradient(to right,  #20b9d4 , rgb(114, 190, 228));">
+                  <div style="transform: skew(-13deg);">
+                    Buy Now <i class="bi bi-bag-heart"></i>
+                  </div>
+                  
                 </button>
               </a>
             </div>
@@ -62,39 +74,46 @@
 
 
 
-        <div class="col-md-7 mt-2 overflow-hidden pl-5" id="textContent">
-          <div>
-            <div class="mb-5">
-              <h2>{{product.Name}}</h2>
-              <p class="text-muted">{{product.Category}}</p>
+        <div class="col-md-7  mt-2 overflow-hidden pl-5" id="textContent">
+          
 
-              <div>
+            <div class="mb-4">
+              <h2>{{product.Name}}</h2>
+              <p class="text-muted ">{{product.Category}}</p>
+                  <div class="row ml-1">
+
+                     <div class="mr-5">
                 <span class="fa fa-star checked"></span>
                 <span class="fa fa-star checked"></span>
                 <span class="fa fa-star checked"></span>
                 <span class="fa fa-star checked"></span>
                 <span class="fa fa-star"></span>
               </div>
+
               {{#ifEquals product.Product_Owner 'Admin'}}
-              <div class="ml-3">
+              <div class="">
                 <img src="/images/easyy.png" style="height: 30px; width:90px" alt="">
               </div>
               {{/ifEquals}}
+
+                  </div>
+             <hr>
             </div>
 
-          </div>
+          
           <div>
-            <label style="color:green">Offer Price </label>
+            <label class="offer-label">Offer Price </label>
 
-            <div class="row ml-1 ">
+            <div class="row ">
               <div class="offer" style="font-size: x-large;">
 
-                <p class="glow">
+                <div class="offer-price">
                   ₹{{product.Offer_Price}}
-                </p>
-
+                </div>
+               
+               <label class="ml-3" style="font-size: small; font-weight: 500;"><i class="bi bi-tag-fill"></i>Inclusive of all taxes</label>
               </div>
-              <div class="ml-5 mt-1">
+              <div class="ml-5 mt-1" >
                 <p class="text-muted"> M.R.P: <br><span> <del>₹{{product.Actual_Price}} </del></span></p>
 
               </div>
@@ -102,12 +121,37 @@
                 <p class="offerbadge "> {{product.Offer_Percentage}}% Off</p>
               </div>
             </div>
+            <hr >
           </div>
 
-          <div class="dody mt-4">
+<div class="scroll-container">
 
+ <button class="left-button"><i class="bi bi-arrow-left-circle-fill"></i></button>
+        <div class="scrollmenu">
+         
+  <a href="#home"><i class="bi bi-house-door"></i><br>easy <br>delivered</a>
+  <a href="#news"><img src="/images/free-delivery.gif" style=" width: 45px;
+    height: 55px; border-radius: 50%;" alt=""> <br> Free <br> Delivery</a>
+  <a href="#contact">Customer <br> support</a>
+  <a href="#about">verified</a>
+  <a href="#support">secure</a>
+  <a href="#blog">assurance</a>
+  <a href="#tools">cod</a>  
+ 
+  
+</div>
+</div>
+  <button class="right-button" ><i class="bi bi-arrow-right-circle-fill"></i></button>
+
+          <div class="description mt-4">
+            <h6>Product Description</h6>
+            <p> {{product.Description}}</p>
+          </div>
+
+            <div class="dody mt-4 mr-3 mb-2">
 
             <span class="heading">User Rating</span>
+            <br>
             <span class="fa fa-star checked"></span>
             <span class="fa fa-star checked"></span>
             <span class="fa fa-star checked"></span>
@@ -118,7 +162,7 @@
 
             <div class="row">
               <div class="side">
-                <div>5 star</div>
+                <div>5 ★</div>
               </div>
               <div class="middle">
                 <div class="bar-container">
@@ -129,7 +173,7 @@
                 <div>150</div>
               </div>
               <div class="side">
-                <div>4 star</div>
+                <div>4 ★</div>
               </div>
               <div class="middle">
                 <div class="bar-container">
@@ -140,7 +184,7 @@
                 <div>63</div>
               </div>
               <div class="side">
-                <div>3 star</div>
+                <div>3 ★</div>
               </div>
               <div class="middle">
                 <div class="bar-container">
@@ -151,7 +195,7 @@
                 <div>15</div>
               </div>
               <div class="side">
-                <div>2 star</div>
+                <div>2 ★</div>
               </div>
               <div class="middle">
                 <div class="bar-container">
@@ -162,7 +206,7 @@
                 <div>6</div>
               </div>
               <div class="side">
-                <div>1 star</div>
+                <div>1 ★</div>
               </div>
               <div class="middle">
                 <div class="bar-container">
@@ -176,11 +220,9 @@
 
           </div>
 
-        </div>
+        
 
-
-
-
+      </div>
       </div>
     </div>
   </div>
@@ -194,12 +236,132 @@
     interval: 2000
   })
 
+document.addEventListener('DOMContentLoaded', function() {
+  const scrollmenu = document.querySelector('.scrollmenu');
+  const leftButton = document.querySelector('.left-button');
+  const rightButton = document.querySelector('.right-button');
+
+  // Set the scroll amount
+  const scrollAmount = 100;
+
+  // Add event listeners to the buttons
+  leftButton.addEventListener('click', () => {
+    scrollmenu.scrollBy({
+      left: -scrollAmount,
+      behavior: 'smooth'
+    });
+  });
+
+  rightButton.addEventListener('click', () => {
+    scrollmenu.scrollBy({
+      left: scrollAmount,
+      behavior: 'smooth'
+    });
+  });
+
+  // Function to update button visibility
+  function updateScrollButtons() {
+    const scrollPosition = scrollmenu.scrollLeft;
+    const maxScrollPosition = scrollmenu.scrollWidth - scrollmenu.offsetWidth;
+
+    if (maxScrollPosition > 0) {
+      if (scrollPosition > 0) {
+        leftButton.style.display = 'block';
+      } else {
+        leftButton.style.display = 'none';
+      }
+
+      if (scrollPosition < maxScrollPosition) {
+        rightButton.style.display = 'block';
+      } else {
+        rightButton.style.display = 'none';
+      }
+    } else {
+      leftButton.style.display = 'none';
+      rightButton.style.display = 'none';
+    }
+  }
+
+  // Add scroll and resize event listeners
+  scrollmenu.addEventListener('scroll', updateScrollButtons);
+  window.addEventListener('resize', updateScrollButtons);
+
+  // Initial check after content has loaded
+  updateScrollButtons();
+});
+
+</script>
+
+
 </script>
 <style>
+.scroll-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+
+}
+
+.left-button, .right-button {
+  color: greenyellow;
+  background-color: transparent; /* Make background transparent */
+  border: none; /* Remove border */
+  border-radius: 50%;
+  
+
+  cursor: pointer;
+  position: absolute;
+  
+  transform: translateY(-50%);
+  display: none; /* Hide buttons initially */
+  font-size: 24px; /* Adjust the icon size as needed */
+}
+
+.left-button:hover, .right-button:hover {
+  color: #777; /* Change color on hover */
+}
+
+.left-button {
+  left: 0;
+}
+
+.right-button {
+  right: 0;
+}
+
+
+
+
+.scrollmenu::-webkit-scrollbar {
+  display: none;
+}
+#textContent::-webkit-scrollbar {
+  display: none;
+}
+
+  div.scrollmenu {
+
+  overflow: auto;
+  white-space: nowrap;
+  
+}
+
+div.scrollmenu a {
+  display: inline-block;
+  color: black;
+  text-align: center;
+  padding: 14px;
+  text-decoration: none;
+}
+
+div.scrollmenu a:hover {
+  background-color: #777;
+}
+
   .checked {
     color: orange;
   }
-
+  
   #carouselExampleIndicators {
     width: 100%;
     height: 100%;
@@ -207,7 +369,7 @@
 
   .carousel-inner img {
     width: 100%;
-    height: 350px;
+    height: 20rem;
   }
 
   .overflow-hidden {
@@ -224,42 +386,36 @@
   }
 
   .offerbadge {
-    background-color: #069c2e;
+    background-color: #1ece4d;
+    
     color: white;
-    padding: 12px 12px;
+    padding: 10px 10px;
     text-align: center;
     font-size: larger;
+    font-weight: bold;
     font-family: Arial, Helvetica, sans-serif;
-    border-radius: 10px;
+    border-radius: 12px;
 
   }
 
 
-  .glow {
+  .offer-price {
     font-size: 40px;
-    color: #fff;
+    color: #068da5;
     text-align: center;
-    animation: glow 1s ease-in-out infinite alternate;
+    
   }
-
-  @-webkit-keyframes glow {
-    from {
-      text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #e60073, 0 0 20px #e60073, 0 0 25px #e60073, 0 0 30px #e60073, 0 0 35px #e60073;
-    }
-
-    to {
-      text-shadow: 0 0 10px #fff, 0 0 15px #ff4da6, 0 0 20px #ff4da6, 0 0 25px #ff4da6, 0 0 30px #ff4da6, 0 0 35px #ff4da6, 0 0 40px #ff4da6;
-    }
+  .offer-label{
+     color:rgb(9, 169, 9);
+      font-style: oblique;
+      font-family: serif;
+      font-weight: 400;
   }
-
-
-
-
-
+ 
 
   .dody {
     font-family: Arial;
-    margin: 0 auto;
+    
     /* Center website */
     max-width: 800px;
     /* Max width */
@@ -276,7 +432,9 @@
   }
 
   .fa {
-    font-size: 20px;
+    font-size: 18px;
+   color: #dedcd7;
+    
   }
 
   .checked {
@@ -285,9 +443,10 @@
 
   /* Three column layout */
   .side {
-    float: left;
+     float: left;
     width: 15%;
-    margin-top: 10px;
+    margin-top: 8px;
+    
   }
 
   .middle {
@@ -314,6 +473,8 @@
     background-color: #f1f1f1;
     text-align: center;
     color: white;
+    border-radius: 10px;
+    
   }
 
   /* Individual bars */
@@ -321,30 +482,35 @@
     width: 60%;
     height: 18px;
     background-color: #04AA6D;
+    border-radius: 10px;
   }
 
   .bar-4 {
     width: 30%;
     height: 18px;
     background-color: #2196F3;
+     border-radius: 10px;
   }
 
   .bar-3 {
     width: 10%;
     height: 18px;
     background-color: #00bcd4;
+     border-radius: 10px;
   }
 
   .bar-2 {
     width: 4%;
     height: 18px;
     background-color: #ff9800;
+     border-radius: 10px;
   }
 
   .bar-1 {
     width: 15%;
     height: 18px;
     background-color: #f44336;
+     border-radius: 10px;
   }
 
   /* Responsive layout - make the columns stack on top of each other instead of next to each other */
@@ -450,6 +616,13 @@
     }
   }
 
+   a {
+      text-decoration: none; /* Remove underline by default */
+    }
+
+    a:hover {
+      text-decoration: none; /* Ensure underline does not appear on hover */
+    }
 
   /*For showing notification on product added to cart */
   .addcart {
@@ -471,5 +644,20 @@
     to {
       left: 60px;
     }
+  }
+
+
+
+/* Custom CSS for rounded carousel indicators */
+    .carousel-indicators li {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #fff;
+  }
+  
+  .carousel-indicators .active {
+    
+    background-color: #0097b2;
   }
 </style>
