@@ -31,14 +31,14 @@
             {{#if user}}
             <div class="text-center pt-3 pb-2">
               <button type="button" onclick="addToCart('{{product._id}}')" class=" btn  btn-lg mt-1"
-                style="min-width: 10em;  transform: skew(13deg); color: white; background-color: #1ecf64;">
+               style="width: 10em; font-weight: 500; transform: skew(13deg); color: white;background-image: linear-gradient(to right,  #16b656 , rgb(4, 231, 125));">
                <div style="transform: skew(-15deg);">
                    Add to Cart <i class="bi bi-cart3"></i>
                 </div>
               </button>
               
-              <a href="/buy-now/{{product._id}}/{{product.Offer_Price}}"><button type="button"  class="btn  btn-lg mt-1 pr-3 pl-3"
-                style="min-width: 10em; transform: skew(13deg); color: white; background-color: #20b9d4">
+              <a href="/buy-now/{{product._id}}/{{product.Offer_Price}}"> <button type="button"  class="btn  btn-lg mt-1 pr-3 pl-3"
+                 style="width: 10em;  transform: skew(13deg); font-weight: 500;color: white;  background-image: linear-gradient(to right,  #1da3ba , rgb(114, 190, 228));">
                <div style="transform: skew(-15deg);">
                     Buy Now <i class="bi bi-bag-heart"></i>
                   </div>
@@ -51,15 +51,15 @@
             
               <a href="/login">
               
-                <button type="button" class=" btn  btn-lg mt-1" style="width: 10em; font-weight: 500; transform: skew(13deg); color: white; background-color: #1ecf64; background-image: linear-gradient(to right,  #1ecf64 , rgb(4, 231, 125));">
-                <div style="transform: skew(-13deg);">
+                <button type="button" class="btn  btn-lg mt-1" style="width: 10em; font-weight: 500; transform: skew(13deg); color: white;background-image: linear-gradient(to right,  #16b656 , rgb(4, 231, 125));">
+                <div style="transform: skew(-13deg);" >
                    Add to Cart <i class="bi bi-cart3"></i>
                 </div>
                 </button>
 
                 <button type="button" class="btn  btn-lg mt-1 pr-3 pl-3"
-                  style="width: 10em;  transform: skew(13deg); font-weight: 500;color: white; background-color: #20b9d4;  background-image: linear-gradient(to right,  #20b9d4 , rgb(114, 190, 228));">
-                  <div style="transform: skew(-13deg);">
+                  style="width: 10em;  transform: skew(13deg); font-weight: 500;color: white;  background-image: linear-gradient(to right,  #1da3ba , rgb(114, 190, 228));">
+                  <div style="transform: skew(-13deg);" >
                     Buy Now <i class="bi bi-bag-heart"></i>
                   </div>
                   
@@ -92,7 +92,7 @@
 
               {{#ifEquals product.Product_Owner 'Admin'}}
               <div class="">
-                <img src="/images/easyy.png" style="height: 30px; width:90px" alt="">
+                <img src="/images/eASY-assurance.png" style="height: 30px; width:90px" alt="eASY-assurance">
               </div>
               {{/ifEquals}}
 
@@ -126,22 +126,47 @@
 
 <div class="scroll-container">
 
- <button class="left-button"><i class="bi bi-arrow-left-circle-fill"></i></button>
-        <div class="scrollmenu">
+ <a class="left-button" style="  color: rgb(83, 218, 200);"><i class="bi bi-arrow-left-circle-fill"></i></a>
+
+  <div class="scrollmenu">
          
-  <a href="#home"><i class="bi bi-house-door"></i><br>easy <br>delivered</a>
-  <a href="#news"><img src="/images/free-delivery.gif" style=" width: 45px;
-    height: 55px; border-radius: 50%;" alt=""> <br> Free <br> Delivery</a>
-  <a href="#contact">Customer <br> support</a>
-  <a href="#about">verified</a>
-  <a href="#support">secure</a>
-  <a href="#blog">assurance</a>
-  <a href="#tools">cod</a>  
+  <div  data-message="<h6>eASY Delivered </h6>  eASY SHOP directly manages delivery for your products.">
+  <img src="/images/eASY-delivery.gif" style=" width: 45px;height: 55px; border-radius: 50%;" alt="">
+  <br>eASY <br> Delivered</div>
+
+  <div  data-message="<h6>Customer Support</h6> 24/7 customer support available for all your delivery inquiries."><img src="/images/customer-support.gif" style=" width: 50px;
+    height: 55px; border-radius: 50%;" alt=""> <br>Customer <br> Support</div>
+
+  <div  data-message="<h6>Free Delivery</h6> eASY SHOP offers free delivery across all of India."><img src="/images/free-delivery.gif" style=" width: 45px;
+    height: 55px; border-radius: 50%;" alt=""> <br> Free <br> Delivery</div>
+
+         {{#ifEquals product.Product_Owner 'User'}}
+  <div data-message="<h6>Verified Seller</h6>  Verified by eASY SHOP, this seller is trusted and reliable."><img src="/images/verified-seller.gif" style=" width: 55px;
+    height: 55px; " alt=""> <br>Verified<br> Seller</div>
+       
+         {{else}}
+  <div data-message="<h6>eASY SHOP assurance</h6> eASY-assurance guarantees the highest quality and fastest delivery."><img src="/images/easy-assurance.gif" style=" width: 45px;
+    height: 55px;" alt=""> <br>eASY <br> assurance</div>
+    
+         {{/ifEquals}}
+
+  <div  data-message="<h6>Your transaction is secure</h6>
+      We work hard to protect your security and privacy. Our payment <br> security system encrypts your information during transmission.<br> 
+       We don’t share your credit card details with third-party sellers, and we<br>  don’t sell your information to others" >
+    <img src="/images/wallet.gif" style=" width: 50px; height: 50px; border-radius: 50%;" alt=""> 
+        <br>Secure <br>Transaction</div>
+
+ <div  data-message="<h6>Doorstep Delivery</h6> Enjoy the convenience of doorstep delivery for all your purchases."><img src="/images/door.gif" style=" width: 50px;
+    height: 50px; border-radius: 50%;" alt=""> <br>Doorstep<br>Delivery</div>
+
+  <div  data-message="<h6>Cash On Deliver</h6> Convenient cash on delivery option available for your purchases."><img src="/images/cod.gif" style=" width: 45px;
+    height: 55px; border-radius: 50%;" alt=""> <br>Cash on <br>Delivery</div>  
  
+</div>
+
+<a class="right-button" style="  color: rgb(83, 218, 200);"><i class="bi bi-arrow-right-circle-fill"></i></a>
+</div>
   
-</div>
-</div>
-  <button class="right-button" ><i class="bi bi-arrow-right-circle-fill"></i></button>
 
           <div class="description mt-4">
             <h6>Product Description</h6>
@@ -220,7 +245,7 @@
 
           </div>
 
-        
+       
 
       </div>
       </div>
@@ -242,7 +267,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const rightButton = document.querySelector('.right-button');
 
   // Set the scroll amount
-  const scrollAmount = 100;
+  const scrollAmount = 150;
 
   // Add event listeners to the buttons
   leftButton.addEventListener('click', () => {
@@ -290,11 +315,56 @@ document.addEventListener('DOMContentLoaded', function() {
   updateScrollButtons();
 });
 
+
+document.querySelectorAll('.scrollmenu div').forEach(item => {
+    item.addEventListener('mouseenter', function() {
+        let message = this.getAttribute('data-message');
+        let popup = document.createElement('div');
+        popup.classList.add('popup');
+        popup.innerHTML = message;
+        this.appendChild(popup);
+    });
+
+    item.addEventListener('mouseleave', function() {
+        let popup = this.querySelector('.popup');
+        if (popup) {
+            this.removeChild(popup);
+        }
+    });
+});
+
+
+
 </script>
 
 
-</script>
+
 <style>
+
+
+.scrollmenu div .popup {
+    visibility: hidden;
+    
+    background-color: rgba(64, 147, 178, 0.8);
+    color: #fff;
+    text-align: left;
+    border-radius: px;
+    padding: 10px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; /* Position above the div */
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.scrollmenu div:hover .popup {
+    visibility: visible;
+    opacity: 1;
+}
+
 .scroll-container {
   display: flex;
   align-items: center;
@@ -303,8 +373,8 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
 .left-button, .right-button {
-  color: greenyellow;
-  background-color: transparent; /* Make background transparent */
+
+
   border: none; /* Remove border */
   border-radius: 50%;
   
@@ -317,16 +387,16 @@ document.addEventListener('DOMContentLoaded', function() {
   font-size: 24px; /* Adjust the icon size as needed */
 }
 
-.left-button:hover, .right-button:hover {
-  color: #777; /* Change color on hover */
-}
+
 
 .left-button {
   left: 0;
+ 
 }
 
 .right-button {
   right: 0;
+ 
 }
 
 
@@ -346,32 +416,31 @@ document.addEventListener('DOMContentLoaded', function() {
   
 }
 
-div.scrollmenu a {
+div.scrollmenu div {
   display: inline-block;
-  color: black;
+  color: rgb(89, 173, 215);
   text-align: center;
   padding: 14px;
   text-decoration: none;
+ font-weight: 500;
 }
 
-div.scrollmenu a:hover {
-  background-color: #777;
-}
-
-  .checked {
-    color: orange;
-  }
-  
-  #carouselExampleIndicators {
+ #carouselExampleIndicators {
     width: 100%;
     height: 100%;
   }
 
   .carousel-inner img {
     width: 100%;
-    height: 20rem;
+    height: 25rem;
   }
+  
 
+  .checked {
+    color: orange;
+  }
+  
+ 
   .overflow-hidden {
     overflow: hidden;
   }
@@ -387,7 +456,7 @@ div.scrollmenu a:hover {
 
   .offerbadge {
     background-color: #1ece4d;
-    
+     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
     color: white;
     padding: 10px 10px;
     text-align: center;
@@ -401,7 +470,7 @@ div.scrollmenu a:hover {
 
   .offer-price {
     font-size: 40px;
-    color: #068da5;
+    color: #1294ab;
     text-align: center;
     
   }

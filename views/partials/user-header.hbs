@@ -1,15 +1,16 @@
 <header >
     <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-image: url(''); " > 
         <div class="container-fluid">
-            <a class="navbar-brand" href="/"> <img src="/images/ec_processed.png" style="height: 50px; width:110px" alt=""></a>
+            <a class="navbar-brand" href="/"> <img src="/images/eASY-SHOP-logo.png" style="height: 50px; width:110px" alt=""></a>
 
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
-                aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler ml-auto  " type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+                aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation" >
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="mx-auto d-lg-none row">
                 {{#if user}}
+            <div class="mx-auto d-lg-none row">
+            
                 <form class="form-inline my-2 my-lg-0" onsubmit="searchProducts(event)">
                     <div class="input-group">
                         <input class="form-control mr-sm-2" type="search" id="search-input" placeholder="Search" aria-label="Search">
@@ -19,9 +20,10 @@
                         </div>
                     </div>
                 </form>
-                {{/if}}
+               
             </div>
-
+             {{/if}}
+             
             <div class="collapse navbar-collapse justify-content-between" id="navbarTogglerDemo03">
                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                     {{#if user}}
@@ -36,9 +38,7 @@
                     </li>
                     
                     {{/if}}
-                     <li class="nav-item">
-                        <a class="nav-link" href="/view-product">Product</a>
-                    </li>
+                    
                 </ul>
 
                 <div class="mx-auto d-lg-block d-sm-none">
