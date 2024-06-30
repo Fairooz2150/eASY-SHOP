@@ -8,7 +8,7 @@
           <div class="row header-content">
             <div class="chip">
               <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Person" width="96" height="96">
-              {{this.User_First_Name}} {{this.User_Last_Name}}
+              {{this.Seller_First_Name}} {{this.Seller_Last_Name}}
             </div>
             <div class="date row">
               {{#ifEquals this.Updations 'Updated'}}
@@ -35,7 +35,7 @@
             </div>
             <div class="address">
               <span style="font-weight: bold;"> Address:</span><br>{{newlineToBr this.Selling_Address}}
-              <br>Ph: {{this.User_Phone}}
+              <br>Ph: {{this.Seller_Phone}}
             </div>
           </div>
           <div>

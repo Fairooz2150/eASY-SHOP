@@ -1,68 +1,66 @@
 <section>
-  <div class="container-fluid pl-5 pr-5" style="background-color: grey;">
-    <div class="container-fluid ml-2 mr-2" style="background-color: white;">
+  <div class="bg-container container-fluid pl-5 pr-5">
+    <div class="ft-container container-fluid ml-2 mr-2">
       <div class="row  pt-5">
 
         <div class="left-content text-center col-12 pl-5 mb-3 pr-5 col-md-5">
-          <div class="card pl-2 pt-1 pr-2 text-center" >
-            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+          <div class="card p-2 text-center">
+            <div id="carouselIndicators" class="carousel slide" data-ride="carousel">
               <ol class="carousel-indicators">
                 {{#each images}}
-                <li data-target="#carouselExampleIndicators" data-slide-to="{{@index}}"
-                  class="{{#if @first}}active{{/if}}"></li>
+                <li data-target="#carouselIndicators" data-slide-to="{{@index}}" class="{{#if @first}}active{{/if}}">
+                </li>
                 {{/each}}
               </ol>
               <div class="carousel-inner">
                 {{#each images}}
                 <div class="carousel-item {{#if @first}}active{{/if}}">
-                  <img class="d-block w-100" src="/product-images/{{this}}" alt="Slide {{@index}}">
+                  <img class="images d-block w-100" src="/product-images/{{this}}" alt="Slide {{@index}}">
                 </div>
                 {{/each}}
               </div>
-              <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+              <a class="carousel-control-prev" href="#carouselIndicators" role="button" data-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="sr-only">Previous</span>
               </a>
-              <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+              <a class="carousel-control-next" href="#carouselIndicators" role="button" data-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="sr-only">Next</span>
               </a>
             </div>
             {{#if user}}
             <div class="text-center pt-3 pb-2">
-              <button type="button" onclick="addToCart('{{product._id}}')" class=" btn  btn-lg mt-1"
-               style="width: 10em; font-weight: 500; transform: skew(13deg); color: white;background-image: linear-gradient(to right,  #16b656 , rgb(4, 231, 125));">
-               <div style="transform: skew(-15deg);">
-                   Add to Cart <i class="bi bi-cart3"></i>
+              <button type="button" onclick="addToCart('{{product._id}}')" class="ADC btn  btn-lg mt-1">
+                <div class="ADC-text">
+                  Add to Cart <i class="bi bi-cart3"></i>
                 </div>
               </button>
-              
-              <a href="/buy-now/{{product._id}}/{{product.Offer_Price}}"> <button type="button"  class="btn  btn-lg mt-1 pr-3 pl-3"
-                 style="width: 10em;  transform: skew(13deg); font-weight: 500;color: white;  background-image: linear-gradient(to right,  #1da3ba , rgb(114, 190, 228));">
-               <div style="transform: skew(-15deg);">
+
+              <a href="/buy-now/{{product._id}}/{{product.Offer_Price}}"> <button type="button"
+                  class="BN btn  btn-lg mt-1 pr-3 pl-3">
+                  <div class="BN-text">
                     Buy Now <i class="bi bi-bag-heart"></i>
                   </div>
-              </button></a>
+                </button></a>
             </div>
             <!--snackbar -->
-              <div id="snackbar">Product added <img src="/images/grocery.gif" class="addcart" alt=""></div>
+            <div id="snackbar">Product added <img src="/images/grocery.gif" class="addcart" alt=""></div>
             {{else}}
             <div class="text-center pt-3 pb-2">
-            
+
               <a href="/login">
-              
-                <button type="button" class="btn  btn-lg mt-1" style="width: 10em; font-weight: 500; transform: skew(13deg); color: white;background-image: linear-gradient(to right,  #16b656 , rgb(4, 231, 125));">
-                <div style="transform: skew(-13deg);" >
-                   Add to Cart <i class="bi bi-cart3"></i>
-                </div>
+
+                <button type="button" class="ADC btn  btn-lg mt-1" title="Please login for Cart">
+                  <div class="ADC-text">
+                    Add to Cart <i class="bi bi-cart3"></i>
+                  </div>
                 </button>
 
-                <button type="button" class="btn  btn-lg mt-1 pr-3 pl-3"
-                  style="width: 10em;  transform: skew(13deg); font-weight: 500;color: white;  background-image: linear-gradient(to right,  #1da3ba , rgb(114, 190, 228));">
-                  <div style="transform: skew(-13deg);" >
+                <button type="button" class="BN btn btn-lg mt-1 pr-3 pl-3" title="Please login to Buy">
+                  <div class="BN-text">
                     Buy Now <i class="bi bi-bag-heart"></i>
                   </div>
-                  
+
                 </button>
               </a>
             </div>
@@ -71,18 +69,14 @@
         </div>
 
 
-
-
-
         <div class="col-md-7  mt-2 overflow-hidden pl-5" id="textContent">
-          
 
-            <div class="mb-4">
-              <h2>{{product.Name}}</h2>
-              <p class="text-muted ">{{product.Category}}</p>
-                  <div class="row ml-1">
+          <div class="mb-4">
+            <h2 title="Title">{{product.Name}}</h2>
+            <p class="text-muted" title="Category">{{product.Category}}</p>
+            <div class="row ml-1">
 
-                     <div class="mr-5">
+              <div class="mr-5" title="Rating">
                 <span class="fa fa-star checked"></span>
                 <span class="fa fa-star checked"></span>
                 <span class="fa fa-star checked"></span>
@@ -92,88 +86,102 @@
 
               {{#ifEquals product.Product_Owner 'Admin'}}
               <div class="">
-                <img src="/images/eASY-assurance.png" style="height: 30px; width:90px" alt="eASY-assurance">
+                <img src="/images/eASY-assurance.png" class="assurance" alt="eASY-assurance">
               </div>
               {{/ifEquals}}
 
-                  </div>
-             <hr>
             </div>
+            <hr>
+          </div>
 
-          
+
           <div>
             <label class="offer-label">Offer Price </label>
 
             <div class="row ">
-              <div class="offer" style="font-size: x-large;">
+              <div class="offer">
 
-                <div class="offer-price">
+                <div class="offer-price" title="Offer Price">
                   ₹{{product.Offer_Price}}
                 </div>
-               
-               <label class="ml-3" style="font-size: small; font-weight: 500;"><i class="bi bi-tag-fill"></i>Inclusive of all taxes</label>
-              </div>
-              <div class="ml-5 mt-1" >
-                <p class="text-muted"> M.R.P: <br><span> <del>₹{{product.Actual_Price}} </del></span></p>
 
+                <label class="tax ml-3"><i class="bi bi-tag-fill"></i>Inclusive of all taxes</label>
               </div>
+              <div class="ml-5 mt-1" title="Maximum Retail Price">
+                <p class="text-muted"> M.R.P: <br><span> <del>₹{{product.Actual_Price}} </del></span></p>
+              </div>
+
               <div class="ml-5 mt-1">
                 <p class="offerbadge "> {{product.Offer_Percentage}}% Off</p>
               </div>
             </div>
-            <hr >
+
           </div>
+          <hr>
+          <div class="scroll-container">
 
-<div class="scroll-container">
+            <a class="left-button" style="color: rgb(83, 218, 200);"><i class="bi bi-arrow-left-circle-fill"></i></a>
 
- <a class="left-button" style="  color: rgb(83, 218, 200);"><i class="bi bi-arrow-left-circle-fill"></i></a>
+            <div class="scrollmenu">
 
-  <div class="scrollmenu">
-         
-  <div  data-message="<h6>eASY Delivered </h6>  eASY SHOP directly manages delivery for your products.">
-  <img src="/images/eASY-delivery.gif" style=" width: 45px;height: 55px; border-radius: 50%;" alt="">
-  <br>eASY <br> Delivered</div>
+              <div data-message="<h6>eASY Delivered </h6>  eASY SHOP directly manages delivery for your products.">
+                <img src="/images/eASY-delivery.gif" class="scrollmenu-images" alt="eASY Delivered"> <br>eASY <br>
+                Delivered
+              </div>
 
-  <div  data-message="<h6>Customer Support</h6> 24/7 customer support available for all your delivery inquiries."><img src="/images/customer-support.gif" style=" width: 50px;
-    height: 55px; border-radius: 50%;" alt=""> <br>Customer <br> Support</div>
+              <div
+                data-message="<h6>Customer Support</h6> 24/7 customer support available for all your delivery inquiries.">
+                <img src="/images/customer-support.gif" class="scrollmenu-images" alt="Customer Support"> <br>Customer
+                <br> Support</div>
 
-  <div  data-message="<h6>Free Delivery</h6> eASY SHOP offers free delivery across all of India."><img src="/images/free-delivery.gif" style=" width: 45px;
-    height: 55px; border-radius: 50%;" alt=""> <br> Free <br> Delivery</div>
+              <div data-message="<h6>Free Delivery</h6> eASY SHOP offers free delivery across all of India."><img
+                  src="/images/free-delivery.gif" class="scrollmenu-images" alt="Free Delivery"> <br> Free <br> Delivery
+              </div>
 
-         {{#ifEquals product.Product_Owner 'User'}}
-  <div data-message="<h6>Verified Seller</h6>  Verified by eASY SHOP, this seller is trusted and reliable."><img src="/images/verified-seller.gif" style=" width: 55px;
-    height: 55px; " alt=""> <br>Verified<br> Seller</div>
-       
-         {{else}}
-  <div data-message="<h6>eASY SHOP assurance</h6> eASY-assurance guarantees the highest quality and fastest delivery."><img src="/images/easy-assurance.gif" style=" width: 45px;
-    height: 55px;" alt=""> <br>eASY <br> assurance</div>
-    
-         {{/ifEquals}}
+              {{#ifEquals product.Product_Owner 'User'}}
+              <div data-message="<h6>Verified Seller</h6>  Verified by eASY SHOP, this seller is trusted and reliable.">
+                <img src="/images/verified-seller.gif" class="scrollmenu-images" alt="Verified Seller"> <br>Verified<br>
+                Seller</div>
 
-  <div  data-message="<h6>Your transaction is secure</h6>
+              {{else}}
+              <div
+                data-message="<h6>eASY SHOP assurance</h6> eASY-assurance guarantees the highest quality and fastest delivery.">
+                <img src="/images/easy-assurance.gif" class="scrollmenu-images" alt="eASY assurance"> <br>eASY <br>
+                assurance</div>
+
+              {{/ifEquals}}
+
+              <div
+                data-message="<h6>Your transaction is secure</h6>
       We work hard to protect your security and privacy. Our payment <br> security system encrypts your information during transmission.<br> 
-       We don’t share your credit card details with third-party sellers, and we<br>  don’t sell your information to others" >
-    <img src="/images/wallet.gif" style=" width: 50px; height: 50px; border-radius: 50%;" alt=""> 
-        <br>Secure <br>Transaction</div>
+       We don’t share your credit card details with third-party sellers, and we<br>  don’t sell your information to others">
+                <img src="/images/wallet.gif" class="scrollmenu-images" alt="Secure Transaction">
+                <br>Secure <br>Transaction
+              </div>
 
- <div  data-message="<h6>Doorstep Delivery</h6> Enjoy the convenience of doorstep delivery for all your purchases."><img src="/images/door.gif" style=" width: 50px;
-    height: 50px; border-radius: 50%;" alt=""> <br>Doorstep<br>Delivery</div>
+              <div
+                data-message="<h6>Doorstep Delivery</h6> Enjoy the convenience of doorstep delivery for all your purchases.">
+                <img src="/images/door.gif" class="scrollmenu-images" alt="Doorstep Delivery"> <br>Doorstep<br>Delivery
+              </div>
 
-  <div  data-message="<h6>Cash On Deliver</h6> Convenient cash on delivery option available for your purchases."><img src="/images/cod.gif" style=" width: 45px;
-    height: 55px; border-radius: 50%;" alt=""> <br>Cash on <br>Delivery</div>  
- 
-</div>
+              <div
+                data-message="<h6>Cash On Deliver</h6> Convenient cash on delivery option available for your purchases.">
+                <img src="/images/cod.gif" class="scrollmenu-images" alt="COD"> <br>Cash on <br>Delivery</div>
 
-<a class="right-button" style="  color: rgb(83, 218, 200);"><i class="bi bi-arrow-right-circle-fill"></i></a>
-</div>
-  
+            </div>
+
+            <a class="right-button" style="color: rgb(83, 218, 200);"><i class="bi bi-arrow-right-circle-fill"></i></a>
+          </div>
+          <hr>
 
           <div class="description mt-4">
             <h6>Product Description</h6>
-            <p> {{product.Description}}</p>
+            <p class="ml-2"> {{newlineToBr product.Description}}</p>
           </div>
+          <hr>
 
-            <div class="dody mt-4 mr-3 mb-2">
+
+          <div class="rating mt-4 mr-3 mb-2" title="User Rating">
 
             <span class="heading">User Rating</span>
             <br>
@@ -187,7 +195,7 @@
 
             <div class="row">
               <div class="side">
-                <div>5 ★</div>
+                <div>5 <span class="fa fa-star checked"></span></div>
               </div>
               <div class="middle">
                 <div class="bar-container">
@@ -198,7 +206,7 @@
                 <div>150</div>
               </div>
               <div class="side">
-                <div>4 ★</div>
+                <div>4 <span class="fa fa-star checked"></span></div>
               </div>
               <div class="middle">
                 <div class="bar-container">
@@ -209,7 +217,7 @@
                 <div>63</div>
               </div>
               <div class="side">
-                <div>3 ★</div>
+                <div>3 <span class="fa fa-star checked"></span></div>
               </div>
               <div class="middle">
                 <div class="bar-container">
@@ -220,7 +228,7 @@
                 <div>15</div>
               </div>
               <div class="side">
-                <div>2 ★</div>
+                <div>2 <span class="fa fa-star checked"></span></div>
               </div>
               <div class="middle">
                 <div class="bar-container">
@@ -231,7 +239,7 @@
                 <div>6</div>
               </div>
               <div class="side">
-                <div>1 ★</div>
+                <div>1 <span class="fa fa-star checked"></span></div>
               </div>
               <div class="middle">
                 <div class="bar-container">
@@ -244,11 +252,43 @@
             </div>
 
           </div>
+          <hr>
+          {{#ifEquals product.Product_Owner 'User'}}
+          <div class="seller mt-4">
+            <h6>About the Seller </h6>
+            <div class="seller-info ml-2">
+              <p><span class="seller-name"> {{product.Seller_First_Name}} {{product.Seller_Last_Name}} 
+                    <i class="bi bi-patch-check-fill"></i> </span> <br>
+                <span class="eASY-description "> {{newlineToBr product.Selling_Address}} <br>
+                  <span class="contact mt-1"> For any inquiries, contact: <br>
+                    <a href="tel:+91{{product.Seller_Phone}}"><i class="bi bi-headset"></i> {{product.Seller_Phone}}</a>
+                    &ensp; &emsp; <a href="https://wa.me/{{product.Seller_Phone}}"><i class="bi bi-whatsapp"></i> chat with us!</a> &ensp; &emsp; 
+                      <a href="mailto:{{product.Seller_Email}}?subject=Inquiry%20about%20'{{product.Name}}'"><i
+                        class="bi bi-envelope"></i> {{product.Seller_Email}}</a></span></span>
+              </p>
+            </div>
+          </div>
 
-       
+          {{else}}
+          <div class="seller mt-4">
+            <h6>Powered by</h6>
+            <div class="seller-info ml-2">
+              <img src="/images/eASY-SHOP-logo.png" class="eASY-logo" alt="eASY SHOP" title="eASY SHOP"> <br>
+              <p class="eASY-description mt-2">Discover our exclusive range of products at <b>eASY SHOP</b>, where
+                quality meets convenience <i class="bi bi-shop-window"></i>. <br>
+                <span class="contact mt-1"> For any inquiries, 24/7 customer support; we'll be happy to assist you! <br>
+                  <a href="tel:0478-2255"><i class="bi bi-headset"></i> talk with us!</a> &ensp; &emsp; <a
+                    href="https://wa.me/+919142111304"><i class="bi bi-whatsapp"></i> chat with us!</a>
+                  &ensp; &emsp; <a href="mailto:easyshop@email.com?subject=Inquiry%20about%20'{{product.Name}}'"><i
+                      class="bi bi-envelope"></i> email us!</a></span>
+              </p>
+            </div>
+          </div>
+          {{/ifEquals}}
 
+        </div>
       </div>
-      </div>
+      <hr>
     </div>
   </div>
 </section>
@@ -261,171 +301,102 @@
     interval: 2000
   })
 
-document.addEventListener('DOMContentLoaded', function() {
-  const scrollmenu = document.querySelector('.scrollmenu');
-  const leftButton = document.querySelector('.left-button');
-  const rightButton = document.querySelector('.right-button');
+  document.addEventListener('DOMContentLoaded', function () {
+    const scrollmenu = document.querySelector('.scrollmenu');
+    const leftButton = document.querySelector('.left-button');
+    const rightButton = document.querySelector('.right-button');
 
-  // Set the scroll amount
-  const scrollAmount = 150;
+    // Set the scroll amount
+    const scrollAmount = 150;
 
-  // Add event listeners to the buttons
-  leftButton.addEventListener('click', () => {
-    scrollmenu.scrollBy({
-      left: -scrollAmount,
-      behavior: 'smooth'
+    // Add event listeners to the buttons
+    leftButton.addEventListener('click', () => {
+      scrollmenu.scrollBy({
+        left: -scrollAmount,
+        behavior: 'smooth'
+      });
     });
-  });
 
-  rightButton.addEventListener('click', () => {
-    scrollmenu.scrollBy({
-      left: scrollAmount,
-      behavior: 'smooth'
+    rightButton.addEventListener('click', () => {
+      scrollmenu.scrollBy({
+        left: scrollAmount,
+        behavior: 'smooth'
+      });
     });
-  });
 
-  // Function to update button visibility
-  function updateScrollButtons() {
-    const scrollPosition = scrollmenu.scrollLeft;
-    const maxScrollPosition = scrollmenu.scrollWidth - scrollmenu.offsetWidth;
+    // Function to update button visibility
+    function updateScrollButtons() {
+      const scrollPosition = scrollmenu.scrollLeft;
+      const maxScrollPosition = scrollmenu.scrollWidth - scrollmenu.offsetWidth;
 
-    if (maxScrollPosition > 0) {
-      if (scrollPosition > 0) {
-        leftButton.style.display = 'block';
+      if (maxScrollPosition > 0) {
+        if (scrollPosition > 0) {
+          leftButton.style.display = 'block';
+        } else {
+          leftButton.style.display = 'none';
+        }
+
+        if (scrollPosition < maxScrollPosition) {
+          rightButton.style.display = 'block';
+        } else {
+          rightButton.style.display = 'none';
+        }
       } else {
         leftButton.style.display = 'none';
-      }
-
-      if (scrollPosition < maxScrollPosition) {
-        rightButton.style.display = 'block';
-      } else {
         rightButton.style.display = 'none';
       }
-    } else {
-      leftButton.style.display = 'none';
-      rightButton.style.display = 'none';
     }
-  }
 
-  // Add scroll and resize event listeners
-  scrollmenu.addEventListener('scroll', updateScrollButtons);
-  window.addEventListener('resize', updateScrollButtons);
+    // Add scroll and resize event listeners
+    scrollmenu.addEventListener('scroll', updateScrollButtons);
+    window.addEventListener('resize', updateScrollButtons);
 
-  // Initial check after content has loaded
-  updateScrollButtons();
-});
+    // Initial check after content has loaded
+    updateScrollButtons();
+  });
 
 
-document.querySelectorAll('.scrollmenu div').forEach(item => {
-    item.addEventListener('mouseenter', function() {
-        let message = this.getAttribute('data-message');
-        let popup = document.createElement('div');
-        popup.classList.add('popup');
-        popup.innerHTML = message;
-        this.appendChild(popup);
+  document.querySelectorAll('.scrollmenu div').forEach(item => {
+    item.addEventListener('mouseenter', function () {
+      let message = this.getAttribute('data-message');
+      let popup = document.createElement('div');
+      popup.classList.add('popup');
+      popup.innerHTML = message;
+      this.appendChild(popup);
     });
 
-    item.addEventListener('mouseleave', function() {
-        let popup = this.querySelector('.popup');
-        if (popup) {
-            this.removeChild(popup);
-        }
+    item.addEventListener('mouseleave', function () {
+      let popup = this.querySelector('.popup');
+      if (popup) {
+        this.removeChild(popup);
+      }
     });
-});
-
+  });
 
 
 </script>
 
-
-
 <style>
+  .bg-container {
+    background-color: #f0f7f9;
+  }
 
+  .ft-container {
+    background-color: white;
+  }
 
-.scrollmenu div .popup {
-    visibility: hidden;
-    
-    background-color: rgba(64, 147, 178, 0.8);
-    color: #fff;
-    text-align: left;
-    border-radius: px;
-    padding: 10px;
-    position: absolute;
-    z-index: 1;
-    bottom: 125%; /* Position above the div */
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0;
-    transition: opacity 0.3s;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-}
+  .card {
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(73, 135, 189, 0.5);
 
-.scrollmenu div:hover .popup {
-    visibility: visible;
-    opacity: 1;
-}
+  }
 
-.scroll-container {
-  display: flex;
-  align-items: center;
-  position: relative;
+  .images {
+    border-radius: 5px;
 
-}
+  }
 
-.left-button, .right-button {
-
-
-  border: none; /* Remove border */
-  border-radius: 50%;
-  
-
-  cursor: pointer;
-  position: absolute;
-  
-  transform: translateY(-50%);
-  display: none; /* Hide buttons initially */
-  font-size: 24px; /* Adjust the icon size as needed */
-}
-
-
-
-.left-button {
-  left: 0;
- 
-}
-
-.right-button {
-  right: 0;
- 
-}
-
-
-
-
-.scrollmenu::-webkit-scrollbar {
-  display: none;
-}
-#textContent::-webkit-scrollbar {
-  display: none;
-}
-
-  div.scrollmenu {
-
-  overflow: auto;
-  white-space: nowrap;
-  
-}
-
-div.scrollmenu div {
-  display: inline-block;
-  color: rgb(89, 173, 215);
-  text-align: center;
-  padding: 14px;
-  text-decoration: none;
- font-weight: 500;
-}
-
- #carouselExampleIndicators {
+  #carouselIndicators {
     width: 100%;
     height: 100%;
   }
@@ -434,169 +405,31 @@ div.scrollmenu div {
     width: 100%;
     height: 25rem;
   }
-  
 
-  .checked {
-    color: orange;
-  }
-  
- 
-  .overflow-hidden {
-    overflow: hidden;
-  }
-
-  .overflow-auto {
-    overflow: auto;
-  }
-
-  #textContent {
-    max-height: 585px;
-    overflow-y: auto;
-  }
-
-  .offerbadge {
-    background-color: #1ece4d;
-     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  .ADC {
+    width: 10em;
+    font-weight: 500;
+    transform: skew(13deg);
     color: white;
-    padding: 10px 10px;
-    text-align: center;
-    font-size: larger;
-    font-weight: bold;
-    font-family: Arial, Helvetica, sans-serif;
-    border-radius: 12px;
-
+    background-image: linear-gradient(to right, #16b656, rgb(4, 231, 125));
+    box-shadow: 0 2px 8px rgba(10, 118, 35, 0.5);
+    ;
   }
 
-
-  .offer-price {
-    font-size: 40px;
-    color: #1294ab;
-    text-align: center;
-    
-  }
-  .offer-label{
-     color:rgb(9, 169, 9);
-      font-style: oblique;
-      font-family: serif;
-      font-weight: 400;
-  }
- 
-
-  .dody {
-    font-family: Arial;
-    
-    /* Center website */
-    max-width: 800px;
-    /* Max width */
-    padding: 20px;
-    box-sizing: border-box;
-    border-radius: 5px;
-
-    border-style: inset;
-  }
-
-  .heading {
-    font-size: 25px;
-    margin-right: 25px;
-  }
-
-  .fa {
-    font-size: 18px;
-   color: #dedcd7;
-    
-  }
-
-  .checked {
-    color: orange;
-  }
-
-  /* Three column layout */
-  .side {
-     float: left;
-    width: 15%;
-    margin-top: 8px;
-    
-  }
-
-  .middle {
-    float: left;
-    width: 70%;
-    margin-top: 10px;
-  }
-
-  /* Place text to the right */
-  .right {
-    text-align: right;
-  }
-
-  /* Clear floats after the columns */
-  .row:after {
-    content: "";
-    display: table;
-    clear: both;
-  }
-
-  /* The bar container */
-  .bar-container {
-    width: 100%;
-    background-color: #f1f1f1;
-    text-align: center;
+  .BN {
+    width: 10em;
+    transform: skew(13deg);
+    font-weight: 500;
     color: white;
-    border-radius: 10px;
-    
+    background-image: linear-gradient(to right, #1da3ba, rgb(114, 190, 228));
+    box-shadow: 0 2px 8px rgba(21, 119, 146, 0.5);
+    ;
   }
 
-  /* Individual bars */
-  .bar-5 {
-    width: 60%;
-    height: 18px;
-    background-color: #04AA6D;
-    border-radius: 10px;
+  .ADC-text,
+  .BN-text {
+    transform: skew(-13deg);
   }
-
-  .bar-4 {
-    width: 30%;
-    height: 18px;
-    background-color: #2196F3;
-     border-radius: 10px;
-  }
-
-  .bar-3 {
-    width: 10%;
-    height: 18px;
-    background-color: #00bcd4;
-     border-radius: 10px;
-  }
-
-  .bar-2 {
-    width: 4%;
-    height: 18px;
-    background-color: #ff9800;
-     border-radius: 10px;
-  }
-
-  .bar-1 {
-    width: 15%;
-    height: 18px;
-    background-color: #f44336;
-     border-radius: 10px;
-  }
-
-  /* Responsive layout - make the columns stack on top of each other instead of next to each other */
-  @media (max-width: 400px) {
-
-    .side,
-    .middle {
-      width: 100%;
-    }
-
-    /* Hide the right column on small screens */
-    .right {
-      display: none;
-    }
-  }
-
-
 
   /* The snackbar - position it at the bottom and in the middle of the screen */
   #snackbar {
@@ -608,7 +441,7 @@ div.scrollmenu div {
     /* Divide value of min-width by 2 */
     background-color: white;
     /* Black background color */
-    color: black;
+    color: rgb(31, 143, 213);
     /* White text color */
     text-align: center;
     /* Centered text */
@@ -685,13 +518,16 @@ div.scrollmenu div {
     }
   }
 
-   a {
-      text-decoration: none; /* Remove underline by default */
-    }
+  a {
+    text-decoration: none;
+    /* Remove underline by default */
+    color: #07a4b9
+  }
 
-    a:hover {
-      text-decoration: none; /* Ensure underline does not appear on hover */
-    }
+  a:hover {
+    text-decoration: none;
+    /* Ensure underline does not appear on hover */
+  }
 
   /*For showing notification on product added to cart */
   .addcart {
@@ -716,17 +552,287 @@ div.scrollmenu div {
   }
 
 
-
-/* Custom CSS for rounded carousel indicators */
-    .carousel-indicators li {
+  /* Custom CSS for rounded carousel indicators */
+  .carousel-indicators li {
     width: 10px;
     height: 10px;
     border-radius: 50%;
     background-color: #fff;
   }
-  
+
   .carousel-indicators .active {
+    background-image: linear-gradient(to right, #0ea8c3, rgb(114, 190, 228));
+  }
+
+  #textContent::-webkit-scrollbar {
+    display: none;
+  }
+
+  #textContent {
+    max-height: 585px;
+    overflow-y: auto;
+  }
+
+  .assurance {
+    height: 30px;
+    width: 90px
+  }
+
+  .offer {
+    font-size: x-large;
+  }
+
+  .offerbadge {
+    background-color: #1ece4d;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 10px 10px;
+    text-align: center;
+    font-size: larger;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 12px;
+
+  }
+
+
+  .offer-price {
+    font-size: 40px;
+    color: #1294ab;
+    text-align: center;
+
+  }
+
+  .offer-label {
+    color: rgb(9, 169, 9);
+    font-style: oblique;
+    font-family: serif;
+    font-weight: 400;
+  }
+
+  .tax {
+    font-size: small;
+    font-weight: 500;
+  }
+
+  .scrollmenu-images {
+    width: 50px;
+    height: 55px;
+
+  }
+
+  .scrollmenu div .popup {
+    visibility: hidden;
+    background-color: rgba(64, 147, 178, 0.8);
+    color: #fff;
+    text-align: left;
+    border-radius: 8px;
+    padding: 10px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    /* Position above the div */
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  }
+
+  .scrollmenu div:hover .popup {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .scroll-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+
+  }
+
+  .left-button,
+  .right-button {
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    position: absolute;
+    transform: translateY(-50%);
+    display: none;
+    /* Hide buttons initially */
+    font-size: 24px;
     
-    background-color: #0097b2;
+  }
+
+  .left-button {
+    left: 0;
+
+  }
+
+  .right-button {
+    right: 0;
+
+  }
+
+
+  .scrollmenu::-webkit-scrollbar {
+    display: none;
+  }
+
+
+  div.scrollmenu {
+    overflow: auto;
+    white-space: nowrap;
+
+  }
+
+  div.scrollmenu div {
+    display: inline-block;
+    color: rgb(89, 173, 215);
+    text-align: center;
+    padding: 14px;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+
+  .overflow-hidden {
+    overflow: hidden;
+  }
+
+  .overflow-auto {
+    overflow: auto;
+  }
+
+
+
+  .rating {
+    font-family: Arial;
+    /* Center website */
+    max-width: 800px;
+    /* Max width */
+    padding: 20px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    border-style: outset
+  }
+
+  .heading {
+    font-size: 25px;
+    margin-right: 25px;
+  }
+
+  .fa {
+    font-size: 18px;
+    color: #dedcd7;
+
+  }
+
+  .checked {
+    color: orange;
+  }
+
+  /* Three column layout */
+  .side {
+    float: left;
+    width: 15%;
+    margin-top: 8px;
+
+  }
+
+  .middle {
+    float: left;
+    width: 70%;
+    margin-top: 10px;
+  }
+
+  /* Place text to the right */
+  .right {
+    text-align: right;
+  }
+
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  /* The bar container */
+  .bar-container {
+    width: 100%;
+    background-color: #f1f1f1;
+    text-align: center;
+    color: white;
+    border-radius: 10px;
+
+  }
+
+  /* Individual bars */
+  .bar-5 {
+    width: 60%;
+    height: 18px;
+    background-color: #04AA6D;
+    border-radius: 10px;
+  }
+
+  .bar-4 {
+    width: 30%;
+    height: 18px;
+    background-color: #2196F3;
+    border-radius: 10px;
+  }
+
+  .bar-3 {
+    width: 10%;
+    height: 18px;
+    background-color: #00bcd4;
+    border-radius: 10px;
+  }
+
+  .bar-2 {
+    width: 4%;
+    height: 18px;
+    background-color: #ff9800;
+    border-radius: 10px;
+  }
+
+  .bar-1 {
+    width: 15%;
+    height: 18px;
+    background-color: #f44336;
+    border-radius: 10px;
+  }
+
+  /* Responsive layout - make the columns stack on top of each other instead of next to each other */
+  @media (max-width: 400px) {
+
+    .side,
+    .middle {
+      width: 100%;
+    }
+
+    /* Hide the right column on small screens */
+    .right {
+      display: none;
+    }
+  }
+
+  .seller-name {
+    color: #0097b2;
+    font-weight: 500;
+  }
+
+  .eASY-logo {
+    height: 50px;
+    width: 110px
+  }
+
+  .eASY-description {
+    font-size: smaller;
+  }
+
+  .contact {
+    font-family: 'Times New Roman', Times, serif;
   }
 </style>

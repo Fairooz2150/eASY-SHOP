@@ -6,7 +6,11 @@
         <form action="/admin/edit-product/{{product._id}}" method="post" enctype="multipart/form-data">
           <label for="">Name</label>
           <input type="text" name="Name" class="form-control" value="{{product.Name}}">
+           {{#ifEquals product.Product_Owner 'Admin'}}
           <input type="text" name="Product_Owner" value="Admin" hidden>
+          {{else}}
+          <input type="text" name="Product_Owner" value="User" hidden>
+          {{/ifEquals}}
           <label for="">Category</label>
           <input type="text" name="Category" class="form-control" value="{{product.Category}}">
 

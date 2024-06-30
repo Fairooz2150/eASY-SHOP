@@ -123,7 +123,7 @@ module.exports = {
     },
     getUserRequestProds: (userId)=>{
         return new Promise(async (resolve, reject)=>{
-           await db.get().collection(collection.USER_PRODUCTS_COLLECTION).find({ User_Id: objectId(userId) }).toArray((err, products) => {
+           await db.get().collection(collection.USER_PRODUCTS_COLLECTION).find({ Seller_Id: objectId(userId) }).toArray((err, products) => {
             if (products.length>0) {
                 resolve(products);
                
