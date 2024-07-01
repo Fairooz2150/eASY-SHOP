@@ -29,13 +29,34 @@
 </head>
 
 <body >
-    {{#if admin}}
-    {{>admin-header}}
-    {{else}}
-    {{>user-header}}
-    {{/if}}
-   {{{body}}}
+   
+    <div class="wrapper">
+        {{#if admin}}
+        {{>admin-header}}
+        {{else}}
+        {{>user-header}}
+        {{/if}}
+        <main>
+            {{{body}}}
+        </main>
+        {{>footer}}
+    </div>
 
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        main {
+            flex: 1;
+        }
+        
+    </style>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
    <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
@@ -52,5 +73,6 @@
 
          
 </body>
+
 
 </html>

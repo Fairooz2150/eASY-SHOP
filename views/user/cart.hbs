@@ -51,9 +51,15 @@
         </table>
         <hr>
         {{#if placeOrder}}
-        <div class="float-right pr-5" id="pop">
+        <div class="row float-right pr-5" id="pop">
+          <div>
             <h5 class="float-left mr-5 mt-4">Total: Rs.<span id="total">{{totalValue}}</span></h5>
-            <a href="/place-order" class="btn btn-success mt-3 " style="width: 100%;"><b>Place Order</b></a>
+          </div>
+          <div>
+             <a href="/place-order" class="btn btn-success mt-3 " style="width: 100%;"><b>Place Order</b></a>
+          </div>
+            
+           
         </div>
         {{/if}}
     </div>
@@ -212,6 +218,15 @@ function showConfirmationModal(confirmCallback) {
 </script>
 
 <style>
+ 
+  section {
+    background-image: url('/images/8.jpg');
+    height: 100vh;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+
+}
     /* The Modal (background) */
 .modal {
   display: none; /* Hidden by default */

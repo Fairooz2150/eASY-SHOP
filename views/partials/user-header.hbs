@@ -1,60 +1,57 @@
 <header >
-    <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-image: url(''); " > 
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" id="nvbr"> 
         <div class="container-fluid">
-            <a class="navbar-brand" href="/"> <img src="/images/eASY-SHOP-logo.png" style="height: 50px; width:110px" alt="eASY SHOP"></a>
+            <a class="navbar-brand" href="/" title="eASY SHOP"> <img src="/images/eASY-SHOP-logo.png" class="eASY-logo" alt="eASY SHOP"> </a>
 
-            <button class="navbar-toggler ml-auto  " type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+            <button class="navbar-toggler ml-auto"  type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
                 aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation" >
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-                {{#if user}}
-            <div class="mx-auto d-lg-none row">
-            
-                <form class="form-inline my-2 my-lg-0" onsubmit="searchProducts(event)">
-                    <div class="input-group">
-                        <input class="form-control mr-sm-2" type="search" id="search-input" placeholder="Search" aria-label="Search">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="bi bi-search"></i></button>
-                           
-                        </div>
-                    </div>
-                </form>
                
+       <!-- Search bar for small screens (visible only on small screens) -->
+<div class="mx-auto d-lg-none row">
+    {{#if user}}
+    <form class="form-inline my-2 my-lg-0" onsubmit="searchProducts(event)">
+        <div class="input-group row">
+            <input class="form-control mr-sm-2" type="search" id="search-input" placeholder="Search" aria-label="Search">
+            <div class="input-group-append">
+                <button class="btn my-2 my-sm-0" id="searchbtn" type="submit"><i class="bi bi-search"></i></button>
             </div>
-             {{/if}}
+        </div>
+    </form>
+    {{/if}}
+</div>
              
             <div class="collapse navbar-collapse justify-content-between" id="navbarTogglerDemo03">
-                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                    {{#if user}}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/cart">Cart <span class="badge badge-success" id="cart-count">{{cartCount}}</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/orders">Orders</a>
+                <ul class="navbar-nav  mr-auto mt-2 mt-lg-0 flex-row" >
+                    
+                    <li class="nav-item" >
+                        <a class="nav-link" href="/" id="header-links">Home <span class="sr-only">(current)</span></a>
                     </li>
                     
-                    {{/if}}
+                    <li class="nav-item ">
+                        <a class="nav-link" id="header-links" href="/cart" >Cart <i class="bi bi-cart">
+                            <span class="badge " id="cart-count">{{cartCount}}</span> </i> </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" id="header-links" href="/orders">Orders</a>
+                    </li>
                     
                 </ul>
 
-                <div class="mx-auto d-lg-block d-sm-none">
-                    {{#if user}}
-                    <form class="form-inline my-2 my-lg-0" onsubmit="searchProducts(event)">
-                        <div class="input-group">
-                            <input class="form-control mr-sm-2" type="search" id="search-inputs" placeholder="Search" aria-label="Search">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-success my-2 my-sm-0 bi bi-search" type="submit"><span class="pl-2">Search</span></button>
-                                
-                                
-                            </div>
-                        </div>
-                    </form>
-                    {{/if}}
-                </div>
+                {{#if user}}
+               <!-- Search bar for large screens (visible only on large screens) -->
+<div class="mx-auto d-none d-lg-block">
+    <form class="form-inline my-2 my-lg-0" onsubmit="searchProducts(event)">
+        <div class="input-group">
+            <input class="form-control mr-sm-2" type="search" id="search-inputs" placeholder="Search" aria-label="Search">
+            <button class="btn my-2 my-sm-0 bi bi-search" type="submit" id="searchbtn"><span class="pl-2">Search</span></button>
+        </div>
+    </form>
+</div>
+                {{/if}}
 
                 <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
                     <li class="nav-item dropdown">
@@ -69,15 +66,15 @@
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             {{#if user}}
                             <a class="dropdown-item" href="/your-account"><i class="bi bi-person-circle"></i> Your Account</a>
-                            <a class="dropdown-item" href=""><i class="bi bi-headset"></i> Customer Care</a>
+                            <a class="dropdown-item" href=""><i class="bi bi-headset" id="icons"></i> Customer Care</a>
                              <a class="dropdown-item" href=""><i class="bi bi-info-circle-fill"></i> About Us</a>
                               <a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-left"></i> Logout</a>
                             {{else}}
-                            <a class="dropdown-item" href="/login"><i class="bi bi-box-arrow-in-left"></i> Login</a>
-                            <a class="dropdown-item" href="/"><i class="bi bi-person-square"></i> Guest</a>
-                             <a class="dropdown-item" href=""><i class="bi bi-headset"></i> Customer Care</a>
-                             <a class="dropdown-item" href=""><i class="bi bi-info-circle-fill"></i> About</a>
-                            <a class="dropdown-item" href="/admin/login"><i class="bi bi-person-fill-check"></i> Admin</a>
+                            <a class="dropdown-item" href="/login" ><i class="bi bi-box-arrow-in-left" id="icons"></i> Login</a>
+                            
+                             <a class="dropdown-item" href=""><i class="bi bi-headset" id="icons"></i> Customer Care</a>
+                             <a class="dropdown-item" href=""><i class="bi bi-info-circle-fill" id="icons"></i> About</a>
+                            <a class="dropdown-item" href="/admin/login"><i class="bi bi-person-fill-check" id="icons"></i> Admin</a>
                             {{/if}}
                         </div>
                     </li>
@@ -108,23 +105,92 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 
   <style>
+     .nav-link .bi-cart {
+        display: inline-block;
+        position: relative;
+       
+    }
+    #header-links{
+        color: #3391a2 ;
+        font-weight: 500;
+        font-family: 'Times New Roman', Times, serif;
+        font-size: larger;
+        margin-left: 10px;
+    }
+    
+    .badge {
+        background-color: #309db0;
+        color: white;
+         
+         border-radius: 50%;
+        padding: 2px 6px;
+        position: absolute; 
+        top: -10px; right: -10px; 
+        
+        
+    }
+     #searchbtn{
+        border-radius: 20px; 
+        min-width: 60px;
+         background-image: linear-gradient(to right, #309db0, rgb(71, 172, 209));
+        color: white;
+        box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
+    }
+   #search-inputs{
+       border-radius: 20px; 
+        width: 22em; 
+        background-color: transparent;
+        border-width: 2px;
+        border-color: #36a3b7;
+        box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
+    }
+     #search-input{
+        border-radius: 20px; 
+        width: 15em; 
+        background-color: transparent;
+        border-width: 2px;
+        border-color: #36a3b7;
+        box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
+    }
+
+    #dropdownMenuButton{
+         background-image: linear-gradient(to right, #309db0, rgb(71, 172, 209));
+          box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
+        border-radius: 20px; 
+    }
+    .dropdown-item{
+        color: #217f8f;
+    }
     body {
       padding-top: 60px; /* Adjust this value to match the height of your header */
     }
 
     header {
-      position: fixed;
-      
+      position: fixed;   
       width: 100%;
       z-index: 1;
       top: 0;
       transition: top 0.3s; /* Smooth transition */
+      
+    }
+
+    .eASY-logo{
+        height: 50px; 
+        width:110px;
+        
     }
 
     .nav-item.dropdown:hover .dropdown-menu {
     display: block;
+    border-radius: 10px;
+   
     }
 
-
+    #nvbr{
+        background-image: url('/images/headerr1.jpg'); 
+        background-size: cover;
+        background-repeat: no-repeat;
+        
+    }
 
   </style>

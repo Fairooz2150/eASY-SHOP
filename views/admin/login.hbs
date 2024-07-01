@@ -1,5 +1,8 @@
-<div class="row">
-    <div class="col-md-6 m-auto">
+<section>
+
+
+<div class="row mt-5">
+    <div class="col-md-6 m-auto pt-4">
         <div class="container mt-5 pl-5">
             <h2 class="text-center">Admin Login</h2>
             <form action="/admin/login" method="post">
@@ -16,8 +19,40 @@
                     <input type="password" class="form-control" name="Password" placeholder="Password">
                 </div>
                
-                <button type="submit" class="btn btn-primary float-right">Admin Login</button>
+                <button type="submit" id="login" class="btn float-right">Admin Login</button>
             </form>
         </div>
     </div>
 </div>
+
+</section>
+<style>
+ body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+ section {
+    background-image: url('/images/8.jpg');
+    height: 100vh;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding-top: 60px ;
+}
+.container{
+     color: rgb(61, 150, 185);
+
+}
+#login {
+    background-color: rgb(26, 175, 212);
+    color: white;
+    font-weight: bold;
+    border-radius: 25px;
+}
+.form-control{
+    border-radius: 25px;  
+}
+</style>
