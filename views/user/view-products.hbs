@@ -1,141 +1,154 @@
 <section>
-    <div class="container-fluid ml-4 mr-4 mt-5">
-        <div class="row" id="product-container">
-            {{#each products}}
-            <div class="col-lg-3 col-md-4 col-sm-6 p-3">
-              <div class="card" style="width: 15rem; height: 23rem">
-                  <a href="/view-product/{{this._id}}" >
-                    <div class="flip-card">
-                         <div class="flip-card-inner">
-                        <div class="flip-card-front">
+  <div class="container-fluid mt-5">
+    <div class="row " id="product-container">
+      {{#each products}}
+      <div class="col-lg-2 col-md-4 col-6 pb-4 ">
+        <div class="card" style="width: 14em; height: 22.2em">
+          <a href="/view-product/{{this._id}}">
+            <div class="flip-card">
+              <div class="flip-card-inner">
 
-                   <img class="card-img-top"
-                        src="/product-images/{{this._id}}_0.jpg"
-                        alt="No images"
-                        style="height: 10rem;">
-
-                                    </div>
-                                <div class="flip-card-back">
-                                  <img class="card-img-top"
-                        src="/product-images/{{this._id}}_1.jpg"
-                        alt="No more images are available"
-                        style="height: 10rem;">
-                                        </div>
-                                             </div>
-                                            </div>
-
-                    <div class="card-body">
-                        <h5 class="card-title" title="{{this.Name}}">{{this.Name}}</h5>
-                       <div class="row ml-2">
-                        <div><p class="text-muted">{{this.Category}}</p> </div>
-                        {{#ifEquals this.Product_Owner 'Admin'}}
-                        <div class="pl-4"><img src="/images/eASY-assurance.png" style="height: 28px; width:90px" alt="eASY-assurance"> </div>
-                        {{/ifEquals}}
-                       </div> 
-                        <div class="row mb-2">
-                            <div class="ml-3">
-                                <p class="card-text" style="color:green"><b> {{this.Offer_Percentage}}% </b><small>off</small></p>
-                            </div>
-                            <div class="ml-3">
-                               <b class="card-text" >₹{{this.Offer_Price}}</b>
-                            </div>
-                            <div class="ml-2">
-                               <p class="card-text text-muted"><small><del>₹{{this.Actual_Price}}</del></small></p>
-                            </div>
-                        </div></a>
-                        
-                        <p hidden>{{this.Description}}</p>
-                        {{#if ../user}}
-                        <button onclick="addToCart('{{this._id}}')" class="btn btn-primary">Add to cart</button>
-                        <!-- The actual snackbar -->
-                        <div id="snackbar">Product added <img src="/images/grocery.gif" class="addcart" alt=""></div> 
-                        {{else}}
-                        <a href="/login"><button  class="btn btn-primary">Add to cart</button>
-                        {{/if}}
-                    </div>
+                <div class="flip-card-front">
+                  <img class="card-img-top" src="/product-images/{{this._id}}_0.jpg" alt="Image not available"
+                    onerror="this.onerror=null; this.src='/images/no-images-available.png';" style="height: 10rem;">
                 </div>
+          
+                <div class="flip-card-back">
+                  <img class="card-img-top" src="/product-images/{{this._id}}_1.jpg" alt="No more Images are available"
+                    onerror="this.onerror=null; this.src='/images/no-more-images.jpg';" style="height: 10rem;">
+                </div>
+
+              </div>
             </div>
-            {{/each}}
-        </div>
-      
-    
-    </div>
-     <!-- Advertisement section -->
+
+            <div class="card-body p-1">
+              <h5 class="card-title ml-1" title="{{this.Name}}">{{this.Name}}</h5>
+
+              <div class="row ml-1">
+                <div>
+                  <p class="text-muted category" style="width: 7rem; " title="{{this.Category}}">{{this.Category}}</p>
+                </div>
+                {{#ifEquals this.Product_Owner 'Admin'}}
+                <div class="ml-1"><img src="/images/eASY-assurance.png" style="height: 2rem; width:5rem"
+                    alt="eASY-assurance"> </div>
+                {{/ifEquals}}
+              </div>
+              <div class="row mb-2">
+                <div class="ml-3 mt-2">
+                  <p class="card-text" title="Offer percentage" style="color:rgb(6, 170, 6)"><b> {{this.Offer_Percentage}}% </b><small>off</small></p>
+                </div>
+                <div class="ml-3 ">
+                  <b class="card-text" title="Offer price" style="font-size: 25px; color: rgb(4, 149, 149);" id="offer-price">₹{{this.Offer_Price}}</b>
+                </div>
+                <div class="ml-3 mt-2">
+                  <p class="card-text text-muted" title="M.R.P." ><small><del>₹{{this.Actual_Price}}</del></small></p>
+                </div>
+              </div>
+          </a>
+
+          <p hidden>{{this.Description}}</p>
+          
+          {{#if ../user}}
+          <button onclick="addToCart('{{this._id}}')" class="btn" id="addtoCart">Add to cart</button>
+          <!-- The actual snackbar -->
+          <div id="snackbar">Product added <img src="/images/grocery.gif" class="addcart" alt=""></div>
+          {{else}}
+         <button class="btn " id="addtoCart">Add to cart
+          <span class="logintext">Please Login to access your Cart.</span>
+         </button>
          
-    <div id="popup-sidebar" class="popup-sidebar">
-        <img id="popup-image" src="/images/Easy-shop-big-sale.gif" alt="Product Advertisement" style="width: 100%; height: auto;">
-        
+          {{/if}}
+            
+          
+        </div>
+      </div>
     </div>
-     
+    {{/each}}
+
+  </div>
+
+
+  </div>
+  
+
+  <!-- Advertisement section -->
+
+  <div id="popup-sidebar" class="popup-sidebar" title="eASY SHOP Ad">
+    <img id="popup-image" src="/images/ad-3.gif" alt="Product Advertisement">
+
+  </div>
+
 </section>
 
 <script>
 
- // Function to handle sliding in and out the popup sidebar
-    function slidePopupSidebar() {
-        const popupSidebar = document.getElementById('popup-sidebar');
-        const popupImage = document.getElementById('popup-image');
+  // Function to handle sliding in and out the popup sidebar
+  function slidePopupSidebar() {
+    const popupSidebar = document.getElementById('popup-sidebar');
+    const popupImage = document.getElementById('popup-image');
 
-        // Array of image URLs for rotation
-        const imageUrls = [
-            "/images/Easy-shop-big-sale.gif",
-            "/images/grocery.gif"
-            // Add more image URLs here as needed
-        ];
-        let currentIndex = 0;
+    // Array of image URLs for rotation
+    const imageUrls = [
+      "/images/ad-3.gif",
+      "/images/ad-2.gif",
+      "/images/ad-1.gif",
+      "/images/ad-4.gif"
+      // Add more image URLs here as needed
+    ];
+    let currentIndex = 0;
 
-        // Function to change image every 5 seconds
-        setInterval(() => {
-            currentIndex = (currentIndex + 1) % imageUrls.length;
-            popupImage.src = imageUrls[currentIndex];
-            // Slide in the popup sidebar
-            popupSidebar.style.right = '0';
-            // Slide out after 3 seconds
-            setTimeout(() => {
-                popupSidebar.style.right = '-300px'; // Adjust width of sidebar
-            }, 3000); // Adjust time to your preference
-        }, 8000); // Adjust time to your preference
-    }
+    // Function to change image every 5 seconds
+    setInterval(() => {
+      currentIndex = (currentIndex + 1) % imageUrls.length;
+      popupImage.src = imageUrls[currentIndex];
+      // Slide in the popup sidebar
+      popupSidebar.style.right = '0';
+      // Slide out after 3 seconds
+      setTimeout(() => {
+        popupSidebar.style.right = '-300px'; // Adjust width of sidebar
+      }, 3000); // Adjust time of
+    }, 6500); // Adjust time 
+  }
 
-    // Call the slidePopupSidebar function when the page is loaded
-    window.onload = slidePopupSidebar;
+  // Call the slidePopupSidebar function when the page is loaded
+  window.onload = slidePopupSidebar;
 
 
 
-document.getElementById('search-input').addEventListener('keyup', function(event) {
+  document.getElementById('search-input').addEventListener('keyup', function (event) {
     const query = event.target.value;
     searchProducts(query);
-});
-// For large screen
-document.getElementById('search-inputs').addEventListener('keyup', function(event) {
+  });
+  // For large screen
+  document.getElementById('search-inputs').addEventListener('keyup', function (event) {
     const query = event.target.value;
     searchProducts(query);
-});
+  });
 
-function searchProducts(query) {
+  function searchProducts(query) {
     $.ajax({
-        url: '/search-products',
-        method: 'GET',
-        data: { query: query },
-        success: (response) => {
-            displaySearchResults(response.products);
-        }
+      url: '/search-products',
+      method: 'GET',
+      data: { query: query },
+      success: (response) => {
+        displaySearchResults(response.products);
+      }
     });
-}
+  }
 
-function displaySearchResults(products) {
+  function displaySearchResults(products) {
     const productContainer = document.getElementById('product-container');
     productContainer.innerHTML = ''; // Clear previous results
 
     if (products.length === 0) {
-        productContainer.innerHTML = '<p>No products found.</p>';
-        return;
+      productContainer.innerHTML = '<p>No products found.</p>';
+      return;
     }
 
     products.forEach(product => {
-        const productElement = document.createElement('div');
-        productElement.classList.add('col-md-4', 'col-lg-3', 'col-sm-6', 'p-3');
-        productElement.innerHTML = `
+      const productElement = document.createElement('div');
+      productElement.classList.add('col-md-4', 'col-lg-3', 'col-sm-6', 'p-3');
+      productElement.innerHTML = `
             <div class="card" style="width: 15rem; height: 23rem">
                 <img class="card-img-top" src="/product-images/${product._id}_0.jpg" alt="Card image cap" style="height: 10rem;">
                 <div class="card-body">
@@ -157,164 +170,299 @@ function displaySearchResults(products) {
                 </div>
             </div>
         `;
-        productContainer.appendChild(productElement);
+      productContainer.appendChild(productElement);
     });
-}
+  }
 </script>
 <style>
-  section{
-    height: 100vh;
-    overflow-y: auto;
+
+  #addtoCart {
+  position: relative;
+  display: inline-block;
+
+}
+
+#addtoCart .logintext {
+  visibility: hidden;
+  width: 250px;
+  background-color: white;
+  color:rgb(28, 146, 164);
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
+  
+  top: 100%;
+  left: 50%;
+  margin-top: 10px;
+  margin-left: -125px; /* To center the logintext*/
+  /* Position the logintext */
+  position: absolute;
+  z-index: 1;
+
+ 
+}
+
+#addtoCart:hover .logintext {
+  visibility: visible;
+}
+
+
+  #addtoCart:hover{
+   
+   background-image: linear-gradient(to right, #199cad, rgb(74, 175, 209));
+  }
+ #addtoCart{
+  width: 13.4em; 
+   background-image: linear-gradient(to left, #199cad, rgb(81, 176, 207));
+  color: #fff; 
+  
+ }
+
+  .category {
+    width: 7em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    /* number of lines to show */
+    -webkit-box-orient: vertical;
+  }
+
+  .card-title {
+
+    color: rgb(40, 155, 155);
+    height: 3rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /* number of lines to show */
+    -webkit-box-orient: vertical;
+  }
+  .card-title:hover{
+   color: #59b6c6 ;
    
   }
- section::-webkit-scrollbar {
+
+  .card {
+    box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
+  }
+  .card:hover {
+    box-shadow: 0 2px 18px rgba(19, 111, 139, 0.5);
+  }
+
+  section {
+    height: 100vh;
+    overflow-y: auto;
+
+  }
+
+  section::-webkit-scrollbar {
     display: none;
   }
 
- /* Styles for the pop-up sidebar */
+  /* Styles for the pop-up sidebar */
+  .popup-sidebar {
+    position: fixed;
+    top: 50%;
+
+    right: -300px;
+    /* Initially hidden off-screen */
+    width: 300px;
+
+    background-color: #fff;
+    box-shadow: -2px 0px 5px rgba(26, 108, 137, 0.2);
+    z-index: 1000;
+    transition: right 1s ease-in-out;
+    padding: 20px;
+    overflow: hidden;
+  }
+
+  .popup-sidebar img {
+    display: block;
+    width: 100%;
+    height:auto;
+  }
+
+  /* Adjustments for smaller screens */
+  @media (max-width: 768px) {
     .popup-sidebar {
-        position: fixed;
-        top: 50%;
-        
-        right: -300px; /* Initially hidden off-screen */
-        width: 300px;
-        height: 100%;
-        background-color: #fff;
-        box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.2);
-        z-index: 1000;
-        transition: right 1s ease-in-out;
-        padding: 20px;
-        overflow: hidden;
+      right: -100%;
+      /* Completely hidden on smaller screens */
     }
-
-    .popup-sidebar img {
-        display: block;
-        width: 100%;
-        height: auto;
-    }
-
-    /* Adjustments for smaller screens */
-    @media (max-width: 768px) {
-        .popup-sidebar {
-            right: -100%; /* Completely hidden on smaller screens */
-        }
-    }
+  }
 
 
 
 
-    .flip-card {
-  background-color: transparent;
-  
-  height: 10rem;
-  border: 1px solid #f1f1f1;
-  perspective: 1000px; /* Remove this if you don't want the 3D effect */
-}
+  .flip-card {
+    background-color: transparent;
+    height: 10rem;
+    border: 1px solid #f1f1f1;
 
-/* This container is needed to position the front and back side */
-.flip-card-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  transition: transform 0.8s;
-  transform-style: preserve-3d;
-}
+    perspective: 1000px;
+    /*For 3D effect */
+  }
 
-/* Do an horizontal flip when you move the mouse over the flip box container */
-.flip-card:hover .flip-card-inner {
-  transform: rotateY(180deg);
-}
+  /* This container is needed to position the front and back side */
+  .flip-card-inner {
+    position: relative;
+    width: 100%;
 
-/* Position the front and back side */
-.flip-card-front, .flip-card-back {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  -webkit-backface-visibility: hidden; /* Safari */
-  backface-visibility: hidden;
-}
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+  }
 
-/* Style the front side (fallback if image is missing) */
-.flip-card-front {
-  background-color: #bbb;
-  color: black;
-}
+  /* Do an horizontal flip when you move the mouse over the flip box container */
+  .flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg);
+  }
 
-/* Style the back side */
-.flip-card-back {
-  background-color: dodgerblue;
-  color: white;
-  transform: rotateY(180deg);
-}
+  /* Position the front and back side */
+  .flip-card-front,
+  .flip-card-back {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    /* Safari */
+    backface-visibility: hidden;
+  }
+
+  /* Style the front side (fallback if image is missing) */
+  .flip-card-front {
+    background-color: #bbb;
+    color: black;
+  }
+
+  /* Style the back side */
+  .flip-card-back {
+    background-color: dodgerblue;
+    color: white;
+    transform: rotateY(180deg);
+  }
+ 
+
   a {
-      text-decoration: none; /* Remove underline by default */
+    text-decoration: none;
+    /* Remove underline by default */
+  }
+
+  a:hover {
+    text-decoration: none;
+    /* Ensure underline does not appear on hover */
+  }
+
+  /*For showing notification on product added to cart */
+  .addcart {
+
+    width: 50px;
+    height: 40px;
+
+    position: relative;
+    animation-name: mymove;
+    animation-duration: 4s;
+
+  }
+
+  @keyframes mymove {
+    from {
+      left: -10px;
     }
 
-    a:hover {
-      text-decoration: none; /* Ensure underline does not appear on hover */
+    to {
+      left: 60px;
     }
+  }
 
-/*For showing notification on product added to cart */
-.addcart{
+  /* The snackbar - position it at the bottom and in the middle of the screen */
+  #snackbar {
+    visibility: hidden;
+    /* Hidden by default. Visible on click */
+    min-width: 280px;
+    /* Set a default minimum width */
+    margin-left: -125px;
+    /* Divide value of min-width by 2 */
+    background-color: white;
+    /* Black background color */
+    color: black;
+    /* White text color */
+    text-align: center;
+    /* Centered text */
+    border-radius: 2px;
+    /* Rounded borders */
+    padding: 16px;
+    /* Padding */
+    position: fixed;
+    /* Sit on top of the screen */
+    z-index: 1;
+    /* Add a z-index if needed */
+    left: 50%;
+    /* Center the snackbar */
+    bottom: 30px;
+    /* 30px from the bottom */
+  }
 
-  width: 50px;
-  height: 40px;
-  
-  position: relative;
-  animation-name: mymove;
-  animation-duration: 4s;
-  
-}
-
-@keyframes mymove {
-  from {left: -10px;}
-  to {left: 60px;}
-}
-
-    /* The snackbar - position it at the bottom and in the middle of the screen */
-#snackbar {
-  visibility: hidden; /* Hidden by default. Visible on click */
-  min-width: 280px; /* Set a default minimum width */
-  margin-left: -125px; /* Divide value of min-width by 2 */
-  background-color: white; /* Black background color */
-  color: black; /* White text color */
-  text-align: center; /* Centered text */
-  border-radius: 2px; /* Rounded borders */
-  padding: 16px; /* Padding */
-  position: fixed; /* Sit on top of the screen */
-  z-index: 1; /* Add a z-index if needed */
-  left: 50%; /* Center the snackbar */
-  bottom: 30px; /* 30px from the bottom */
-}
-
-/* Show the snackbar when clicking on a button (class added with JavaScript) */
-#snackbar.show {
-  visibility: visible; /* Show the snackbar */
-  /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+  /* Show the snackbar when clicking on a button (class added with JavaScript) */
+  #snackbar.show {
+    visibility: visible;
+    /* Show the snackbar */
+    /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
   However, delay the fade out process for 2.5 seconds */
-  -webkit-animation: fadein 0.5s, fadeout 0.5s 3s;
-  animation: fadein 0.5s, fadeout 0.5s 2.5s;
-}
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 3s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  }
 
-/* Animations to fade the snackbar in and out */
-@-webkit-keyframes fadein {
-  from {bottom: 0; opacity: 0;}
-  to {bottom: 30px; opacity: 1;}
-}
+  /* Animations to fade the snackbar in and out */
+  @-webkit-keyframes fadein {
+    from {
+      bottom: 0;
+      opacity: 0;
+    }
 
-@keyframes fadein {
-  from {bottom: 0; opacity: 0;}
-  to {bottom: 30px; opacity: 1;}
-}
+    to {
+      bottom: 30px;
+      opacity: 1;
+    }
+  }
 
-@-webkit-keyframes fadeout {
-  from {bottom: 30px; opacity: 1;}
-  to {bottom: 0; opacity: 0;}
-}
+  @keyframes fadein {
+    from {
+      bottom: 0;
+      opacity: 0;
+    }
 
-@keyframes fadeout {
-  from {bottom: 30px; opacity: 1;}
-  to {bottom: 0; opacity: 0;}
-}
+    to {
+      bottom: 30px;
+      opacity: 1;
+    }
+  }
+
+  @-webkit-keyframes fadeout {
+    from {
+      bottom: 30px;
+      opacity: 1;
+    }
+
+    to {
+      bottom: 0;
+      opacity: 0;
+    }
+  }
+
+  @keyframes fadeout {
+    from {
+      bottom: 30px;
+      opacity: 1;
+    }
+
+    to {
+      bottom: 0;
+      opacity: 0;
+    }
+  }
 </style>

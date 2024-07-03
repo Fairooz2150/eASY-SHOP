@@ -1,80 +1,92 @@
-<header >
-    <nav class="navbar navbar-expand-lg navbar-light bg-light" id="nvbr"> 
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" id="nvbr">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/" title="eASY SHOP"> <img src="/images/eASY-SHOP-logo.png" class="eASY-logo" alt="eASY SHOP"> </a>
+            <a class="navbar-brand" href="/" title="eASY SHOP"> <img src="/images/eASY-SHOP-logo.png" class="eASY-logo"
+                    alt="eASY SHOP"> </a>
 
-            <button class="navbar-toggler ml-auto"  type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
-                aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation" >
+
+
+            <!-- Search bar for small screens (visible only on small screens) -->
+
+            <div class="mx-auto d-lg-none row">
+
+                <form class="form-inline my-2 my-lg-0" onsubmit="searchProducts(event)">
+                    <div class="input-group row">
+                        <input class="form-control mr-sm-2" type="search" id="search-input" placeholder="Search"
+                            aria-label="Search">
+
+                        <button class="btn my-2 my-sm-0 mr-2" id="searchbtn" type="submit"><i
+                                class="bi bi-search"></i></button>
+
+                    </div>
+                </form>
+
+            </div>
+
+            <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse"
+                data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false"
+                aria-label="Toggle navigation" title="Menu">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-               
-       <!-- Search bar for small screens (visible only on small screens) -->
-<div class="mx-auto d-lg-none row">
-    {{#if user}}
-    <form class="form-inline my-2 my-lg-0" onsubmit="searchProducts(event)">
-        <div class="input-group row">
-            <input class="form-control mr-sm-2" type="search" id="search-input" placeholder="Search" aria-label="Search">
-            <div class="input-group-append">
-                <button class="btn my-2 my-sm-0" id="searchbtn" type="submit"><i class="bi bi-search"></i></button>
-            </div>
-        </div>
-    </form>
-    {{/if}}
-</div>
-             
-            <div class="collapse navbar-collapse justify-content-between" id="navbarTogglerDemo03">
-                <ul class="navbar-nav  mr-auto mt-2 mt-lg-0 flex-row" >
-                    
-                    <li class="nav-item" >
-                        <a class="nav-link" href="/" id="header-links">Home <span class="sr-only">(current)</span></a>
-                    </li>
-                    
-                    <li class="nav-item ">
-                        <a class="nav-link" id="header-links" href="/cart" >Cart <i class="bi bi-cart">
-                            <span class="badge " id="cart-count">{{cartCount}}</span> </i> </a>
+            <div class="collapse navbar-collapse justify-content-between " id="navbarTogglerDemo03">
+
+                <ul class="navbar-nav mt-2 mt-lg-0 flex-row">
+
+                    <li class="nav-item pr-3" id="navItem">
+                        <a class="nav-link" href="/" id="header-links"><i class="bi bi-shop-window"></i> Home</a>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" id="header-links" href="/orders">Orders</a>
+                    <li class="nav-item pr-3" id="navItem">
+                        <a class="nav-link" id="header-links" href="/cart"><i class="bi bi-cart">
+                                <span class="badge " id="cart-count" title="cart count">{{cartCount}}</span> </i> Cart</a>
                     </li>
-                    
+
+                    <li class="nav-item pr-3" id="navItem">
+                        <a class="nav-link" id="header-links" href="/orders"><i class="bi bi-bag-heart"></i> Orders</a>
+                    </li>
+
                 </ul>
 
-                {{#if user}}
-               <!-- Search bar for large screens (visible only on large screens) -->
-<div class="mx-auto d-none d-lg-block">
-    <form class="form-inline my-2 my-lg-0" onsubmit="searchProducts(event)">
-        <div class="input-group">
-            <input class="form-control mr-sm-2" type="search" id="search-inputs" placeholder="Search" aria-label="Search">
-            <button class="btn my-2 my-sm-0 bi bi-search" type="submit" id="searchbtn"><span class="pl-2">Search</span></button>
-        </div>
-    </form>
-</div>
-                {{/if}}
 
-                <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
-                    <li class="nav-item dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <!-- Search bar for large screens (visible only on large screens) -->
+                <div class="mx-auto d-none d-lg-block">
+                    <form class="form-inline my-2 my-lg-0" onsubmit="searchProducts(event)">
+                        <div class="input-group">
+                            <input class="form-control mr-sm-2" type="search" id="search-inputs" placeholder="Search"
+                                aria-label="Search">
+                            <button class="btn my-2 my-sm-0 bi bi-search mr-2" type="submit" id="searchbtn"><span
+                                    class="pl-2">Search</span></button>
+                        </div>
+                    </form>
+                </div>
+
+
+                <ul class="navbar-nav mt-2 mt-lg-0">
+                    <li class="nav-item dropdown ml-auto">
+                        <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
                             {{#if user}}
-                           Hello, <b>{{user.First_Name}}</b>
+                            Hello, <b>{{user.First_Name}}</b>
                             {{else}}
-                           <i class="bi bi-person-circle mr-1"></i> Account
+                            <i class="bi bi-person-circle mr-1"></i> Account
                             {{/if}}
                         </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <div class="dropdown-menu " aria-labelledby="dropdownMenuButton">
                             {{#if user}}
-                            <a class="dropdown-item" href="/your-account"><i class="bi bi-person-circle"></i> Your Account</a>
+                            <a class="dropdown-item" href="/your-account"><i class="bi bi-person-circle"></i> Your
+                                Account</a>
                             <a class="dropdown-item" href=""><i class="bi bi-headset" id="icons"></i> Customer Care</a>
-                             <a class="dropdown-item" href=""><i class="bi bi-info-circle-fill"></i> About Us</a>
-                              <a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-left"></i> Logout</a>
+                            <a class="dropdown-item" href=""><i class="bi bi-info-circle-fill"></i> About Us</a>
+                            <a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-left"></i> Logout</a>
                             {{else}}
-                            <a class="dropdown-item" href="/login" ><i class="bi bi-box-arrow-in-left" id="icons"></i> Login</a>
-                            
-                             <a class="dropdown-item" href=""><i class="bi bi-headset" id="icons"></i> Customer Care</a>
-                             <a class="dropdown-item" href=""><i class="bi bi-info-circle-fill" id="icons"></i> About</a>
-                            <a class="dropdown-item" href="/admin/login"><i class="bi bi-person-fill-check" id="icons"></i> Admin</a>
+                            <a class="dropdown-item" href="/login"><i class="bi bi-box-arrow-in-left" id="icons"></i>
+                                Login</a>
+
+                            <a class="dropdown-item" href=""><i class="bi bi-headset" id="icons"></i> Customer Care</a>
+                            <a class="dropdown-item" href=""><i class="bi bi-info-circle-fill" id="icons"></i> About</a>
+                            <a class="dropdown-item" href="/admin/login"><i class="bi bi-person-fill-check"
+                                    id="icons"></i> Admin</a>
                             {{/if}}
                         </div>
                     </li>
@@ -84,113 +96,162 @@
     </nav>
 </header>
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-  var lastScrollTop = 0;
-  var header = document.querySelector("header");
+    document.addEventListener("DOMContentLoaded", function () {
+        var lastScrollTop = 0;
+        var header = document.querySelector("header");
 
-  window.addEventListener("scroll", function() {
-    var currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+        window.addEventListener("scroll", function () {
+            var currentScroll = window.pageYOffset || document.documentElement.scrollTop;
 
-    if (currentScroll > lastScrollTop) {
-      // Downscroll
-      header.style.top = "-60px"; // Adjust the value if the header height is different
-    } else {
-      // Upscroll
-      header.style.top = "0";
-    }
+            if (currentScroll > lastScrollTop) {
+                // Downscroll
+                header.style.top = "-80px"; // Adjust the value if the header height is different
+            } else {
+                // Upscroll
+                header.style.top = "0";
+            }
 
-    lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; // For Mobile or negative scrolling
-  }, false);
-});
+            lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; // For Mobile or negative scrolling
+        }, false);
+    });
 </script>
 
-  <style>
-     .nav-link .bi-cart {
+<style>
+    .input-group {
+        position: relative;
+        display: inline-block;
+    }
+
+    .input-group input {
+        padding-right: 40px;
+    }
+
+    .input-group button {
+        position: absolute;
+        top: 0;
+        right: 0;
+        border: none;
+
+    }
+
+    .nav-link .bi-cart {
         display: inline-block;
         position: relative;
-       
+
     }
-    #header-links{
-        color: #3391a2 ;
+
+
+
+    #header-links {
+        color: #3391a2;
         font-weight: 500;
         font-family: 'Times New Roman', Times, serif;
         font-size: larger;
         margin-left: 10px;
     }
-    
+
+    #header-links:hover {
+        color: #52b4c6;
+    }
+
     .badge {
         background-color: #309db0;
         color: white;
-         
-         border-radius: 50%;
+
+        border-radius: 50%;
         padding: 2px 6px;
-        position: absolute; 
-        top: -10px; right: -10px; 
-        
-        
+        position: absolute;
+        top: -10px;
+        right: -10px;
+
+
     }
-     #searchbtn{
-        border-radius: 20px; 
+
+    #searchbtn {
+        border-radius: 20px;
         min-width: 60px;
-         background-image: linear-gradient(to right, #309db0, rgb(71, 172, 209));
+
+        background-image: linear-gradient(to left, #309db0, rgb(71, 172, 209));
         color: white;
         box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
+
     }
-   #search-inputs{
-       border-radius: 20px; 
-        width: 22em; 
-        background-color: transparent;
-        border-width: 2px;
-        border-color: #36a3b7;
-        box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
+
+    #searchbtn:hover {
+        background-image: linear-gradient(to right, #309db0, rgb(71, 172, 209));
     }
-     #search-input{
-        border-radius: 20px; 
-        width: 15em; 
+
+    #search-inputs {
+        border-radius: 20px;
+        width: 22em;
         background-color: transparent;
         border-width: 2px;
         border-color: #36a3b7;
         box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
     }
 
-    #dropdownMenuButton{
-         background-image: linear-gradient(to right, #309db0, rgb(71, 172, 209));
-          box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
-        border-radius: 20px; 
+    #search-input {
+        border-radius: 20px;
+        width: 15em;
+        background-color: transparent;
+        border-width: 2px;
+        border-color: #36a3b7;
+        box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
     }
-    .dropdown-item{
+
+    #dropdownMenuButton {
+        background-image: linear-gradient(to right, #309db0, rgb(71, 172, 209));
+        box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
+        border-radius: 20px;
+        color: white;
+    }
+
+    .navbar-toggler {
+        border-radius: 10px;
+
+        box-shadow: 0 2px 6px rgba(28, 113, 139, 0.5);
+    }
+
+    .dropdown-item {
         color: #217f8f;
+
     }
+
+    .dropdown-item:hover {
+        color: rgb(32, 161, 190);
+    }
+
     body {
-      padding-top: 60px; /* Adjust this value to match the height of your header */
+        padding-top: 60px;
+        /* Adjust this value to match the height of your header */
     }
 
     header {
-      position: fixed;   
-      width: 100%;
-      z-index: 1;
-      top: 0;
-      transition: top 0.3s; /* Smooth transition */
-      
+        position: fixed;
+        width: 100%;
+        z-index: 1;
+        top: 0;
+        transition: top 0.3s;
+        /* Smooth transition */
+
     }
 
-    .eASY-logo{
-        height: 50px; 
-        width:110px;
-        
+    .eASY-logo {
+        height: 50px;
+        width: 110px;
+
     }
 
     .nav-item.dropdown:hover .dropdown-menu {
-    display: block;
-    border-radius: 10px;
-   
+        display: block;
+        border-radius: 10px;
+
     }
 
-    #nvbr{
-        background-image: url('/images/headerr1.jpg'); 
+    #nvbr {
+        background-image: url('/images/user-login-bg-1.png');
         background-size: cover;
         background-repeat: no-repeat;
-        
-    }
 
-  </style>
+    }
+</style>

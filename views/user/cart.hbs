@@ -1,4 +1,4 @@
-<section>
+<section class="bg-section">
     <div class="container pt-5">
         <table class="table mt-5 " id="productsTable">
             <thead>
@@ -218,15 +218,22 @@ function showConfirmationModal(confirmCallback) {
 </script>
 
 <style>
- 
-  section {
+  .bg-section {
     background-image: url('/images/8.jpg');
-    height: 100vh;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+ section .container {
+    background: rgba(255, 255, 255, 0.8); /* Optional: Add a semi-transparent background to improve text readability */
+    padding: 20px;
+    border-radius: 10px;
+}
+  
     /* The Modal (background) */
 .modal {
   display: none; /* Hidden by default */
