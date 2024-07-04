@@ -8,13 +8,15 @@ const bcrypt = require('bcrypt')
 const userHelpers = require('../helpers/user-helpers');
 const { log } = require('console');
 
-const verifyLogin = (req, res, next) => { // verify login
+const verifyLogin = (req, res, next) => {
   if (req.session.userLoggedIn) {
-    next()
+    next();
   } else {
-    res.redirect('/login')
+    req.session.returnTo = req.originalUrl; // Store the original URL
+    res.redirect('/login');
   }
-}
+};
+
 
 
 /* Route to home page. */
@@ -97,10 +99,12 @@ router.post('/login', (req, res) => {
     if (response.status) {
       req.session.user = response.user
       req.session.userLoggedIn = true
-      res.redirect('/')
+      const returnTo = req.session.returnTo || '/'; // Default to home if no return URL
+      delete req.session.returnTo; // Clear the return URL from session
+      res.redirect(returnTo);
     } else {
       req.session.userLoginErr = "Invalid Username or Password"
-      res.redirect('/login')
+      res.redirect('/login') // Redirect back to login on failure
     }
   })
 })
