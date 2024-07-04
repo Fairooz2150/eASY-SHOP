@@ -228,18 +228,40 @@ module.exports={
     searchProducts: (query) => {
         return new Promise(async (resolve, reject) => {
             try {
-                let filter = {
+                const filter = {
                     $or: [
                         { Name: { $regex: query, $options: 'i' } },
                         { Description: { $regex: query, $options: 'i' } },
                         { Offer_Price: { $regex: query, $options: 'i' } },
                         { Category: { $regex: query, $options: 'i' } },
                         { Actual_Price: { $regex: query, $options: 'i' } },
-                        
+                        { 
+                            $expr: {
+                                $regexMatch: {
+                                    input: {
+                                        $concat: [
+                                            '$Name', ' ',
+                                            '$Description', ' ',
+                                            '$Offer_Price', ' ',
+                                            '$Category', ' ',
+                                            '$Actual_Price', ' ',
+                                            {
+                                                $cond: {
+                                                    if: { $eq: ['$Product_Owner', 'Admin'] },
+                                                    then: ' easy assurance',
+                                                    else: ''
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    regex: query,
+                                    options: 'i'
+                                }
+                            }
+                        }
                     ]
                 };
-                
-               
+    
                 const products = await db.get().collection(collection.PRODUCT_COLLECTION).find(filter).toArray();
                 resolve(products);
             } catch (error) {
@@ -247,6 +269,7 @@ module.exports={
             }
         });
     },
+    
     addUserProduct: (product) => {
         return new Promise((resolve, reject) => {
             let Date = moment().format('DD MMM YYYY');

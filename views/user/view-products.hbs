@@ -3,19 +3,19 @@
     <div class="row " id="product-container">
       {{#each products}}
       <div class="col-lg-2 col-md-4 col-6 pb-4 ">
-        <div class="card" style="width: 14em; height: 22.2em">
+        <div class="card">
           <a href="/view-product/{{this._id}}">
             <div class="flip-card">
               <div class="flip-card-inner">
 
                 <div class="flip-card-front">
                   <img class="card-img-top" src="/product-images/{{this._id}}_0.jpg" alt="Image not available"
-                    onerror="this.onerror=null; this.src='/images/no-images-available.png';" style="height: 10rem;">
+                    onerror="this.onerror=null; this.src='/images/no-images-available.png';">
                 </div>
-          
+
                 <div class="flip-card-back">
                   <img class="card-img-top" src="/product-images/{{this._id}}_1.jpg" alt="No more Images are available"
-                    onerror="this.onerror=null; this.src='/images/no-more-images.jpg';" style="height: 10rem;">
+                    onerror="this.onerror=null; this.src='/images/no-more-images.jpg';">
                 </div>
 
               </div>
@@ -26,105 +26,108 @@
 
               <div class="row ml-1">
                 <div>
-                  <p class="text-muted category" style="width: 7rem; " title="{{this.Category}}">{{this.Category}}</p>
+                  <p class="text-muted category" title="{{this.Category}}">{{this.Category}}</p>
                 </div>
                 {{#ifEquals this.Product_Owner 'Admin'}}
-                <div class="ml-1"><img src="/images/eASY-assurance.png" style="height: 2rem; width:5rem"
-                    alt="eASY-assurance"> </div>
+                <div class="eASY-assurance ml-1"><img src="/images/eASY-assurance.png" class="eASY-assurance"
+                    alt="eASY-assurance"> <p hidden>easy-assurance</p> </div>
                 {{/ifEquals}}
               </div>
               <div class="row mb-2">
                 <div class="ml-3 mt-2">
-                  <p class="card-text" title="Offer percentage" style="color:rgb(6, 170, 6)"><b> {{this.Offer_Percentage}}% </b><small>off</small></p>
+                  <p class="card-text" title="Offer percentage" id="offer-percentage"><b> {{this.Offer_Percentage}}%
+                    </b><small>off</small></p>
                 </div>
                 <div class="ml-3 ">
-                  <b class="card-text" title="Offer price" style="font-size: 25px; color: rgb(4, 149, 149);" id="offer-price">₹{{this.Offer_Price}}</b>
+                  <b class="card-text" title="Offer price" id="offer-price">₹{{this.Offer_Price}}</b>
                 </div>
                 <div class="ml-3 mt-2">
-                  <p class="card-text text-muted" title="M.R.P." ><small><del>₹{{this.Actual_Price}}</del></small></p>
+                  <p class="card-text text-muted" title="M.R.P."><small><del>₹{{this.Actual_Price}}</del></small></p>
                 </div>
               </div>
           </a>
 
           <p hidden>{{this.Description}}</p>
-          
+
           {{#if ../user}}
           <button onclick="addToCart('{{this._id}}')" class="btn" id="addtoCart">Add to cart</button>
-          <!-- The actual snackbar -->
-          <div id="snackbar">Product added <img src="/images/grocery.gif" class="addcart" alt=""></div>
+          <!-- eASY SHOP Advertisement -->
+          <div id="Ad">Product added <img src="/images/grocery.gif" class="addcart" alt=""></div>
           {{else}}
-         <button class="btn " id="addtoCart">Add to cart
-          <span class="logintext">Please Login to access your Cart.</span>
-         </button>
-         
+          <button class="btn " id="addtoCart">Add to cart
+            <span class="logintext">Please Login to access your Cart.</span>
+          </button>
+
           {{/if}}
-            
-          
+
+
         </div>
       </div>
     </div>
     {{/each}}
 
   </div>
-
-
   </div>
-  
 
   <!-- Advertisement section -->
 
   <div id="popup-sidebar" class="popup-sidebar" title="eASY SHOP Ad">
-    <img id="popup-image" src="/images/ad-3.gif" alt="Product Advertisement">
-
+    <img id="popup-image" src="/images/ad-1.gif" alt="Product Advertisement">
   </div>
-
+  
 </section>
 
 <script>
 
-  // Function to handle sliding in and out the popup sidebar
-  function slidePopupSidebar() {
-    const popupSidebar = document.getElementById('popup-sidebar');
-    const popupImage = document.getElementById('popup-image');
+  // Function for Advertisement
+function slidePopupSidebar() {
+      const popupSidebar = document.getElementById('popup-sidebar');
+      const popupImage = document.getElementById('popup-image');
+      const imageUrls = [
+        "/images/ad-1.gif",
+        "/images/ad-2.gif",
+        "/images/ad-3.gif",
+        "/images/ad-4.gif"
+      ];
+      let currentIndex = 0;
 
-    // Array of image URLs for rotation
-    const imageUrls = [
-      "/images/ad-3.gif",
-      "/images/ad-2.gif",
-      "/images/ad-1.gif",
-      "/images/ad-4.gif"
-      // Add more image URLs here as needed
-    ];
-    let currentIndex = 0;
-
-    // Function to change image every 5 seconds
-    setInterval(() => {
-      currentIndex = (currentIndex + 1) % imageUrls.length;
-      popupImage.src = imageUrls[currentIndex];
-      // Slide in the popup sidebar
+      // Slide in the popup sidebar immediately
       popupSidebar.style.right = '0';
       // Slide out after 3 seconds
       setTimeout(() => {
-        popupSidebar.style.right = '-300px'; // Adjust width of sidebar
-      }, 3000); // Adjust time of
-    }, 6500); // Adjust time 
-  }
+        popupSidebar.style.right = '-300px';
+      }, 3000);
 
-  // Call the slidePopupSidebar function when the page is loaded
-  window.onload = slidePopupSidebar;
+      // Change image every 5 seconds
+      setInterval(() => {
+        currentIndex = (currentIndex + 1) % imageUrls.length;
+        popupImage.src = imageUrls[currentIndex];
+        // Slide in the popup sidebar
+        popupSidebar.style.right = '0';
+        // Slide out after 3 seconds
+        setTimeout(() => {
+          popupSidebar.style.right = '-300px';
+        }, 3000);
+      }, 6500);
+    }
+
+    // Call the slidePopupSidebar function when the page is loaded
+    window.onload = slidePopupSidebar;
 
 
-
+  // Search bar for small screen
   document.getElementById('search-input').addEventListener('keyup', function (event) {
     const query = event.target.value;
     searchProducts(query);
   });
-  // For large screen
+
+  // Search bar for  large screen
   document.getElementById('search-inputs').addEventListener('keyup', function (event) {
     const query = event.target.value;
     searchProducts(query);
   });
 
+  //Search function
   function searchProducts(query) {
     $.ajax({
       url: '/search-products',
@@ -135,98 +138,78 @@
       }
     });
   }
-
+  //For display Search results
   function displaySearchResults(products) {
-    const productContainer = document.getElementById('product-container');
-    productContainer.innerHTML = ''; // Clear previous results
+  const productContainer = document.getElementById('product-container');
+  productContainer.innerHTML = ''; // Clear previous results
+if (products.length === 0) {
+    productContainer.innerHTML = `
+        <div class="d-flex justify-content-center pb-5 col-12">
+            <img src="/images/no-products.png" alt="No Products" style="width:80%; height:90%;"> 
+        </div>
+    `;
+    return;
+}
 
-    if (products.length === 0) {
-      productContainer.innerHTML = '<p>No products found.</p>';
-      return;
-    }
-
-    products.forEach(product => {
-      const productElement = document.createElement('div');
-      productElement.classList.add('col-md-4', 'col-lg-3', 'col-sm-6', 'p-3');
-      productElement.innerHTML = `
-            <div class="card" style="width: 15rem; height: 23rem">
-                <img class="card-img-top" src="/product-images/${product._id}_0.jpg" alt="Card image cap" style="height: 10rem;">
-                <div class="card-body">
-                    <h5 class="card-title">${product.Name}</h5>
-                    <div class="row">
-                        <div class="ml-3">
-                            <p class="card-text" style="color:green"><b> ${product.Offer_Percentage}% </b><small>off</small></p>
-                        </div>
-                        <div class="ml-3">
-                            <b class="card-text">₹${product.Offer_Price}</b>
-                        </div>
-                        <div class="ml-2">
-                            <p class="card-text text-muted"><small><del>₹${product.Actual_Price}</del></small></p>
-                        </div>
-                    </div>
-                    <p class="card-text">${product.Description}.</p>
-                    <p hidden>${product.Category}</p>
-                    <button onclick="addToCart('${product._id}')" class="btn btn-primary">Add to cart</button>
-                </div>
+  products.forEach(product => {
+    const productElement = document.createElement('div');
+    productElement.classList.add('col-md-4', 'col-lg-2', 'col-6', 'pb-4');
+    productElement.innerHTML = `
+      <div class="card">
+        <a href="/view-product/${product._id}">
+          <div class="flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <img class="card-img-top" src="/product-images/${product._id}_0.jpg" alt="Image not available" onerror="this.onerror=null; this.src='/images/no-images-available.png';">
+              </div>
+              <div class="flip-card-back">
+                <img class="card-img-top" src="/product-images/${product._id}_1.jpg" alt="No more Images are available" onerror="this.onerror=null; this.src='/images/no-more-images.jpg';">
+              </div>
             </div>
-        `;
-      productContainer.appendChild(productElement);
-    });
-  }
+          </div>
+          <div class="card-body p-1">
+            <h5 class="card-title ml-1" title="${product.Name}">${product.Name}</h5>
+            <div class="row ml-1">
+              <div>
+                <p class="text-muted category" title="${product.Category}">${product.Category}</p>
+              </div>
+              ${product.Product_Owner === 'Admin' ? '<div class="eASY-assurance ml-1"><img src="/images/eASY-assurance.png" class="eASY-assurance" alt="eASY-assurance"> <p hidden>easy-assurance</p> </div>' : ''}
+            </div>
+            <div class="row mb-2">
+              <div class="ml-3 mt-2">
+                <p class="card-text" title="Offer percentage" id="offer-percentage"><b>${product.Offer_Percentage}%</b><small> off</small></p>
+              </div>
+              <div class="ml-3">
+                <b class="card-text" title="Offer price" id="offer-price">₹${product.Offer_Price}</b>
+              </div>
+              <div class="ml-3 mt-2">
+                <p class="card-text text-muted" title="M.R.P."><small><del>₹${product.Actual_Price}</del></small></p>
+              </div>
+            </div>
+          </a>
+          <p hidden>${product.Description}</p>
+          
+            <button onclick="addToCart('${product._id}')" class="btn" id="addtoCart">Add to cart</button>
+            <div id="Ad">Product added <img src="/images/grocery.gif" class="addcart" alt=""></div>
+          
+        </div>
+      </div>
+    `
+    productContainer.appendChild(productElement);
+  });
+}
+
 </script>
+
 <style>
-
-  #addtoCart {
-  position: relative;
-  display: inline-block;
-
-}
-
-#addtoCart .logintext {
-  visibility: hidden;
-  width: 250px;
-  background-color: white;
-  color:rgb(28, 146, 164);
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-  box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
-  
-  top: 100%;
-  left: 50%;
-  margin-top: 10px;
-  margin-left: -125px; /* To center the logintext*/
-  /* Position the logintext */
-  position: absolute;
-  z-index: 1;
-
- 
-}
-
-#addtoCart:hover .logintext {
-  visibility: visible;
-}
-
-
-  #addtoCart:hover{
-   
-   background-image: linear-gradient(to right, #199cad, rgb(74, 175, 209));
+  .card {
+    box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
+    width: 14em;
+    height: 22.2em
   }
- #addtoCart{
-  width: 13.4em; 
-   background-image: linear-gradient(to left, #199cad, rgb(81, 176, 207));
-  color: #fff; 
-  
- }
 
-  .category {
-    width: 7em;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    /* number of lines to show */
-    -webkit-box-orient: vertical;
+  .card:hover {
+    box-shadow: 0 2px 18px rgba(19, 111, 139, 0.5);
   }
 
   .card-title {
@@ -240,17 +223,86 @@
     /* number of lines to show */
     -webkit-box-orient: vertical;
   }
-  .card-title:hover{
-   color: #59b6c6 ;
-   
+
+  .card-title:hover {
+    color: #59b6c6;
+
   }
 
-  .card {
+  .card-img-top {
+    height: 10rem;
+  }
+
+  .category {
+    width: 7em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    /* number of lines to show */
+    -webkit-box-orient: vertical;
+
+  }
+
+  .eASY-assurance {
+    height: 2rem;
+    width: 5rem
+  }
+
+  #offer-percentage {
+    color: rgb(6, 170, 6);
+  }
+
+  #offer-price {
+    font-size: 25px;
+    color: rgb(4, 149, 149);
+  }
+
+  #addtoCart {
+    position: relative;
+    display: inline-block;
+
+  }
+
+  #addtoCart .logintext {
+    visibility: hidden;
+    width: 250px;
+    background-color: white;
+    color: rgb(28, 146, 164);
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
     box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
+
+    top: 100%;
+    left: 50%;
+    margin-top: 10px;
+    margin-left: -125px;
+    /* To center the logintext*/
+    /* Position the logintext */
+    position: absolute;
+    z-index: 1;
+
+
   }
-  .card:hover {
-    box-shadow: 0 2px 18px rgba(19, 111, 139, 0.5);
+
+  #addtoCart:hover .logintext {
+    visibility: visible;
   }
+
+
+  #addtoCart:hover {
+
+    background-image: linear-gradient(to right, #199cad, rgb(74, 175, 209));
+  }
+
+  #addtoCart {
+    width: 13.4em;
+    background-image: linear-gradient(to left, #199cad, rgb(81, 176, 207));
+    color: #fff;
+
+  }
+
 
   section {
     height: 100vh;
@@ -282,7 +334,7 @@
   .popup-sidebar img {
     display: block;
     width: 100%;
-    height:auto;
+    height: auto;
   }
 
   /* Adjustments for smaller screens */
@@ -345,7 +397,7 @@
     color: white;
     transform: rotateY(180deg);
   }
- 
+
 
   a {
     text-decoration: none;
@@ -379,8 +431,8 @@
     }
   }
 
-  /* The snackbar - position it at the bottom and in the middle of the screen */
-  #snackbar {
+  /* The Advertisement - position it at the bottom and in the middle of the screen */
+  #Ad {
     visibility: hidden;
     /* Hidden by default. Visible on click */
     min-width: 280px;
@@ -402,22 +454,22 @@
     z-index: 1;
     /* Add a z-index if needed */
     left: 50%;
-    /* Center the snackbar */
+    /* Center the Advertisement */
     bottom: 30px;
     /* 30px from the bottom */
   }
 
-  /* Show the snackbar when clicking on a button (class added with JavaScript) */
-  #snackbar.show {
+  /* Show the Advertisement when clicking on a button (class added with JavaScript) */
+  #Ad.show {
     visibility: visible;
-    /* Show the snackbar */
-    /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+    /* Show the Advertisement */
+    /* Add animation: Take 0.5 seconds to fade in and out the Advertisement
   However, delay the fade out process for 2.5 seconds */
     -webkit-animation: fadein 0.5s, fadeout 0.5s 3s;
     animation: fadein 0.5s, fadeout 0.5s 2.5s;
   }
 
-  /* Animations to fade the snackbar in and out */
+  /* Animations to fade the Advertisementin and out */
   @-webkit-keyframes fadein {
     from {
       bottom: 0;

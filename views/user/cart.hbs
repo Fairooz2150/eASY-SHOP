@@ -1,15 +1,14 @@
 <section class="bg-section">
     <div class="container pt-5">
+     
         <table class="table mt-5 " id="productsTable">
             <thead>
                 <tr>
                     <th scope="col">No</th>
                     <th scope="col">Item</th>
-
                     <th scope="col">Price</th>
                     <th scope="col">Quantity</th>
                     <th scope="col">Delete</th>
-
                 </tr>
             </thead>
             <tbody>
@@ -41,9 +40,8 @@
                         <button class="cart-item-count ml-3" style="border-radius: 5px; "
                             onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',1)">+</button>
                     </td>
-                    <td>
-                        <button class="btn btn-danger"
-                            onclick="deleteCartProduct('{{this.product._id}}')">Delete</button>
+                    <td >
+                        <button class="btn dltBtn"  onclick="deleteCartProduct('{{this.product._id}}')">Delete</button>
                     </td>
                 </tr>
                 {{/each}}
@@ -58,8 +56,6 @@
           <div>
              <a href="/place-order" class="btn btn-success mt-3 " style="width: 100%;"><b>Place Order</b></a>
           </div>
-            
-           
         </div>
         {{/if}}
     </div>
@@ -69,8 +65,8 @@
   <div class="modal-content">
     <span class="close">&times;</span>
     <p>Removing the item from the cart. Are you sure?</p>
-    <button id="confirmRemove" class="btn btn-danger">OK</button>
-    <button id="cancelRemove" class="btn btn-secondary">Cancel</button>
+    <button id="confirmRemove" class="btn okBtn">OK</button>
+    <button id="cancelRemove" class="btn cancelBtn">Cancel</button>
   </div>
 </div>
 
@@ -80,7 +76,7 @@
 
 
     function deleteCartProduct(productId) {
-
+      showConfirmationModal(() => {
         $.ajax({
             url: '/delete-cart-product/' + productId,
             method: 'DELETE',
@@ -97,7 +93,7 @@
                 alert('An error occurred while deleting the product');
             }
         });
-
+      })
     }
 
 
@@ -215,6 +211,7 @@ function showConfirmationModal(confirmCallback) {
   }
 }
 
+
 </script>
 
 <style>
@@ -274,21 +271,33 @@ function showConfirmationModal(confirmCallback) {
   cursor: pointer;
 }
 
-.btn {
+
+.okBtn {
+  background-color: red;
+  color: white;
+  border: none;
   padding: 10px 20px;
   margin: 10px;
 }
 
-.btn-danger {
-  background-color: red;
-  color: white;
-  border: none;
-}
-
-.btn-secondary {
+.cancelBtn {
   background-color: grey;
   color: white;
   border: none;
+   padding: 10px 20px;
+  margin: 10px;
 }
 
+.dltBtn{
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(21, 105, 131, 0.5);
+  border-radius: 20px;
+  color: rgb(209, 111, 58);
+  font-weight: bold;
+}
+
+.dltBtn:hover{
+background-color: rgb(209, 111, 58);
+color: white;
+}
 </style>

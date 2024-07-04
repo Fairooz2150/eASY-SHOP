@@ -55,21 +55,16 @@
             {{else}}
             <div class="text-center pt-3 pb-2">
 
-              <a href="/login">
-
-                <button type="button" class="ADC btn  btn-lg mt-1" title="Please login for Cart">
-                  <div class="ADC-text">
-                    Add to Cart <i class="bi bi-cart3"></i>
-                  </div>
+                <button type="button" id="addtoCart" class="ADC btn btn-lg mt-1" >
+                  <div class="ADC-text" > Add to Cart <i class="bi bi-cart3"></i> </div>
+                  <span class="logintext">Please Login to access your Cart.</span>
                 </button>
 
-                <button type="button" class="BN btn btn-lg mt-1 pr-3 pl-3" title="Please login to Buy">
-                  <div class="BN-text">
-                    Buy Now <i class="bi bi-bag-heart"></i>
-                  </div>
-
+                <button type="button" id="buyNow" class="BN btn btn-lg mt-1 pr-3 pl-3" >
+                  <div class="BN-text"> Buy Now <i class="bi bi-bag-heart"></i> </div>
+                  <span class="logintext">Please Login to Buy.</span>
                 </button>
-              </a>
+              
             </div>
             {{/if}}
           </div>
@@ -389,6 +384,7 @@
 </script>
 
 <style>
+
   section {
     height: 100vh;
     overflow-y: auto;
@@ -435,7 +431,7 @@
     color: white;
     background-image: linear-gradient(to right, #16b656, rgb(4, 231, 125));
     box-shadow: 0 2px 8px rgba(10, 118, 35, 0.5);
-    ;
+    
   }
 
   .BN {
@@ -443,14 +439,57 @@
     transform: skew(13deg);
     font-weight: 500;
     color: white;
-    background-image: linear-gradient(to right, #1da3ba, rgb(114, 190, 228));
+    background-image: linear-gradient(to right, #1da3ba, rgb(114, 209, 228));
     box-shadow: 0 2px 8px rgba(21, 119, 146, 0.5);
-    ;
+    
   }
 
   .ADC-text,
   .BN-text {
     transform: skew(-13deg);
+  }
+
+  .BN:hover{
+background-image: linear-gradient(to left, #1da3ba, rgb(114, 209, 228));
+   
+  }
+  
+  .ADC:hover{
+    background-image: linear-gradient(to left, #16b656, rgb(4, 231, 125));
+  }
+  
+   #addtoCart, #buyNow {
+    position: relative;
+    display: inline-block;
+  }
+
+  #addtoCart .logintext, #buyNow .logintext {
+    visibility: hidden;
+    width: 250px;
+    background-color: white;
+    color: rgb(28, 146, 164);
+    text-align: center;
+    font-size: 15px;
+    transform: skew(-13deg);
+    border-radius: 6px;
+    padding: 5px 1px;
+    box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
+    top: 100%;
+    left: 50%;
+    margin-top: 10px;
+    margin-left: -125px;
+    /* To center the logintext*/
+    /* Position the logintext */
+    position: absolute;
+    z-index: 1;
+  }
+
+   #buyNow:hover .logintext {
+    visibility: visible;
+  }
+  
+  #addtoCart:hover .logintext {
+    visibility: visible;
   }
 
   /* The snackbar - position it at the bottom and in the middle of the screen */

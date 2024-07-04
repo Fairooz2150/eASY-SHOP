@@ -7,21 +7,18 @@
 
 
             <!-- Search bar for small screens (visible only on small screens) -->
-
+            {{#if search}}
             <div class="mx-auto d-lg-none row">
-
                 <form class="form-inline my-2 my-lg-0" onsubmit="searchProducts(event)">
                     <div class="input-group row">
                         <input class="form-control mr-sm-2" type="search" id="search-input" placeholder="Search"
                             aria-label="Search">
-
                         <button class="btn my-2 my-sm-0 mr-2" id="searchbtn" type="submit"><i
-                                class="bi bi-search"></i></button>
-
+                            class="bi bi-search"></i></button>
                     </div>
                 </form>
-
             </div>
+            {{/if}}
 
             <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse"
                 data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false"
@@ -39,7 +36,7 @@
 
                     <li class="nav-item pr-3" id="navItem">
                         <a class="nav-link" id="header-links" href="/cart"><i class="bi bi-cart">
-                                <span class="badge " id="cart-count" title="cart count">{{cartCount}}</span> </i> Cart</a>
+                                <span class="badge  " id="cart-count" title="cart count">{{cartCount}}</span> </i> Cart</a>
                     </li>
 
                     <li class="nav-item pr-3" id="navItem">
@@ -50,6 +47,7 @@
 
 
                 <!-- Search bar for large screens (visible only on large screens) -->
+                {{#if search}}
                 <div class="mx-auto d-none d-lg-block">
                     <form class="form-inline my-2 my-lg-0" onsubmit="searchProducts(event)">
                         <div class="input-group">
@@ -60,7 +58,7 @@
                         </div>
                     </form>
                 </div>
-
+                {{/if}}
 
                 <ul class="navbar-nav mt-2 mt-lg-0">
                     <li class="nav-item dropdown ml-auto">
@@ -140,8 +138,6 @@
 
     }
 
-
-
     #header-links {
         color: #3391a2;
         font-weight: 500;
@@ -162,7 +158,7 @@
         padding: 2px 6px;
         position: absolute;
         top: -10px;
-        right: -10px;
+        right: -5px;
 
 
     }
@@ -199,7 +195,7 @@
         box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
     }
 
-    #dropdownMenuButton {
+    .dropdown-toggle {
         background-image: linear-gradient(to right, #309db0, rgb(71, 172, 209));
         box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
         border-radius: 20px;
@@ -208,13 +204,11 @@
 
     .navbar-toggler {
         border-radius: 10px;
-
         box-shadow: 0 2px 6px rgba(28, 113, 139, 0.5);
     }
 
     .dropdown-item {
         color: #217f8f;
-
     }
 
     .dropdown-item:hover {
@@ -249,7 +243,7 @@
     }
 
     #nvbr {
-        background-image: url('/images/user-login-bg-1.png');
+        background-image: url('/images/header.png');
         background-size: cover;
         background-repeat: no-repeat;
 

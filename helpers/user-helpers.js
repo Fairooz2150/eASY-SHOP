@@ -275,7 +275,7 @@ module.exports = {
             };
 
             db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response) => {
-                db.get().collection(collection.CART_COLLECTION).removeOne({ user: objectId(order.userId) });
+                
                 resolve(response.ops[0]._id);
             });
         });
@@ -481,13 +481,14 @@ module.exports = {
 
         })
     },
-    verifypayment: (details) => {
+    verifypayment: (details,userId) => {
         return new Promise((resolve, reject) => {
             const crypto = require('crypto');
             let hmac = crypto.createHmac('sha256', 'NxHqrxegFsANJL3mBznh2YvY')
             hmac.update(details['payment[razorpay_order_id]'] + '|' + details['payment[razorpay_payment_id]']);
             hmac = hmac.digest('hex')
             if (hmac == details['payment[razorpay_signature]']) {
+                db.get().collection(collection.CART_COLLECTION).removeOne({ user: objectId(userId) });
                 resolve()
             } else {
                 reject()
