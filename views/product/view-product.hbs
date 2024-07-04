@@ -35,7 +35,7 @@
                 <span class="sr-only">Next</span>
               </a>
             </div>
-            {{#if user}}
+            
             <div class="text-center pt-3 pb-2">
               <button type="button" onclick="addToCart('{{product._id}}')" class="ADC btn  btn-lg mt-1">
                 <div class="ADC-text">
@@ -51,22 +51,8 @@
                 </button></a>
             </div>
             <!--snackbar -->
-            <div id="snackbar">Product added <img src="/images/grocery.gif" class="addcart" alt=""></div>
-            {{else}}
-            <div class="text-center pt-3 pb-2">
-
-                <button type="button" id="addtoCart" class="ADC btn btn-lg mt-1" >
-                  <div class="ADC-text" > Add to Cart <i class="bi bi-cart3"></i> </div>
-                  <span class="logintext">Please Login to access your Cart.</span>
-                </button>
-
-                <button type="button" id="buyNow" class="BN btn btn-lg mt-1 pr-3 pl-3" >
-                  <div class="BN-text"> Buy Now <i class="bi bi-bag-heart"></i> </div>
-                  <span class="logintext">Please Login to Buy.</span>
-                </button>
-              
-            </div>
-            {{/if}}
+            <div id="Ad">Product added <img src="/images/grocery.gif" class="addcart" alt=""></div>
+           
           </div>
         </div>
 
@@ -492,19 +478,21 @@ background-image: linear-gradient(to left, #1da3ba, rgb(114, 209, 228));
     visibility: visible;
   }
 
-  /* The snackbar - position it at the bottom and in the middle of the screen */
-  #snackbar {
+  /* The Ad - position it at the bottom and in the middle of the screen */
+  #Ad {
     visibility: hidden;
     /* Hidden by default. Visible on click */
-    min-width: 280px;
+     min-width: 290px;
     /* Set a default minimum width */
     margin-left: -125px;
     /* Divide value of min-width by 2 */
     background-color: white;
     /* Black background color */
-    color: rgb(31, 143, 213);
+    color: rgb(40, 155, 155);
     /* White text color */
     text-align: center;
+    font-weight: bold;
+    font-size: large;
     /* Centered text */
     border-radius: 2px;
     /* Rounded borders */
@@ -518,10 +506,11 @@ background-image: linear-gradient(to left, #1da3ba, rgb(114, 209, 228));
     /* Center the snackbar */
     bottom: 30px;
     /* 30px from the bottom */
+    box-shadow: 0 2px 8px rgba(21, 105, 131, 0.5);
   }
 
   /* Show the snackbar when clicking on a button (class added with JavaScript) */
-  #snackbar.show {
+  #Ad.show {
     visibility: visible;
     /* Show the snackbar */
     /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
@@ -608,7 +597,7 @@ background-image: linear-gradient(to left, #1da3ba, rgb(114, 209, 228));
     }
 
     to {
-      left: 60px;
+      left: 55px;
     }
   }
 

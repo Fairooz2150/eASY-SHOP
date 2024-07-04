@@ -8,7 +8,7 @@ const bcrypt = require('bcrypt')
 const userHelpers = require('../helpers/user-helpers');
 const { log } = require('console');
 
-const verifyLogin = (req, res, next) => {
+const verifyLogin = (req, res, next) => {  //checks the user login
   if (req.session.userLoggedIn) {
     next();
   } else {
@@ -18,15 +18,20 @@ const verifyLogin = (req, res, next) => {
 };
 
 
-
 /* Route to home page. */
 
 router.get('/', async function (req, res, next) {
   let user = req.session.user
 
-  var cartCount = null
+  let cartCount = 0;
   if (req.session.user) {
     cartCount = await userHelpers.getCartCount(req.session.user._id)
+  }
+  else {
+    // User is not logged in, calculate cart count from session storage
+    if (req.session.cart) {
+      cartCount = req.session.cart.length;
+    }
   }
   productHelpers.getAllProducts().then((products) => {
     res.render('user/view-products', { products, user, cartCount, search:true }) //view all products at home page
@@ -42,9 +47,15 @@ router.get('/view-product/:id', async (req, res) => {
   let product = await productHelpers.getProductDetails(Id)
   let prodImages = await productHelpers.getProductImages(Id);
   let images = prodImages.images;
-  let cartCount = null;
-  if (user) {
-    cartCount = await userHelpers.getCartCount(user._id)
+  let cartCount = 0;
+  if (req.session.user) {
+    cartCount = await userHelpers.getCartCount(req.session.user._id)
+  }
+  else {
+    // User is not logged in, calculate cart count from session storage
+    if (req.session.cart) {
+      cartCount = req.session.cart.length;
+    }
   }
   res.render('product/view-product', { user, product, images, cartCount })
 })
@@ -94,20 +105,29 @@ router.get('/login', (req, res) => {
 
 /* redirect to Home after Login */
 
-router.post('/login', (req, res) => {
-  userHelpers.doLogin(req.body).then((response) => {
-    if (response.status) {
-      req.session.user = response.user
-      req.session.userLoggedIn = true
-      const returnTo = req.session.returnTo || '/'; // Default to home if no return URL
-      delete req.session.returnTo; // Clear the return URL from session
-      res.redirect(returnTo);
-    } else {
-      req.session.userLoginErr = "Invalid Username or Password"
-      res.redirect('/login') // Redirect back to login on failure
+router.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+  const response = await userHelpers.doLogin(req.body);
+
+  if (response) {
+    req.session.userLoggedIn = true;
+    req.session.user = response.user;
+
+    // Merge session cart with user's cart
+    const sessionCart = req.session.cart || [];
+    for (let productId of sessionCart) {
+      await userHelpers.addToCart(productId, response.user._id);
     }
-  })
-})
+    delete req.session.cart; // Clear session cart
+
+    const returnTo = req.session.returnTo || '/'; // Default to home if no return URL
+    delete req.session.returnTo; // Clear the return URL from session
+
+    res.json({ success: true, redirectUrl: returnTo });
+  } else {
+    res.json({ success: false });
+  }
+});
 
 
 /*For Logout  */
@@ -138,11 +158,24 @@ router.get('/cart', verifyLogin, async (req, res) => {
 /* Add to cart  */
 
 router.get('/add-to-cart/:id', (req, res) => {
-  userHelpers.addToCart(req.params.id, req.session.user._id).then(() => {
-    res.json({ status: true })
-  })
+  const productId = req.params.id;
+  let userId = req.session.user ? req.session.user._id : null;
+  if (userId) {
+    userHelpers.addToCart(productId, req.session.user._id).then(() => {
+      res.json({ status: true });
+    });
+  } else {
+    // Store cart items in session storage if user is not logged in
+    if (!req.session.cart) {
+      req.session.cart = [];
+    }
+    req.session.cart.push(productId);
+     // Calculate cart count from session storage
+     let cartCount = req.session.cart.length;
+     res.json({ status: true, cartCount: cartCount });
+  }
+}); 
 
-})
 
 
 /* Delete cart products */

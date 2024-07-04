@@ -3,7 +3,7 @@
         <div class="col-md-6 m-auto pt-4">
             <div class="container mt-5">
                 <h2 class="title text-center" >User Login</h2>
-                <form action="/login" method="post">
+                <form action="/login" id="login-form" method="post">
                     {{#if loginErr}}
                     <p class="error">{{loginErr}}</p>
                     {{/if}}
@@ -22,6 +22,33 @@
         </div>
     </div>
 </section>
+<script>
+  document.getElementById('login-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const form = event.target;
+    const formData = new FormData(form);
+    const formObject = {};
+    formData.forEach((value, key) => formObject[key] = value);
+
+    fetch('/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formObject)
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        window.location.href = data.redirectUrl;
+      } else {
+        alert('Login failed. Please check your username and password.');
+      }
+    })
+    .catch(error => console.error('Error:', error));
+  });
+</script>
 
 <style>
  body {

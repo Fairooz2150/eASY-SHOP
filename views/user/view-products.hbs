@@ -48,19 +48,12 @@
           </a>
 
           <p hidden>{{this.Description}}</p>
-
-          {{#if ../user}}
+        
           <button onclick="addToCart('{{this._id}}')" class="btn" id="addtoCart">Add to cart</button>
-          <!-- eASY SHOP Advertisement -->
+
+          <!-- product added notification -->
           <div id="Ad">Product added <img src="/images/grocery.gif" class="addcart" alt=""></div>
-          {{else}}
-          <button class="btn " id="addtoCart">Add to cart
-            <span class="logintext">Please Login to access your Cart.</span>
-          </button>
-
-          {{/if}}
-
-
+         
         </div>
       </div>
     </div>
@@ -258,38 +251,6 @@ if (products.length === 0) {
     color: rgb(4, 149, 149);
   }
 
-  #addtoCart {
-    position: relative;
-    display: inline-block;
-
-  }
-
-  #addtoCart .logintext {
-    visibility: hidden;
-    width: 250px;
-    background-color: white;
-    color: rgb(28, 146, 164);
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px 0;
-    box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
-
-    top: 100%;
-    left: 50%;
-    margin-top: 10px;
-    margin-left: -125px;
-    /* To center the logintext*/
-    /* Position the logintext */
-    position: absolute;
-    z-index: 1;
-
-
-  }
-
-  #addtoCart:hover .logintext {
-    visibility: visible;
-  }
-
 
   #addtoCart:hover {
 
@@ -324,7 +285,7 @@ if (products.length === 0) {
     width: 300px;
 
     background-color: #fff;
-    box-shadow: -2px 0px 5px rgba(26, 108, 137, 0.2);
+      box-shadow: 0 2px 8px rgba(21, 105, 131, 0.5);
     z-index: 1000;
     transition: right 1s ease-in-out;
     padding: 20px;
@@ -344,8 +305,6 @@ if (products.length === 0) {
       /* Completely hidden on smaller screens */
     }
   }
-
-
 
 
   .flip-card {
@@ -387,13 +346,13 @@ if (products.length === 0) {
 
   /* Style the front side (fallback if image is missing) */
   .flip-card-front {
-    background-color: #bbb;
+    background-color: transparent;
     color: black;
   }
 
   /* Style the back side */
   .flip-card-back {
-    background-color: dodgerblue;
+    background-color: transparent;
     color: white;
     transform: rotateY(180deg);
   }
@@ -408,6 +367,7 @@ if (products.length === 0) {
     text-decoration: none;
     /* Ensure underline does not appear on hover */
   }
+
 
   /*For showing notification on product added to cart */
   .addcart {
@@ -427,7 +387,7 @@ if (products.length === 0) {
     }
 
     to {
-      left: 60px;
+      left: 55px;
     }
   }
 
@@ -435,15 +395,17 @@ if (products.length === 0) {
   #Ad {
     visibility: hidden;
     /* Hidden by default. Visible on click */
-    min-width: 280px;
+    min-width: 290px;
     /* Set a default minimum width */
     margin-left: -125px;
     /* Divide value of min-width by 2 */
     background-color: white;
     /* Black background color */
-    color: black;
+   color: rgb(40, 155, 155);
     /* White text color */
     text-align: center;
+    font-weight: bold;
+    font-size: large;
     /* Centered text */
     border-radius: 2px;
     /* Rounded borders */
@@ -457,6 +419,7 @@ if (products.length === 0) {
     /* Center the Advertisement */
     bottom: 30px;
     /* 30px from the bottom */
+    box-shadow: 0 2px 8px rgba(21, 105, 131, 0.5);
   }
 
   /* Show the Advertisement when clicking on a button (class added with JavaScript) */
@@ -467,6 +430,7 @@ if (products.length === 0) {
   However, delay the fade out process for 2.5 seconds */
     -webkit-animation: fadein 0.5s, fadeout 0.5s 3s;
     animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    
   }
 
   /* Animations to fade the Advertisementin and out */
