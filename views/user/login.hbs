@@ -4,16 +4,14 @@
             <div class="container mt-5">
                 <h2 class="title text-center" >User Login</h2>
                 <form action="/login" id="login-form" method="post">
-                    {{#if loginErr}}
-                    <p class="error">{{loginErr}}</p>
-                    {{/if}}
+                    <p class="error" id="login-error"></p>
                     <div class="form-group">
                         <label for="" >Email address</label>
-                        <input type="email" class="form-control" name="Email" placeholder="Enter email">
+                        <input type="email" class="form-control" id="email" name="Email" placeholder="Enter email">
                     </div>
                     <div class="form-group">
                         <label for="" >Password</label>
-                        <input type="password" class="form-control" name="Password" placeholder="Password">
+                        <input type="password" id="password" class="form-control" name="Password" placeholder="Password">
                     </div>
                     <a href="/signup">Create a new account?</a>
                     <button type="submit" id="login" class="btn float-right" title="Do login">Login</button>
@@ -24,30 +22,47 @@
 </section>
 <script>
   document.getElementById('login-form').addEventListener('submit', function(event) {
-    event.preventDefault();
+      event.preventDefault();
 
-    const form = event.target;
-    const formData = new FormData(form);
-    const formObject = {};
-    formData.forEach((value, key) => formObject[key] = value);
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const errorElement = document.getElementById('login-error');
 
-    fetch('/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formObject)
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        window.location.href = data.redirectUrl;
+      if (!email || !password) {
+        errorElement.textContent = 'Please fill out all fields.';
+        errorElement.style.display = 'block';
+        return;
       } else {
-        alert('Login failed. Please check your username and password.');
+        errorElement.style.display = 'none';
       }
-    })
-    .catch(error => console.error('Error:', error));
-  });
+
+      const form = event.target;
+      const formData = new FormData(form);
+      const formObject = {};
+      formData.forEach((value, key) => formObject[key] = value);
+
+      fetch('/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formObject)
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          window.location.href = data.redirectUrl;
+        } else {
+          errorElement.textContent = 'Login failed. Please check your email and password.';
+          errorElement.style.display = 'block';
+        }
+      })
+      .catch(error => {
+        errorElement.textContent = 'An error occurred. Please try again.';
+        errorElement.style.display = 'block';
+        console.error('Error:', error);
+      });
+    });
 </script>
 
 <style>

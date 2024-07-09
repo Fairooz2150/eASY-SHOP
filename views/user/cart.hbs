@@ -1,215 +1,247 @@
 <section class="bg-section">
-    <div class="container pt-5">
-     
-        <table class="table mt-5 " id="productsTable">
-            <thead>
-                <tr>
-                    <th scope="col">No</th>
-                    <th scope="col">Item</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Delete</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#each products}}
-                <tr>
+  <div class="container pt-5">
 
-                    <th scope="row">{{incrementedIndex @index}}</th>
-                    <td>
-                        <div class="row">
-                            <div class="ml-2">
-                                <img src="/product-images/{{this.product._id}}_0.jpg" style="width:7em;height: 6em;"
-                                    alt="">
-                            </div>
-                            <div class="ml-2">
-                                {{this.product.Name}} <br>
-                                <span class="text-muted">{{this.product.Category}}</span>
-                            </div>
-                            
-                        </div>
-                    </td>
-                    <td>₹{{this.product.Offer_Price}}</td>
+    <table class="table mt-5 " id="productsTable">
+      <thead>
+        <tr>
+          <th scope="col">No</th>
+          <th scope="col">Item</th>
+          <th scope="col">Price</th>
+          <th scope="col">Quantity</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each products}}
+        <tr>
 
+          <th scope="row">{{incrementedIndex @index}}</th>
+          <td>
+            <a href="/view-product/{{this.product._id}}">
+              <div class="row">
+                <div class="m-2 img">
+                  <img src="/product-images/{{this.product._id}}_0.jpg"
+                    style="width: 8em; height: 7em; " alt="Image not available"
+                    onerror="this.onerror=null; this.src='/images/no-images-available.png';">
+                </div>
+                <div class="ml-2">
+                  <span class="title" title="{{this.product.Name}}">{{this.product.Name}} </span><br>
+                  <span class="category text-muted" title="{{this.product.Category}}">{{this.product.Category}}</span>
+                </div>
+              </div>
+            </a>
+          </td>
+          <td>₹<span id="Offer-price">{{this.product.Offer_Price}}</span></td>
 
-                    <td>
+          <td>
+            <div class="mb-4">
+              <button class="cart-item-count mr-1 " style=" background-color: transparent; border:none; outline: none; "
+                onclick=" changeQuantity('{{this._id}}' ,'{{this.product._id}}','{{../user._id}}',-1)"><i
+                  class="bi bi-caret-left-fill"></i></button>
+              <span id="{{this.product._id}}">{{this.quantity}}</span>
+              <button class="cart-item-count ml-1" style="background-color: transparent; border:none; outline: none;"
+                onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',1)"><i
+                  class="bi bi-caret-right-fill"></i></button>
+            </div>
+            <div>
+              <button class="btn dltBtn m-2" onclick="deleteCartProduct('{{this.product._id}}')">Delete</button>
+            </div>
 
-                        <button class="cart-item-count mr-3 " style="border-radius: 5px; "
-                            onclick=" changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',-1)">-</button>
-                        <span id="{{this.product._id}}">{{this.quantity}}</span>
-                        <button class="cart-item-count ml-3" style="border-radius: 5px; "
-                            onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',1)">+</button>
-                    </td>
-                    <td >
-                        <button class="btn dltBtn"  onclick="deleteCartProduct('{{this.product._id}}')">Delete</button>
-                    </td>
-                </tr>
-                {{/each}}
-            </tbody>
-        </table>
-        <hr>
-        {{#if placeOrder}}
-        <div class="row float-right pr-5" id="pop">
-          <div>
-            <h5 class="float-left mr-5 mt-4">Total: Rs.<span id="total">{{totalValue}}</span></h5>
-          </div>
-          <div>
-             <a href="/place-order" class="btn btn-success mt-3 " style="width: 100%;"><b>Place Order</b></a>
-          </div>
-        </div>
-        {{/if}}
+          </td>
+
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    <hr>
+   
+    <div class="row float-right pr-5" id="pop">
+      <div>
+        <h5 class="float-left mr-5 mt-4">Total: ₹<span id="total"></span></h5>
+      </div>
+      <div>
+        <a href="/place-order" class="btn placeOrder mt-3 " title="Place Order" ><b>Place Order</b></a>
+      </div>
     </div>
-
-    <!-- Confirmation Modal -->
-<div id="confirmationModal" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <p>Removing the item from the cart. Are you sure?</p>
-    <button id="confirmRemove" class="btn okBtn">OK</button>
-    <button id="cancelRemove" class="btn cancelBtn">Cancel</button>
+  
   </div>
-</div>
+
+  <!-- Confirmation Modal -->
+  <div id="confirmationModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <p>Removing the item from the cart. Are you sure?</p>
+      <button id="confirmRemove" class="btn confirmBtn">Yes</button>
+      <button id="cancelRemove" class="btn cancelBtn">Cancel</button>
+    </div>
+  </div>
 
 </section>
 
 <script>
+  
+  $(function () {
+    $('#productsTable').DataTable();
+  });
 
 
-    function deleteCartProduct(productId) {
-      showConfirmationModal(() => {
-        $.ajax({
-            url: '/delete-cart-product/' + productId,
-            method: 'DELETE',
-            success: function (response) {
-                if (response.success) {
-                    console.log('Product deleted successfully');
-                    location.reload();
-                } else {
-                    alert('Failed to delete product');
-                }
-            },
-            error: function (error) {
-                console.error('Error:', error);
-                alert('An error occurred while deleting the product');
-            }
-        });
-      })
+   // Function to format number with commas
+    function formatNumber(number) {
+      return number.toLocaleString('en-IN'); // 'en-IN' for Indian number formatting (₹ separation)
     }
 
-
-    $(function () {
-        $('#productsTable').DataTable();
-    });
-
-
-    function changeQuantity(cartId, proId, userId, count) {
-  let quantity = parseInt(document.getElementById(proId).innerHTML);
-  count = parseInt(count);
-
-  // Check if the current quantity will become one after decreasing
-  if (quantity === 1 && count === -1) {
-    // Display the custom confirmation dialog
-    showConfirmationModal(() => {
-      // User confirmed the removal
-      $.ajax({
-        url: '/change-product-quantity',
-        data: {
-          user: userId,
-          cart: cartId,
-          product: proId,
-          count: count,
-          quantity: quantity
-        },
-        method: 'post',
-        success: (response) => {
-          if (response.removeProduct) {
-            // Remove the corresponding table row
-            $(`#${proId}`).closest('tr').remove();
-            // Update total value
-            document.getElementById('total').innerHTML = response.total;
-            // Check if the total count of products becomes zero
-            if (response.cartCount === 0) {
-              // Hide the 'Place Order' section and 'Total: Rs' div
-              $('#placeOrderSection').hide();
-              $('#totalSection').hide();
-            }
-          } else {
-            document.getElementById(proId).innerHTML = quantity + count;
-            document.getElementById('total').innerHTML = response.total;
-          }
+    document.addEventListener('DOMContentLoaded', function() {
+      const offerPrices = document.querySelectorAll('#Offer-price');
+      offerPrices.forEach(element => {
+        const priceString = element.textContent.trim();
+        const price = parseFloat(priceString.replace(/[^\d.-]/g, ''));
+        if (!isNaN(price)) {
+          element.textContent = formatNumber(price);
         }
       });
     });
-    return;
-  }
 
-  $.ajax({
-    url: '/change-product-quantity',
-    data: {
-      user: userId,
-      cart: cartId,
-      product: proId,
-      count: count,
-      quantity: quantity
-    },
-    method: 'post',
-    success: (response) => {
-      if (response.removeProduct) {
-        // Remove the corresponding table row
-        $(`#${proId}`).closest('tr').remove();
-        // Update total value
-        document.getElementById('total').innerHTML = response.total;
-        // Check if the total count of products becomes zero
-        if (response.cartCount === 0) {
-          // Hide the 'Place Order' section and 'Total: Rs' div
-          $('#placeOrderSection').hide();
-          $('#totalSection').hide();
+  
+    // total value 
+    const totals = {{totalValue}}; // Replace with your dynamic value
+    
+    // Format and display the total value
+    document.getElementById('total').textContent = formatNumber(totals);
+   
+  
+
+  function deleteCartProduct(productId) {
+    showConfirmationModal(() => {
+      $.ajax({
+        url: '/delete-cart-product/' + productId,
+        method: 'DELETE',
+        success: function (response) {
+          if (response.success) {
+            console.log('Product deleted successfully');
+            location.reload();
+          } else {
+            alert('Failed to delete product');
+          }
+        },
+        error: function (error) {
+          console.error('Error:', error);
+          alert('An error occurred while deleting the product');
         }
-      } else {
-        document.getElementById(proId).innerHTML = quantity + count;
-        document.getElementById('total').innerHTML = response.total;
-      }
+      });
+    })
+  }
+
+
+  function changeQuantity(cartId, proId, userId, count) {
+    let quantity = parseInt(document.getElementById(proId).innerHTML);
+    count = parseInt(count);
+
+    // Check if the current quantity will become one after decreasing
+    if (quantity === 1 && count === -1) {
+      // Display the custom confirmation dialog
+      showConfirmationModal(() => {
+        // User confirmed the removal
+        $.ajax({
+          url: '/change-product-quantity',
+          data: {
+            user: userId,
+            cart: cartId,
+            product: proId,
+            count: count,
+            quantity: quantity
+          },
+          method: 'post',
+          success: (response) => {
+            if (response.removeProduct) {
+              // Remove the corresponding table row
+              $(`#${proId}`).closest('tr').remove();
+              // Update total value
+              document.getElementById('total').innerHTML = response.total;
+              // Check if the total count of products becomes zero
+              location.reload();
+              if (response.cartCount === 0) {
+                // Hide the 'Place Order' section and 'Total: Rs' div
+                $('#placeOrderSection').hide();
+                $('#totalSection').hide();
+              }
+            } else {
+              document.getElementById(proId).innerHTML = quantity + count;
+              document.getElementById('total').innerHTML = formatNumber(response.total);
+            }
+          }
+        });
+      });
+      return;
     }
-  });
-}
 
-function showConfirmationModal(confirmCallback) {
-  // Get the modal
-  var modal = document.getElementById("confirmationModal");
-
-  // Get the <span> element that closes the modal
-  var span = document.getElementsByClassName("close")[0];
-
-  // Get the confirm and cancel buttons
-  var confirmButton = document.getElementById("confirmRemove");
-  var cancelButton = document.getElementById("cancelRemove");
-
-  // Show the modal
-  modal.style.display = "block";
-
-  // When the user clicks on <span> (x), close the modal
-  span.onclick = function() {
-    modal.style.display = "none";
+    $.ajax({
+      url: '/change-product-quantity',
+      data: {
+        user: userId,
+        cart: cartId,
+        product: proId,
+        count: count,
+        quantity: quantity
+      },
+      method: 'post',
+      success: (response) => {
+        if (response.removeProduct) {
+          // Remove the corresponding table row
+          $(`#${proId}`).closest('tr').remove();
+          // Update total value
+          document.getElementById('total').innerHTML = response.total;
+          // Check if the total count of products becomes zero
+          
+          if (response.cartCount === 0) {
+            // Hide the 'Place Order' section and 'Total: Rs' div
+            $('#placeOrderSection').hide();
+            $('#totalSection').hide();
+            
+          }
+        } else {
+          document.getElementById(proId).innerHTML = quantity + count;
+          document.getElementById('total').innerHTML = formatNumber(response.total);
+        }
+      }
+    });
   }
 
-  // When the user clicks on confirm button
-  confirmButton.onclick = function() {
-    modal.style.display = "none";
-    confirmCallback();
-  }
+  function showConfirmationModal(confirmCallback) {
+    // Get the modal
+    var modal = document.getElementById("confirmationModal");
 
-  // When the user clicks on cancel button
-  cancelButton.onclick = function() {
-    modal.style.display = "none";
-  }
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
 
-  // When the user clicks anywhere outside of the modal, close it
-  window.onclick = function(event) {
-    if (event.target == modal) {
+    // Get the confirm and cancel buttons
+    var confirmButton = document.getElementById("confirmRemove");
+    var cancelButton = document.getElementById("cancelRemove");
+
+    // Show the modal
+    modal.style.display = "block";
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
       modal.style.display = "none";
     }
+
+    // When the user clicks on confirm button
+    confirmButton.onclick = function () {
+      modal.style.display = "none";
+      confirmCallback();
+    }
+
+    // When the user clicks on cancel button
+    cancelButton.onclick = function () {
+      modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
   }
-}
 
 
 </script>
@@ -224,80 +256,162 @@ function showConfirmationModal(confirmCallback) {
     display: flex;
     align-items: center;
     justify-content: center;
-}
- section .container {
-    background: rgba(255, 255, 255, 0.8); /* Optional: Add a semi-transparent background to improve text readability */
+  }
+
+  section .container {
+    background: rgba(255, 255, 255, 0.8);
     padding: 20px;
     border-radius: 10px;
-}
-  
-    /* The Modal (background) */
-.modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-}
 
-/* Modal Content/Box */
-.modal-content {
-  background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
-  max-width: 400px; /* Maximum width */
-  text-align: center;
-}
+  }
 
-/* The Close Button */
-.close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
+  a {
+    color: black;
+    text-decoration: none;
+    /* Remove underline by default */
+  }
 
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
+  a:hover {
+    color: black;
+    text-decoration: none;
+    /* Ensure underline does not appear on hover */
+  }
+  .img:hover{
+     box-shadow: 0 2px 8px rgba(19, 111, 139, 0.5);
+  }
+  .title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    max-width: 35em;
+    min-width: 7em;
+    font-weight: bold;
+    font-size: larger;
+  }
+
+  .title:hover {
+    color: rgb(40, 155, 155);
+  }
+
+  .category {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    max-width: 30em;
+  }
+
+  .bi-caret-left-fill:hover {
+    color: rgb(194, 119, 21);
+   
+  }
+
+  .bi-caret-right-fill:hover {
+    color: rgb(40, 155, 155);
+  }
+  .placeOrder{
+    width: 100%; 
+    border-radius: 25px; 
+    color: white; 
+    background-image: linear-gradient(to right, #109545, rgb(2, 164, 89));
+    
+  }
+  .placeOrder:hover{
+      background-image: linear-gradient(to left, #109545,  rgb(2, 164, 89));
+      color: white;
+  }
+  /* The Modal (background) */
+  .modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+   
+  }
+
+  /* Modal Content/Box */
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    /* 15% from the top and centered */
+    padding: 20px;
+    border-radius: 10px;  
+    box-shadow: 0 2px 15px rgba(18, 155, 150, 0.5);
+    width: 80%;
+    /* Could be more or less, depending on screen size */
+    max-width: 400px;
+    /* Maximum width */
+    text-align: center;
+  }
+
+  /* The Close Button */
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: rgb(7, 63, 68);
+    text-decoration: none;
+    cursor: pointer;
+  }
 
 
-.okBtn {
-  background-color: red;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  margin: 10px;
-}
+  .confirmBtn {
+    background-image: linear-gradient(to left, #f07b0d, rgb(245, 157, 64));
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    margin: 10px;
+  }
 
-.cancelBtn {
-  background-color: grey;
-  color: white;
-  border: none;
-   padding: 10px 20px;
-  margin: 10px;
-}
+  .cancelBtn {
+    background-image: linear-gradient(to left, #309db0, rgb(71, 172, 209));
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    margin: 10px;
+  }
+  .cancelBtn:hover{
+    background-image: linear-gradient(to right, #309db0, rgb(71, 172, 209));
+  }
+  .confirmBtn:hover{
+   background-image: linear-gradient(to right, #f07b0d, rgb(245, 157, 64));
 
-.dltBtn{
-  background-color: white;
-  box-shadow: 0 2px 8px rgba(21, 105, 131, 0.5);
-  border-radius: 20px;
-  color: rgb(209, 111, 58);
-  font-weight: bold;
-}
+  }
 
-.dltBtn:hover{
-background-color: rgb(209, 111, 58);
-color: white;
-}
+  .dltBtn {
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(21, 105, 131, 0.5);
+    border-radius: 20px;
+    color: rgb(209, 111, 58);
+    font-weight: bold;
+  }
+
+  .dltBtn:hover {
+    background-color: rgb(209, 111, 58);
+    color: white;
+  }
 </style>

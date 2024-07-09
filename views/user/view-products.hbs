@@ -42,7 +42,7 @@
                   <b class="card-text" title="Offer price" id="offer-price">₹{{this.Offer_Price}}</b>
                 </div>
                 <div class="ml-3 mt-2">
-                  <p class="card-text text-muted" title="M.R.P."><small><del>₹{{this.Actual_Price}}</del></small></p>
+                  <p class="card-text text-muted" title="M.R.P."><small><del id="actual-price">₹{{this.Actual_Price}}</del></small></p>
                 </div>
               </div>
           </a>
@@ -106,6 +106,35 @@ function slidePopupSidebar() {
 
     // Call the slidePopupSidebar function when the page is loaded
     window.onload = slidePopupSidebar;
+
+
+   // Function to format number with commas
+    function formatNumber(number) {
+      return number.toLocaleString('en-IN'); // 'en-IN' for Indian number formatting (₹ separation)
+    }
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const offerPrices = document.querySelectorAll('#offer-price');
+      offerPrices.forEach(element => {
+        const priceString = element.textContent.trim();
+        const price = parseFloat(priceString.replace(/[^\d.-]/g, ''));
+        if (!isNaN(price)) {
+          element.textContent = formatNumber(price);
+        }
+      });
+    });
+
+      document.addEventListener('DOMContentLoaded', function() {
+      const offerPrices = document.querySelectorAll('#actual-price');
+      offerPrices.forEach(element => {
+        const priceString = element.textContent.trim();
+        const price = parseFloat(priceString.replace(/[^\d.-]/g, ''));
+        if (!isNaN(price)) {
+          element.textContent = formatNumber(price);
+        }
+      });
+    });
 
 
   // Search bar for small screen
@@ -176,7 +205,7 @@ if (products.length === 0) {
                 <b class="card-text" title="Offer price" id="offer-price">₹${product.Offer_Price}</b>
               </div>
               <div class="ml-3 mt-2">
-                <p class="card-text text-muted" title="M.R.P."><small><del>₹${product.Actual_Price}</del></small></p>
+                <p class="card-text text-muted" title="M.R.P."><small><del id="actual-price">₹${product.Actual_Price}</del></small></p>
               </div>
             </div>
           </a>
@@ -247,7 +276,7 @@ if (products.length === 0) {
   }
 
   #offer-price {
-    font-size: 25px;
+    font-size: 22px;
     color: rgb(4, 149, 149);
   }
 
@@ -285,7 +314,7 @@ if (products.length === 0) {
     width: 300px;
 
     background-color: #fff;
-      box-shadow: 0 2px 8px rgba(21, 105, 131, 0.5);
+    box-shadow: 0 2px 8px rgba(21, 105, 131, 0.5);  
     z-index: 1000;
     transition: right 1s ease-in-out;
     padding: 20px;

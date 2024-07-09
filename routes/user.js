@@ -28,7 +28,7 @@ router.get('/', async function (req, res, next) {
     cartCount = await userHelpers.getCartCount(req.session.user._id)
   }
   else {
-    // User is not logged in, calculate cart count from session storage
+    // IF User is not logged in, calculate cart count from session storage
     if (req.session.cart) {
       cartCount = req.session.cart.length;
     }
@@ -52,7 +52,7 @@ router.get('/view-product/:id', async (req, res) => {
     cartCount = await userHelpers.getCartCount(req.session.user._id)
   }
   else {
-    // User is not logged in, calculate cart count from session storage
+    // IF User is not logged in, calculate cart count from session storage
     if (req.session.cart) {
       cartCount = req.session.cart.length;
     }
@@ -97,19 +97,19 @@ router.get('/login', (req, res) => {
     res.redirect('/')
   }
   else {
-    res.render('user/login', { "loginErr": req.session.userLoginErr, adminOption: true })
+    res.render('user/login')
     req.session.userLoginErr = false
   }
 })
 
 
-/* redirect to Home after Login */
+/* return to recent URL after Login */
 
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
   const response = await userHelpers.doLogin(req.body);
 
-  if (response) {
+  if (response.status) {
     req.session.userLoggedIn = true;
     req.session.user = response.user;
 
@@ -142,16 +142,19 @@ router.get('/logout', (req, res) => {
 /* GET Cart  */
 
 router.get('/cart', verifyLogin, async (req, res) => {
+  let user = req.session.user;
   let products = await userHelpers.getCartProducts(req.session.user._id)
   let cartCount = await userHelpers.getCartCount(req.session.user._id)
-  let placeOrder = false
+  
   let totalValue = 0;
   if (products.length > 0) {
     totalValue = await userHelpers.getTotalAmount(req.session.user._id)
-    placeOrder = true
+    
+  res.render('user/cart', { products, user, totalValue, cartCount})
+  }else{
+    res.redirect('/')
   }
-  let user = req.session.user;
-  res.render('user/cart', { products, user, totalValue, cartCount, placeOrder })
+  
 })
 
 

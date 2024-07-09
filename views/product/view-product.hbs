@@ -1,5 +1,5 @@
 <section>
-  <div class="bg-container container-fluid pl-5 pr-5">
+  <div class="bg-container container-fluid pl-5 pr-5 ">
     <div class="ft-container container-fluid ml-2 mr-2">
       <div class="row  pt-5">
 
@@ -89,14 +89,14 @@
             <div class="row ">
               <div class="offer">
 
-                <div class="offer-price" title="Offer Price">
-                  ₹{{product.Offer_Price}}
+                <div class="offer-price" title="Offer Price" id="offer-price">
+                  {{product.Offer_Price}}
                 </div>
 
                 <label class="tax ml-3"><i class="bi bi-tag-fill"></i>Inclusive of all taxes</label>
               </div>
               <div class="ml-5 mt-1" title="Maximum Retail Price">
-                <p class="text-muted"> M.R.P: <br><span> <del>₹{{product.Actual_Price}} </del></span></p>
+                <p class="text-muted"> M.R.P: <br><span> <del id="actual-price">{{product.Actual_Price}} </del></span></p>
               </div>
 
               <div class="ml-5 mt-1">
@@ -162,7 +162,7 @@
 
             </div>
 
-            <a class="right-button" style="color: rgb(83, 218, 200);"><i class="bi bi-arrow-right-circle-fill"></i></a>
+            <a class="right-button" style="color: rgb(83, 218, 200); "><i class="bi bi-arrow-right-circle-fill"></i></a>
           </div>
           <hr>
 
@@ -286,13 +286,22 @@
   </div>
 </section>
 
-
-
-
 <script>
+
   $('.carousel').carousel({
     interval: 2000
   })
+
+   function formatNumber(number) {
+      return number.toLocaleString('en-IN'); // 'en-IN' for Indian number formatting (₹ separation)
+    }
+     
+    // total value 
+    const offerPrice = {{product.Offer_Price}}; // Replace with your dynamic value
+    const actualPrice = {{product.Actual_Price}}; 
+    // Format and display the total value
+    document.getElementById('offer-price').textContent ='₹'+ formatNumber(offerPrice);
+    document.getElementById('actual-price').textContent ='₹'+ formatNumber(actualPrice);
 
   document.addEventListener('DOMContentLoaded', function () {
     const scrollmenu = document.querySelector('.scrollmenu');
@@ -449,35 +458,8 @@ background-image: linear-gradient(to left, #1da3ba, rgb(114, 209, 228));
     display: inline-block;
   }
 
-  #addtoCart .logintext, #buyNow .logintext {
-    visibility: hidden;
-    width: 250px;
-    background-color: white;
-    color: rgb(28, 146, 164);
-    text-align: center;
-    font-size: 15px;
-    transform: skew(-13deg);
-    border-radius: 6px;
-    padding: 5px 1px;
-    box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
-    top: 100%;
-    left: 50%;
-    margin-top: 10px;
-    margin-left: -125px;
-    /* To center the logintext*/
-    /* Position the logintext */
-    position: absolute;
-    z-index: 1;
-  }
-
-   #buyNow:hover .logintext {
-    visibility: visible;
-  }
+ 
   
-  #addtoCart:hover .logintext {
-    visibility: visible;
-  }
-
   /* The Ad - position it at the bottom and in the middle of the screen */
   #Ad {
     visibility: hidden;
@@ -579,7 +561,7 @@ background-image: linear-gradient(to left, #1da3ba, rgb(114, 209, 228));
     /* Ensure underline does not appear on hover */
   }
 
-  /*For showing notification on product added to cart */
+  /*Image for showing notification on product added to cart */
   .addcart {
 
     width: 50px;
