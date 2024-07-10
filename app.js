@@ -64,6 +64,14 @@ handlebars.registerHelper('ifCond', function(v1, operator, v2, options) {
       return options.inverse(this);
   }
 });
+handlebars.registerHelper('gt', function(a, b) {
+  return a > b;
+});
+handlebars.registerHelper('lt', function(a, b) {
+  return a < b;
+});
+
+
 
 app.engine('hbs', hbsInstance.engine);
 app.set('view engine', 'hbs');

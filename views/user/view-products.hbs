@@ -39,20 +39,24 @@
                     </b><small>off</small></p>
                 </div>
                 <div class="ml-3 ">
-                  <b class="card-text" title="Offer price" id="offer-price">₹{{this.Offer_Price}}</b>
+                  <b class="card-text" title="Offer price" id="offer-price">{{this.Offer_Price}}</b>
                 </div>
                 <div class="ml-3 mt-2">
-                  <p class="card-text text-muted" title="M.R.P."><small><del id="actual-price">₹{{this.Actual_Price}}</del></small></p>
+                  <p class="card-text text-muted" title="M.R.P."><small><del id="actual-price">{{this.Actual_Price}}</del></small></p>
                 </div>
               </div>
           </a>
 
           <p hidden>{{this.Description}}</p>
-        
-          <button onclick="addToCart('{{this._id}}')" class="btn" id="addtoCart">Add to cart</button>
-
+          {{#if (gt this.Stock_Count 0)}}
+          <button onclick="addToCart('{{this._id}}')" class="btn" id="addtoCart" title="Add to Cart">Add to cart</button>
+          {{else}}
+          <button  class="btn" id="out0fStock" title="Out of Stock">Out of Stock</button>
+          {{/if}}
           <!-- product added notification -->
-          <div id="Ad">Product added <img src="/images/grocery.gif" class="addcart" alt=""></div>
+          <a href="/cart">
+          <div id="Ad">Product added <img src="/images/grocery.gif" class="addcart" alt="Product added"></div>
+          </a>
          
         </div>
       </div>
@@ -68,9 +72,74 @@
     <img id="popup-image" src="/images/ad-1.gif" alt="Product Advertisement">
   </div>
   
+  <div id="confirmationModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>Product was out of stock</p>
+        <button id="confirmRemove" class="btn confirmBtn">ok</button>
+    </div>
+</div>
+
 </section>
 
 <script>
+
+// Get the modal
+var modal = document.getElementById("confirmationModal");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// Get the button that closes the modal
+var confirmRemove = document.getElementById("confirmRemove");
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks on the button, close the modal
+confirmRemove.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+function addToCart(proId) {
+    $.ajax({
+        url: '/add-to-cart/' + proId,
+        method: 'get',
+        success: (response) => {
+            if (response.status) {
+                let count = $('#cart-count').html();
+                count = parseInt(count) + 1;
+                $("#cart-count").html(count);
+
+                var ad = document.getElementById("Ad");
+
+                // Add the "show" class to DIV
+                ad.className = "show";
+
+                // After 3 seconds, remove the show class from DIV
+                setTimeout(function () {
+                    ad.className = ad.className.replace("show", "");
+                }, 3000);
+            } else {
+                // Show the modal
+                modal.style.display = "block";
+            }
+        },
+        error: (err) => {
+            console.error("Error adding to cart:", err);
+            location.reload();  // Reload the page in case of an error
+        }
+    });
+}
 
   // Function for Advertisement
 function slidePopupSidebar() {
@@ -91,7 +160,7 @@ function slidePopupSidebar() {
         popupSidebar.style.right = '-300px';
       }, 3000);
 
-      // Change image every 5 seconds
+      // Change image every 3 seconds
       setInterval(() => {
         currentIndex = (currentIndex + 1) % imageUrls.length;
         popupImage.src = imageUrls[currentIndex];
@@ -101,7 +170,7 @@ function slidePopupSidebar() {
         setTimeout(() => {
           popupSidebar.style.right = '-300px';
         }, 3000);
-      }, 6500);
+      }, 10000);
     }
 
     // Call the slidePopupSidebar function when the page is loaded
@@ -120,7 +189,7 @@ function slidePopupSidebar() {
         const priceString = element.textContent.trim();
         const price = parseFloat(priceString.replace(/[^\d.-]/g, ''));
         if (!isNaN(price)) {
-          element.textContent = formatNumber(price);
+          element.textContent ='₹' + formatNumber(price);
         }
       });
     });
@@ -131,7 +200,7 @@ function slidePopupSidebar() {
         const priceString = element.textContent.trim();
         const price = parseFloat(priceString.replace(/[^\d.-]/g, ''));
         if (!isNaN(price)) {
-          element.textContent = formatNumber(price);
+          element.textContent ='₹' +  formatNumber(price);
         }
       });
     });
@@ -224,6 +293,70 @@ if (products.length === 0) {
 </script>
 
 <style>
+  /* The Modal (background) */
+  .modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+   
+  }
+
+  /* Modal Content/Box */
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    /* 15% from the top and centered */
+    padding: 20px;
+    border-radius: 10px;  
+    box-shadow: 0 2px 15px rgba(18, 155, 150, 0.5);
+    width: 80%;
+    /* Could be more or less, depending on screen size */
+    max-width: 400px;
+    /* Maximum width */
+    text-align: center;
+  }
+
+  /* The Close Button */
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: rgb(7, 63, 68);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+
+  .confirmBtn {
+    background-image: linear-gradient(to left, #f07b0d, rgb(245, 157, 64));
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    margin: 10px;
+  }
+
+
   .card {
     box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
     width: 14em;
@@ -235,7 +368,7 @@ if (products.length === 0) {
   }
 
   .card-title {
-
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     color: rgb(40, 155, 155);
     height: 3rem;
     overflow: hidden;
@@ -278,11 +411,10 @@ if (products.length === 0) {
   #offer-price {
     font-size: 22px;
     color: rgb(4, 149, 149);
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   }
-
-
+ 
   #addtoCart:hover {
-
     background-image: linear-gradient(to right, #199cad, rgb(74, 175, 209));
   }
 
@@ -292,7 +424,12 @@ if (products.length === 0) {
     color: #fff;
 
   }
-
+  #out0fStock{
+     width: 13.4em;
+    background-color: rgb(175, 170, 170);
+    color: #fff;
+    
+  }
 
   section {
     height: 100vh;

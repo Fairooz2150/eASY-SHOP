@@ -3,32 +3,57 @@
         <div class="row">
             <div class="col-md-12">
                 <h2 class="text-center">Edit User Products</h2>
-                <form action="/edit-user-product/{{product._id}}" method="post" enctype="multipart/form-data" novalidate>
+                <form action="/edit-user-product/{{product._id}}" method="post" enctype="multipart/form-data">
                     <label for="">Name</label>
-                    <input type="text" name="Name" class="form-control" value="{{product.Name}}">
+                    <input type="text" name="Name" class="form-control" value="{{product.Name}}" required>
                     <input type="text" name="Updations" value="Updated" hidden>
                     <label for="">Category</label>
                     <input type="text" name="Product_Owner" value="User" hidden>
 
-                    <input type="text" name="Category" class="form-control" value="{{product.Category}}">
+                    <input type="text" name="Category" class="form-control" value="{{product.Category}}"  required>
                     <div class="row">
                         <div class="ml-3">
                             <label for="">Actual Price</label>
-                            <input type="number" name="Actual_Price" class="form-control" value="{{product.Actual_Price}}">
+                            <input type="number" name="Actual_Price" class="form-control" value="{{product.Actual_Price}}"  required>
                         </div>
                         <div class="ml-3">
                             <label for="">Offer Percentage</label>
-                            <input type="number" name="Offer_Percentage" class="form-control" value="{{product.Offer_Percentage}}">
+                            <input type="number" name="Offer_Percentage" class="form-control" value="{{product.Offer_Percentage}}" required>
                         </div>
                         <div class="ml-3">
                             <label for="">Offer Price</label>
-                            <input type="number" name="Offer_Price" class="form-control" value="{{product.Offer_Price}}">
+                            <input type="number" name="Offer_Price" class="form-control" value="{{product.Offer_Price}}" required>
                         </div>
                     </div>
                     <label for="">Description</label>
-                    <textarea class="form-control" type="text" name="Description" rows="3">{{product.Description}}</textarea>
-                    <label for="">Selling Address</label>
-                    <textarea class="form-control" type="text" name="Selling_Address" rows="3">{{product.Selling_Address}}</textarea>
+                    <textarea class="form-control" type="text" name="Description" rows="3" required>{{product.Description}}</textarea>
+                   
+                     <h5 class="text-center mt-2">Product Enquiry Contact Information</h5>
+
+                    <label for="shop-address">Shop Address</label>
+                    
+                    <textarea class="form-control" type="text"  name="Shop_Address" rows="3" id="shop-address" required>{{product.Shop_Address}}</textarea>
+                    
+                    <div class="row">
+                        
+                       <div class="ml-3">
+                            <label for="email"> Email</label>
+                            <input type="email" name="Email" class="form-control" id="email" value="{{product.Email}}" required>
+                        </div>
+                        <div class=" ml-3  ">
+                            <label for="phone">Phone</label> 
+                            <input type="tel" id="phone" name="Phone" pattern="[0-9]{10}" class="form-control" value="{{product.Phone}}" required>
+                            
+                        </div>
+                        <div class="ml-3">
+                            <label for="whatsapp">Whatsapp</label>
+                           <input type="tel" id="whatsapp" name="Whatsapp" pattern="[0-9]{10}"  class="form-control" value="{{product.Whatsapp}}" required>
+                        </div>
+                         <div class="ml-3">
+                            <label for="stock-count">Stock Count</label>
+                            <input type="number" name="Stock_Count" class="form-control" id="stock-count" value="{{product.Stock_Count}}" required>
+                        </div>
+                    </div>    
                     <div class="ml-auto">
                         <button type="submit" class="btn btn-success mt-4">Submit</button>
                     </div>

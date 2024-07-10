@@ -110,8 +110,10 @@ router.post('/add-product', (req, res) => {
     Offer_Percentage: req.body.Offer_Percentage,
     Description: req.body.Description,
     Product_Owner: req.body.Product_Owner,
-    Carted: req.body.Carted
+    Carted: req.body.Carted,
+    Stock_Count:req.body.Stock_COunt
   };
+  
 
   productHelpers.addProduct(product).then((productId) => {
     if (req.files) {

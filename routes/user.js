@@ -160,24 +160,37 @@ router.get('/cart', verifyLogin, async (req, res) => {
 
 /* Add to cart  */
 
-router.get('/add-to-cart/:id', (req, res) => {
+router.get('/add-to-cart/:id', async (req, res) => {
   const productId = req.params.id;
   let userId = req.session.user ? req.session.user._id : null;
-  if (userId) {
-    userHelpers.addToCart(productId, req.session.user._id).then(() => {
-      res.json({ status: true });
-    });
-  } else {
-    // Store cart items in session storage if user is not logged in
-    if (!req.session.cart) {
-      req.session.cart = [];
+  let product = await productHelpers.getProductDetails(productId);
+
+  try {
+
+    if (product.Stock_Count > 0) {
+      await productHelpers.changeStockCount(productId);
+
+      if (userId) {
+        await userHelpers.addToCart(productId, req.session.user._id);
+        res.json({ status: true });
+      } else {
+        // Store cart items in session storage if user is not logged in
+        if (!req.session.cart) {
+          req.session.cart = [];
+        }
+        req.session.cart.push(productId);
+        // Calculate cart count from session storage
+        let cartCount = req.session.cart.length;
+        res.json({ status: true, cartCount: cartCount });
+      }
+    } else {
+      res.json({ status: false, message: 'Product out of stock' });
     }
-    req.session.cart.push(productId);
-     // Calculate cart count from session storage
-     let cartCount = req.session.cart.length;
-     res.json({ status: true, cartCount: cartCount });
+  } catch (error) {
+    console.error("Error during add-to-cart:", error);
+    res.json({ status: false, message: 'An error occurred' });
   }
-}); 
+});
 
 
 

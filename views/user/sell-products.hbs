@@ -4,54 +4,77 @@
             <div class="col-md-12 ">
                 <h2 class="text-center">Sell Your Products</h2>
                 <form action="/sell-product" method="post" enctype="multipart/form-data" id="productForm">
-                    <label for="">Name</label>
-                    <input type="text" name="Name" class="form-control">
+                    <label for="Name">Name</label>
+                    <input type="text" name="Name" class="form-control" id="Name" required>
                     
                         <!-- Hidden User Details -->
-                     <input type="text" name="Product_Owner" value="User" hidden>
-                      <input type="text" name="User_Id" value="{{user._id}}" hidden>
-                       <input type="text" name="User_First_Name" value="{{user.First_Name}}" hidden>
+                        <input type="text" name="Product_Owner" value="User" hidden>
+                        <input type="text" name="User_Id" value="{{user._id}}" hidden>
+                        <input type="text" name="User_First_Name" value="{{user.First_Name}}" hidden>
                         <input type="text" name="User_Last_Name" value="{{user.Last_Name}}" hidden>
-                         <input type="text" name="User_Phone" value="{{user.Phone}}" hidden>
-                           <input type="text" name="User_Email" value="{{user.Email}}" hidden>
-                       <!-- Hidden User Product Statuses -->
+                    
+                        <!-- Hidden User Product Statuses -->
                         <input type="text" name="Status" value="Pending" hidden>
                         <input type="text" name="Updations" value="Never" hidden>
                         <input type="number" name="Carted" class="form-control" value="0" hidden>
 
-                    <label for="">Category</label>
-                    <input type="text" name="Category" class="form-control">
+                    <label for="Category">Category</label>
+                    <input type="text" name="Category" class="form-control" id="Category" required>
 
                     <div class="row">
                        <div class="ml-3">
-                            <label for=""> Actual Price</label>
-                            <input type="number" name="Actual_Price" class="form-control ">
+                            <label for="actual-price"> Actual Price</label>
+                            <input type="number" name="Actual_Price" class="form-control" id="actual-price" required>
                         </div>
                         <div class=" ml-3  ">
-                            <label for="">Offer Percentage</label> 
-                            <input type="number" name="Offer_Percentage" class="form-control ">
+                            <label for="offer-perecentage">Offer Percentage</label> 
+                            <input type="number" name="Offer_Percentage" class="form-control" id="offer-percentage" required>
                             
                             
                         </div>
                         <div class="ml-3">
-                            <label for="">Offer Price</label>
-                            <input type="number" name="Offer_Price" class="form-control">
+                            <label for="offer-price">Offer Price</label>
+                            <input type="number" name="Offer_Price" class="form-control" id="offer-price" required>
                         </div>
+                         
                     </div>
                             
-                    <label for="">Description</label>
+                    <label for="description">Description</label>
                     
-                    <textarea class="form-control" type="text"  name="Description" rows="3"></textarea>
-                    
-                    <label for="">Selling Address</label>
-                    
-                    <textarea class="form-control" type="text"  name="Selling_Address" rows="3"></textarea>
+                    <textarea class="form-control" type="text"  name="Description" rows="3" id="description"required></textarea>
 
-                    <label for="">Images: </label>
+                     <h5 class="text-center mt-2">Product Enquiry Contact Information</h5>
+
+                    <label for="shop-address">Shop Address</label>
+                    
+                    <textarea class="form-control" type="text"  name="Shop_Address" rows="3" id="shop-address" required></textarea>
+                    
+                    <div class="row">
+                        
+                       <div class="ml-3">
+                            <label for="email"> Email</label>
+                            <input type="email" name="Email" class="form-control" id="email" required>
+                        </div>
+                        <div class=" ml-3  ">
+                            <label for="phone">Phone</label> 
+                            <input type="tel" id="phone" name="Phone" pattern="[0-9]{10}" class="form-control" required>
+                            
+                        </div>
+                        <div class="ml-3">
+                            <label for="whatsapp">Whatsapp</label>
+                           <input type="tel" id="whatsapp" name="Whatsapp" pattern="[0-9]{10}"  class="form-control" required>
+                        </div>
+                         <div class="ml-3">
+                            <label for="stock-count">Stock Count</label>
+                            <input type="number" name="Stock_Count" class="form-control" id="stock-count" required>
+                        </div>
+                    </div>                            
+
+                    <label for="imageContainer" style="font-weight: bold;">Images: </label>
                     
                     <div id="imageContainer" class="col-lg-6">
                         <!-- Input for the first image -->
-                        <input type="file" name="Image" class="form-control mb-2" onchange="viewImage(event)">
+                        <input type="file" name="Image" class="form-control mb-2" onchange="viewImage(event)" required>
                         <!-- Placeholder for the first image -->
                         <img src="" alt="" style="width:100px; height:auto" id="imgView" class="pt-3">
                         

@@ -5,37 +5,40 @@
                 <h2 class="text-center">Add Products</h2>
                 <form action="/admin/add-product" method="post" enctype="multipart/form-data" id="productForm">
                     <label for="">Name</label>
-                    <input type="text" name="Name" class="form-control">
+                    <input type="text" name="Name" class="form-control" required>
                     <input type="text" name="Product_Owner" value="Admin" hidden>
                     <label for="">Category</label>
-                    <input type="text" name="Category" class="form-control">
+                    <input type="text" name="Category" class="form-control" required>
                     <div class="row">
                         <div class="ml-3">
                             <label for=""> Actual Price</label>
-                            <input type="number" name="Actual_Price" class="form-control ">
+                            <input type="number" name="Actual_Price" class="form-control" required>
                         </div>
                         <div class="ml-3">
                             <label for="">Offer Percentage</label>
-                            <input type="number" name="Offer_Percentage" class="form-control ">
+                            <input type="number" name="Offer_Percentage" class="form-control" required>
                             
                         </div>
                         <div class="ml-3">
                             <label for="">Offer Price</label>
-                            <input type="number" name="Offer_Price" class="form-control">
+                            <input type="number" name="Offer_Price" class="form-control" required>
                         </div>
-
+                          <div class="ml-3">
+                            <label for="stock-count">Stock Count</label>
+                            <input type="number" name="Stock_Count" class="form-control" id="stock-count" required>
+                        </div>
                         
                         
                             <input type="number" name="Carted" class="form-control" value="0" hidden>
                         
                     </div>
                     <label for="">Description</label>
-                    <textarea class="form-control" type="text" name="Description" rows="3"></textarea>
+                    <textarea class="form-control" type="text" name="Description" rows="3" required></textarea>
                     <label for="">Images: </label>
                     
                     <div id="imageContainer" class="col-lg-6">
                         <!-- Input for the first image -->
-                        <input type="file" name="Image" class="form-control mb-2" onchange="viewImage(event)">
+                        <input type="file" name="Image" class="form-control mb-2" onchange="viewImage(event)" required>
                         <!-- Placeholder for the first image -->
                         <img src="" alt="" style="width:100px; height:auto" id="imgView" class="pt-3">
                         

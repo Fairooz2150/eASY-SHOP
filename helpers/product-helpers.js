@@ -143,6 +143,27 @@ module.exports={
                 }})
         })
     },
+    changeStockCount: (proId) => {
+        return new Promise((resolve, reject) => {
+          db.get().collection(collection.PRODUCT_COLLECTION)
+            .findOneAndUpdate(
+              { _id: objectId(proId) },
+              [{ $set: { Stock_Count: { $subtract: [{ $toInt: "$Stock_Count" }, 1] } } }],
+              { returnOriginal: false }
+            )
+            .then((result) => {
+              if (result.value) {
+                resolve(result.value);
+              } else {
+                reject('Product not found or stock not updated');
+              }
+            })
+            .catch((error) => {
+              reject(error);
+            });
+        });
+      },
+    
     updateProduct:(proId,proDetails)=>{
         return new Promise((resolve,reject)=>{
             db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:objectId(proId)},{
@@ -154,7 +175,7 @@ module.exports={
                     Category:proDetails.Category,
                     Offer_Percentage:proDetails.Offer_Percentage,
                     Product_Owner:proDetails.Product_Owner,
-                  
+                    Stock_Count:proDetails.Stock_Count
                 }
             }).then((response)=>{
                 resolve()
@@ -177,7 +198,11 @@ module.exports={
                             Offer_Price: product.Offer_Price,
                             Offer_Percentage: product.Offer_Percentage,
                             Description: product.Description,                              
-                            Selling_Address:product.Selling_Address,                     
+                            Shop_Address:product.Shop_Address,  
+                            Stock_Count:product.Stock_Count,   
+                            Phone:product.Phone,     
+                            Email:product.Email,
+                            Whatsapp:product.Whatsapp,                 
                             Carted:product.Carted,
                             Updations:product.Updations,
                             UpdatedDate: Date,
@@ -190,36 +215,46 @@ module.exports={
             db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:objectId(proId)},{
                 $set:{
                     
-                        Name: product.Name,
-                        Category: product.Category,
-                        Actual_Price: product.Actual_Price,
-                        Product_Owner:product.Product_Owner,
-                        Offer_Price: product.Offer_Price,
-                        Offer_Percentage: product.Offer_Percentage,
-                        Description: product.Description,                              
-                        Selling_Address:product.Selling_Address,                     
-                        Carted:product.Carted,
-                        Updations:product.Updations,
-                        UpdatedDate: Date,
-                        UpdatedTime: Time
+                       
+                    Name: product.Name,
+                    Category: product.Category,
+                    Actual_Price: product.Actual_Price,
+                    Product_Owner:product.Product_Owner,
+                    Offer_Price: product.Offer_Price,
+                    Offer_Percentage: product.Offer_Percentage,
+                    Description: product.Description,                              
+                    Shop_Address:product.Shop_Address,  
+                    Stock_Count:product.Stock_Count,   
+                    Phone:product.Phone,     
+                    Email:product.Email,
+                    Whatsapp:product.Whatsapp,                 
+                    Carted:product.Carted,
+                    Updations:product.Updations,
+                    UpdatedDate: Date,
+                    UpdatedTime: Time  
                 }
             })
 
             db.get().collection(collection.USER_PRODUCTS_COLLECTION).updateOne({_id:objectId(proId)},{
                 $set:{
                     
-                        Name: product.Name,
-                        Category: product.Category,
-                        Actual_Price: product.Actual_Price,
-                        Product_Owner:product.Product_Owner,
-                        Offer_Price: product.Offer_Price,
-                        Offer_Percentage: product.Offer_Percentage,
-                        Description: product.Description,                              
-                        Selling_Address:product.Selling_Address,                     
-                        Carted:product.Carted,
-                        Updations:product.Updations,
-                        UpdatedDate: Date,
-                        UpdatedTime: Time               
+                        
+                    Name: product.Name,
+                    Category: product.Category,
+                    Actual_Price: product.Actual_Price,
+                    Product_Owner:product.Product_Owner,
+                    Offer_Price: product.Offer_Price,
+                    Offer_Percentage: product.Offer_Percentage,
+                    Description: product.Description,                              
+                    Shop_Address:product.Shop_Address,  
+                    Stock_Count:product.Stock_Count,   
+                    Phone:product.Phone,     
+                    Email:product.Email,
+                    Whatsapp:product.Whatsapp,                 
+                    Carted:product.Carted,
+                    Updations:product.Updations,
+                    UpdatedDate: Date,
+                    UpdatedTime: Time               
                 }
             })
         }
@@ -286,9 +321,11 @@ module.exports={
                 Seller_Id: objectId(product.User_Id),
                 Seller_First_Name: product.User_First_Name,
                 Seller_Last_Name: product.User_Last_Name,
-                Seller_Phone:product.User_Phone,     
-                Seller_Email:product.User_Email,       
-                Selling_Address:product.Selling_Address,
+                Phone:product.Phone,     
+                Email:product.Email,
+                Whatsapp:product.Whatsapp,       
+                Shop_Address:product.Shop_Address,
+                Stock_Count:product.Stock_Count,
                 Status: product.Status,
                 Carted:product.Carted,
                 Updations:product.Updations,

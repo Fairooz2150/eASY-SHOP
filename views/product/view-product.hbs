@@ -37,7 +37,8 @@
             </div>
             
             <div class="text-center pt-3 pb-2">
-              <button type="button" onclick="addToCart('{{product._id}}')" class="ADC btn  btn-lg mt-1">
+                 {{#if (gt product.Stock_Count 0)}}
+              <button type="button" onclick="addToCart('{{product._id}}')" class="ADC btn btn-lg mt-1">
                 <div class="ADC-text">
                   Add to Cart <i class="bi bi-cart3"></i>
                 </div>
@@ -49,9 +50,14 @@
                     Buy Now <i class="bi bi-bag-heart"></i>
                   </div>
                 </button></a>
+                {{else}}
+                <h3 class="outofStock" title="Out of Stock">Out of Stock</h3>
+                {{/if}}
             </div>
             <!--snackbar -->
-            <div id="Ad">Product added <img src="/images/grocery.gif" class="addcart" alt=""></div>
+            <a href="/cart">
+            <div id="Ad">Product added <img src="/images/grocery.gif" class="addcart" alt="Product added"></div>
+            </a>
            
           </div>
         </div>
@@ -60,7 +66,7 @@
         <div class="col-md-7  mt-3 overflow-hidden pl-5" id="textContent">
 
           <div class="mb-4">
-            <h3 title="Title">{{product.Name}}</h3>
+            <h3 title="Title" class="title">{{product.Name}}</h3>
             <p class="text-muted" title="Category">{{product.Category}}</p>
             <div class="row ml-1">
 
@@ -103,6 +109,12 @@
                 <p class="offerbadge "> {{product.Offer_Percentage}}% Off</p>
               </div>
             </div>
+
+            {{#if (gt product.Stock_Count 0)}} {{#if (lt product.Stock_Count 10)}}
+              <div class="m-2">
+                <p class="stock">Only {{product.Stock_Count}} left</p>
+              </div>
+            {{/if}} {{/if}}
 
           </div>
           <hr>
@@ -251,13 +263,13 @@
             <div class="seller-info ml-2">
               <p><span class="seller-name"> {{product.Seller_First_Name}} {{product.Seller_Last_Name}}
                   <i class="bi bi-patch-check-fill"></i> </span> <br>
-                <span class="eASY-description "> {{newlineToBr product.Selling_Address}} <br>
+                <span class="eASY-description "> {{newlineToBr product.Shop_Address}} <br>
                   <span class="contact mt-1"> For any inquiries, contact: <br>
-                    <a href="tel:+91{{product.Seller_Phone}}"><i class="bi bi-headset"></i> {{product.Seller_Phone}}</a>
-                    &ensp; &emsp; <a href="https://wa.me/{{product.Seller_Phone}}"><i class="bi bi-whatsapp"></i> chat
+                    <a href="tel:+91{{product.Seller_Phone}}"><i class="bi bi-headset"></i> {{product.Phone}}</a>
+                    &ensp; &emsp; <a href="https://wa.me/{{product.Whatsapp}}"><i class="bi bi-whatsapp"></i> chat
                       with seller!</a> &ensp; &emsp;
-                    <a href="mailto:{{product.Seller_Email}}?subject=Inquiry%20about%20'{{product.Name}}'"><i
-                        class="bi bi-envelope"></i> {{product.Seller_Email}}</a></span></span>
+                    <a href="mailto:{{product.Email}}?subject=Inquiry%20about%20'{{product.Name}}'"><i
+                        class="bi bi-envelope"></i> {{product.Email}}</a></span></span>
               </p>
             </div>
           </div>
@@ -283,6 +295,14 @@
       </div>
       <hr>
     </div>
+    
+  <div id="confirmationModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>Product was out of stock</p>
+        <button id="confirmRemove" class="btn confirmBtn">ok</button>
+    </div>
+</div>
   </div>
 </section>
 
@@ -376,9 +396,132 @@
   });
 
 
+//Get the modal
+var modal = document.getElementById("confirmationModal");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// Get the button that closes the modal
+var confirmRemove = document.getElementById("confirmRemove");
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks on the button, close the modal
+confirmRemove.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+function addToCart(proId) {
+    $.ajax({
+        url: '/add-to-cart/' + proId,
+        method: 'get',
+        success: (response) => {
+            if (response.status) {
+                let count = $('#cart-count').html();
+                count = parseInt(count) + 1;
+                $("#cart-count").html(count);
+
+                var ad = document.getElementById("Ad");
+
+                // Add the "show" class to DIV
+                ad.className = "show";
+
+                // After 3 seconds, remove the show class from DIV
+                setTimeout(function () {
+                    ad.className = ad.className.replace("show", "");
+                }, 3000);
+            } else {
+                // Show the modal
+                modal.style.display = "block";
+            }
+        },
+        error: (err) => {
+            console.error("Error adding to cart:", err);
+            location.reload();  // Reload the page in case of an error
+        }
+    });
+}
+
 </script>
 
 <style>
+/* The Modal (background) */
+  .modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+   
+  }
+
+  /* Modal Content/Box */
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    /* 15% from the top and centered */
+    padding: 20px;
+    border-radius: 10px;  
+    box-shadow: 0 2px 15px rgba(18, 155, 150, 0.5);
+    width: 80%;
+    /* Could be more or less, depending on screen size */
+    max-width: 400px;
+    /* Maximum width */
+    text-align: center;
+  }
+
+  /* The Close Button */
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: rgb(7, 63, 68);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+
+  .confirmBtn {
+    background-image: linear-gradient(to left, #f07b0d, rgb(245, 157, 64));
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    margin: 10px;
+  }
+
+
+
+
 
   section {
     height: 100vh;
@@ -458,7 +601,9 @@ background-image: linear-gradient(to left, #1da3ba, rgb(114, 209, 228));
     display: inline-block;
   }
 
- 
+ .outofStock{
+  color: #c2c0be;
+ }
   
   /* The Ad - position it at the bottom and in the middle of the screen */
   #Ad {
@@ -605,6 +750,10 @@ background-image: linear-gradient(to left, #1da3ba, rgb(114, 209, 228));
     overflow-y: auto;
   }
 
+  .title{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  }
+
   .assurance {
     height: 30px;
     width: 90px
@@ -632,7 +781,7 @@ background-image: linear-gradient(to left, #1da3ba, rgb(114, 209, 228));
     font-size: 40px;
     color: #1294ab;
     text-align: center;
-
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   }
 
   .offer-label {
@@ -645,6 +794,11 @@ background-image: linear-gradient(to left, #1da3ba, rgb(114, 209, 228));
   .tax {
     font-size: small;
     font-weight: 500;
+  }
+
+  .stock{
+    color: #e4941a;
+    font-weight: bold;
   }
 
   .scrollmenu-images {
