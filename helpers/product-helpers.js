@@ -50,16 +50,29 @@ module.exports={
             resolve(products)
         })
     },
-    getAllProductswithQuantity: (products, productQuantity) => {
+    getAllProductswithQuantity: (products,stockCount, productQuantity) => {
         return new Promise((resolve, reject) => {
             products.forEach(product => {
                 const match = productQuantity.find(pq => pq.product_id.equals(product._id));
                 if (match) {
                     product.Carted = match.totalquantity;
+                  
                 } else {
-                    product.Carted = 0;
+                    product.Carted = 0; 
+                   
                 }
-            });
+            },
+            product => {
+                const match = stockCount.find(pq => pq.product_id.equals(product._id));
+                if (match) {
+                    
+                    stockCount.Stock_Count= match.stockCount.Stock_Count
+                } else {
+                    
+                    stockCount.Stock_Count=0
+                }
+            }
+        );
             resolve(products);
         });
     },
@@ -152,6 +165,14 @@ module.exports={
               { returnOriginal: false }
             )
             .then((result) => {
+                db.get().collection(collection.USER_PRODUCTS_COLLECTION)
+                .findOneAndUpdate(
+                  { _id: objectId(proId) },
+                  [{ $set: { Stock_Count: { $subtract: [{ $toInt: "$Stock_Count" }, 1] } } }],
+                  
+                )
+
+
               if (result.value) {
                 resolve(result.value);
               } else {

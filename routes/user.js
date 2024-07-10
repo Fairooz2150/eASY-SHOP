@@ -196,10 +196,11 @@ router.get('/add-to-cart/:id', async (req, res) => {
 
 /* Delete cart products */
 
-router.delete('/delete-cart-product/:id', verifyLogin, (req, res) => {
-  let proId = req.params.id;
-  let userId = req.session.user._id
-  userHelpers.deleteCartProduct(proId, userId).then((response) => {
+router.delete('/delete-cart-product/:id/:quantity', verifyLogin, (req, res) => {
+  const proId = req.params.id;
+  const quantity = parseInt(req.params.quantity);
+  const userId = req.session.user._id
+  userHelpers.deleteCartProduct(proId, quantity, userId).then((response) => {
     res.json({ success: true });
   }).catch((err) => {
     console.error('Error deleting product:', err);
@@ -426,9 +427,9 @@ router.get('/your-products', verifyLogin, async (req, res) => {
   let user = req.session.user
   await userHelpers.getUserRequestProds(user._id).then((productsWoQnty) => {
 
-    productHelpers.getCartedProductQuantity().then((productQuantity) => {
-
-      productHelpers.getAllProductswithQuantity(productsWoQnty, productQuantity).then((products) => {
+     productHelpers.getCartedProductQuantity().then((productQuantity) => {
+      let stockCount= productHelpers.getAllProducts()
+      productHelpers.getAllProductswithQuantity(productsWoQnty,stockCount, productQuantity).then((products) => {
 
         console.log("userprods", products);
         res.render('user/your-products', { user, products })

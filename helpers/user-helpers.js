@@ -63,16 +63,16 @@ module.exports = {
                 }
                 else {
                     db.get().collection(collection.CART_COLLECTION).
-                    updateOne({ user: objectId(userId) },
-                        {
+                        updateOne({ user: objectId(userId) },
+                            {
 
-                            $push: { products: proObj }
+                                $push: { products: proObj }
 
-                        }
-                    ).then((response) => {
+                            }
+                        ).then((response) => {
 
-                        resolve()
-                    })
+                            resolve()
+                        })
                 }
 
             } else {
@@ -121,19 +121,19 @@ module.exports = {
             resolve(cartItems);
         })
     },
-    getUserRequestProds: (userId)=>{
-        return new Promise(async (resolve, reject)=>{
-           await db.get().collection(collection.USER_PRODUCTS_COLLECTION).find({ Seller_Id: objectId(userId) }).toArray((err, products) => {
-            if (products.length>0) {
-                resolve(products);
-               
-            } else {
-                reject("You have no products");
-                
-            }
-        });
-           
-        } )
+    getUserRequestProds: (userId) => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.USER_PRODUCTS_COLLECTION).find({ Seller_Id: objectId(userId) }).toArray((err, products) => {
+                if (products.length > 0) {
+                    resolve(products);
+
+                } else {
+                    reject("You have no products");
+
+                }
+            });
+
+        })
     },
     getCartCount: (userId) => {
         return new Promise(async (resolve, reject) => {
@@ -180,19 +180,24 @@ module.exports = {
             }
         })
     },
-    deleteCartProduct:(prodId,userId)=>{
-        return new Promise(async (resolve,reject)=>{
-            console.log(prodId);
-            console.log(objectId(prodId));
-            await db.get().collection(collection.CART_COLLECTION).updateOne({user:objectId(userId)},{$pull: { products: { item: objectId(prodId) } }}).then((response)=>{
-               
-                resolve(response)
+    deleteCartProduct: (prodId, quantity, userId) => {
+
+        return new Promise(async (resolve, reject) => {
+
+            await db.get().collection(collection.CART_COLLECTION).updateOne({ user: objectId(userId) }, { $pull: { products: { item: objectId(prodId) } } }).then((response) => {
+
+                db.get().collection(collection.PRODUCT_COLLECTION).findOneAndUpdate({ _id: objectId(prodId) },
+                    [{ $set: { Stock_Count: { $add: [{ $toInt: "$Stock_Count" }, parseInt(quantity)] } } }])
+
+
+                    resolve(response);
+
             }).catch((err) => {
                 reject(err);
-              });
+            });
         })
     },
-   
+
     getTotalAmount: (userId) => {
         return new Promise(async (resolve, reject) => {
             try {
@@ -241,7 +246,7 @@ module.exports = {
                         }
                     }
                 ]).toArray();
-    
+
                 if (total.length > 0 && total[0].total !== undefined) {
                     resolve(total[0].total);
                 } else {
@@ -275,7 +280,7 @@ module.exports = {
             };
 
             db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response) => {
-                
+
                 resolve(response.ops[0]._id);
             });
         });
@@ -303,7 +308,7 @@ module.exports = {
             };
 
             db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response) => {
-                console.log("go",response.ops[0]._id);
+                console.log("go", response.ops[0]._id);
                 resolve(response.ops[0]._id);
             });
         });
@@ -311,8 +316,8 @@ module.exports = {
     getCartProductList: (userId) => {
         return new Promise(async (resolve, reject) => {
             let cart = await db.get().collection(collection.CART_COLLECTION).findOne({ user: objectId(userId) })
-            console.log("productmm",cart.products);
-            
+            console.log("productmm", cart.products);
+
             resolve(cart.products)
         })
     },
@@ -427,8 +432,8 @@ module.exports = {
             });
         });
     },
-    
-    
+
+
     getOrderProducts: (orderId) => {
         return new Promise(async (resolve, reject) => {
             let orderItems = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
@@ -481,7 +486,7 @@ module.exports = {
 
         })
     },
-    verifypayment: (details,userId) => {
+    verifypayment: (details, userId) => {
         return new Promise((resolve, reject) => {
             const crypto = require('crypto');
             let hmac = crypto.createHmac('sha256', 'NxHqrxegFsANJL3mBznh2YvY')
@@ -530,32 +535,32 @@ module.exports = {
     },
 
     // Update account details
-   
 
-// Update account details
-updateAccount: (userId, updates) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            // If the updates object contains a password field and it's not null
-            if (updates.Password) {
-                // Hash the password using bcrypt
-                updates.Password = await bcrypt.hash(updates.Password, 10);
-            } else {
-                // If password is null, remove it from the updates object
-                delete updates.Password;
+
+    // Update account details
+    updateAccount: (userId, updates) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                // If the updates object contains a password field and it's not null
+                if (updates.Password) {
+                    // Hash the password using bcrypt
+                    updates.Password = await bcrypt.hash(updates.Password, 10);
+                } else {
+                    // If password is null, remove it from the updates object
+                    delete updates.Password;
+                }
+
+                // Update the user's account details in the database
+                await db.get().collection(collection.USER_COLLECTION).updateOne(
+                    { _id: objectId(userId) },
+                    { $set: updates }
+                );
+                resolve();
+            } catch (error) {
+                reject(error);
             }
-
-            // Update the user's account details in the database
-            await db.get().collection(collection.USER_COLLECTION).updateOne(
-                { _id: objectId(userId) },
-                { $set: updates }
-            );
-            resolve();
-        } catch (error) {
-            reject(error);
-        }
-    });
-},
+        });
+    },
 
     // Delete account
     deleteAccount: async (userId) => {

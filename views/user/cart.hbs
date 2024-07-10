@@ -12,7 +12,7 @@
       </thead>
       <tbody>
         {{#each products}}
-        <tr>
+        <tr id="product-container-{{this.product._id}}">
 
           <th scope="row">{{incrementedIndex @index}}</th>
           <td>
@@ -107,29 +107,27 @@
     // Format and display the total value
     document.getElementById('total').textContent = formatNumber(totals);
    
-  
-
   function deleteCartProduct(productId) {
     showConfirmationModal(() => {
-      $.ajax({
-        url: '/delete-cart-product/' + productId,
-        method: 'DELETE',
-        success: function (response) {
-          if (response.success) {
-            console.log('Product deleted successfully');
-            location.reload();
-          } else {
-            alert('Failed to delete product');
-          }
-        },
-        error: function (error) {
-          console.error('Error:', error);
-          alert('An error occurred while deleting the product');
-        }
-      });
-    })
-  }
-
+        let quantity = parseInt(document.getElementById(productId).innerHTML);
+        $.ajax({
+            url: '/delete-cart-product/' + productId + '/' + quantity,
+            method: 'DELETE',
+            success: function (response) {
+                if (response.success) {
+                    console.log('Product deleted successfully');
+                    document.getElementById('product-container-' + productId).remove(); // Remove the product's container element from the DOM
+                } else {
+                    alert('Failed to delete product');
+                }
+            },
+            error: function (error) {
+                console.error('Error:', error);
+                alert('An error occurred while deleting the product');
+            }
+        });
+    });
+}
 
   function changeQuantity(cartId, proId, userId, count) {
     let quantity = parseInt(document.getElementById(proId).innerHTML);
