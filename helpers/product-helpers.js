@@ -18,64 +18,90 @@ module.exports={
             });
         });
     },
-    getCartedProductQuantity:()=>{
-        return new Promise(async(resolve,reject)=>{
-            let productQuantity=await db.get().collection(collection.CART_COLLECTION).aggregate([
-                {
-                  $unwind: "$products" // Deconstructs the products array
-                },
-                {
-                  $group: {
-                    _id: "$products.item", // Group by item ID
-                    totalQuantity: { $sum: "$products.quantity" } // Calculate the total quantity
-                  }
-                },
-                {
-                  $project: {
-                    _id: 0, // Exclude _id field
-                    product_id: "$_id", // Rename _id as product_id
-                    totalquantity: "$totalQuantity" // Rename totalQuantity as quantity
-                  }
-                }
-              ]).toArray();
-             
-              resolve(productQuantity)
-              
-        })
-    },
-    getAllProducts:()=>{
-        return new Promise(async(resolve,reject)=>{
-            
-            let products=await db.get().collection(collection.PRODUCT_COLLECTION).find().toArray()
-            resolve(products)
-        })
-    },
-    getAllProductswithQuantity: (products,stockCount, productQuantity) => {
-        return new Promise((resolve, reject) => {
-            products.forEach(product => {
-                const match = productQuantity.find(pq => pq.product_id.equals(product._id));
-                if (match) {
-                    product.Carted = match.totalquantity;
-                  
-                } else {
-                    product.Carted = 0; 
-                   
-                }
-            },
-            product => {
-                const match = stockCount.find(pq => pq.product_id.equals(product._id));
-                if (match) {
-                    
-                    stockCount.Stock_Count= match.stockCount.Stock_Count
-                } else {
-                    
-                    stockCount.Stock_Count=0
-                }
+
+getAllProducts: () => {
+    return new Promise(async (resolve, reject) => {
+      let products = await db.get().collection(collection.PRODUCT_COLLECTION).find().toArray();
+      resolve(products);
+    });
+  },
+  getCartedProductQuantity: () => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let productQuantity = await db.get().collection(collection.CART_COLLECTION).aggregate([
+          {
+            $unwind: "$products"
+          },
+          {
+            $group: {
+              _id: "$products.item",
+              totalQuantity: { $sum: "$products.quantity" }
             }
-        );
-            resolve(products);
-        });
-    },
+          },
+          {
+            $project: {
+              _id: 0,
+              product_id: "$_id",
+              totalquantity: "$totalQuantity"
+            }
+          }
+        ]).toArray();
+  
+        // Check if productQuantity is not an array, convert it to an array
+        if (!Array.isArray(productQuantity)) {
+          productQuantity = [productQuantity]; // Wrap in array
+        }
+  
+        resolve(productQuantity);
+      } catch (error) {
+        console.error('Error in getCartedProductQuantity:', error);
+        reject(error);
+      }
+    });
+  },
+  getAllProductswithQuantity: (products, stockCount, productQuantity) => {
+    return new Promise((resolve, reject) => {
+      // Ensure productQuantity and stockCount are arrays
+      if (!Array.isArray(productQuantity)) {
+        productQuantity = [];
+      }
+      if (!Array.isArray(stockCount)) {
+        stockCount = [];
+      }
+  
+      // First loop to add Carted quantity from productQuantity
+      products.forEach(product => {
+        if (product && product._id) {
+          const matchQuantity = productQuantity.find(pq => pq.product_id && pq.product_id.equals(product._id));
+          if (matchQuantity) {
+            product.Carted = matchQuantity.totalquantity;
+          } else {
+            product.Carted = 0;
+          }
+        } else {
+          product.Carted = 0; // Set default value if product or product._id is undefined
+        }
+      });
+  
+      // Second loop to add Stock_Count from stockCount
+      products.forEach(product => {
+        if (product && product._id) {
+          const matchStock = stockCount.find(sc => sc._id && sc._id.equals(product._id)); // Adjust for _id comparison
+          if (matchStock) {
+            product.Stock_Count = matchStock.Stock_Count;
+          } else {
+            product.Stock_Count = 0;
+          }
+        } else {
+          product.Stock_Count = 0; // Set default value if product or product._id is undefined
+        }
+      });
+  
+      resolve(products);
+    });
+  }
+  ,
+    
 
     getAllUserProducts: () => {
         return new Promise(async (resolve, reject) => {

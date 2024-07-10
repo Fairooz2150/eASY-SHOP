@@ -424,24 +424,19 @@ router.post('/delete-account', verifyLogin, async (req, res) => {
 /*User selling products*/
 
 router.get('/your-products', verifyLogin, async (req, res) => {
-  let user = req.session.user
-  await userHelpers.getUserRequestProds(user._id).then((productsWoQnty) => {
-
-     productHelpers.getCartedProductQuantity().then((productQuantity) => {
-      let stockCount= productHelpers.getAllProducts()
-      productHelpers.getAllProductswithQuantity(productsWoQnty,stockCount, productQuantity).then((products) => {
-
-        console.log("userprods", products);
-        res.render('user/your-products', { user, products })
-
-      })
-    })
-
-  }).catch((error) => {
-    res.render('user/no-products', { error, user })
-  });
-
-})
+  let user = req.session.user;
+  try {
+    let productsWoQnty = await userHelpers.getUserRequestProds(user._id);
+    let productQuantity = await productHelpers.getCartedProductQuantity();
+    let stockCount = await productHelpers.getAllProducts();
+    let products = await productHelpers.getAllProductswithQuantity(productsWoQnty, stockCount, productQuantity);
+    console.log("userprods", products);
+    res.render('user/your-products', { user, products });
+  } catch (error) {
+    res.render('user/no-products', { error, user });
+    console.log('kkk',error);
+  }
+});
 
 
 /*Delete User approved selling product */

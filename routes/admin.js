@@ -14,20 +14,20 @@ const verifyLogin = (req, res, next) => {
 }
 
 /* GET users listing. */
-router.get('/', verifyLogin, function (req, res, next) {
+router.get('/', verifyLogin, async (req, res, next) => {
+  try {
+    const productsWoQnty = await productHelpers.getAllProducts();
+    const productQuantity = await productHelpers.getCartedProductQuantity();
+    let stockCount = await productHelpers.getAllProducts();
 
-  productHelpers.getAllProducts().then((productsWoQnty) => {
+    const products = await productHelpers.getAllProductswithQuantity(productsWoQnty,stockCount, productQuantity);
 
-    productHelpers.getCartedProductQuantity().then((productQuantity) => {
-
-      productHelpers.getAllProductswithQuantity(productsWoQnty, productQuantity).then((products) => {
-        console.log(products);
-
-        res.render('admin/view-products', { admin: true, products })
-      })
-    })
-
-  })
+    console.log(products);
+    res.render('admin/view-products', { admin: true, products });
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    res.render('admin/view-products', { admin: true, error: 'Failed to fetch products' });
+  }
 });
 
 router.get('/login', (req, res) => {
