@@ -34,7 +34,7 @@ router.get('/', async function (req, res, next) {
     }
   }
   productHelpers.getAllProducts().then((products) => {
-    res.render('user/view-products', { products, user, cartCount, search:true }) //view all products at home page
+    res.render('product/view-products', { products, user, cartCount, search:true }) //view all products at home page
   })
 });
 
@@ -154,7 +154,6 @@ router.get('/cart', verifyLogin, async (req, res) => {
   }else{
     res.redirect('/orders')
   }
-  
 })
 
 
