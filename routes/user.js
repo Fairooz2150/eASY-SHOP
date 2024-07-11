@@ -148,11 +148,10 @@ router.get('/cart', verifyLogin, async (req, res) => {
   
   let totalValue = 0;
   if (products.length > 0) {
-    totalValue = await userHelpers.getTotalAmount(req.session.user._id)
-    
+    totalValue = await userHelpers.getTotalAmount(req.session.user._id)   
   res.render('user/cart', { products, user, totalValue, cartCount})
   }else{
-    res.redirect('/orders')
+    res.render('user/empty-cart',{user})
   }
 })
 

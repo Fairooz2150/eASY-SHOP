@@ -1,0 +1,117 @@
+ <a href="/">
+  <section class="bg-section">
+
+    <div class="container-fluid" id="bg" >
+
+        <div class="pt-5 text-center">
+            <h2>Your <span class="eASY"> eASY </span> Cart is empty</h2>
+        </div>
+
+            <!-- Advertisement section -->
+
+        <div id="popup-sidebar" class="popup-sidebar" title="eASY Cart's Ad">
+            <img id="popup-image" src="/images/cart-ad-1.gif" alt="eASY SHOP">
+        </div>
+
+    </div>
+
+</section> 
+</a>
+
+<script>
+
+    // Function for Advertisement
+    function slidePopupSidebar() {
+        const popupSidebar = document.getElementById('popup-sidebar');
+        const popupImage = document.getElementById('popup-image');
+        const imageUrls = [
+            "/images/cart-ad-1.gif",
+            "/images/cart-ad-2.gif"
+
+        ];
+        let currentIndex = 0;
+
+        // Slide in the popup sidebar immediately
+        popupSidebar.style.right = '0';
+        // Slide out after 5 seconds
+        setTimeout(() => {
+            popupSidebar.style.right = '-300px';
+        }, 5000);
+
+        // Change image every 5 seconds
+        setInterval(() => {
+            currentIndex = (currentIndex + 1) % imageUrls.length;
+            popupImage.src = imageUrls[currentIndex];
+            // Slide in the popup sidebar
+            popupSidebar.style.right = '0';
+            // Slide out after 5 seconds
+            setTimeout(() => {
+                popupSidebar.style.right = '-300px';
+            }, 5000);
+        }, 10000);
+    }
+
+    // Call the slidePopupSidebar function when the page is loaded
+    window.onload = slidePopupSidebar;
+
+</script>
+
+<style>
+    
+    .bg-section {
+        background-image: url('/images/bg-wall.png');
+    }
+
+    #bg {
+        background-image: url('/images/empty-cart.gif');
+        background-repeat: no-repeat;
+        background-position: center;
+        min-height: 100vh;
+    }
+
+    .eASY {
+        color: rgb(40, 155, 155);
+    }
+
+    /* Styles for the pop-up sidebar */
+    .popup-sidebar {
+        position: fixed;
+        top: 50%;
+
+        right: -300px;
+        /* Initially hidden off-screen */
+        width: 300px;
+
+        background-color: #fff;
+        box-shadow: 0 2px 8px rgba(21, 105, 131, 0.5);
+        z-index: 1000;
+        transition: right 1s ease-in-out;
+        padding: 20px;
+        overflow: hidden;
+    }
+
+    .popup-sidebar img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    /* Adjustments for smaller screens */
+    @media (max-width: 768px) {
+        .popup-sidebar {
+            right: -100%;
+            /* Completely hidden on smaller screens */
+        }
+    }
+
+      a {
+    text-decoration: none;  /* Remove underline by default */
+    color: black;
+    }
+
+  a:hover {
+    text-decoration: none; /* Ensure underline does not appear on hover */
+    color: black;
+  }
+
+</style>
