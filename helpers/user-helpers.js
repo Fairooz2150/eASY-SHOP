@@ -149,50 +149,60 @@ module.exports = {
         });
     },
     changeProductQuantity: (details) => {
-        details.count = parseInt(details.count)
-        details.quantity = parseInt(details.quantity)
-
-        return new Promise((resolve, reject) => {
-            if (details.count == -1 && details.quantity == 1) {
-
-                db.get().collection(collection.CART_COLLECTION).
-                    updateOne({ _id: objectId(details.cart) },
-                        {
-                            $pull: { products: { item: objectId(details.product) } }
-                        }
-                    ).then((response) => {
-                        resolve({ removeProduct: true })
-                    })
-            } else {
-                db.get().collection(collection.CART_COLLECTION).
-                    updateOne({ _id: objectId(details.cart), 'products.item': objectId(details.product) },
-                        {
-                            $inc: { 'products.$.quantity': details.count }
-                        }
-                    ).then((response) => {
-
-                        resolve({ status: true })
-                    })
-            }
-        })
-    },
-    deleteCartProduct: (prodId, quantity, userId) => {
-
+        details.count = parseInt(details.count);
+        details.quantity = parseInt(details.quantity);
+    
         return new Promise(async (resolve, reject) => {
-
+            try {
+                let product = await db.get().collection(collection.PRODUCT_COLLECTION)
+                    .findOne({ _id: objectId(details.product) });
+    
+                // Check if the product has sufficient stock
+                if (product.Stock_Count <= 0 && details.count === 1) {
+                    resolve({ outOfStock: true });
+                } else {
+                    // Update cart quantity
+                        if(details.quantity===1&& details.count === -1){
+                            await db.get().collection(collection.CART_COLLECTION).updateOne({ _id: objectId(details.cart) }, { $pull: { products: { item: objectId(details.product) } } })
+                            await db.get().collection(collection.PRODUCT_COLLECTION)
+                            .updateOne({ _id: objectId(details.product) },
+                                { $inc: { Stock_Count: -details.count } });
+                                resolve({ removeProduct: true });
+                        
+                        }else{
+                            await db.get().collection(collection.CART_COLLECTION)
+                        .updateOne({ _id: objectId(details.cart), 'products.item': objectId(details.product) },
+                            { $inc: { 'products.$.quantity': details.count } });
+    
+                    // Decrease product stock count
+                    await db.get().collection(collection.PRODUCT_COLLECTION)
+                        .updateOne({ _id: objectId(details.product) },
+                            { $inc: { Stock_Count: -details.count } });
+    
+                    resolve({ status: true });
+                        }
+                    
+                }
+            } catch (error) {
+                reject(error);
+            }
+        });
+    },    
+      
+   
+    deleteCartProduct: (prodId, quantity, userId) => {
+        return new Promise(async (resolve, reject) => {
             await db.get().collection(collection.CART_COLLECTION).updateOne({ user: objectId(userId) }, { $pull: { products: { item: objectId(prodId) } } }).then((response) => {
-
                 db.get().collection(collection.PRODUCT_COLLECTION).findOneAndUpdate({ _id: objectId(prodId) },
                     [{ $set: { Stock_Count: { $add: [{ $toInt: "$Stock_Count" }, parseInt(quantity)] } } }])
-
-
-                    resolve(response);
-
+    
+                resolve(response);
             }).catch((err) => {
                 reject(err);
             });
-        })
+        });
     },
+    
 
     getTotalAmount: (userId) => {
         return new Promise(async (resolve, reject) => {

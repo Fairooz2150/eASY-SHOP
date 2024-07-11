@@ -54,12 +54,12 @@
     </table>
     <hr>
    
-    <div class="row float-right pr-5" id="pop">
+    <div class="row float-right pr-5" >
       <div>
         <h5 class="float-left mr-5 mt-4">Total: ₹<span id="total"></span></h5>
       </div>
       <div>
-        <a href="/place-order" class="btn placeOrder mt-3 " title="Place Order" ><b>Place Order</b></a>
+        <a href="/place-order" class="btn placeOrder mt-3 "  title="Place Order" ><b>Place Order</b></a>
       </div>
     </div>
   
@@ -75,10 +75,47 @@
     </div>
   </div>
 
+ <div id="alertModal2" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>Product was out of stock</p>
+        <button id="alert" class="btn confirmBtn">ok</button>
+    </div>
+</div>
+
 </section>
 
 <script>
-  
+
+  // Get the modal for alerting user to Product was Out of Stock
+var modal = document.getElementById("alertModal2");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// Get the button that closes the modal
+var confirmRemove = document.getElementById("alert");
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks on the button, close the modal
+confirmRemove.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+
+
+// For cart table design
   $(function () {
     $('#productsTable').DataTable();
   });
@@ -101,13 +138,87 @@
     });
 
   
-    // total value 
+    // total value (total amount of products in the cart)
     const totals = {{totalValue}}; // Replace with your dynamic value
     
     // Format and display the total value
     document.getElementById('total').textContent = formatNumber(totals);
-   
-  function deleteCartProduct(productId) {
+
+
+//Change the product quantity
+   function changeQuantity(cartId, proId, userId, count) {
+    let quantityElement = document.getElementById(proId);
+    let quantity = parseInt(quantityElement.innerHTML);
+    count = parseInt(count);
+  if (quantity === 1 && count === -1) {
+
+        showConfirmationModal(() => {
+            $.ajax({
+                url: '/change-product-quantity',
+                data: {
+                    user: userId,
+                    cart: cartId,
+                    product: proId,
+                    count: count,
+                    quantity: quantity
+                },
+                method: 'post',
+                success: (response) => {
+                    if (response.removeProduct) {
+                        $(`#${proId}`).closest('tr').remove();
+                           let cartnumber = $('#cart-count').html();
+                    cartnumber = parseInt(cartnumber) + count;
+                    $("#cart-count").html(cartnumber);
+
+                    } else {
+                        quantityElement.innerHTML = quantity + count;
+                         
+                    }
+                    document.getElementById('total').textContent = formatNumber(response.total);
+                    checkCartCount(response.cartCount);
+                     $(`#${proId}`).closest('tr').remove();
+                }
+            });
+        });
+    } else {
+        $.ajax({
+            url: '/change-product-quantity',
+            data: {
+                user: userId,
+                cart: cartId,
+                product: proId,
+                count: count,
+                quantity: quantity
+            },
+            method: 'post',
+            success: (response) => {
+                if (response.outOfStock) {
+                    
+                modal.style.display = "block"; //shows when product was out of stock
+                } else {
+                    let cartnumber = $('#cart-count').html();
+                    cartnumber = parseInt(cartnumber) + count;
+                    $("#cart-count").html(cartnumber);
+                    if (response.removeProduct) {
+                        $(`#${proId}`).closest('tr').remove();
+                    } else {
+                        quantityElement.innerHTML = quantity + count;
+                    }
+                    document.getElementById('total').textContent = formatNumber(response.total);
+                    checkCartCount(response.cartCount);
+                }
+            }
+        });
+    }
+}
+
+function checkCartCount(cartCount) {
+    if (cartCount === 0) {
+        location.reload();
+    }
+}
+
+function deleteCartProduct(productId) {
     showConfirmationModal(() => {
         let quantity = parseInt(document.getElementById(productId).innerHTML);
         $.ajax({
@@ -115,11 +226,15 @@
             method: 'DELETE',
             success: function (response) {
                 if (response.success) {
-                    console.log('Product deleted successfully');
-                    document.getElementById('product-container-' + productId).remove(); // Remove the product's container element from the DOM
+                    document.getElementById('product-container-' + productId).remove();
+                    document.getElementById('total').textContent = formatNumber(response.total);
+                    cartnumber = parseInt(response.cartCount) 
+                    $("#cart-count").html(cartnumber);
+                    
                 } else {
                     alert('Failed to delete product');
                 }
+                checkCartCount(response.cartCount);
             },
             error: function (error) {
                 console.error('Error:', error);
@@ -129,79 +244,7 @@
     });
 }
 
-  function changeQuantity(cartId, proId, userId, count) {
-    let quantity = parseInt(document.getElementById(proId).innerHTML);
-    count = parseInt(count);
 
-    // Check if the current quantity will become one after decreasing
-    if (quantity === 1 && count === -1) {
-      // Display the custom confirmation dialog
-      showConfirmationModal(() => {
-        // User confirmed the removal
-        $.ajax({
-          url: '/change-product-quantity',
-          data: {
-            user: userId,
-            cart: cartId,
-            product: proId,
-            count: count,
-            quantity: quantity
-          },
-          method: 'post',
-          success: (response) => {
-            if (response.removeProduct) {
-              // Remove the corresponding table row
-              $(`#${proId}`).closest('tr').remove();
-              // Update total value
-              document.getElementById('total').innerHTML = response.total;
-              // Check if the total count of products becomes zero
-              location.reload();
-              if (response.cartCount === 0) {
-                // Hide the 'Place Order' section and 'Total: Rs' div
-                $('#placeOrderSection').hide();
-                $('#totalSection').hide();
-              }
-            } else {
-              document.getElementById(proId).innerHTML = quantity + count;
-              document.getElementById('total').innerHTML = formatNumber(response.total);
-            }
-          }
-        });
-      });
-      return;
-    }
-
-    $.ajax({
-      url: '/change-product-quantity',
-      data: {
-        user: userId,
-        cart: cartId,
-        product: proId,
-        count: count,
-        quantity: quantity
-      },
-      method: 'post',
-      success: (response) => {
-        if (response.removeProduct) {
-          // Remove the corresponding table row
-          $(`#${proId}`).closest('tr').remove();
-          // Update total value
-          document.getElementById('total').innerHTML = response.total;
-          // Check if the total count of products becomes zero
-          
-          if (response.cartCount === 0) {
-            // Hide the 'Place Order' section and 'Total: Rs' div
-            $('#placeOrderSection').hide();
-            $('#totalSection').hide();
-            
-          }
-        } else {
-          document.getElementById(proId).innerHTML = quantity + count;
-          document.getElementById('total').innerHTML = formatNumber(response.total);
-        }
-      }
-    });
-  }
 
   function showConfirmationModal(confirmCallback) {
     // Get the modal
@@ -322,7 +365,7 @@
       color: white;
   }
   /* The Modal (background) */
-  .modal {
+  .modal, .modal2 {
     display: none;
     /* Hidden by default */
     position: fixed;

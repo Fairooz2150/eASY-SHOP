@@ -152,7 +152,7 @@ router.get('/cart', verifyLogin, async (req, res) => {
     
   res.render('user/cart', { products, user, totalValue, cartCount})
   }else{
-    res.redirect('/')
+    res.redirect('/orders')
   }
   
 })
@@ -196,12 +196,15 @@ router.get('/add-to-cart/:id', async (req, res) => {
 
 /* Delete cart products */
 
-router.delete('/delete-cart-product/:id/:quantity', verifyLogin, (req, res) => {
+router.delete('/delete-cart-product/:id/:quantity', verifyLogin, async(req, res) => {
   const proId = req.params.id;
   const quantity = parseInt(req.params.quantity);
-  const userId = req.session.user._id
-  userHelpers.deleteCartProduct(proId, quantity, userId).then((response) => {
-    res.json({ success: true });
+  const userId = req.session.user._id;
+ 
+  userHelpers.deleteCartProduct(proId, quantity, userId).then(async(response) => {
+    let total = await userHelpers.getTotalAmount(userId);
+    let cartCount = await userHelpers.getCartCount(req.session.user._id);
+    res.json({ success: true, cartCount: cartCount, total: total });
   }).catch((err) => {
     console.error('Error deleting product:', err);
     res.json({ success: false });
@@ -210,15 +213,25 @@ router.delete('/delete-cart-product/:id/:quantity', verifyLogin, (req, res) => {
 
 
 /* Change product quantity in cart */
-
-router.post('/change-product-quantity', (req, res, next) => {
-  console.log(req.body);
-
+router.post('/change-product-quantity', async (req, res, next) => {
+  
   userHelpers.changeProductQuantity(req.body).then(async (response) => {
-    response.total = await userHelpers.getTotalAmount(req.body.user)
-    res.json(response)
-  })
-})
+      let total = await userHelpers.getTotalAmount(req.body.user);
+      let cartCount = await userHelpers.getCartCount(req.session.user._id);
+
+      if (response.removeProduct) {
+          res.json({ removeProduct: true, cartCount: cartCount, total: total });
+      } else if (response.outOfStock) {
+          res.json({ outOfStock: true, cartCount: cartCount });
+      } else {
+          res.json({ status: true, cartCount: cartCount, total: total });
+      }
+  }).catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'An error occurred while updating product quantity' });
+  });
+});
+
 
 
 /* Buy single product*/
