@@ -257,7 +257,7 @@ router.post('/place-product', async (req, res) => {
       quantity: 1
     }]
     const total = req.body.total;
-
+   
     // Place the order
     const orderId = await userHelpers.placeProduct(req.body, products, total);
 
@@ -265,7 +265,7 @@ router.post('/place-product', async (req, res) => {
     if (paymentMethod === 'COD') {
       res.json({ codSuccess: true });
     } else {
-      const response = await userHelpers.generateRazorpay(orderId, price);
+      const response = await userHelpers.generateRazorpay(orderId, total);
       res.json(response);
     }
   } catch (error) {
@@ -303,7 +303,10 @@ router.post('/place-order', async (req, res) => {
 
     // Handle payment method
     if (paymentMethod === 'COD') {
-      res.json({ codSuccess: true });
+      await productHelpers.removeCartProducts(userId).then(()=>{
+        res.json({ codSuccess: true });
+      })
+      
     } else {
       const response = await userHelpers.generateRazorpay(orderId, totalPrice);
       res.json(response);
@@ -341,7 +344,24 @@ router.get('/orders', verifyLogin, async (req, res) => {
 });
 
 
-/* Verify payment */
+/* Verify payment for orders(for all cart products) */
+
+router.post('/verify-payments', (req, res) => {
+  let userId=req.session.user._id
+  userHelpers.verifypayment(req.body,userId).then(() => {
+    userHelpers.changePaymentStatus(req.body['order[receipt]']).then(async() => {
+      await productHelpers.removeCartProducts(userId).then(()=>{
+      console.log('payment succesful');
+      res.json({ status: true }) })
+    })
+  }).catch((err) => {
+    console.log(err);
+    res.json({ status: false, errMsg: '' })
+  })
+})
+
+
+/* Verify payment for single product order(by Buy Now) */
 
 router.post('/verify-payment', (req, res) => {
   console.log(req.body);
@@ -356,6 +376,7 @@ router.post('/verify-payment', (req, res) => {
     res.json({ status: false, errMsg: '' })
   })
 })
+
 
 
 /* Your Account*/

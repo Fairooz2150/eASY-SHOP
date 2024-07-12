@@ -54,6 +54,7 @@
             success: (response) => {
 
                 if (response.codSuccess) {
+                    
                     location.href = '/order-success'
                  } else {
                     razorpayPayment(response)

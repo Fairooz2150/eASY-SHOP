@@ -498,14 +498,14 @@ module.exports = {
             let hmac = crypto.createHmac('sha256', 'NxHqrxegFsANJL3mBznh2YvY')
             hmac.update(details['payment[razorpay_order_id]'] + '|' + details['payment[razorpay_payment_id]']);
             hmac = hmac.digest('hex')
-            if (hmac == details['payment[razorpay_signature]']) {
-                db.get().collection(collection.CART_COLLECTION).removeOne({ user: objectId(userId) });
+            if (hmac == details['payment[razorpay_signature]']) {           
                 resolve()
             } else {
                 reject()
             }
         })
     },
+  
     changePaymentStatus: (orderId) => {
         return new Promise((resolve, reject) => {
             db.get().collection(collection.ORDER_COLLECTION)

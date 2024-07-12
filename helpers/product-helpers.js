@@ -167,9 +167,14 @@ getAllProducts: () => {
                 resolve(product)
             })
         })
-    },
-
-
+    }, 
+     removeCartProducts:(userId)=>{
+      return new Promise((resolve, reject) => {
+      db.get().collection(collection.CART_COLLECTION).removeOne({ user: objectId(userId) }).then(()=>{
+          resolve()
+      })
+  })
+  },
     getProductDetails:(proId)=>{
         return new Promise((resolve,reject)=>{
             db.get().collection(collection.PRODUCT_COLLECTION).findOne({_id:objectId(proId)}).then((product)=>{
