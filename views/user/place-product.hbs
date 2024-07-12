@@ -3,19 +3,19 @@
         <form action="" id="checkout-form">
             <div class="row">
 
-                <div class="col-md-6">
-                    <h2>Enter Delivery Details</h2>
-                    <div>
+                <div class="col-md-6 mr-4">
+                    <h2>Enter Delivery Address</h2>
 
-                        <label for="">Address</label>
-                      
-                        <textarea class="form-control" type="text"  name="address" id="address" rows="3"></textarea>
+                    <div  class="mt-4">                        
+                        <label for="address">Address</label>
+
+                        <textarea class="form-control" type="text"  name="address" id="address" rows="5" placeholder="Name&#10House/Building Name&#10Street Locality/Area&#10District, State" required></textarea>
 
                         <label for="">Pincode</label>
-                        <input type="text" id="pincode" name="pincode" class="form-control">
+                        <input type="text" id="pincode" name="pincode" class="form-control" placeholder="Pincode" required>
 
                         <label for="">Mobile</label>
-                        <input type="text" class="form-control" id="mobile" name="mobile">
+                        <input type="tel" class="form-control" id="mobile" name="mobile" placeholder="Mobile" required>
                         <input type="text" name="userId" id="" value="{{user._id}}" hidden>
                          <input type="text" name="prodId" id="" value="{{prodId}}" hidden>
                            <input type="text" name="total" id="" value="{{total}}" hidden>
@@ -28,13 +28,13 @@
                         <div class="payment">
                             <p>Payment method</p>
                             <label class="radio-inline" for="">
-                                <input type="radio" name="payment-method" value="COD" checked>COD
+                                <input type="radio" name="payment-method" value="COD" checked>Cash on Delivery
 
                             </label>
                             <label for="" class="radio-inline mt-2">
                                 <input type="radio" name="payment-method" value="ONLINE">Online payment
                             </label>
-                            <button class="btn btn-primary float-right" type="submit">Checkout</button>
+                            <button id="checkoutBtn" class="btn float-right" type="submit">Checkout</button>
                         </div>
                     </div>
                 </div>
@@ -132,5 +132,16 @@
 
     .payment {
         padding-bottom: 16px;
+    }
+    #checkoutBtn{
+        border-radius: 20px;
+        width: 150px;
+        background-image: linear-gradient(to right, #1ba3a5, rgb(67, 187, 208));  
+        color: white;
+        font-weight: bold;
+          
+    }
+    #checkoutBtn:hover{
+        background-image: linear-gradient(to left, #1ba3a5, rgb(67, 187, 208)); 
     }
 </style>
