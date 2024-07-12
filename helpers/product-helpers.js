@@ -187,6 +187,7 @@ getAllProducts: () => {
                 }})
         })
     },
+
     changeStockCount: (proId) => {
         return new Promise((resolve, reject) => {
           db.get().collection(collection.PRODUCT_COLLECTION)
@@ -202,8 +203,6 @@ getAllProducts: () => {
                   [{ $set: { Stock_Count: { $subtract: [{ $toInt: "$Stock_Count" }, 1] } } }],
                   
                 )
-
-
               if (result.value) {
                 resolve(result.value);
               } else {
@@ -215,7 +214,24 @@ getAllProducts: () => {
             });
         });
       },
-    
+   
+    reduceStockCount : (proId) => {
+      return new Promise((resolve, reject) => {
+          db.get().collection(collection.PRODUCT_COLLECTION)
+              .findOneAndUpdate(
+                  { _id: objectId(proId) },
+                  [{ $set: { Stock_Count: { $subtract: [{ $toInt: "$Stock_Count" }, 1] } } }],
+                  { returnDocument: 'after' } 
+              )
+              .then(() => {
+                  resolve(); 
+              })
+              .catch((error) => {
+                  reject(error); 
+              });
+         });
+       },
+        
     updateProduct:(proId,proDetails)=>{
         return new Promise((resolve,reject)=>{
             db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:objectId(proId)},{

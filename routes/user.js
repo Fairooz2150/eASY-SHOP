@@ -48,11 +48,11 @@ router.get('/view-product/:id', async (req, res) => {
   let prodImages = await productHelpers.getProductImages(Id);
   let images = prodImages.images;
   let cartCount = 0;
-  if (req.session.user) {
-    cartCount = await userHelpers.getCartCount(req.session.user._id)
+  if (user) {
+    cartCount = await userHelpers.getCartCount(user._id)
   }
   else {
-    // IF User is not logged in, calculate cart count from session storage
+    // If User is not logged in, calculate cart count from session storage
     if (req.session.cart) {
       cartCount = req.session.cart.length;
     }
@@ -235,13 +235,34 @@ router.post('/change-product-quantity', async (req, res, next) => {
 /* Buy single product*/
 
 router.get('/buy-now/:id/:price', verifyLogin, async (req, res) => {
-  let user = req.session.user;
-  let prodId = req.params.id;
-  let total = req.params.price;
-  let cartCount = await userHelpers.getCartCount(req.session.user._id);
-  console.log("products", prodId, total);
-  res.render('user/place-product', { total, prodId, user, cartCount })
-})
+  try {
+    let user = req.session.user;
+    let prodId = req.params.id;
+    let total = req.params.price;
+    
+    // Fetch cart count for the user
+    let cartCount = await userHelpers.getCartCount(user._id);
+
+    // Fetch product details
+    let product = await productHelpers.getProductDetails(prodId);
+
+    // Log product details for debugging purposes
+    console.log("products", prodId, total, product);
+
+    // Check if the product is out of stock
+    if (product.Stock_Count < 1) {
+      res.redirect('back');
+    } else {
+      // Reduce stock count and render the place-product page
+      await productHelpers.reduceStockCount(prodId);
+      res.render('user/place-product', { total, prodId, user, cartCount });
+    }
+  } catch (err) {
+    // Log the error and redirect back
+    console.error(err);
+    res.redirect('back');
+  }
+});
 
 
 

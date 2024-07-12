@@ -111,7 +111,7 @@ router.post('/add-product', (req, res) => {
     Description: req.body.Description,
     Product_Owner: req.body.Product_Owner,
     Carted: req.body.Carted,
-    Stock_Count:req.body.Stock_COunt
+    Stock_Count:req.body.Stock_Count
   };
   
 
