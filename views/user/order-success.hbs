@@ -1,10 +1,70 @@
-<section>
-    <div class="row mt-5">
-        <div class="container">
-            <div class="col-md-12 text-center">
-                <h1 class="text-center">Order Placed Successfully</h1>
-                <a href="/orders" class="btn btn-primary">View Orders</a>
-            </div>
-        </div>
+
+<div class="order-success">
+    <h2 class="title">Your Order Has Been Successfully Placed!</h2>
+    <p>Thank you for choosing eASY Shop. Your order is now being processed.</p>
+    <div class="image-container">
+        <img src="/images/order-delivery.png" alt="Order Delivery">
+        <h6>Your Delivery Will Arrive in 3-4 Days. <a href="/">Continue Shopping</a> </h6>
     </div>
-</section>
+    <a href="/orders" class="btn btn-success ">View Your Orders</a>
+</div>
+
+
+    <style>
+        .order-success {
+            text-align: center;
+            padding: 50px;
+        }
+        .title {
+           color: rgb(40, 155, 155);
+          font-size: 2.5em;
+           animation: title 1s ease-in-out infinite alternate;
+          }
+
+          @-webkit-keyframes title {
+            from {
+              text-shadow:  0 0 20px #428bbf;
+            }
+            
+            to {
+              text-shadow:  0 0 45px #428bbf;
+          }
+            }
+
+        .order-success p {
+            font-size: 1.2em;
+        }
+        .order-success .btn {
+            color: white; 
+            border-radius: 20px;
+            background-image: linear-gradient(to right, #2c9f5a, rgb(64, 167, 86));
+            margin-top: 20px;
+        }
+       .order-success .btn:hover {
+            background-image: linear-gradient(to left, #2c9f5a,  rgb(64, 167, 86));
+       }
+        /* Centering the image */
+        .image-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+        .image-container img {
+            width: 30em;
+            height: auto;
+        }
+        
+  a {
+    text-decoration: none;
+    /* Remove underline by default */
+      color: rgb(43, 156, 156);
+  }
+
+  a:hover {
+    text-decoration: none;
+    /* Ensure underline does not appear on hover */
+      color: rgb(46, 184, 184);
+  }
+
+    </style>

@@ -267,7 +267,6 @@ router.get('/buy-now/:id/:price', verifyLogin, async (req, res) => {
 
 
 /* Place single product */
-
 router.post('/place-product', async (req, res) => {
   try {
     const userId = req.body.userId;
@@ -276,7 +275,7 @@ router.post('/place-product', async (req, res) => {
     const products = [{
       item: objectId(req.body.prodId),
       quantity: 1
-    }]
+    }];
     const total = req.body.total;
    
     // Place the order
@@ -299,11 +298,11 @@ router.post('/place-product', async (req, res) => {
 /* Route to Place orders page*/
 
 router.get('/place-order', verifyLogin, async (req, res) => {
-  let total = await userHelpers.getTotalAmount(req.session.user._id)
-  
+    let total = await userHelpers.getTotalAmount(req.session.user._id);
+    let user=req.session.user;
     let cartCount = await userHelpers.getCartCount(req.session.user._id);
   
-  res.render('user/place-order', { total, user: req.session.user,cartCount  })
+  res.render('user/place-order', { total, user, cartCount  })
 })
 
 
@@ -340,10 +339,12 @@ router.post('/place-order', async (req, res) => {
 
 
 /* order success page*/
+router.get('/order-success', verifyLogin, async (req, res) => {
+  let user = req.session.user;
+  let cartCount = await userHelpers.getCartCount(user._id);
 
-router.get('/order-success', verifyLogin, (req, res) => {
-  res.render('user/order-success', { user: req.session.user })
-})
+  res.render('user/order-success', { user, cartCount });
+});
 
 
 /* Orders*/
@@ -386,17 +387,20 @@ router.post('/verify-payments', (req, res) => {
 
 router.post('/verify-payment', (req, res) => {
   console.log(req.body);
-  let userId=req.session.user._id
-  userHelpers.verifypayment(req.body,userId).then(() => {
-    userHelpers.changePaymentStatus(req.body['order[receipt]']).then(() => {
-      console.log('payment succesful');
-      res.json({ status: true })
-    })
+  let userId = req.session.user._id;
+
+
+  userHelpers.verifypayment(req.body, userId).then(() => {
+      userHelpers.changePaymentStatus(req.body['order[receipt]']).then(() => {
+          console.log('payment successful');
+          res.json({ status: true});
+      });
   }).catch((err) => {
-    console.log(err);
-    res.json({ status: false, errMsg: '' })
-  })
-})
+      console.log(err);
+      res.json({ status: false, errMsg: '' });
+  });
+});
+
 
 
 

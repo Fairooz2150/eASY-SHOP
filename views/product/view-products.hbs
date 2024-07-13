@@ -42,7 +42,7 @@
                   <b class="card-text" title="Offer price" id="offer-price">{{this.Offer_Price}}</b>
                 </div>
                 <div class="ml-3 mt-2">
-                  <p class="card-text text-muted" title="M.R.P."><small><del id="actual-price">{{this.Actual_Price}}</del></small></p>
+                  <p class="card-text text-muted" id="actualPrice" title="M.R.P."><small><del id="actual-price">{{this.Actual_Price}}</del></small></p>
                 </div>
               </div>
           </a>
@@ -53,11 +53,7 @@
           {{else}}
           <button  class="btn" id="out0fStock" title="Out of Stock">Out of Stock</button>
           {{/if}}
-          <!-- product added notification -->
-          <a href="/cart">
-          <div id="Ad">Product added <img src="/images/grocery.gif" class="addcart" alt="Product added"></div>
-          </a>
-         
+          
         </div>
       </div>
     </div>
@@ -66,6 +62,11 @@
   </div>
   </div>
 
+    <!-- product added notification -->
+      <a href="/cart">
+     <div id="Ad">Product added <img src="/images/grocery.gif" class="addcart" alt="Product added">
+     </div></a>
+         
   <!-- Advertisement section -->
 
   <div id="popup-sidebar" class="popup-sidebar" title="eASY SHOP Ad">
@@ -295,70 +296,7 @@ if (products.length === 0) {
 </script>
 
 <style>
-  /* The Modal (background) */
-  .modal {
-    display: none;
-    /* Hidden by default */
-    position: fixed;
-    /* Stay in place */
-    z-index: 1;
-    /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%;
-    /* Full width */
-    height: 100%;
-    /* Full height */
-    overflow: auto;
-    /* Enable scroll if needed */
-    background-color: rgb(0, 0, 0);
-    /* Fallback color */
-    background-color: rgba(0, 0, 0, 0.4);
-    /* Black w/ opacity */
-   
-  }
-
-  /* Modal Content/Box */
-  .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    /* 15% from the top and centered */
-    padding: 20px;
-    border-radius: 10px;  
-    box-shadow: 0 2px 15px rgba(18, 155, 150, 0.5);
-    width: 80%;
-    /* Could be more or less, depending on screen size */
-    max-width: 400px;
-    /* Maximum width */
-    text-align: center;
-  }
-
-  /* The Close Button */
-  .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-  }
-
-  .close:hover,
-  .close:focus {
-    color: rgb(7, 63, 68);
-    text-decoration: none;
-    cursor: pointer;
-  }
-
-
-  .confirmBtn {
-    background-image: linear-gradient(to left, #f07b0d, rgb(245, 157, 64));
-    color: white;
-    border: none;
-    border-radius: 20px;
-    padding: 10px 20px;
-    margin: 10px;
-  }
-
-
+ 
   .card {
     box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
     width: 14em;
@@ -415,7 +353,7 @@ if (products.length === 0) {
     color: rgb(4, 149, 149);
     font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   }
- 
+
   #addtoCart:hover {
     background-image: linear-gradient(to right, #199cad, rgb(74, 175, 209));
   }
@@ -649,4 +587,69 @@ if (products.length === 0) {
       opacity: 0;
     }
   }
+
+   /* The Modal (background) */
+  .modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+   
+  }
+
+  /* Modal Content/Box */
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    /* 15% from the top and centered */
+    padding: 20px;
+    border-radius: 10px;  
+    box-shadow: 0 2px 15px rgba(18, 155, 150, 0.5);
+    width: 80%;
+    /* Could be more or less, depending on screen size */
+    max-width: 400px;
+    /* Maximum width */
+    text-align: center;
+  }
+
+  /* The Close Button */
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: rgb(7, 63, 68);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+
+  .confirmBtn {
+    background-image: linear-gradient(to left, #f07b0d, rgb(245, 157, 64));
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    margin: 10px;
+  }
+
+
 </style>
