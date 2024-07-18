@@ -7,7 +7,15 @@
         <div class="card-header">
           <div class="row header-content">
             <div class="chip">
-              <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Person" width="96" height="96">
+              {{#ifEquals this.userDetails.Gender 'Male'}}
+                <img src="/images/trans-icon.jpg" alt="Male Icon">
+              {{else}}
+                {{#ifEquals this.userDetails.Gender 'Female'}}
+                  <img src="/images/female-icon.jpg" alt="Female Icon">
+                {{else}}
+                  <img src="/images/trans-icon.jpg" alt="Trans Icon">
+                {{/ifEquals}}
+              {{/ifEquals}}
               {{this.userDetails.First_Name}} {{this.userDetails.Last_Name}}
             </div>
             <div class="date">
@@ -74,10 +82,36 @@
       </div>
       {{/each}}
     </div>
+
+     <!-- Scroll Up -->
+  <div id="back-top" >
+        <button  title="Go to Top" onclick="topFunction()" id="myBtn"> <i class="bi bi-arrow-up-circle-fill"></i></button>
+    </div>
+
   </div>
 </section>
 
+<script>
+  // Get the button
+let mybutton = document.getElementById("myBtn");
 
+// When the user scrolls down 20px from the top of the document, show the button
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    mybutton.style.display = "block";
+  } else {
+    mybutton.style.display = "none";
+  }
+}
+
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+</script>
 
 <style>
 
@@ -153,6 +187,23 @@
     .product_details{
       margin-left: 10px;
     }
+    
+    #myBtn {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 30px;
+      z-index: 99;
+      font-size: 25px;
+      border: none;
+      outline: none;
+      border-radius: 50%;
+      color: white;
+      background-color: rgb(50, 151, 177);
+      cursor: pointer;
+      
+    }
+
   </style>
 
 

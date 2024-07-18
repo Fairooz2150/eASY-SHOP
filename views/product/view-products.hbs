@@ -72,7 +72,8 @@
   <div id="popup-sidebar" class="popup-sidebar" title="eASY SHOP Ad">
     <img id="popup-image" src="/images/ad-1.gif" alt="Product Advertisement">
   </div>
-  
+
+   <!-- Shows for product out of stock -->
   <div id="confirmationModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
@@ -84,6 +85,8 @@
 </section>
 
 <script>
+
+    /* Out of Stock notification modal*/
 
 // Get the modal
 var modal = document.getElementById("confirmationModal");
@@ -110,7 +113,10 @@ window.onclick = function(event) {
         modal.style.display = "none";
     }
 }
+    /* End of Out of Stock notification modal function */
 
+
+//Add to cart
 function addToCart(proId) {
     $.ajax({
         url: '/add-to-cart/' + proId,
@@ -208,6 +214,7 @@ function slidePopupSidebar() {
       });
     });
 
+  
 
   // Search bar for small screen
   document.getElementById('search-input').addEventListener('keyup', function (event) {
@@ -442,7 +449,6 @@ if (products.length === 0) {
   .flip-card-front,
   .flip-card-back {
     position: absolute;
-
     width: 100%;
     height: 100%;
     -webkit-backface-visibility: hidden;
@@ -480,7 +486,6 @@ if (products.length === 0) {
 
     width: 50px;
     height: 40px;
-
     position: relative;
     animation-name: mymove;
     animation-duration: 4s;

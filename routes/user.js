@@ -350,15 +350,14 @@ router.get('/order-success', verifyLogin, async (req, res) => {
 /* Orders*/
 
 router.get('/orders', verifyLogin, async (req, res) => {
-  let cartCount = 0;
-  if (req.session.user) {
-    cartCount = await userHelpers.getCartCount(req.session.user._id);
-  }
-  userHelpers.getAllUserOrders(req.session.user._id).then((orders) => {
+    let user=req.session.user;
+   let cartCount = await userHelpers.getCartCount(user._id);
+  
+  userHelpers.getAllUserOrders(user._id).then((orders) => {
     // Sort orders by date in descending order
     orders.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-    res.render('user/orders', { user: req.session.user, cartCount, orders });
+    res.render('user/orders', { user, cartCount, orders });
   }).catch((err) => {
     console.error(err);
     res.status(500).send("Internal Server Error");
