@@ -272,6 +272,7 @@ module.exports = {
 
             let orderObj = {
                 deliveryDetails: {
+                    name: order.name,
                     mobile: order.mobile,
                     address: order.address,
                     pincode: order.pincode
@@ -300,6 +301,7 @@ module.exports = {
 
             let orderObj = {
                 deliveryDetails: {
+                    name: order.name,
                     mobile: order.mobile,
                     address: order.address,
                     pincode: order.pincode

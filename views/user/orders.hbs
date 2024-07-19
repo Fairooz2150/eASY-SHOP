@@ -8,7 +8,7 @@
           <div class="row header-content">
             <div class="chip">
               {{#ifEquals this.userDetails.Gender 'Male'}}
-                <img src="/images/trans-icon.jpg" alt="Male Icon">
+                <img src="/images/male-icon.jpg" alt="Male Icon">
               {{else}}
                 {{#ifEquals this.userDetails.Gender 'Female'}}
                   <img src="/images/female-icon.jpg" alt="Female Icon">
@@ -16,33 +16,53 @@
                   <img src="/images/trans-icon.jpg" alt="Trans Icon">
                 {{/ifEquals}}
               {{/ifEquals}}
-              {{this.userDetails.First_Name}} {{this.userDetails.Last_Name}}
+              {{this.deliveryDetails.name}}
             </div>
             <div class="date">
               <span style="font-weight:bold"> Date: </span> {{this.date}} <br>
               <span style="font-weight:bold"> Time: </span> {{this.time}}
             </div>
             <div class="payment">
-              <span style="font-weight:bold">Payment: </span>
-              <br> {{this.paymentMethod}}
+              <span class="payment-title">Payment: </span>
+              <br> {{#ifEquals this.paymentMethod 'ONLINE'}}
+                    <span title="Paid Successfully">Successful </span>
+                    {{else}}
+                    <span title="Cash on Delivery">COD </span> 
+                    {{/ifEquals}}
             </div>
           </div>
         </div>
         <div class="card-body">
           <div class="row">
-            <div class="orderid">
+            <div class="orderId">
               <p class="card-text"><span style="font-weight:bold">Order Id: </span><br> {{this._id}}</p>
               <p class="card-text"><span style="font-weight:bold">Order Status: </span> <span id="status-{{this._id}}">{{this.status}}</span></p>
             </div>
             <div class="address">
-              <span style="font-weight: bold;"> Address:</span><br>{{this.deliveryDetails.address}}
+              <span style="font-weight: bold;">Delivery Address:</span><br>{{newlineToBr this.deliveryDetails.address}}
               <br> {{this.deliveryDetails.pincode}}
-              <br> {{this.deliveryDetails.mobile}}
+              <br> <i class="bi bi-telephone"></i>  {{this.deliveryDetails.mobile}}
+            </div>
+            <div class="status-image" >
+               
+                {{#ifEquals this.status 'placed'}}
+              <img src="/images/order-placed.png" style="height: 250px;" alt="">
+                {{else}}
+                 {{#ifEquals this.status 'pending'}}
+              <img src="/images/order-pending.png" style="height: 250px;" alt="">
+                {{else}}
+                 {{#ifEquals this.status 'Shipped'}}
+                <img src="/images/deliver-soon.png" style="height: 250px;" alt="">
+                {{else}}
+                <img src="/images/order-delivered.png" style="height: 250px;" alt="">
+                 {{/ifEquals}}
+                 {{/ifEquals}}
+              {{/ifEquals}}
             </div>
           </div>
           <div>
             {{#each products}}
-            <table class="table mt-5" id="productsTable">
+            <table class="table" id="productsTable">
               <thead>
                 <tr>
                   <th scope="col">No</th>
@@ -85,7 +105,7 @@
 
      <!-- Scroll Up -->
   <div id="back-top" >
-        <button  title="Go to Top" onclick="topFunction()" id="myBtn"> <i class="bi bi-arrow-up-circle-fill"></i></button>
+        <button  title="Go to Top" onclick="topFunction()" id="myBtn"> <i class="bi bi-arrow-up-circle-fill"></i> </button>
     </div>
 
   </div>
@@ -111,6 +131,7 @@ function topFunction() {
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
 }
+
 </script>
 
 <style>
@@ -118,18 +139,37 @@ function topFunction() {
     .main-heading {
       text-align: center;
       margin-top: 30px;
+      
     }
 
     .card {
       margin-top: 65px;
+      border-radius: 20px;
+      overflow: hidden; 
+      margin-bottom: 50px;
+       box-shadow: 0 14px 16px rgba(21, 105, 131, 0.5);
+    }
+    .card-header{
+      background-color: #278a9b96;
+      color: white;
     }
 
     .payment-header {
       font-weight: bold;
     }
-
+    .payment-title{
+      font-weight: bold;
+    }
+    .orderId{
+      margin-right: 10em;
+      margin-bottom: 2em;
+    }
     .address {
-      margin-left: 5rem;
+      margin-right: 10em;
+      margin-bottom: 2em;
+    }
+    .status-image{
+       margin-bottom: 2em;
     }
 
     .chip {
@@ -140,6 +180,9 @@ function topFunction() {
       line-height: 50px;
       border-radius: 25px;
       background-color: #f1f1f1;
+      color: #309db0;
+      font-weight: 500;
+      font-size: large;
     }
   
     .chip img {
@@ -161,6 +204,7 @@ function topFunction() {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      background-color: #278a9b96;
     }
 
     .footer-content {
@@ -191,7 +235,7 @@ function topFunction() {
     #myBtn {
       display: none;
       position: fixed;
-      bottom: 20px;
+      bottom: 40px;
       right: 30px;
       z-index: 99;
       font-size: 25px;
@@ -199,11 +243,14 @@ function topFunction() {
       outline: none;
       border-radius: 50%;
       color: white;
-      background-color: rgb(50, 151, 177);
-      cursor: pointer;
+      background-image: linear-gradient(to bottom, #309db0, rgb(71, 172, 209));
+       cursor: pointer;
       
     }
 
+    #myBtn:hover {
+      background-image: linear-gradient(to top, #309db0, rgb(71, 172, 209));
+    }
   </style>
 
 
