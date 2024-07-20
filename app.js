@@ -83,7 +83,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileupload());
-app.use(session({ secret: "Key", cookie: { maxAge: 600000 } }));
+app.use(session({
+  secret: 'Key',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 } // 1 week
+}));
 app.use(nocache());
 
 db.connect((err) => {
