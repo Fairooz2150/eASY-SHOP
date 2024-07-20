@@ -204,8 +204,8 @@ function slidePopupSidebar() {
     });
 
       document.addEventListener('DOMContentLoaded', function() {
-      const offerPrices = document.querySelectorAll('#actual-price');
-      offerPrices.forEach(element => {
+      const actualPrices = document.querySelectorAll('#actual-price');
+      actualPrices.forEach(element => {
         const priceString = element.textContent.trim();
         const price = parseFloat(priceString.replace(/[^\d.-]/g, ''));
         if (!isNaN(price)) {

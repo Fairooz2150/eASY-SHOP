@@ -20,8 +20,7 @@
               <div class="row">
                 <div class="m-2 img">
                   <img src="/product-images/{{this.product._id}}_0.jpg"
-                    style="width: 8em; height: 7em; " alt="Image not available"
-                    onerror="this.onerror=null; this.src='/images/no-images-available.png';">
+                   alt="Image not available" onerror="this.onerror=null; this.src='/images/no-images-available.png';">
                 </div>
                 <div class="ml-2">
                   <span class="title" title="{{this.product.Name}}">{{this.product.Name}} </span><br>
@@ -319,6 +318,10 @@ function deleteCartProduct(productId) {
   }
   .img:hover{
      box-shadow: 0 2px 8px rgba(19, 111, 139, 0.5);
+  }
+  .img img{
+     width: 8em; 
+     height: 7em;
   }
   .title {
     overflow: hidden;

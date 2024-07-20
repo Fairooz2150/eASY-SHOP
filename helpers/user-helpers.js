@@ -369,7 +369,7 @@ module.exports = {
                             $cond: {
                                 if: { $isArray: "$products" },
                                 then: "$products",
-                                else: [{ item: "$products", quantity: 1 }] // Adjust quantity as needed
+                                else: [{ item: "$products", quantity: 1 }] 
                             }
                         }
                     }

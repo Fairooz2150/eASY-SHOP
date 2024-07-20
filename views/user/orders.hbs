@@ -1,6 +1,6 @@
 <section>
   <div class="container">
-    <h2 class="main-heading">All Orders</h2>
+    <h2 class="main-heading">Your Orders</h2>
     <div id="orders-container">
     {{#each orders}}
       <div class="card">
@@ -34,7 +34,7 @@
         </div>
         <div class="card-body">
           <div class="row">
-            <div class="orderId">
+            <div class="orderInfo">
               <p class="card-text"><span style="font-weight:bold">Order Id: </span><br> {{this._id}}</p>
               <p class="card-text"><span style="font-weight:bold">Order Status: </span> <span id="status-{{this._id}}">{{this.status}}</span></p>
             </div>
@@ -47,14 +47,18 @@
                
                 {{#ifEquals this.status 'placed'}}
               <img src="/images/order-placed.png" style="height: 250px;" alt="">
+              <p><small>We've received your order and it will be shipped shortly.</small></p>
                 {{else}}
                  {{#ifEquals this.status 'pending'}}
-              <img src="/images/order-pending.png" style="height: 250px;" alt="">
+              <img src="/images/order-pending.png" style="height: 250px;" alt="">        
+              <p><small>We’re unable to process your order due to a payment issue.</small></p>
                 {{else}}
                  {{#ifEquals this.status 'Shipped'}}
                 <img src="/images/deliver-soon.png" style="height: 250px;" alt="">
+                 <p><small>Your order has been shipped and will be dispatched soon.</small></p>
                 {{else}}
                 <img src="/images/order-delivered.png" style="height: 250px;" alt="">
+                 <p><small>Your order has arrived. We hope you enjoy your purchase!</small></p>
                  {{/ifEquals}}
                  {{/ifEquals}}
               {{/ifEquals}}
@@ -67,25 +71,30 @@
                 <tr>
                   <th scope="col">No</th>
                   <th scope="col">Item</th>
-                  <th scope="col">Price</th>
-                  <th scope="col">Quantity</th>
+                  <th scope="col" class="ml-auto">Price</th>
+                  <th scope="col" class="ml-auto">Quantity</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <th scope="row">{{incrementedIndex @index}}</th>
                   <td>
-                    <div class="row">
-                      <div>
-                        <img src="/product-images/{{this.item}}_0.jpg" style="width:70px;height:70px" alt="" class="product_image">
-                      </div>
-                      <div class="product_details">
-                        {{this.productName}} <br>
-                        <div class="text-muted"> Product Id {{this.item}}</div>
-                      </div>
-                    </div>
+                    
+                     <a href="/view-product/{{this.item}}">
+              <div class="row">
+                <div class="m-2">
+                  <img src="/product-images/{{this.item}}_0.jpg" id="prodImg"
+                   alt="Image not available" onerror="this.onerror=null; this.src='/images/no-images-available.png';" >
+                </div>
+                <div class="ml-2 product_details">
+                  <span class="title" title="{{this.productName}}">{{this.productName}} </span> <br>
+                  <span class="text-muted"> Product Id {{this.item}}</span>
+                </div>
+              </div> 
+                  </a>
+
                   </td>
-                  <td>₹{{this.price}}</td>
+                  <td>₹<span id="offerPrice">{{this.price}}</span></td>
                   <td>{{this.quantity}}</td>
                 </tr>
               </tbody>
@@ -95,8 +104,7 @@
         </div>
         <div class="card-footer">
           <div class="footer-content">
-            <div class="total">Total: ₹{{this.totalAmount}}</div>
-            
+            <div class="total"><span id="totalTitle"> Total: </span><span id="totalAmount">{{this.totalAmount}}</span></div>
           </div>
         </div>
       </div>
@@ -105,7 +113,7 @@
 
      <!-- Scroll Up -->
   <div id="back-top" >
-        <button  title="Go to Top" onclick="topFunction()" id="myBtn"> <i class="bi bi-arrow-up-circle-fill"></i> </button>
+        <button  title="Go to Top" onclick="topFunction()" id="topBtn"> <i class="bi bi-arrow-up-circle-fill"></i> </button>
     </div>
 
   </div>
@@ -113,7 +121,7 @@
 
 <script>
   // Get the button
-let mybutton = document.getElementById("myBtn");
+let mybutton = document.getElementById("topBtn");
 
 // When the user scrolls down 20px from the top of the document, show the button
 window.onscroll = function() {scrollFunction()};
@@ -132,6 +140,37 @@ function topFunction() {
   document.documentElement.scrollTop = 0;
 }
 
+
+  // Function to format number with commas
+    function formatNumber(number) {
+      return number.toLocaleString('en-IN'); // 'en-IN' for Indian number formatting 
+    }
+
+  // format offer price number with commas
+     document.addEventListener('DOMContentLoaded', function() {
+      const offerPrices = document.querySelectorAll('#offerPrice');
+      offerPrices.forEach(element => {
+        const priceString = element.textContent.trim();
+        const price = parseFloat(priceString.replace(/[^\d.-]/g, ''));
+        if (!isNaN(price)) {
+          element.textContent = formatNumber(price);
+        }
+      });
+    });
+
+  // format Total amount of an order with commas
+     document.addEventListener('DOMContentLoaded', function() {
+      const totalAmounts = document.querySelectorAll('#totalAmount');
+      totalAmounts.forEach(element => {
+        const priceString = element.textContent.trim();
+        const price = parseFloat(priceString.replace(/[^\d.-]/g, ''));
+        if (!isNaN(price)) {
+          element.textContent ='₹' + formatNumber(price);
+        }
+      });
+    });
+
+
 </script>
 
 <style>
@@ -147,7 +186,7 @@ function topFunction() {
       border-radius: 20px;
       overflow: hidden; 
       margin-bottom: 50px;
-       box-shadow: 0 14px 16px rgba(21, 105, 131, 0.5);
+      box-shadow: 0 14px 16px rgba(21, 105, 131, 0.5);
     }
     .card-header{
       background-color: #278a9b96;
@@ -160,7 +199,7 @@ function topFunction() {
     .payment-title{
       font-weight: bold;
     }
-    .orderId{
+    .orderInfo{
       margin-right: 10em;
       margin-bottom: 2em;
     }
@@ -171,6 +210,35 @@ function topFunction() {
     .status-image{
        margin-bottom: 2em;
     }
+    .title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    max-width: 35em;
+    min-width: 8em;
+    font-size: large;
+  }
+
+  .title:hover {
+    color: rgb(40, 155, 155);
+  }
+   a {
+    color: black;
+    text-decoration: none;
+    /* Remove underline by default */
+  }
+
+  a:hover {
+    color: black;
+    text-decoration: none;
+    /* Ensure underline does not appear on hover */
+  }
+  #prodImg{
+     width: 8em; 
+     height: 7em;
+  }
 
     .chip {
       display: inline-block;
@@ -205,6 +273,7 @@ function topFunction() {
       justify-content: space-between;
       align-items: center;
       background-color: #278a9b96;
+      color: white;
     }
 
     .footer-content {
@@ -212,6 +281,10 @@ function topFunction() {
       width: 100%;
       justify-content: space-between;
       align-items: center;
+      font-size: large;
+    }
+    #totalTitle{
+       font-weight: bold;
     }
 
     .ship {
@@ -232,7 +305,7 @@ function topFunction() {
       margin-left: 10px;
     }
     
-    #myBtn {
+    #topBtn {
       display: none;
       position: fixed;
       bottom: 40px;
@@ -245,11 +318,12 @@ function topFunction() {
       color: white;
       background-image: linear-gradient(to bottom, #309db0, rgb(71, 172, 209));
        cursor: pointer;
-      
+       box-shadow: 0 2px 12px rgba(21, 105, 131, 0.5);
     }
 
-    #myBtn:hover {
+    #topBtn:hover {
       background-image: linear-gradient(to top, #309db0, rgb(71, 172, 209));
+      box-shadow: 0 2px 18px rgba(13, 89, 112, 0.5);
     }
   </style>
 
