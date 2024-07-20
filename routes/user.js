@@ -320,6 +320,7 @@ router.post('/place-order', async (req, res) => {
 
     // Place the order
     const orderId = await userHelpers.placeOrder(req.body, products, totalPrice);
+    console.log('sss',req.body);
 
     // Handle payment method
     if (paymentMethod === 'COD') {

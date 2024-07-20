@@ -275,7 +275,9 @@ module.exports = {
                     name: order.name,
                     mobile: order.mobile,
                     address: order.address,
-                    pincode: order.pincode
+                    pincode: order.pincode,
+                    state: order.state, 
+                    district: order.district
                 },
                 userId: objectId(order.userId),
                 paymentMethod: order['payment-method'],
@@ -304,7 +306,9 @@ module.exports = {
                     name: order.name,
                     mobile: order.mobile,
                     address: order.address,
-                    pincode: order.pincode
+                    pincode: order.pincode,
+                    state: order.state, 
+                    district: order.district
                 },
                 userId: objectId(order.userId),
                 paymentMethod: order['payment-method'],
@@ -369,7 +373,7 @@ module.exports = {
                             $cond: {
                                 if: { $isArray: "$products" },
                                 then: "$products",
-                                else: [{ item: "$products", quantity: 1 }] 
+                                else: [{ item: "$products", quantity: 1 }] // Adjust quantity as needed
                             }
                         }
                     }

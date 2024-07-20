@@ -19,8 +19,8 @@
               {{this.deliveryDetails.name}}
             </div>
             <div class="date">
-              <span style="font-weight:bold"> Date: </span> {{this.date}} <br>
-              <span style="font-weight:bold"> Time: </span> {{this.time}}
+              <span id="date"> Date: </span> {{this.date}} <br>
+              <span id="time"> Time: </span> {{this.time}}
             </div>
             <div class="payment">
               <span class="payment-title">Payment: </span>
@@ -35,29 +35,30 @@
         <div class="card-body">
           <div class="row">
             <div class="orderInfo">
-              <p class="card-text"><span style="font-weight:bold">Order Id: </span><br> {{this._id}}</p>
-              <p class="card-text"><span style="font-weight:bold">Order Status: </span> <span id="status-{{this._id}}">{{this.status}}</span></p>
+              <p class="card-text"><span id="orderId">Order Id: </span><br> {{this._id}}</p>
+              <p class="card-text"><span  id="orderStatus">Order Status: </span> <span id="status-{{this._id}}">{{this.status}}</span></p>
             </div>
             <div class="address">
-              <span style="font-weight: bold;">Delivery Address:</span><br>{{newlineToBr this.deliveryDetails.address}}
-              <br> {{this.deliveryDetails.pincode}}
+              <span id="address">Delivery Address:</span><br>{{newlineToBr this.deliveryDetails.address}}, <br>
+              {{this.deliveryDetails.district}}  {{this.deliveryDetails.pincode}},
+              <br> {{this.deliveryDetails.state}}
               <br> <i class="bi bi-telephone"></i>  {{this.deliveryDetails.mobile}}
             </div>
             <div class="status-image" >
                
                 {{#ifEquals this.status 'placed'}}
-              <img src="/images/order-placed.png" style="height: 250px;" alt="">
+              <img src="/images/order-placed.png"  alt="Order Placed">
               <p><small>We've received your order and it will be shipped shortly.</small></p>
                 {{else}}
                  {{#ifEquals this.status 'pending'}}
-              <img src="/images/order-pending.png" style="height: 250px;" alt="">        
+              <img src="/images/order-pending.png" alt="Order Pending">        
               <p><small>We’re unable to process your order due to a payment issue.</small></p>
                 {{else}}
                  {{#ifEquals this.status 'Shipped'}}
-                <img src="/images/deliver-soon.png" style="height: 250px;" alt="">
+                <img src="/images/deliver-soon.png" alt="Order Shipped">
                  <p><small>Your order has been shipped and will be dispatched soon.</small></p>
                 {{else}}
-                <img src="/images/order-delivered.png" style="height: 250px;" alt="">
+                <img src="/images/order-delivered.png"  alt="Order Delivered">
                  <p><small>Your order has arrived. We hope you enjoy your purchase!</small></p>
                  {{/ifEquals}}
                  {{/ifEquals}}
@@ -71,15 +72,14 @@
                 <tr>
                   <th scope="col">No</th>
                   <th scope="col">Item</th>
-                  <th scope="col" class="ml-auto">Price</th>
-                  <th scope="col" class="ml-auto">Quantity</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Quantity</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <th scope="row">{{incrementedIndex @index}}</th>
                   <td>
-                    
                      <a href="/view-product/{{this.item}}">
               <div class="row">
                 <div class="m-2">
@@ -92,7 +92,6 @@
                 </div>
               </div> 
                   </a>
-
                   </td>
                   <td>₹<span id="offerPrice">{{this.price}}</span></td>
                   <td>{{this.quantity}}</td>
@@ -207,8 +206,14 @@ function topFunction() {
       margin-right: 10em;
       margin-bottom: 2em;
     }
+    #address{
+      font-weight: bold;
+    }
     .status-image{
        margin-bottom: 2em;
+    }
+    .status-image img{
+      height: 250px;
     }
     .title {
     overflow: hidden;
@@ -266,6 +271,12 @@ function topFunction() {
       justify-content: space-between;
       align-items: center;
       width: 100%;
+    }
+    #date, #time{
+      font-weight:bold;
+    }
+    #orderId, #orderStatus{
+      font-weight:bold;
     }
 
     .card-footer {

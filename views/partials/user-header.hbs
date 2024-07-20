@@ -11,9 +11,9 @@
             <div class="mx-auto d-lg-none row">
                 <form class="form-inline my-2 my-lg-0" onsubmit="searchProducts(event)">
                     <div class="input-group row">
-                        <input class="form-control mr-sm-2" type="search" id="search-input" placeholder="Search"
+                        <input class="form-control  mr-sm-2" type="search" id="search-input" placeholder="Search"
                             aria-label="Search">
-                        <button class="btn my-2 my-sm-0 mr-2" id="searchbtn" type="submit"><i
+                        <button class="btn my-sm-0 ml-auto" id="searchbtn" type="submit"><i
                             class="bi bi-search"></i></button>
                     </div>
                 </form>
@@ -115,9 +115,12 @@
 </script>
 
 <style>
+  
+
     .input-group {
         position: relative;
         display: inline-block;
+         margin: 0; /* Remove default margins */
     }
 
     .input-group input {
@@ -129,8 +132,10 @@
         top: 0;
         right: 0;
         border: none;
-
     }
+
+   
+
 
     .nav-link .bi-cart {
         display: inline-block;
@@ -163,10 +168,11 @@
 
     }
 
+
     #searchbtn {
         border-radius: 20px;
         min-width: 60px;
-
+        
         background-image: linear-gradient(to left, #309db0, rgb(71, 172, 209));
         color: white;
         box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
@@ -188,7 +194,7 @@
 
     #search-input {
         border-radius: 20px;
-        width: 14em;
+        width: 14rem;
         background-color: transparent;
         border-width: 2px;
         border-color: #36a3b7;

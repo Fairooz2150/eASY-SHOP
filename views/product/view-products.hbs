@@ -289,13 +289,11 @@ if (products.length === 0) {
             </div>
           </a>
           <p hidden>${product.Description}</p>
-          
-            <button onclick="addToCart('${product._id}')" class="btn" id="addtoCart">Add to cart</button>
-            <div id="Ad">Product added <img src="/images/grocery.gif" class="addcart" alt=""></div>
-          
+          <button onclick="addToCart('${product._id}')" class="btn" id="addtoCart">Add to cart</button>
+          <div id="Ad">Product added <img src="/images/grocery.gif" class="addcart" alt=""></div>
         </div>
       </div>
-    `
+    `;
     productContainer.appendChild(productElement);
   });
 }
