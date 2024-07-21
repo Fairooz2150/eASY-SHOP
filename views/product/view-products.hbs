@@ -78,7 +78,7 @@
     <div class="modal-content">
         <span class="close">&times;</span>
         <p>Product was out of stock</p>
-        <button id="confirmRemove" class="btn confirmBtn">ok</button>
+        <button id="confirmRemove" class="btn confirmBtn">Ok</button>
     </div>
 </div>
 
@@ -326,7 +326,6 @@ if (products.length === 0) {
 
   .card-title:hover {
     color: #59b6c6;
-
   }
 
   .card-img-top {
@@ -341,7 +340,6 @@ if (products.length === 0) {
     -webkit-line-clamp: 1;
     /* number of lines to show */
     -webkit-box-orient: vertical;
-
   }
 
   .eASY-assurance {
@@ -367,19 +365,17 @@ if (products.length === 0) {
     width: 13.4em;
     background-image: linear-gradient(to left, #199cad, rgb(81, 176, 207));
     color: #fff;
-
   }
+
   #out0fStock{
      width: 13.4em;
     background-color: rgb(175, 170, 170);
     color: #fff;
-    
   }
 
   section {
     height: 100vh;
     overflow-y: auto;
-
   }
 
   section::-webkit-scrollbar {
@@ -390,11 +386,9 @@ if (products.length === 0) {
   .popup-sidebar {
     position: fixed;
     top: 50%;
-
     right: -300px;
     /* Initially hidden off-screen */
     width: 300px;
-
     background-color: #fff;
     box-shadow: 0 2px 8px rgba(21, 105, 131, 0.5);  
     z-index: 1000;
@@ -422,7 +416,6 @@ if (products.length === 0) {
     background-color: transparent;
     height: 10rem;
     border: 1px solid #f1f1f1;
-
     perspective: 1000px;
     /*For 3D effect */
   }
@@ -431,7 +424,6 @@ if (products.length === 0) {
   .flip-card-inner {
     position: relative;
     width: 100%;
-
     height: 100%;
     text-align: center;
     transition: transform 0.8s;
@@ -481,7 +473,6 @@ if (products.length === 0) {
 
   /*For showing notification on product added to cart */
   .addcart {
-
     width: 50px;
     height: 40px;
     position: relative;
@@ -653,6 +644,9 @@ if (products.length === 0) {
     padding: 10px 20px;
     margin: 10px;
   }
-
+  
+  .confirmBtn:hover {
+    color: white;
+  }
 
 </style>

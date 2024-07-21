@@ -151,7 +151,7 @@ router.get('/cart', verifyLogin, async (req, res) => {
     totalValue = await userHelpers.getTotalAmount(req.session.user._id)   
   res.render('user/cart', { products, user, totalValue, cartCount})
   }else{
-    res.render('user/empty-cart',{user})
+    res.render('user/empty-cart',{user,cartCount})
   }
 })
 
@@ -320,8 +320,7 @@ router.post('/place-order', async (req, res) => {
 
     // Place the order
     const orderId = await userHelpers.placeOrder(req.body, products, totalPrice);
-    console.log('sss',req.body);
-
+   
     // Handle payment method
     if (paymentMethod === 'COD') {
       await productHelpers.removeCartProducts(userId).then(()=>{
@@ -357,8 +356,11 @@ router.get('/orders', verifyLogin, async (req, res) => {
   userHelpers.getAllUserOrders(user._id).then((orders) => {
     // Sort orders by date in descending order
     orders.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-    res.render('user/orders', { user, cartCount, orders });
+    if(orders.length===0){
+      res.render('user/no-orders', { user, cartCount});
+    }else{
+      res.render('user/orders', { user, cartCount, orders });
+    }
   }).catch((err) => {
     console.error(err);
     res.status(500).send("Internal Server Error");
@@ -408,8 +410,8 @@ router.post('/verify-payment', (req, res) => {
 
 router.get('/your-account', verifyLogin, async (req, res) => {
   let user = req.session.user;
-
-  res.render('user/your-account', { user })
+  let cartCount = await userHelpers.getCartCount(req.session.user._id)
+  res.render('user/your-account', { user,cartCount })
 })
 
 
@@ -418,7 +420,8 @@ router.get('/your-account', verifyLogin, async (req, res) => {
 router.get('/account-settings', verifyLogin, async (req, res) => {
   let user = req.session.user;
   let accountDetails = await userHelpers.userDetails(user);
-  res.render('user/account-settings', { user, accountDetails });
+  let cartCount = await userHelpers.getCartCount(user._id)
+  res.render('user/account-settings', { user, accountDetails,cartCount });
 });
 
 
@@ -491,7 +494,6 @@ router.get('/your-products', verifyLogin, async (req, res) => {
     res.render('user/your-products', { user, products });
   } catch (error) {
     res.render('user/no-products', { error, user });
-    console.log('kkk',error);
   }
 });
 

@@ -328,8 +328,6 @@ module.exports = {
     getCartProductList: (userId) => {
         return new Promise(async (resolve, reject) => {
             let cart = await db.get().collection(collection.CART_COLLECTION).findOne({ user: objectId(userId) })
-            console.log("productmm", cart.products);
-
             resolve(cart.products)
         })
     },

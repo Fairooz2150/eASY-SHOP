@@ -1,3 +1,5 @@
+<section>
+
 <div class="row">
     <div class="col-md-6 m-auto">
         <div class="container mt-5 pl-5">
@@ -39,10 +41,10 @@
                     <input type="password" class="form-control" name="Password" id="newpassword" disabled>
                     <span id="passwordHelp" class="form-text "></span>
                 </div>
-                <div>
+                <div class="btns">
                     <button type="button" class="btn btn-danger float-left" id="deleteAccountBtn">Delete Account</button>
                     <button type="button" class="btn btn-primary float-right" id="editAccountBtn">Edit</button>
-                    <button type="submit" class="btn btn-success float-right" id="saveAccountBtn" style="display: none;">Save</button>
+                    <button type="submit" class="btn btn-success float-right" id="saveAccountBtn">Save</button>
                 </div>
             </form>
         </div>
@@ -71,6 +73,8 @@
         </div>
     </div>
 </div>
+
+</section>
 
 <script>
     $(document).ready(function () {
@@ -209,3 +213,21 @@
         }
     });
 </script>
+
+<style>
+   
+  .row{
+    width: 100%;
+  }
+  #saveAccountBtn{
+    display: none;
+  }
+  .btns button{
+     min-width: 70px;
+    border-radius: 20px;
+  }
+  .modal-dialog{
+    box-shadow: 0 2px 22px rgba(21, 105, 131, 0.5);
+  }
+ 
+</style>
