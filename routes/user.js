@@ -413,12 +413,12 @@ router.get('/your-account', verifyLogin, async (req, res) => {
 })
 
 
-/* Account info */
+/* Account Settings */
 
-router.get('/account-info', verifyLogin, async (req, res) => {
+router.get('/account-settings', verifyLogin, async (req, res) => {
   let user = req.session.user;
   let accountDetails = await userHelpers.userDetails(user);
-  res.render('user/account-info', { user, accountDetails });
+  res.render('user/account-settings', { user, accountDetails });
 });
 
 

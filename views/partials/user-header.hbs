@@ -67,24 +67,21 @@
                             {{#if user}}
                             Hello, <b>{{user.First_Name}}</b>
                             {{else}}
-                            <i class="bi bi-person-circle mr-1"></i> Account
+                            <i class="bi bi-person-circle mr-1"></i>  Login
                             {{/if}}
                         </button>
                         <div class="dropdown-menu " aria-labelledby="dropdownMenuButton">
                             {{#if user}}
-                            <a class="dropdown-item" href="/your-account"><i class="bi bi-person-circle"></i> Your
-                                Account</a>
+                            <a class="dropdown-item" href="/your-account"><i class="bi bi-person-circle"></i> Your Account</a>
                             <a class="dropdown-item" href=""><i class="bi bi-headset" id="icons"></i> Customer Care</a>
                             <a class="dropdown-item" href=""><i class="bi bi-info-circle-fill"></i> About Us</a>
                             <a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-left"></i> Logout</a>
                             {{else}}
-                            <a class="dropdown-item" href="/login"><i class="bi bi-box-arrow-in-left" id="icons"></i>
-                                Login</a>
-
+                            <a class="dropdown-item" href="/login"><i class="bi bi-box-arrow-in-left" id="icons"></i> Login</a>
+                            <a class="dropdown-item" href="/signup"><i class="bi bi-cloud-arrow-up-fill" id="icons"></i> Sign Up</a>
                             <a class="dropdown-item" href=""><i class="bi bi-headset" id="icons"></i> Customer Care</a>
                             <a class="dropdown-item" href=""><i class="bi bi-info-circle-fill" id="icons"></i> About</a>
-                            <a class="dropdown-item" href="/admin/login"><i class="bi bi-person-fill-check"
-                                    id="icons"></i> Admin</a>
+                            <a class="dropdown-item" href="/admin/login"><i class="bi bi-person-fill-check" id="icons"></i> Admin</a>
                             {{/if}}
                         </div>
                     </li>
@@ -202,11 +199,18 @@
     }
 
     .dropdown-toggle {
-        background-image: linear-gradient(to right, #309db0, rgb(71, 172, 209));
+        background-color: #35a8b7;
         box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
         border-radius: 20px;
         color: white;
+        min-width: 140px;
+        
     }
+    .dropdown-toggle:hover {
+       background-color: white;
+       color: #35a8b7;
+    }
+
 
     .navbar-toggler {
         border-radius: 10px;

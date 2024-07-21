@@ -1,0 +1,211 @@
+<div class="row">
+    <div class="col-md-6 m-auto">
+        <div class="container mt-5 pl-5">
+            <h2 class="text-center pb-5">Account Info</h2>
+            <form id="accountForm">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>First Name</label>
+                        <input type="text" class="form-control" name="First_Name" placeholder="First Name" value="{{user.First_Name}}" disabled required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Last Name</label>
+                        <input type="text" class="form-control" name="Last_Name" placeholder="Last Name" value="{{user.Last_Name}}" disabled required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" class="form-control" name="Email" placeholder="Email Address" value="{{user.Email}}" disabled required>
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="phone" class="form-control" name="Phone" placeholder="Phone" value="{{user.Phone}}" disabled required>
+                </div>
+                <div class="form-group">
+                    <label>Gender</label>
+                    <br>
+                    <label class="radio-inline ml-2 mr-2" for="">
+                        Male<input type="radio" class="ml-2" name="Gender" value="Male" {{#ifCond user.Gender "===" "Male"}} checked {{/ifCond}} disabled>
+                    </label>
+                    <label for="" class="radio-inline ml-2 mr-2 mt-1">
+                        Female<input type="radio" class="ml-2" name="Gender" value="Female" {{#ifCond user.Gender "===" "Female"}} checked {{/ifCond}} disabled>
+                    </label>
+                    <label for="" class="radio-inline ml-2 mr-2 mt-1">
+                        Others<input type="radio" class="ml-2" name="Gender" value="Others" {{#ifCond user.Gender "===" "Others"}} checked {{/ifCond}} disabled>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>New Password</label>
+                    <input type="password" class="form-control" name="Password" id="newpassword" disabled>
+                    <span id="passwordHelp" class="form-text "></span>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-danger float-left" id="deleteAccountBtn">Delete Account</button>
+                    <button type="button" class="btn btn-primary float-right" id="editAccountBtn">Edit</button>
+                    <button type="submit" class="btn btn-success float-right" id="saveAccountBtn" style="display: none;">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Password Confirmation Modal -->
+<div class="modal fade" id="passwordModal" tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="passwordModalLabel">Confirm Password</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="passwordForm">
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Confirm</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        let action = '';
+
+        // Show password confirmation modal on Edit button click
+        $('#editAccountBtn').click(function () {
+            action = 'edit';
+            $('#passwordModal').modal('show');
+        });
+
+        // Show password confirmation modal on Delete Account button click
+        $('#deleteAccountBtn').click(function () {
+            action = 'delete';
+            $('#passwordModal').modal('show');
+        });
+
+        // Handle password confirmation form submission
+        $('#passwordForm').submit(function (e) {
+            e.preventDefault();
+            const password = $('#password').val();
+
+            $.post('/verify-password', { password: password }, function (response) {
+                if (response.success) {
+                    $('#passwordModal').modal('hide');
+                    if (action === 'edit') {
+                        $('form input').prop('disabled', false);
+                        $('#editAccountBtn').hide();
+                        $('#saveAccountBtn').show();
+                    } else if (action === 'delete') {
+                        // Password verified, proceed with account deletion
+                        $.post('/delete-account', function (deleteResponse) {
+                            if (deleteResponse.success) {
+                                alert('Account deleted successfully');
+                                window.location.href = '/logout'; // Redirect to logout or homepage
+                            } else {
+                                alert('Error deleting account');
+                            }
+                        });
+                    }
+                } else {
+                    alert('Incorrect password');
+                }
+            });
+        });
+
+        // Save changes and disable fields again
+        $('#saveAccountBtn').click(function (e) {
+            e.preventDefault();
+
+            // Check for empty required fields
+            let valid = true;
+            $('#accountForm input[required]').each(function () {
+                if ($(this).val() === '') {
+                    valid = false;
+                }
+            });
+
+            if (!valid) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            const newPassword = $('#newpassword').val();
+            const passwordValid = validatePassword(newPassword);
+
+            if (newPassword && !passwordValid) {
+                alert('Please enter a valid password.');
+                return;
+            }
+
+            const formData = $('#accountForm').serialize();
+
+            $.ajax({
+                url: '/update-account',
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        $('form input').prop('disabled', true);
+                        $('#editAccountBtn').show();
+                        $('#saveAccountBtn').hide();
+                        alert('Account updated successfully');
+                        window.location.href = '/your-account';
+                    } else {
+                        alert('Error updating account');
+                    }
+                }
+            });
+        });
+    });
+
+    const passwordField = document.getElementById('newpassword');
+    const passwordHelp = document.getElementById('passwordHelp');
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,16}$/;
+
+    function validatePassword(password) {
+        if (!password) return true; // No new password entered, consider valid
+
+        if (password.length < 6 || password.length > 16) {
+            passwordHelp.textContent = 'Password must be between 6 and 16 characters.';
+            passwordHelp.style.color = 'red';
+            return false;
+        } else if (!password.match(/[A-Za-z]/)) {
+            passwordHelp.textContent = 'Password must contain at least one alphabetic letter.';
+            passwordHelp.style.color = 'red';
+            return false;
+        } else if (!password.match(/\d/)) {
+            passwordHelp.textContent = 'Password must contain at least one numeric digit.';
+            passwordHelp.style.color = 'red';
+            return false;
+        } else if (!password.match(/[@$!%*?&]/)) {
+            passwordHelp.textContent = 'Password must contain at least one special character.';
+            passwordHelp.style.color = 'red';
+            return false;
+        } else if (passwordRegex.test(password)) {
+            passwordHelp.textContent = 'Password is valid.';
+            passwordHelp.style.color = 'green';
+            return true;
+        } else {
+            passwordHelp.textContent = 'Password is invalid.';
+            passwordHelp.style.color = 'red';
+            return false;
+        }
+    }
+
+    passwordField.addEventListener('input', function () {
+        validatePassword(passwordField.value);
+    });
+
+    document.getElementById('accountForm').addEventListener('submit', function (event) {
+        const newPassword = passwordField.value;
+
+        if (newPassword && !validatePassword(newPassword)) {
+            event.preventDefault();  // Prevent form submission if password is invalid
+        }
+    });
+</script>
