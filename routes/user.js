@@ -429,10 +429,7 @@ router.get('/account-settings', verifyLogin, async (req, res) => {
 
 router.post('/update-account', verifyLogin, async (req, res) => {
   const userId = req.session.user._id;
-
   let { First_Name, Last_Name, Email, Phone, Gender, Password } = req.body;
-
-
   try {
     await userHelpers.updateAccount(userId, { First_Name, Last_Name, Email, Phone, Gender, Password });
 
@@ -442,7 +439,6 @@ router.post('/update-account', verifyLogin, async (req, res) => {
     req.session.user.Email = Email;
     req.session.user.Phone = Phone;
     req.session.user.Gender = Gender;
-
 
     res.json({ success: true });
   } catch (error) {
@@ -456,7 +452,6 @@ router.post('/update-account', verifyLogin, async (req, res) => {
 router.post('/verify-password', verifyLogin, async (req, res) => {
   const userId = req.session.user._id;
   const enteredPassword = req.body.password;
-
   try {
     const isValid = await userHelpers.verifyPassword(userId, enteredPassword);
     res.json({ success: isValid });
@@ -470,7 +465,6 @@ router.post('/verify-password', verifyLogin, async (req, res) => {
 
 router.post('/delete-account', verifyLogin, async (req, res) => {
   const userId = req.session.user._id;
-
   try {
     await userHelpers.deleteAccount(userId);
     req.session.destroy();
@@ -481,19 +475,24 @@ router.post('/delete-account', verifyLogin, async (req, res) => {
 });
 
 
-/*User selling products*/
+/*Get User selling products*/
 
 router.get('/your-products', verifyLogin, async (req, res) => {
   let user = req.session.user;
+  let cartCount = await userHelpers.getCartCount(user._id);
   try {
-    let productsWoQnty = await userHelpers.getUserRequestProds(user._id);
-    let productQuantity = await productHelpers.getCartedProductQuantity();
-    let stockCount = await productHelpers.getAllProducts();
+    //User requested products details for selling
+    let productsWoQnty = await userHelpers.getUserRequestProds(user._id); 
+    //Retrieve the quantity of each product that the user has added to their cart
+    let productQuantity = await productHelpers.getCartedProductQuantity(); 
+    //get all users live Products thats in sale
+    let stockCount = await productHelpers.getAllProducts(); 
+     //Add stock count and carted counts to user products
     let products = await productHelpers.getAllProductswithQuantity(productsWoQnty, stockCount, productQuantity);
-    console.log("userprods", products);
-    res.render('user/your-products', { user, products });
+
+    res.render('user/your-products', { user, products, cartCount });
   } catch (error) {
-    res.render('user/no-products', { error, user });
+    res.render('user/no-products', { error, user, cartCount });
   }
 });
 
