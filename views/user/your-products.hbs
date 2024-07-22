@@ -1,13 +1,14 @@
 <section>
-  <div class="container mt-4">
-    <div class="row mt-4">
-      <a href="/sell-products" class="btn btn-success ml-auto">Sell Product</a>
+  <div class="container-fluid mt-4">
+      <h2 class="text-center pt-3">Your Products</h2>
+    <div class="row mr-2 mb-2">
+      <a href="/sell-products" class="btn btn-success ml-auto" id="sellProd"><i class="bi bi-arrow-right-square"></i> Sell Your Product </a>
     </div>
-    <table class="table mt-5" id="productsTable">
+    <table class="table mt-3" id="productsTable">
       <thead>
         <tr>
           <th scope="col">No</th>
-          <th scope="col">Item</th>
+          <th scope="col">Product</th>
           <th scope="col">Status</th>
           <th>Options</th>
         </tr>
@@ -21,30 +22,30 @@
           
             <div class="row">
 
-              <div>
-                <img style=" width: 8em;  height: 7em;" src="/product-images/{{this._id}}_0.jpg" class="ml-2"
+              <div class="m-2">
+                <img  src="/product-images/{{this._id}}_0.jpg" class="img ml-2"
                   alt="Image not available" onerror="this.onerror=null; this.src='/images/no-images-available.png';">
               </div>
 
               <div class="product_details ml-3">
-                {{this.Name}} <br>
-                <span class="text-muted">{{this.Category}}</span>
+                <span class="title" title="{{this.Name}}">{{this.Name}} </span><br>
+                <span class="category text-muted" title="{{this.Category}}">{{this.Category}}</span>
                 <br><b>Stock:</b> {{this.Stock_Count}}
-  
             </div>
+
           </td>
 
           <td>{{this.Status}}</td>
 
           <td>
             {{#ifEquals this.Status 'Approved'}}
-            <a href="/edit-user-product/{{this._id}}" class="btn btn-primary"><i class="bi bi-pencil-square"></i></a>
-            <button class="btn btn-danger" onclick="deleteUserProduct('{{this._id}}', '{{this.Name}}')"><i
+            <a href="/edit-user-product/{{this._id}}" class="btn p-1 mr-1" id="edit"><i class="bi bi-pencil-square"></i></a>
+            <button class="btn p-1" onclick="deleteUserProduct('{{this._id}}', '{{this.Name}}')" id="delete"><i
                 class="bi bi-trash3"></i></button>
             {{else}}
 
-            <a href="/edit-pending-product/{{this._id}}" class="btn btn-primary"><i class="bi bi-pencil-square"></i></a>
-            <button class="btn btn-danger" onclick="deletePendingProduct('{{this._id}}', '{{this.Name}}')"><i
+            <a href="/edit-pending-product/{{this._id}}" class="btn p-1 mr-1 " id="edit"><i class="bi bi-pencil-square"></i></a>
+            <button class="btn p-1" onclick="deletePendingProduct('{{this._id}}', '{{this.Name}}')" id="delete"><i
                 class="bi bi-trash3"></i></button>
             {{/ifEquals}}
           </td>
@@ -59,8 +60,8 @@
     <div class="modal-content">
       <span class="close">&times;</span>
       <p id="modalMessage">Are you sure?</p>
-      <button id="confirmRemove" class="btn btn-danger">OK</button>
-      <button id="cancelRemove" class="btn btn-secondary">Cancel</button>
+      <button id="confirmRemove" class="btn ">Yes</button>
+      <button id="cancelRemove" class="btn ">Cancel</button>
     </div>
   </div>
 
@@ -84,7 +85,15 @@
     var cancelButton = document.getElementById("cancelRemove");
 
     // Set the modal message
-    document.getElementById("modalMessage").innerText = message;
+    const modalMessage = document.getElementById('modalMessage');
+    
+    // Apply the message with styled productName
+    modalMessage.innerHTML = message;
+    modalMessage.style.overflow = 'hidden';
+    modalMessage.style.textOverflow = 'ellipsis';
+    modalMessage.style.webkitLineClamp = '3';
+    modalMessage.style.display = '-webkit-box';
+    modalMessage.style.webkitBoxOrient = 'vertical';
 
     // Show the modal
     modal.style.display = "block";
@@ -114,7 +123,7 @@
   }
 
   function deleteUserProduct(productId, productName) {
-    showConfirmationModal(`Are you sure you want to delete ${productName}?`, function () {
+    showConfirmationModal(`Are you sure you want to delete <span id="styledProductName">${productName}</span>?`, function () {
       $.ajax({
         url: '/delete-user-product/' + productId,
         method: 'DELETE',
@@ -135,7 +144,7 @@
   }
 
   function deletePendingProduct(productId, productName) {
-    showConfirmationModal(`Are you sure you want to delete ${productName}?`, function () {
+    showConfirmationModal(`Are you sure you want to delete <span id="styledProductName">${productName}</span> ?`, function () {
       $.ajax({
         url: '/delete-user-pendingprod/' + productId,
         method: 'DELETE',
@@ -186,7 +195,8 @@
     margin: 15% auto;
     /* 15% from the top and centered */
     padding: 20px;
-    border: 1px solid #888;
+    border-radius: 10px; 
+    box-shadow: 0 0 20px rgba(18, 155, 150, 0.5);
     width: 80%;
     /* Could be more or less, depending on screen size */
     max-width: 400px;
@@ -204,25 +214,106 @@
 
   .close:hover,
   .close:focus {
-    color: black;
+    color: rgb(6, 51, 53);
     text-decoration: none;
     cursor: pointer;
   }
+ #styledProductName {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 3;
+    display: -webkit-box;
+    -webkit-box-orient: vertical; 
+    font-weight: bold;
+}
 
-  .btn {
+  #confirmRemove {
     padding: 10px 20px;
     margin: 10px;
-  }
-
-  .btn-danger {
-    background-color: red;
+    background-image: linear-gradient(to left, #f07b0d, rgb(245, 157, 64));
     color: white;
     border: none;
+    border-radius: 20px;
   }
-
-  .btn-secondary {
-    background-color: grey;
+  #cancelRemove{
+    padding: 10px 20px;
+    margin: 10px;
+    background-image: linear-gradient(to left, #309db0, rgb(71, 172, 209));
     color: white;
     border: none;
+    border-radius: 20px;
   }
+   #cancelRemove:hover{
+    background-image: linear-gradient(to right, #309db0, rgb(71, 172, 209));
+    color: white;
+  }
+  #confirmRemove:hover{
+   background-image: linear-gradient(to right, #f07b0d, rgb(245, 157, 64));
+    color: white;
+  }
+
+  #delete{
+    box-shadow: 0 0 4px rgba(5, 78, 75, 0.5);
+    color: #e2740e;
+  }
+  #edit{
+    box-shadow: 0 0 4px rgba(5, 78, 75, 0.5);
+    color:rgb(39, 163, 195);
+  }
+  #delete:hover{
+    background-color: #e2740e;
+    color: white;
+  }
+  #edit:hover{
+      background-color:rgb(39, 163, 195);
+      color:  white;
+    }
+
+    a {
+    color: black;
+    text-decoration: none;
+    /* Remove underline by default */
+  }
+
+  a:hover {
+    color: black;
+    text-decoration: none;
+    /* Ensure underline does not appear on hover */
+  }
+  .img {
+     width: 9em; 
+     height: 8em;
+  }
+  .title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    max-width: 45em;
+    min-width: 7em;
+    font-weight: bold;
+    
+  }
+
+   #sellProd{
+    border-radius: 25px; 
+    color: white; 
+    background-image: linear-gradient(to right, #1e8f4b, rgb(2, 164, 89));
+    
+  }
+  #sellProd:hover{
+      background-image: linear-gradient(to left, #1e8f4b, rgb(2, 164, 89));
+      color: white;
+  }
+
+  .category { 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    max-width: 40em;
+  }
+
 </style>

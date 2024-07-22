@@ -294,9 +294,15 @@ if (products.length === 0) {
               </div>
             </div>
           </a>
-          <p hidden>${product.Description}</p>
-          <button onclick="addToCart('${product._id}')" class="btn" id="addtoCart">Add to cart</button>
+           <p hidden>${product.Description}</p>
+          ${product.Stock_Count > 0 ? `
+            <button onclick="addToCart('${product._id}')" class="btn" id="addtoCart">Add to cart</button>
+          ` : `
+            <button class="btn" id="outOfStock" disabled>Out of Stock</button> 
+          `}
+          <a href="/cart">
           <div id="Ad">Product added <img src="/images/grocery.gif" class="addcart" alt=""></div>
+          </a>
         </div>
       </div>
     `;
@@ -497,7 +503,7 @@ if (products.length === 0) {
     }
   }
 
-  /* The Advertisement - position it at the bottom and in the middle of the screen */
+  /* The Add to Cart showing animation(notification) - position it at the bottom and in the middle of the screen */
   #Ad {
     visibility: hidden;
     /* Hidden by default. Visible on click */
@@ -618,7 +624,7 @@ if (products.length === 0) {
     /* 15% from the top and centered */
     padding: 20px;
     border-radius: 10px;  
-    box-shadow: 0 2px 15px rgba(18, 155, 150, 0.5);
+    box-shadow: 0 0 22px rgba(18, 155, 150, 0.5);
     width: 80%;
     /* Could be more or less, depending on screen size */
     max-width: 400px;
