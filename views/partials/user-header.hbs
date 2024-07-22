@@ -1,26 +1,30 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light" id="nvbr">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/" title="eASY SHOP"> <img src="/images/eASY-SHOP-logo.png" class="eASY-logo"
-                    alt="eASY SHOP"> </a>
 
+            <!--  eASY SHOP Logo for Large screens (visible only on Large screens) -->
+            <a class="navbar-brand" href="/" title="eASY SHOP"> <img src="/images/eASY-SHOP-logo.png"
+                    class="eASY-Logo d-none d-lg-block" alt="eASY SHOP"> </a>
 
+            <!-- Search bar and eASY SHOP Logo for small screens (visible only on small screens) -->
+            <a class="navbar-brand" href="/" title="eASY SHOP"> <img src="/images/eASY-SHOP-logo.png"
+                    class="eASY-logoS d-lg-none " alt="eASY SHOP"> </a>
 
-            <!-- Search bar for small screens (visible only on small screens) -->
             {{#if search}}
-            <div class="mx-auto d-lg-none row">
-                <form class="form-inline my-2 my-lg-0" onsubmit="searchProducts(event)">
-                    <div class="input-group row">
-                        <input class="form-control  mr-sm-2" type="search" id="search-input" placeholder="Search"
+            <div class="mx-auto d-lg-none">
+                <form class="form-inline my-2" onsubmit="searchProducts(event)">
+                    <div class="input-group">
+                        <input class="form-control" type="search" id="search-inputs" placeholder="Search..."
                             aria-label="Search">
-                        <button class="btn my-sm-0 ml-auto" id="searchbtn" type="submit"><i
-                            class="bi bi-search"></i></button>
+                        <span class="input-group-append">
+                            <i class="bi bi-search" id="search-icon"></i>
+                        </span>
                     </div>
                 </form>
             </div>
             {{/if}}
 
-            <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse"
+            <button class="navbar-toggler  ml-auto" type="button" data-toggle="collapse"
                 data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false"
                 aria-label="Toggle navigation" title="Menu">
                 <span class="navbar-toggler-icon"></span>
@@ -36,7 +40,8 @@
 
                     <li class="nav-item pr-3" id="navItem">
                         <a class="nav-link" id="header-links" href="/cart"><i class="bi bi-cart">
-                                <span class="badge" id="cart-count" title="cart count">{{cartCount}}</span> </i> Cart</a>
+                                <span class="badge" id="cart-count" title="cart count">{{cartCount}}</span> </i>
+                            Cart</a>
                     </li>
 
                     <li class="nav-item pr-3" id="navItem">
@@ -45,16 +50,16 @@
 
                 </ul>
 
-
                 <!-- Search bar for large screens (visible only on large screens) -->
                 {{#if search}}
                 <div class="mx-auto d-none d-lg-block">
-                    <form class="form-inline my-2 my-lg-0" onsubmit="searchProducts(event)">
+                    <form class="form-inline my-2" onsubmit="searchProducts(event)">
                         <div class="input-group">
-                            <input class="form-control mr-sm-2" type="search" id="search-inputs" placeholder="Search"
+                            <input class="form-control " type="search" id="search-input" placeholder="Search..."
                                 aria-label="Search">
-                            <button class="btn my-2 my-sm-0 bi bi-search mr-2" type="submit" id="searchbtn"><span
-                                    class="pl-2">Search</span></button>
+                            <span class="input-group-append ">
+                                <i class="bi bi-search " id="search-icon"></i>
+                            </span>
                         </div>
                     </form>
                 </div>
@@ -67,21 +72,25 @@
                             {{#if user}}
                             Hello, <b>{{user.First_Name}}</b>
                             {{else}}
-                            <i class="bi bi-person-circle mr-1"></i>  Login
+                            <i class="bi bi-person-circle mr-1"></i> Login
                             {{/if}}
                         </button>
                         <div class="dropdown-menu " aria-labelledby="dropdownMenuButton">
                             {{#if user}}
-                            <a class="dropdown-item" href="/your-account"><i class="bi bi-person-circle"></i> Your Account</a>
+                            <a class="dropdown-item" href="/your-account"><i class="bi bi-person-circle"></i> Your
+                                Account</a>
                             <a class="dropdown-item" href=""><i class="bi bi-headset" id="icons"></i> Customer Care</a>
                             <a class="dropdown-item" href=""><i class="bi bi-info-circle-fill"></i> About Us</a>
                             <a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-left"></i> Logout</a>
                             {{else}}
-                            <a class="dropdown-item" href="/login"><i class="bi bi-box-arrow-in-left" id="icons"></i> Login</a>
-                            <a class="dropdown-item" href="/signup"><i class="bi bi-cloud-arrow-up-fill" id="icons"></i> Sign Up</a>
+                            <a class="dropdown-item" href="/login"><i class="bi bi-box-arrow-in-left" id="icons"></i>
+                                Login</a>
+                            <a class="dropdown-item" href="/signup"><i class="bi bi-cloud-arrow-up-fill" id="icons"></i>
+                                Sign Up</a>
                             <a class="dropdown-item" href=""><i class="bi bi-headset" id="icons"></i> Customer Care</a>
                             <a class="dropdown-item" href=""><i class="bi bi-info-circle-fill" id="icons"></i> About</a>
-                            <a class="dropdown-item" href="/admin/login"><i class="bi bi-person-fill-check" id="icons"></i> Admin</a>
+                            <a class="dropdown-item" href="/admin/login"><i class="bi bi-person-fill-check"
+                                    id="icons"></i> Admin</a>
                             {{/if}}
                         </div>
                     </li>
@@ -90,6 +99,7 @@
         </div>
     </nav>
 </header>
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         var lastScrollTop = 0;
@@ -109,35 +119,98 @@
             lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; // For Mobile or negative scrolling
         }, false);
     });
+
+    //for navbar-toggler outline removing(none)
+    const button = document.querySelector('.navbar-toggler');
+    button.addEventListener('focus', (event) => {
+        event.target.style.outline = 'none';
+    });
+
+
+    //for changing Placeholders in search input
+    const placeholders = ["Search for products...", "Explore eASY collections...", "Find your favorite items..."];
+    let index = 0;
+
+    function changePlaceholder() {
+        const searchInput = document.getElementById('search-input');
+        const searchInputs = document.getElementById('search-inputs');
+        searchInput.placeholder = placeholders[index];
+        searchInputs.placeholder = placeholders[index];
+        index = (index + 1) % placeholders.length;
+    }
+
+    // Change placeholder every 3 seconds
+    setInterval(changePlaceholder, 3000);
+
+    // Initialize the first placeholder
+    changePlaceholder();
 </script>
 
-<style>
-  
 
+<style>
     .input-group {
         position: relative;
         display: inline-block;
-         margin: 0; /* Remove default margins */
+        margin: 0;
+        /* Remove default margins */
     }
 
     .input-group input {
         padding-right: 40px;
     }
 
-    .input-group button {
+    .input-group-append {
         position: absolute;
-        top: 0;
+        top: -6px;
         right: 0;
+        padding: 10px;
         border: none;
+        background-color: transparent;
+        bottom: 5px;
     }
 
-   
 
+    /*Search bar and eASY SHOP Logo for Large screens */
+    #search-input {
+        border-radius: 20px;
+        width: 22em;
+        background-color: transparent;
+        border-width: 2px;
+        border-color: #36a3b7;
+        box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
+    }
+
+    .eASY-Logo {
+        height: 50px;
+        width: 110px;
+    }
+
+
+    /*Search bar and eASY SHOP Logo for small screens  */
+    #search-inputs {
+        border-radius: 20px;
+        width: 14.5em;
+        background-color: transparent;
+        border-width: 2px;
+        border-color: #36a3b7;
+        box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
+    }
+
+    .eASY-logoS {
+        height: 40px;
+        width: 90px;
+    }
+
+
+    #search-icon {
+        font-size: 20px;
+        color: #36a3b7;
+
+    }
 
     .nav-link .bi-cart {
         display: inline-block;
         position: relative;
-
     }
 
     #header-links {
@@ -155,48 +228,13 @@
     .badge {
         background-color: #309db0;
         color: white;
-
         border-radius: 50%;
         padding: 2px 6px;
         position: absolute;
         top: -10px;
         right: -5px;
-
-
     }
 
-
-    #searchbtn {
-        border-radius: 20px;
-        min-width: 60px;
-        
-        background-image: linear-gradient(to left, #309db0, rgb(71, 172, 209));
-        color: white;
-        box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
-
-    }
-
-    #searchbtn:hover {
-        background-image: linear-gradient(to right, #309db0, rgb(71, 172, 209));
-    }
-
-    #search-inputs {
-        border-radius: 20px;
-        width: 22em;
-        background-color: transparent;
-        border-width: 2px;
-        border-color: #36a3b7;
-        box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
-    }
-
-    #search-input {
-        border-radius: 20px;
-        width: 14rem;
-        background-color: transparent;
-        border-width: 2px;
-        border-color: #36a3b7;
-        box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
-    }
 
     .dropdown-toggle {
         background-color: #35a8b7;
@@ -204,17 +242,20 @@
         border-radius: 20px;
         color: white;
         min-width: 140px;
-        
-    }
-    .dropdown-toggle:hover {
-       background-color: white;
-       color: #35a8b7;
     }
 
+    .dropdown-toggle:hover {
+        background-color: white;
+        color: #35a8b7;
+    }
 
     .navbar-toggler {
         border-radius: 10px;
         box-shadow: 0 2px 6px rgba(28, 113, 139, 0.5);
+        padding: 1px;
+        border: none;
+        outline: none;
+
     }
 
     .dropdown-item {
@@ -223,6 +264,7 @@
 
     .dropdown-item:hover {
         color: rgb(32, 161, 190);
+        background-color: rgba(176, 213, 238, 0.125);
     }
 
     body {
@@ -237,25 +279,17 @@
         top: 0;
         transition: top 0.3s;
         /* Smooth transition */
-
     }
 
-    .eASY-logo {
-        height: 50px;
-        width: 110px;
-
-    }
 
     .nav-item.dropdown:hover .dropdown-menu {
         display: block;
         border-radius: 10px;
-
     }
 
     #nvbr {
         background-image: url('/images/header.png');
         background-size: cover;
         background-repeat: no-repeat;
-
     }
 </style>
