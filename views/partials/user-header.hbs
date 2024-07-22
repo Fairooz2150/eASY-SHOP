@@ -6,15 +6,27 @@
             <a class="navbar-brand" href="/" title="eASY SHOP"> <img src="/images/eASY-SHOP-logo.png"
                     class="eASY-Logo d-none d-lg-block" alt="eASY SHOP"> </a>
 
-            <!-- Search bar and eASY SHOP Logo for small screens (visible only on small screens) -->
+            <!-- Search bar and eASY SHOP Logo for small and medium screens (visible only on small and medium screens) -->
             <a class="navbar-brand" href="/" title="eASY SHOP"> <img src="/images/eASY-SHOP-logo.png"
                     class="eASY-logoS d-lg-none " alt="eASY SHOP"> </a>
 
             {{#if search}}
-            <div class="mx-auto d-lg-none">
+            <div class="mx-auto d-md-none">
                 <form class="form-inline my-2" onsubmit="searchProducts(event)">
                     <div class="input-group">
                         <input class="form-control" type="search" id="search-inputs" placeholder="Search..."
+                            aria-label="Search">
+                        <span class="input-group-append">
+                            <i class="bi bi-search" id="search-icon"></i>
+                        </span>
+                    </div>
+                </form>
+            </div>
+
+            <div class="mx-auto d-md-block d-none d-lg-none">
+                <form class="form-inline my-2" onsubmit="searchProducts(event)">
+                    <div class="input-group">
+                        <input class="form-control" type="search" id="search-input" placeholder="Search..."
                             aria-label="Search">
                         <span class="input-group-append">
                             <i class="bi bi-search" id="search-icon"></i>
@@ -189,7 +201,7 @@
     /*Search bar and eASY SHOP Logo for small screens  */
     #search-inputs {
         border-radius: 20px;
-        width: 14.5em;
+        width: 14em;
         background-color: transparent;
         border-width: 2px;
         border-color: #36a3b7;
