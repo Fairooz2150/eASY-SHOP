@@ -67,7 +67,7 @@
                 <div class="mx-auto d-none d-lg-block">
                     <form class="form-inline my-2" onsubmit="searchProducts(event)">
                         <div class="input-group">
-                            <input class="form-control " type="search" id="search-input" placeholder="Search..."
+                            <input class="form-control " type="search" id="search-inputL" placeholder="Search..."
                                 aria-label="Search">
                             <span class="input-group-append ">
                                 <i class="bi bi-search " id="search-icon"></i>
@@ -146,8 +146,10 @@
     function changePlaceholder() {
         const searchInput = document.getElementById('search-input');
         const searchInputs = document.getElementById('search-inputs');
+        const searchInputL = document.getElementById('search-inputL');
         searchInput.placeholder = placeholders[index];
         searchInputs.placeholder = placeholders[index];
+        searchInputL.placeholder = placeholders[index];
         index = (index + 1) % placeholders.length;
     }
 
@@ -168,13 +170,13 @@
     }
 
     .input-group input {
-        padding-right: 40px;
+        padding-left: 40px;
     }
 
     .input-group-append {
         position: absolute;
         top: -6px;
-        right: 0;
+        left: 0;
         padding: 10px;
         border: none;
         background-color: transparent;
@@ -182,8 +184,8 @@
     }
 
 
-    /*Search bar and eASY SHOP Logo for Large screens */
-    #search-input {
+    /*Search bar and eASY SHOP Logo for medium and Large screens */
+    #search-input, #search-inputL {
         border-radius: 20px;
         width: 22em;
         background-color: transparent;

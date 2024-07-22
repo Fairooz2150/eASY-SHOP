@@ -217,13 +217,19 @@ function slidePopupSidebar() {
   
 
   // Search bar for small screen
+  document.getElementById('search-inputs').addEventListener('keyup', function (event) {
+    const query = event.target.value;
+    searchProducts(query);
+  });
+
+  // Search bar for medium screen
   document.getElementById('search-input').addEventListener('keyup', function (event) {
     const query = event.target.value;
     searchProducts(query);
   });
 
-  // Search bar for  large screen
-  document.getElementById('search-inputs').addEventListener('keyup', function (event) {
+    // Search bar for large screen
+  document.getElementById('search-inputL').addEventListener('keyup', function (event) {
     const query = event.target.value;
     searchProducts(query);
   });

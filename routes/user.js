@@ -481,15 +481,8 @@ router.get('/your-products', verifyLogin, async (req, res) => {
   let user = req.session.user;
   let cartCount = await userHelpers.getCartCount(user._id);
   try {
-    //User requested products details for selling
-    let productsWoQnty = await userHelpers.getUserRequestProds(user._id); 
-    //Retrieve the quantity of each product that the user has added to their cart
-    let productQuantity = await productHelpers.getCartedProductQuantity(); 
-    //get all users live Products thats in sale
-    let stockCount = await productHelpers.getAllProducts(); 
-     //Add stock count and carted counts to user products
-    let products = await productHelpers.getAllProductswithQuantity(productsWoQnty, stockCount, productQuantity);
-
+    //User selling Products details
+    let products = await userHelpers.getUserRequestProds(user._id); 
     res.render('user/your-products', { user, products, cartCount });
   } catch (error) {
     res.render('user/no-products', { error, user, cartCount });
