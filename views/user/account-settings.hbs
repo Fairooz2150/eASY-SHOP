@@ -1,9 +1,22 @@
 <section>
 
-<div class="row">
-    <div class="col-md-6 m-auto">
-        <div class="container mt-5 pl-5">
-            <h2 class="text-center pb-5">Account Info</h2>
+<div class="row mb-5">
+    <div class="col-md-8 m-auto ">
+        <div class="container mt-5 pl-5 ">
+           <div class="text-center avatar">
+            {{#ifCond user.Gender "===" "Male"}} 
+            <img src="/images/male-avatar.avif" alt="Male"  >
+            {{else}}
+            {{#ifCond user.Gender "===" "Female"}} 
+            <img src="/images/female-avatar.avif" alt="Female" >
+            {{else}}
+            <img src="/images/trans-avatar.jpg" alt="Person" >
+            {{/ifCond}}
+            {{/ifCond}}
+
+             <h2 class="pt-2 pb-5"> {{user.First_Name}} {{user.Last_Name}}</h2>
+           </div> 
+           
             <form id="accountForm">
                 <div class="form-row">
                     <div class="form-group col-md-6">
@@ -228,6 +241,12 @@
   }
   .modal-dialog{
     box-shadow: 0 2px 22px rgba(21, 105, 131, 0.5);
+  }
+  .avatar img{
+    border-radius: 50%; 
+    border-style: outset;
+    border-color: rgb(22, 119, 116); 
+    height:125px;
   }
  
 </style>
