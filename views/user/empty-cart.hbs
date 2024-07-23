@@ -1,22 +1,31 @@
- <a href="/">
-  <section class="bg-section">
+<section>
 
-    <div class="container-fluid" id="bg" >
+    <div class="container-fluid">
 
         <div class="pt-5 text-center">
-            <h2>Your <span class="eASY"> eASY </span> Cart is empty</h2>
+            <h2 class="eASY">Your eASY Cart is empty</h2>
         </div>
 
-            <!-- Advertisement section -->
+        <div class="d-flex justify-content-center pb-3 col-12" id="img">
+            <img src="/images/add-to-cart.png" alt="Empty Cart" > 
+            </div>
 
+                 <div class="text-center mb-4 ">
+                    <p>Add Items to the Cart & Continue Shopping!</p>
+                    <a href="/" class="btn btn-primary" style=" color: white; border-radius: 20px;" id="addBtn"><b>Add Items <i class="bi bi-cart3"></i></b> </a>
+                   </div> 
+                   
+            <!-- Advertisement section -->
+         <a href="/" >
         <div id="popup-sidebar" class="popup-sidebar" title="eASY Cart's Ad">
             <img id="popup-image" src="/images/cart-ad-1.gif" alt="eASY SHOP">
         </div>
+        </a>
 
     </div>
 
 </section> 
-</a>
+
 
 <script>
 
@@ -57,21 +66,27 @@
 </script>
 
 <style>
-    
-    .bg-section {
-        background-image: url('/images/bg-wall.png');
-    }
-
-    #bg {
-        background-image: url('/images/empty-cart.gif');
-        background-repeat: no-repeat;
-        background-position: center;
-        min-height: 100vh;
-    }
 
     .eASY {
         color: rgb(40, 155, 155);
     }
+     #img img{
+    width: 60%;
+  }
+     #addBtn {
+            padding: 10px 20px;
+            background-image: linear-gradient(to right, #188d32, rgb(46, 175, 106));
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #addBtn:hover {
+            background-image: linear-gradient(to left,#188d32, rgb(46, 175, 106));
+            transform: scale(1.1);
+        }
 
     /* Styles for the pop-up sidebar */
     .popup-sidebar {
