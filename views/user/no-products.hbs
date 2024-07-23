@@ -1,9 +1,140 @@
-<section>
-    <div class="container mt-5 text-center">
-        <h1>{{error}}</h1>
+
+  <section class="bg-section">
+
+    <div class="container-fluid" id="bg" >
+
+        <div class="pt-5 text-center">
+            <h2>Start Selling on eASY Shop</h2>
+            
+        </div>
+
+             <div class="d-flex justify-content-center pb-5 col-12" id="img">
+            <img src="/images/sell-product.png" alt="No Orders" > 
+            </div>
+                   <div class="text-center ">
+                    <p> Turn Your Products into Profits with Ease. <br> 
+                        Start selling today and enjoy the benefits of a platform built for your success.</p>
+                    <a href="/sell-products" class="btn btn-success ml-auto" id="sellProd"><i class="bi bi-arrow-right-square"></i> Sell Your Product </a>
+                   </div> 
+
+
+            <!-- Advertisement section -->
+        <a href="/sell-products">
+        <div id="popup-sidebar" class="popup-sidebar" title="eASY Shop Ad">
+            <img id="popup-image" src="/images/sell-products-Ad2.gif" alt="eASY SHOP">
+        </div>
+        </a>
+
     </div>
-    <div class=" mt-5 text-center">
-        <h3>Add some products </h3>
-        <a href="/sell-products" class="btn btn-primary">Sell products</a>
-    </div>
-</section>
+
+</section> 
+
+
+<script>
+
+    // Function for Advertisement
+    function slidePopupSidebar() {
+        const popupSidebar = document.getElementById('popup-sidebar');
+        const popupImage = document.getElementById('popup-image');
+        const imageUrls = [
+            "/images/sell-products-Ad2.gif",
+           "/images/sell-products-Ad1.gif",         
+           "/images/sell-products-Ad3.gif" 
+
+        ];
+        let currentIndex = 0;
+
+        // Slide in the popup sidebar immediately
+        popupSidebar.style.right = '0';
+        // Slide out after 5 seconds
+        setTimeout(() => {
+            popupSidebar.style.right = '-300px';
+        }, 5000);
+
+        // Change image every 5 seconds
+        setInterval(() => {
+            currentIndex = (currentIndex + 1) % imageUrls.length;
+            popupImage.src = imageUrls[currentIndex];
+            // Slide in the popup sidebar
+            popupSidebar.style.right = '0';
+            // Slide out after 5 seconds
+            setTimeout(() => {
+                popupSidebar.style.right = '-300px';
+            }, 5000);
+        }, 10000);
+    }
+
+    // Call the slidePopupSidebar function when the page is loaded
+    window.onload = slidePopupSidebar;
+
+</script>
+
+<style>
+
+    .eASY {
+        color: rgb(40, 155, 155);
+    }
+    #sellProd{
+    border-radius: 25px; 
+    color: white; 
+    background-image: linear-gradient(to right, #1e8f4b, rgb(2, 164, 89));
+    transition: all 0.3s ease;
+  }
+  #sellProd:hover{
+      background-image: linear-gradient(to left, #1e8f4b, rgb(2, 164, 89));
+      color: white;
+      transform: scale(1.1);
+  }
+
+    /* Styles for the pop-up sidebar */
+    .popup-sidebar {
+        position: fixed;
+        top: 50%;
+        right: -300px;
+        /* Initially hidden off-screen */
+        width: 300px;
+        background-color: #fff;
+        box-shadow: 0 2px 8px rgba(21, 105, 131, 0.5);
+        z-index: 1000;
+        transition: right 1s ease-in-out;
+        padding: 20px;
+        overflow: hidden;
+    }
+
+    .popup-sidebar img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    /* Adjustments for smaller screens */
+    @media (max-width: 768px) {
+        .popup-sidebar {
+            right: -100%;
+            /* Completely hidden on smaller screens */
+        }
+    }
+
+      a {
+    text-decoration: none;  /* Remove underline by default */
+    color: black;
+    }
+
+  a:hover {
+    text-decoration: none; /* Ensure underline does not appear on hover */
+    color: black;
+  }
+
+  #img img{
+    width: 40%;
+  }
+
+   #shop{
+    color: white; 
+    border-radius: 20px;
+    transition: all 0.3s ease;
+   } 
+    #shop:hover{
+    transform: scale(1.1);
+    }
+</style>
