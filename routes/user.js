@@ -793,13 +793,19 @@ router.delete('/delete-pending-image', verifyLogin, async (req, res) => {
 });
 
 
-/* Route for get Sell user products page */
+/* Route for get Sell User Products form page */
 
 router.get('/sell-products', verifyLogin, async (req, res) => {
-  let user = req.session.user
-  res.render('user/sell-products', { user })
+  try {
+    let user = req.session.user;
+    let cartCount = await userHelpers.getCartCount(user._id);
+    res.render('user/sell-products', { user, cartCount });
+  } catch (error) {
+    console.error('Error fetching cart count:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
-})
 
 
 /* Sell user products */
