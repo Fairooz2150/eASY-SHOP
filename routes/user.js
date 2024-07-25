@@ -682,9 +682,10 @@ router.post('/edit-pending-product/:id', verifyLogin, (req, res) => {
 /* Route to pending-product-images for selling product (not approved products)*/
 router.get('/pending-product-images/:id', verifyLogin, async (req, res) => {
   let user = req.session.user;
+  let cartCount = await userHelpers.getCartCount(user._id)
   try {
     let product = await productHelpers.getPndgProductImages(req.params.id);
-    res.render('user/pending-product-images', { product, user });
+    res.render('user/pending-product-images', { product, user,cartCount });
   } catch (error) {
     console.error(error);
     res.status(500).send(error);
