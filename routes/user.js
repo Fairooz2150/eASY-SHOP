@@ -451,7 +451,6 @@ router.post('/update-account', verifyLogin, async (req, res) => {
 
 
 /*verifying password */
-
 router.post('/verify-password', verifyLogin, async (req, res) => {
   const userId = req.session.user._id;
   const enteredPassword = req.body.password;
@@ -465,7 +464,6 @@ router.post('/verify-password', verifyLogin, async (req, res) => {
 
 
 /*Delete Account*/
-
 router.post('/delete-account', verifyLogin, async (req, res) => {
   const userId = req.session.user._id;
   try {
@@ -479,7 +477,6 @@ router.post('/delete-account', verifyLogin, async (req, res) => {
 
 
 /*Get User selling products*/
-
 router.get('/your-products', verifyLogin, async (req, res) => {
   let user = req.session.user;
   let cartCount = await userHelpers.getCartCount(user._id);
@@ -494,7 +491,6 @@ router.get('/your-products', verifyLogin, async (req, res) => {
 
 
 /*Delete User approved selling product */
-
 router.delete('/delete-user-product/:id', verifyLogin, (req, res) => {
   let proId = req.params.id;
   productHelpers.deleteUserProduct(proId).then((response) => {
@@ -507,7 +503,6 @@ router.delete('/delete-user-product/:id', verifyLogin, (req, res) => {
 
 
 /*Delete User requested selling product */
-
 router.delete('/delete-user-pendingprod/:id', verifyLogin, (req, res) => {
   let proId = req.params.id;
   productHelpers.deletePendingProduct(proId).then((response) => {
@@ -536,14 +531,14 @@ router.get('/edit-user-product/:id', verifyLogin, async (req, res) => {
 
 
 /* Route to handle the product update */
-router.post('/edit-user-product/:id', (req, res) => {
+router.post('/edit-user-product/:id',verifyLogin, (req, res) => {
   let id = req.params.id;
   productHelpers.updateUserProduct(req.params.id, req.body)
   res.redirect(`/user-product-images/${id}`);
 });
 
 
-/* Route to render the add more images page */
+/* Route to render the user-product-images page for editing */
 router.get('/user-product-images/:id', verifyLogin, async (req, res) => {
   let user = req.session.user;
   let cartCount= await userHelpers.getCartCount(user._id)
@@ -557,8 +552,8 @@ router.get('/user-product-images/:id', verifyLogin, async (req, res) => {
 });
 
 
-/* Route to handle the image upload and skip actions*/
-router.post('/user-product-images/:id', async (req, res) => {
+/* Route to handle the image upload and skip actions after edit product images*/
+router.post('/user-product-images/:id',verifyLogin, async (req, res) => {
   let productId = req.params.id;
   let uploadPromises = [];
 
@@ -609,8 +604,7 @@ router.post('/user-product-images/:id', async (req, res) => {
 });
 
 
-/* Route for deleting product images */
-
+/* Route for deleting product images from user-product-images*/
 router.delete('/delete-image', verifyLogin, async (req, res) => {
   const { imageName, productId } = req.body;
   const filePath = path.join(__dirname, '../public/product-images', imageName);
@@ -639,8 +633,7 @@ router.delete('/delete-image', verifyLogin, async (req, res) => {
 });
 
 
-/* Route for editing selling images  */
-
+/* Route for post edited user product images  */
 router.post('/edit-image', verifyLogin, async (req, res) => {
   if (!req.files || !req.files.newImage) {
     return res.status(400).send('No new image file uploaded.');
@@ -661,8 +654,7 @@ router.post('/edit-image', verifyLogin, async (req, res) => {
 });
 
 
-/* Route for editing pending images  */
-
+/* Route for editing pending product */
 router.get('/edit-pending-product/:id', verifyLogin, async (req, res) => {
   let user = req.session.user;
   let prodId = req.params.id;
@@ -678,21 +670,16 @@ router.get('/edit-pending-product/:id', verifyLogin, async (req, res) => {
 });
 
 
-/* Post edited images  */
-
+/* Post edited images for pending products  */
 router.post('/edit-pending-product/:id', verifyLogin, (req, res) => {
   let id = req.params.id;
-
   productHelpers.updateUserProduct(req.params.id, req.body)
   console.log('pending product updated');
-
   res.redirect(`/pending-product-images/${id}`);
-
 });
 
 
-/* Route to add more images for selling product (not approved)*/
-
+/* Route to pending-product-images for selling product (not approved products)*/
 router.get('/pending-product-images/:id', verifyLogin, async (req, res) => {
   let user = req.session.user;
   try {
@@ -706,7 +693,6 @@ router.get('/pending-product-images/:id', verifyLogin, async (req, res) => {
 
 
 /* Route to handle the image upload and skip actions */
-
 router.post('/pending-product-images/:id', async (req, res) => {
   let productId = req.params.id;
   let uploadPromises = [];
@@ -759,7 +745,6 @@ router.post('/pending-product-images/:id', async (req, res) => {
 
 
 /* Route for deleting pending product images */
-
 router.delete('/delete-pending-image', verifyLogin, async (req, res) => {
   const { imageName, productId } = req.body;
   const filePath = path.join(__dirname, '../public/product-images', imageName);
@@ -789,7 +774,6 @@ router.delete('/delete-pending-image', verifyLogin, async (req, res) => {
 
 
 /* Route for get Sell User Products form page */
-
 router.get('/sell-products', verifyLogin, async (req, res) => {
   try {
     let user = req.session.user;
@@ -803,7 +787,6 @@ router.get('/sell-products', verifyLogin, async (req, res) => {
 
 
 /* Sell user products */
-
 router.post('/sell-product', (req, res) => {
   let product = req.body
   productHelpers.addUserProduct(product).then((productId) => {
@@ -822,7 +805,6 @@ router.post('/sell-product', (req, res) => {
 
 
 /* Search products in home page */
-
 router.get('/search-products', async (req, res) => {
   const query = req.query.query;
 

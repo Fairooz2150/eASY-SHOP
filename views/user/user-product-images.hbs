@@ -2,22 +2,31 @@
     <div class="container mt-4">
         <div class="row">
             <div class="col-md-12">
-                <h2 class="text-center pb-4">Product Images</h2>
+                <h2 class="text-center pb-4 mt-3">Product Images</h2>
                 <form action="/user-product-images/{{product._id}}" method="post" enctype="multipart/form-data" id="addImagesForm">
                     <div id="imageContainer" class="row mt-4">
                         <!-- Existing Images -->
                         {{#each product.images}}
-                        <div  class="image-group mb-2 ml-5">
-                            <div class="overlay-buttons position-absolute top-0 end-0 pl-2 ml-1">
-                                <button class="btn btn-sm me-2 bg-transparent" type="button">
-                                    <i class="bi bi-pencil-square" onclick="editImage('{{this}}')"></i>
+                        <div class="image-group mb-4 ml-5">
+
+                            <div class="overlay-buttons position-absolute top-0 end-0 pl-2 ml-1 ">
+                               
+                               <div>
+                                 <button class="btn btn-sm me-2 " id="editbtn" type="button">
+                                    <i class="bi bi-pencil-square" id="edit" onclick="editImage('{{this}}')"></i>
                                 </button>
-                                <button class="btn btn-sm ml-5 bg-transparent" type="button" onclick="deleteImage('{{this}}')">
-                                    <i class="bi bi-trash3 ml-4"></i>
+                               </div>
+
+                               <div class="ml-5">
+                                <button class="btn btn-sm ml-5 " id="delbtn" type="button" onclick="deleteImage('{{this}}')">
+                                    <i class="bi bi-trash3 " id="delete"></i>
                                 </button>
+                               </div> 
+
                             </div>
-                            <img src="/product-images/{{this}}" alt="Product Image" style="width:170px; height:190px" class="shadow-lg rounded">
-                            <input type="file" name="editImages" class="form-control d-none" id="editImageInput_{{@index}}" data-image-name="{{this}}" onchange="uploadEditedImage(event, '{{this}}')">
+
+                            <img src="/product-images/{{this}}" alt="Product Image" >
+                            <input type="file" name="editImages" class="form-control d-none" id="editImageInput_{{@index}}" data-image-name="{{this}}" onchange="uploadEditedImage(event, '{{this}}')" >
                         </div>
                         {{/each}}
                     </div>
@@ -25,10 +34,10 @@
                     <div id="newImageContainer" class="row mt-4"></div>
                     <div class="row">
                         <div class="addImages">
-                            <button type="button" class="btn btn-primary mt-4 ml-3" id="addImageButton">Add Images</button>
+                            <button type="button" class="btn btn-primary mt-4 ml-3" id="addImageButton"><i class="bi bi-plus-square"></i> Images <i class="bi bi-images"></i></button>
                         </div>
                         <div class="submit">
-                            <button type="submit" class="btn btn-success mt-4 mr-5">Submit</button>
+                            <button type="submit" class="btn btn-success mt-4 mr-5" id="submit">Submit</button>
                         </div>
                     </div>
                 </form>
@@ -37,34 +46,11 @@
     </div>
 </section>
 
-<style>
-    .bi {
-        color: grey;
-    }
-
-    .submit {
-        margin-left: auto;
-        margin-right: 22px;
-        margin-top: 100px;
-    }
-
-    .overlay-buttons {
-        display: flex;
-        gap: 0.5rem;
-        z-index: 10;
-    }
-
-    .image-group img {
-        display: block;
-        margin: 0 auto;
-    }
-</style>
-
 <script>
     document.getElementById('addImageButton').addEventListener('click', function () {
         var newImageContainer = document.getElementById('newImageContainer');
         var imageGroup = document.createElement('div');
-        imageGroup.className = 'image-group mb-2 ml-3';
+        imageGroup.className = 'image-group mb-2 ml-3 ';
 
         var input = document.createElement('input');
         input.type = 'file';
@@ -83,15 +69,15 @@
             var reader = new FileReader();
             reader.onload = function (e) {
                 var imageGroup = document.createElement('div');
-                imageGroup.className = 'image-group';
+                imageGroup.className = 'image-group mt-3';
 
                 var img = document.createElement('img');
                 img.src = e.target.result;
                 img.alt = 'New Image';
                 img.style.width = '170px';
-                img.style.height = '190px';
-                img.className = 'shadow-lg rounded';
-
+                img.style.height = '180px';
+                    
+               
                 imageGroup.appendChild(img);
                 input.parentNode.appendChild(imageGroup);
             };
@@ -134,3 +120,83 @@
         xhr.send(formData);
     }
 </script>
+
+
+<style>
+    #edit, #delete {
+        color: rgba(178, 178, 178, 0.855);
+        
+    }
+    #edit:hover{
+       color: rgb(36, 169, 165);
+    }
+    #delete:hover{
+        color: rgb(194, 119, 21);
+   
+    }
+    #editbtn, #dltbtn{
+        padding: 0;
+    }
+    .submit {
+        margin-left: auto;
+        margin-right: 22px;
+        margin-top: 100px;
+    }
+
+    .overlay-buttons {
+        display: flex;
+        gap: 0.5rem;
+        z-index: 10;
+    }
+
+    .image-group img {
+        display: block;
+        margin: 0 auto;
+        width:170px; 
+        height:180px;
+        border-radius: 8px;       
+        box-shadow: 0 0 10px rgba(18, 155, 150, 0.5);
+    }
+
+    #addImageButton {
+            padding: 10px 20px;
+            background-color: #2480bd;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #addImageButton::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            padding-top: 300%;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-70%, -50%) scale(0);
+            opacity: 0;
+            transition: transform 1s, opacity 1s;
+        }
+
+        #addImageButton:active::after {
+            transform: translate(-70%, -50%) scale(1);
+            opacity: 1;
+            transition: 0s;
+        }
+
+        #submit{
+    background-image: linear-gradient(to right, #109545, rgb(2, 164, 89));
+    border-radius: 20px;
+    inline-size: 100px;
+}
+
+#submit:hover{
+    background-image: linear-gradient(to left, #109545, rgb(2, 164, 89));
+}
+
+</style>
