@@ -44,8 +44,8 @@ router.get('/', async function (req, res, next) {
   }
 });
 
-/* View each product. */
 
+/* View each product. */
 router.get('/view-product/:id', async (req, res) => {
   let user = req.session.user
   let Id = req.params.id
@@ -67,14 +67,12 @@ router.get('/view-product/:id', async (req, res) => {
 
 
 /* Route Signup page. */
-
 router.get('/signup', (req, res) => {
   res.render('user/signup');
 });
 
 
 /* Save signup details and redirect to home page. */
-
 router.post('/signup', (req, res) => {
   const { Password } = req.body;
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,16}$/;
@@ -522,7 +520,6 @@ router.delete('/delete-user-pendingprod/:id', verifyLogin, (req, res) => {
 
 
 /* Route to render the edit user selling product page */
-
 router.get('/edit-user-product/:id', verifyLogin, async (req, res) => {
   let user = req.session.user;
   let prodId = req.params.id;
@@ -539,22 +536,20 @@ router.get('/edit-user-product/:id', verifyLogin, async (req, res) => {
 
 
 /* Route to handle the product update */
-
-router.post('/edit-user-product/:id', verifyLogin, (req, res) => {
+router.post('/edit-user-product/:id', (req, res) => {
   let id = req.params.id;
   productHelpers.updateUserProduct(req.params.id, req.body)
-  res.redirect(`/add-more-images/${id}`);
+  res.redirect(`/user-product-images/${id}`);
 });
 
 
 /* Route to render the add more images page */
-
-router.get('/add-more-images/:id', verifyLogin, async (req, res) => {
+router.get('/user-product-images/:id', verifyLogin, async (req, res) => {
   let user = req.session.user;
   let cartCount= await userHelpers.getCartCount(user._id)
   try {
     let product = await productHelpers.getProductImages(req.params.id);
-    res.render('user/add-more-images', { product, user,cartCount });
+    res.render('user/user-product-images', { product, user,cartCount });
   } catch (error) {
     console.error(error);
     res.status(500).send(error);
@@ -563,13 +558,12 @@ router.get('/add-more-images/:id', verifyLogin, async (req, res) => {
 
 
 /* Route to handle the image upload and skip actions*/
-
-router.post('/add-more-images/:id', async (req, res) => {
+router.post('/user-product-images/:id', async (req, res) => {
   let productId = req.params.id;
   let uploadPromises = [];
 
   if (req.body.skip) {
-    return res.redirect('/');
+    return res.redirect('/your-account');
   }
 
   if (req.files && req.files.Images) {
@@ -606,7 +600,7 @@ router.post('/add-more-images/:id', async (req, res) => {
         return newFileName;
       });
       await productHelpers.updateProductImages(productId, imageFiles);
-      res.redirect('/');
+      res.redirect('/your-account');
     })
     .catch((err) => {
       console.error(err);
@@ -692,18 +686,18 @@ router.post('/edit-pending-product/:id', verifyLogin, (req, res) => {
   productHelpers.updateUserProduct(req.params.id, req.body)
   console.log('pending product updated');
 
-  res.redirect(`/add-morepending-images/${id}`);
+  res.redirect(`/pending-product-images/${id}`);
 
 });
 
 
 /* Route to add more images for selling product (not approved)*/
 
-router.get('/add-morepending-images/:id', verifyLogin, async (req, res) => {
+router.get('/pending-product-images/:id', verifyLogin, async (req, res) => {
   let user = req.session.user;
   try {
     let product = await productHelpers.getPndgProductImages(req.params.id);
-    res.render('user/add-morepending-images', { product, user });
+    res.render('user/pending-product-images', { product, user });
   } catch (error) {
     console.error(error);
     res.status(500).send(error);
@@ -713,7 +707,7 @@ router.get('/add-morepending-images/:id', verifyLogin, async (req, res) => {
 
 /* Route to handle the image upload and skip actions */
 
-router.post('/add-morepending-images/:id', async (req, res) => {
+router.post('/pending-product-images/:id', async (req, res) => {
   let productId = req.params.id;
   let uploadPromises = [];
 

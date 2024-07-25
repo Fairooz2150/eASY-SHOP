@@ -3,11 +3,11 @@
         <div class="row">
             <div class="col-md-12">
                 <h2 class="text-center pb-4">Images</h2>
-                <form action="/add-more-images/{{product._id}}" method="post" enctype="multipart/form-data" id="addImagesForm">
+                <form action="/pending-product-images/{{product._id}}" method="post" enctype="multipart/form-data" id="addImagesForm">
                     <div id="imageContainer" class="row mt-4">
                         <!-- Existing Images -->
                         {{#each product.images}}
-                        <div  class="image-group mb-2 ml-5">
+                        <div class="image-group mb-2 ml-5">
                             <div class="overlay-buttons position-absolute top-0 end-0 pl-2 ml-1">
                                 <button class="btn btn-sm me-2 bg-transparent" type="button">
                                     <i class="bi bi-pencil-square" onclick="editImage('{{this}}')"></i>
@@ -102,7 +102,7 @@
     
     function deleteImage(imageName) {
         var xhr = new XMLHttpRequest();
-        xhr.open('DELETE', '/delete-image', true);
+        xhr.open('DELETE', '/delete-pending-image', true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
