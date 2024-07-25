@@ -698,7 +698,7 @@ router.post('/pending-product-images/:id', async (req, res) => {
   let uploadPromises = [];
 
   if (req.body.skip) {
-    return res.redirect('/');
+    return res.redirect('/your-account');
   }
 
   if (req.files && req.files.Images) {
@@ -735,7 +735,7 @@ router.post('/pending-product-images/:id', async (req, res) => {
         return newFileName;
       });
       await productHelpers.updatePndgProductImages(productId, imageFiles);
-      res.redirect('/');
+      res.redirect('/your-account');
     })
     .catch((err) => {
       console.error(err);
