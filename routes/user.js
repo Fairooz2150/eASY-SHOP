@@ -4,9 +4,7 @@ const path = require('path');
 const fs = require('fs');
 var objectId = require('mongodb').ObjectID
 var productHelpers = require('../helpers/product-helpers');
-const bcrypt = require('bcrypt') 
 const userHelpers = require('../helpers/user-helpers');
-const { log } = require('console');
 
 const verifyLogin = (req, res, next) => {  //checks the user login
   if (req.session.userLoggedIn) {
@@ -521,12 +519,11 @@ router.delete('/delete-user-pendingprod/:id', verifyLogin, (req, res) => {
 router.get('/edit-user-product/:id', verifyLogin, async (req, res) => {
   let user = req.session.user;
   let prodId = req.params.id;
-
+  let cartCount = await userHelpers.getCartCount(user._id);
   try {
     let product = await productHelpers.getProductDetails(prodId);
-
     console.log("Product details:", product);
-    res.render('user/edit-user-product', { product, user });
+    res.render('user/edit-user-product', { product, user, cartCount });
   } catch (error) {
     console.error(error);
     res.status(500).send(error);
@@ -538,11 +535,8 @@ router.get('/edit-user-product/:id', verifyLogin, async (req, res) => {
 
 router.post('/edit-user-product/:id', verifyLogin, (req, res) => {
   let id = req.params.id;
-
   productHelpers.updateUserProduct(req.params.id, req.body)
-
   res.redirect(`/add-more-images/${id}`);
-
 });
 
 
@@ -550,9 +544,10 @@ router.post('/edit-user-product/:id', verifyLogin, (req, res) => {
 
 router.get('/add-more-images/:id', verifyLogin, async (req, res) => {
   let user = req.session.user;
+  let cartCount= await userHelpers.getCartCount(user._id)
   try {
     let product = await productHelpers.getProductImages(req.params.id);
-    res.render('user/add-more-images', { product, user });
+    res.render('user/add-more-images', { product, user,cartCount });
   } catch (error) {
     console.error(error);
     res.status(500).send(error);
@@ -670,12 +665,11 @@ router.post('/edit-image', verifyLogin, async (req, res) => {
 router.get('/edit-pending-product/:id', verifyLogin, async (req, res) => {
   let user = req.session.user;
   let prodId = req.params.id;
-
+  let cartCount = await userHelpers.getCartCount(user._id);
   try {
     let product = await productHelpers.getProductDetails(prodId);
-
     console.log("Pending product details:", product);
-    res.render('user/edit-pending-product', { product, user });
+    res.render('user/edit-pending-product', { product, user, cartCount });
   } catch (error) {
     console.error(error);
     res.status(500).send(error);
@@ -807,12 +801,10 @@ router.get('/sell-products', verifyLogin, async (req, res) => {
 });
 
 
-
 /* Sell user products */
 
 router.post('/sell-product', (req, res) => {
   let product = req.body
-
   productHelpers.addUserProduct(product).then((productId) => {
     if (req.files) {
       if (Array.isArray(req.files.Image)) {
@@ -823,7 +815,7 @@ router.post('/sell-product', (req, res) => {
         req.files.Image.mv(`./public/product-images/${productId}_0.jpg`);
       }
     }
-    res.redirect('/');
+    res.redirect('/your-account');
   });
 });
 
