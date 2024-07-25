@@ -2,7 +2,7 @@
     <div class="container mt-4 mb-5">
         <div class="row">
             <div class="col-md-12">
-                <h2 class="text-center">Edit Your Product</h2>
+                <h2 class="text-center">Edit Your Product Details</h2>
                 <form action="/edit-user-product/{{product._id}}" method="post" enctype="multipart/form-data">
                     <label for="">Name</label>
                     <input type="text" name="Name" class="form-control" placeholder="Enter product name"
@@ -42,7 +42,7 @@
                     <textarea class="form-control" type="text" name="Description"
                         placeholder="Enter product description" rows="3" required>{{product.Description}}</textarea>
 
-                    <h5 class="text-center mt-2">Product Enquiry Contact Information</h5>
+                    <h5 class="text-center mt-4 mb-2">Product Enquiry Contact Information</h5>
 
                     <label for="shop-address">Shop Address</label>
                     <textarea class="form-control" type="text" name="Shop_Address" rows="3"
