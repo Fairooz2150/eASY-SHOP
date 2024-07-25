@@ -131,23 +131,23 @@ module.exports = {
           }
         });
       },
-    getCartCount: (userId) => {
+      getCartCount: (userId) => {
         return new Promise(async (resolve, reject) => {
-            try {
-                let totalQuantity = 0;
-                let cart = await db.get().collection(collection.CART_COLLECTION).findOne({ user: objectId(userId) });
-                if (cart) {
-                    // Iterate over each product in the cart and sum up their quantities
-                    cart.products.forEach(product => {
-                        totalQuantity += parseInt(product.quantity) || 0; // Ensure quantity is a valid number
-                    });
-                }
-                resolve(totalQuantity);
-            } catch (error) {
-                reject(error);
+          try {
+            let totalQuantity = 0;
+            let cart = await db.get().collection(collection.CART_COLLECTION).findOne({ user: objectId(userId) });
+            if (cart) {
+              // Iterate over each product in the cart and sum up their quantities
+              cart.products.forEach(product => {
+                totalQuantity += parseInt(product.quantity) || 0; // Ensure quantity is a valid number
+              });
             }
+            resolve(totalQuantity);
+          } catch (err) {
+            reject(err);
+          }
         });
-    },
+      },
     changeProductQuantity: (details) => {
         details.count = parseInt(details.count);
         details.quantity = parseInt(details.quantity);
