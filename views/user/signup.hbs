@@ -1,90 +1,123 @@
-<div class="row ">
-    <div class="col-md-6 m-auto">
-        <div class="container mt-5 mb-5 pl-5">
-            <h2 class="text-center pb-5">Create new account</h2>
+<section>
+<div class="row mt-2">
+    <div class="col-md-6 mx-auto">
+        <div class="container mt-5 mb-5">
+            <h2 class="text-center pb-5">Create New Account</h2>
 
             <form id="signupForm" action="/signup" method="post">
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label>First Name</label>
-                        <input type="text" class="form-control" name="First_Name" placeholder="First Name">
+                        <label for="firstName">First Name</label>
+                        <input type="text" class="form-control" id="firstName" name="First_Name" placeholder="First Name" required>
                     </div>
                     <div class="form-group col-md-6">
-                        <label>Last Name</label>
-                        <input type="text" class="form-control" name="Last_Name" placeholder="Last Name">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" class="form-control" id="lastName" name="Last_Name" placeholder="Last Name" required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" class="form-control" name="Email" placeholder="Email Address">
-                </div>
-                
-                <div class="form-group">
-                    <label>Phone</label>
-                    <input type="phone" class="form-control" name="Phone" placeholder="Phone">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="Email" placeholder="Email Address" required>
                 </div>
                 <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" class="form-control" id="password" name="Password" placeholder="Password">
-                    <span id="passwordHelp" class="form-text " ></span>
+                    <label for="phone">Phone</label>
+                    <input type="tel" class="form-control" id="phone" name="Phone" placeholder="Phone" required>
                 </div>
-
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" name="Password" placeholder="Password" required>
+                    <small id="passwordHelp" class="form-text"></small>
+                </div>
                 <div class="form-group">
                     <label>Gender</label>
-                    <br>
-                    <label class="radio-inline ml-2 mr-2" for="">
-                        Male<input type="radio" class="ml-2" name="Gender" value="Male" checked>
-                    </label>
-                    <label for="" class="radio-inline ml-2 mr-2 mt-1">
-                        Female<input type="radio" class="ml-2" name="Gender" value="Female">
-                    </label>
-                    <label for="" class="radio-inline ml-2 mr-2 mt-1">
-                        Others<input type="radio" class="ml-2" name="Gender" value="Others">
-                    </label>
+                    <div>
+                        <label class="radio-inline mr-3">
+                            <input type="radio" name="Gender" value="Male" checked> Male
+                        </label>
+                        <label class="radio-inline mr-3">
+                            <input type="radio" name="Gender" value="Female"> Female
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="Gender" value="Others"> Others
+                        </label>
+                    </div>
                 </div>
-                <a href="/login">Already have an account ?</a>
-                <button type="submit" class="btn btn-primary float-right">Signup</button>
+                <div class="form-group text-center">
+                    <a href="/login" class="toLogin">Already have an account?</a>
+                </div>
+                <button type="submit" class="btn btn-primary float-right" id="submit">Signup</button>
             </form>
         </div>
     </div>
 </div>
+</section>
 
 <script>
-const passwordField = document.getElementById('password');
-const passwordHelp = document.getElementById('passwordHelp');
-const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,16}$/;
+document.addEventListener('DOMContentLoaded', () => {
+    const passwordField = document.getElementById('password');
+    const passwordHelp = document.getElementById('passwordHelp');
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,16}$/;
 
-function validatePassword() {
-    const password = passwordField.value;
+    function validatePassword() {
+        const password = passwordField.value;
 
-    if (password.length < 6 || password.length > 16) {
-        passwordHelp.textContent = 'Password must be between 6 and 16 characters.';
-        passwordHelp.style.color = 'red';
-    } else if (!password.match(/[A-Za-z]/)) {
-        passwordHelp.textContent = 'Password must contain at least one alphabetic letter.';
-        passwordHelp.style.color = 'red';
-    } else if (!password.match(/\d/)) {
-        passwordHelp.textContent = 'Password must contain at least one numeric digit.';
-        passwordHelp.style.color = 'red';
-    } else if (!password.match(/[@$!%*?&]/)) {
-        passwordHelp.textContent = 'Password must contain at least one special character.';
-        passwordHelp.style.color = 'red';
-    } else if (passwordRegex.test(password)) {
-        passwordHelp.textContent = 'Password is valid.';
-        passwordHelp.style.color = 'green';
-    } else {
-        passwordHelp.textContent = 'Password is invalid.';
-        passwordHelp.style.color = 'red';
+        if (password.length < 6 || password.length > 16) {
+            passwordHelp.textContent = 'Password must be between 6 and 16 characters.';
+            passwordHelp.style.color = 'red';
+        } else if (!password.match(/[A-Za-z]/)) {
+            passwordHelp.textContent = 'Password must contain at least one alphabetic letter.';
+            passwordHelp.style.color = 'red';
+        } else if (!password.match(/\d/)) {
+            passwordHelp.textContent = 'Password must contain at least one numeric digit.';
+            passwordHelp.style.color = 'red';
+        } else if (!password.match(/[@$!%*?&]/)) {
+            passwordHelp.textContent = 'Password must contain at least one special character.';
+            passwordHelp.style.color = 'red';
+        } else if (passwordRegex.test(password)) {
+            passwordHelp.textContent = 'Password is valid.';
+            passwordHelp.style.color = 'green';
+        } else {
+            passwordHelp.textContent = 'Password is invalid.';
+            passwordHelp.style.color = 'red';
+        }
     }
-}
 
-passwordField.addEventListener('input', validatePassword);
+    passwordField.addEventListener('input', validatePassword);
 
-document.getElementById('signupForm').addEventListener('submit', function(event) {
-    const password = passwordField.value;
+    document.getElementById('signupForm').addEventListener('submit', function(event) {
+        const password = passwordField.value;
 
-    if (!passwordRegex.test(password)) {
-        event.preventDefault();  // Prevent form submission if password is invalid
-    }
+        if (!passwordRegex.test(password)) {
+            event.preventDefault();  // Prevent form submission if password is invalid
+            validatePassword(); // Ensure the error message is displayed if the form is prevented from submission
+        }
+    });
 });
 </script>
+
+<style>
+body{
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+ .toLogin {
+    color: rgb(58, 157, 162);  
+    text-decoration: none;
+    /* Remove underline by default */
+  }
+
+  .toLogin:hover {
+     color: rgb(96, 197, 203);  
+    text-decoration: none;
+    /* Ensure underline does not appear on hover */
+  }
+ 
+   #submit{
+    color: white; 
+    border-radius: 20px;
+    transition: all 0.3s ease;
+   } 
+    #submit:hover{
+    transform: scale(1.1);
+    }
+</style>
