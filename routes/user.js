@@ -82,8 +82,6 @@ router.post('/signup', (req, res) => {
   }
 
   userHelpers.doSignup(req.body).then((response) => {
-    console.log(response);
-
     req.session.user = response;
     req.session.userLoggedIn = true;
     res.redirect('/');
@@ -94,7 +92,6 @@ router.post('/signup', (req, res) => {
 
 
 /* Login  */
-
 router.get('/login', (req, res) => {
   if (req.session.user) {
     res.redirect('/')
@@ -107,7 +104,6 @@ router.get('/login', (req, res) => {
 
 
 /* return to recent URL after Login */
-
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
   const response = await userHelpers.doLogin(req.body);
@@ -134,7 +130,6 @@ router.post('/login', async (req, res) => {
 
 
 /*For Logout  */
-
 router.get('/logout', (req, res) => {
   req.session.user = null
   req.session.userLoggedIn = false
@@ -142,8 +137,42 @@ router.get('/logout', (req, res) => {
 })
 
 
-/* GET Cart  */
+/*Get eASY Customer Service from Contact page*/
+router.get('/contact',async(req,res)=>{
+  let cartCount = 0;
+  let user= req.session.user;
+  if (user) {
+    cartCount = await userHelpers.getCartCount(user._id)
+  }
+  else {
+    // If User is not logged in, calculate cart count from session storage
+    if (req.session.cart) {
+      cartCount = req.session.cart.length;
+    }
+  }
 
+  res.render('user/contact',{cartCount})
+})
+
+
+/*Get Detail About eASY Shop */
+router.get('/about',async(req,res)=>{
+  let cartCount = 0;
+  let user= req.session.user;
+  if (user) {
+    cartCount = await userHelpers.getCartCount(user._id)
+  }
+  else {
+    // If User is not logged in, calculate cart count from session storage
+    if (req.session.cart) {
+      cartCount = req.session.cart.length;
+    }
+  }
+
+  res.render('user/about',{cartCount})
+})
+
+/* GET Cart  */
 router.get('/cart', verifyLogin, async (req, res) => {
   let user = req.session.user;
   let products = await userHelpers.getCartProducts(req.session.user._id)
@@ -160,7 +189,6 @@ router.get('/cart', verifyLogin, async (req, res) => {
 
 
 /* Add to cart  */
-
 router.get('/add-to-cart/:id', async (req, res) => {
   const productId = req.params.id;
   let userId = req.session.user ? req.session.user._id : null;
@@ -194,9 +222,7 @@ router.get('/add-to-cart/:id', async (req, res) => {
 });
 
 
-
 /* Delete cart products */
-
 router.delete('/delete-cart-product/:id/:quantity', verifyLogin, async(req, res) => {
   const proId = req.params.id;
   const quantity = parseInt(req.params.quantity);
@@ -234,9 +260,7 @@ router.post('/change-product-quantity', async (req, res, next) => {
 });
 
 
-
 /* Buy single product*/
-
 router.get('/buy-now/:id/:price', verifyLogin, async (req, res) => {
   try {
     let user = req.session.user;
@@ -266,7 +290,6 @@ router.get('/buy-now/:id/:price', verifyLogin, async (req, res) => {
     res.redirect('back');
   }
 });
-
 
 
 /* Place single product */
@@ -299,7 +322,6 @@ router.post('/place-product', async (req, res) => {
 
 
 /* Route to Place orders page*/
-
 router.get('/place-order', verifyLogin, async (req, res) => {
     let total = await userHelpers.getTotalAmount(req.session.user._id);
     let user=req.session.user;
@@ -310,7 +332,6 @@ router.get('/place-order', verifyLogin, async (req, res) => {
 
 
 /* Place orders */
-
 router.post('/place-order', async (req, res) => {
   try {
     const userId = req.body.userId;
@@ -351,7 +372,6 @@ router.get('/order-success', verifyLogin, async (req, res) => {
 
 
 /* Orders*/
-
 router.get('/orders', verifyLogin, async (req, res) => {
     let user=req.session.user;
    let cartCount = await userHelpers.getCartCount(user._id);
@@ -372,7 +392,6 @@ router.get('/orders', verifyLogin, async (req, res) => {
 
 
 /* Verify payment for orders(for all cart products) */
-
 router.post('/verify-payments', (req, res) => {
   let userId=req.session.user._id
   userHelpers.verifypayment(req.body,userId).then(() => {
@@ -389,12 +408,9 @@ router.post('/verify-payments', (req, res) => {
 
 
 /* Verify payment for single product order(by Buy Now) */
-
 router.post('/verify-payment', (req, res) => {
   console.log(req.body);
   let userId = req.session.user._id;
-
-
   userHelpers.verifypayment(req.body, userId).then(() => {
       userHelpers.changePaymentStatus(req.body['order[receipt]']).then(() => {
           console.log('payment successful');
@@ -407,10 +423,7 @@ router.post('/verify-payment', (req, res) => {
 });
 
 
-
-
 /* Your Account*/
-
 router.get('/your-account', verifyLogin, async (req, res) => {
   let user = req.session.user;
   let cartCount = await userHelpers.getCartCount(req.session.user._id)
@@ -419,7 +432,6 @@ router.get('/your-account', verifyLogin, async (req, res) => {
 
 
 /* Account Settings */
-
 router.get('/account-settings', verifyLogin, async (req, res) => {
   let user = req.session.user;
   let accountDetails = await userHelpers.userDetails(user);
@@ -429,7 +441,6 @@ router.get('/account-settings', verifyLogin, async (req, res) => {
 
 
 /* For updating account and verifying password */
-
 router.post('/update-account', verifyLogin, async (req, res) => {
   const userId = req.session.user._id;
   let { First_Name, Last_Name, Email, Phone, Gender, Password } = req.body;
