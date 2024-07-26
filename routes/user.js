@@ -36,7 +36,7 @@ router.get('/', async function (req, res, next) {
       res.render('product/view-products', { products, user, cartCount, search: true });
     } catch (err) {
       console.error(err);
-      res.render('empty/empty-shop', { user, cartCount });
+      res.render('user/empty/empty-shop', { user, cartCount });
     }
   } catch (err) {
     console.error(err);
@@ -183,7 +183,7 @@ router.get('/cart', verifyLogin, async (req, res) => {
     totalValue = await userHelpers.getTotalAmount(req.session.user._id)   
   res.render('user/cart', { products, user, totalValue, cartCount})
   }else{
-    res.render('empty/empty-cart',{user,cartCount})
+    res.render('user/empty/empty-cart',{user,cartCount})
   }
 })
 
@@ -380,7 +380,7 @@ router.get('/orders', verifyLogin, async (req, res) => {
     // Sort orders by date in descending order
     orders.sort((a, b) => new Date(b.date) - new Date(a.date));
     if(orders.length===0){
-      res.render('empty/no-orders', { user, cartCount});
+      res.render('user/empty/no-orders', { user, cartCount});
     }else{
       res.render('user/orders', { user, cartCount, orders });
     }
@@ -496,7 +496,7 @@ router.get('/your-products', verifyLogin, async (req, res) => {
     let products = await userHelpers.getUserRequestProds(user._id); 
     res.render('user/your-products', { user, products, cartCount });
   } catch (error) {
-    res.render('empty/no-products', { error, user, cartCount });
+    res.render('user/empty/no-products', { error, user, cartCount });
   }
 });
 
