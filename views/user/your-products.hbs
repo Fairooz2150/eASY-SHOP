@@ -29,7 +29,8 @@
 
               <div class="product_details ml-3">
                 <span class="title" title="{{this.Name}}">{{this.Name}} </span><br>
-                <span class="category text-muted" title="{{this.Category}}">{{this.Category}}</span>
+                <span class="category " title="{{this.Category}}">{{this.Category}}</span>
+                <br> <span class="prodId text-muted" title="Product Id">{{this._id}}</span>
                 <br><b>Stock:</b> {{this.Stock_Count}}
             </div>
 
@@ -308,6 +309,14 @@
   }
 
   .category { 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    max-width: 40em;
+  }
+  .prodId{
     overflow: hidden;
     text-overflow: ellipsis;
     -webkit-line-clamp: 1;
