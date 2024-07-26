@@ -1,4 +1,95 @@
-<h2>Contact Us</h2>
+<section>
+    <div class="container ">
+        <div class="row mt-5 pt-5 mb-5 " id="row">
 
-<p>Chat,whatsap call email</p>
+       <a href="/account-settings"> 
+         <div class="card ml-4 mt-3" >
+               <div class="card-body">
+                    <div class="d-flex flex-row align-items-center">
+                        <div class="content">
+                            <h5 class="card-title">Talk with us</h5>
+                        </div>
+                        <div class="icon ml-auto">
+                            <img src="/images/callUs.webp"  alt="">
+                        </div>
+                    </div>
+                    <p class="card-subtitle mb-2 text-muted mt-2">Edit Name, Email and Delete account.</p>
+                </div> 
+            </div> 
+        </a>
 
+           <a href="/your-products"> 
+            <div class="card ml-4 mt-3" >
+                <div class="card-body">
+                    <div class="d-flex flex-row align-items-center">
+                        <div class="content">
+                            <h5 class="card-title">Chat with us</h5>
+                        </div>
+                        <div class="icon ml-auto">
+                            <img src="/images/your-products.png" alt="">
+                        </div>
+                    </div>
+                    <p class="card-subtitle mb-2 text-muted mt-2">View Your Products, Status, Edit, Delete.</p>
+                </div> 
+            </div>
+           </a>
+
+        <a href="/sell-products">
+            <div class="card ml-4 mt-3 " >
+              <div class="card-body">
+                    <div class="d-flex flex-row align-items-center">
+                        <div class="content">
+                            <h5 class="card-title">Drop Us an Email</h5>
+                        </div>
+                        <div class="icon ml-auto">
+                            <img src="/images/sell-products.png"  alt="">
+                        </div>
+                    </div>
+                    <p class="card-subtitle mb-2 text-muted mt-2">Sell Your Products on eASY Shop.</p>
+                </div>
+            </div>
+         </a> 
+
+        </div>
+    </div>
+</section>
+
+<style>
+    #row{
+     display: flex;
+     justify-content: center;
+     align-items: center;
+}
+
+     a {
+    color: black;
+    text-decoration: none;
+    /* Remove underline by default */
+  }
+
+  a:hover {
+    color: black;
+    text-decoration: none;
+    /* Ensure underline does not appear on hover */
+  }
+
+  .card{
+    width: 20rem; 
+    height: 12rem; 
+    border-radius: 10px;
+    color: rgb(38, 141, 139);
+    border-color: rgb(28, 133, 117);
+  }
+  .card:hover{
+    box-shadow: 0 0 14px rgba(21, 105, 131, 0.5);
+
+  }
+  .card-title{
+    font-size: x-large;
+  }
+  .icon img{
+    block-size: 120px;
+  }
+
+  
+</style>
