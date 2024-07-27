@@ -172,6 +172,17 @@ router.get('/message', async (req, res) => {
 })
 
 
+/*Post message from User */
+router.post('/send-message',async(req,res)=>{
+ await userHelpers.uploadMsg(req.body).then(() => {
+    res.json({ send: true })
+  }).catch((error)=>{
+   console.log('message not send',error);
+    res.status(500).send('Internal Server Error');
+  })
+})
+
+
 /*Get Detail About eASY Shop */
 router.get('/about', async (req, res) => {
   let cartCount = 0;
