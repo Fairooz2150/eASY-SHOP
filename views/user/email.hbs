@@ -1,0 +1,76 @@
+<section>
+<div class="row mt-2">
+    <div class="col-md-6 mx-auto">
+        <div class="container mt-5 mb-5">
+            <h2 class="text-center pb-5">Send Mail to Us</h2>
+
+            <form id="signupForm" action="/signup" method="post">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="firstName">First Name</label>
+                        <input type="text" class="form-control" id="firstName" name="First_Name" placeholder="First Name" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" class="form-control" id="lastName" name="Last_Name" placeholder="Last Name" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="Email" placeholder="Email Address" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input type="tel" class="form-control" id="phone" name="Phone" placeholder="Phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" name="Password" placeholder="Password" required>
+                    <small id="passwordHelp" class="form-text"></small>
+                </div>
+                <div class="form-group">
+                    <label>Gender</label>
+                    <div>
+                        <label class="radio-inline mr-3">
+                            <input type="radio" name="Gender" value="Male" checked> Male
+                        </label>
+                        <label class="radio-inline mr-3">
+                            <input type="radio" name="Gender" value="Female"> Female
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="Gender" value="Others"> Others
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group text-center">
+                    <a href="/login" class="toLogin">Already have an account?</a>
+                </div>
+                <button type="submit" class="btn btn-primary float-right" id="submit">Signup</button>
+            </form>
+        </div>
+    </div>
+</div>
+</section>
+
+
+                <script>
+                     
+        $("#submit-form").submit((e)=>{
+            e.preventDefault()
+            $.ajax({
+                url:"https://script.google.com/macros/s/AKfycbzqAjLy5zZlbXfgGzXdO08hR22Ngw2o2jOXAD9EEqO5Fck-XWixBi39UWPABVCoK8tCFA/exec",
+                data:$("#submit-form").serialize(),
+                method:"post",
+                success:function (response){
+                    alert("Message send successfully")
+                    window.location.reload()
+                    
+                },
+                error:function (err){
+                    alert("Something Error")
+    
+                }
+            })
+        })
+    
+                </script>

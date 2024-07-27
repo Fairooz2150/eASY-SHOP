@@ -150,6 +150,7 @@
         searchInput.placeholder = placeholders[index];
         searchInputs.placeholder = placeholders[index];
         searchInputL.placeholder = placeholders[index];
+        
         index = (index + 1) % placeholders.length;
     }
 
@@ -162,6 +163,7 @@
 
 
 <style>
+
     .input-group {
         position: relative;
         display: inline-block;
@@ -221,6 +223,19 @@
         color: #36a3b7;
 
     }
+    
+    #search-inputs::placeholder {
+        color: #217f8f;
+    }
+
+    #search-input::placeholder {
+        color: #217f8f;
+    }
+    
+    #search-inputL::placeholder {
+        color: #217f8f;
+    }
+
 
     .nav-link .bi-cart {
         display: inline-block;
