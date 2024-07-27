@@ -155,7 +155,7 @@ router.get('/contact', async (req, res) => {
 })
 
 
-/*Get email page*/
+/*Get email page for submitting message inquiry*/
 router.get('/email', async (req, res) => {
   let cartCount = 0
   let user = req.session.user

@@ -1,45 +1,83 @@
 <section>
-     <div class="container" style="background-color: rgb(7, 158, 172); ">
-            <div class="row mt-2">
-       
+    <div class="container">
+        <div class="row mt-2">
+
             <div class="col-md-12 ">
                 <div class=" mt-4 mb-5 p-5">
-                    <h2 class="text-center mt-2 pb-5" style="color: white;">Send Mail to Us</h2>
 
-                    <form id="signupForm" action="/signup" method="post" class="" style="color: white;">
+                    <h2 class="text-center mt-2 pb-5" id="title">We’d Love to Hear from You <br> Send Us a Message!</h2>
+
+                    <form id="submit-form" action="" method="post">
                         <div class="form-row">
-                            <div class="form-group col-md-6 col-lg-4">
-                                <label for="firstName" >Name</label>
-                                <input type="text" class="form-control" id="firstName" name="First_Name"
-                                    placeholder="Full Name" required>
-                            </div>
-                            <div class="form-group col-md-6 col-lg-4">
-                            <label for="phone">Phone</label>
-                            <input type="tel" class="form-control" id="phone" name="Phone" placeholder="Phone" required>
+
+                                <div class="form-group col-md-6 col-lg-4">
+                                    <label for="Name">Name</label>
+                                    <input type="text" class="form-control" id="Name" name="Name"
+                                        value="{{user.First_Name}}{{user.Last_Name}}" placeholder="Full Name" required>
+                                </div>
+                                  <input type="text" name="UserId" value="{{user._id}}" hidden>
+
+                                <div class="form-group col-md-6 col-lg-4">
+                                    <label for="mobile">Mobile</label>
+                                    <input type="tel" class="form-control" id="mhone" name="Phone" placeholder="Mobile"
+                                        value="{{user.Phone}}" required>
+                                </div>
+
+                                <div class="form-group col-12 col-lg-4 ">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" id="email" name="Email" placeholder="Email"
+                                        value="{{user.Email}}" required>
+                                </div>
+
                         </div>
 
-                         <div class="form-group col-12 col-lg-4 ">
-                            <label for="email">Email</label>
-                            <input type="email" class="form-control" id="email" name="Email" placeholder="Email Address"
-                                required>
-                        </div>
-                        </div>
-                         
-                            <label for="subject" class="mt-2">Subject</label>
-                            <input type="text" class="form-control" id="subject" name="Subject" placeholder="Subject"
-                                required>
-                        
-                        <label for="description" class="mt-4">Description</label>
-                    <textarea class="form-control" name="Description" rows="5" id="description" placeholder="Enter product description" required></textarea>
-                      
-                        <button type="submit" class="btn btn-primary mt-4 " style="width: 100%;" id="submit">Send</button>
+                        <label for="subject" class="mt-2">Subject</label>
+                        <input type="text" class="form-control" id="subject" name="Subject" placeholder="Subject"
+                            required>
+
+                        <label for="message" class="mt-4">Message</label>
+                        <textarea class="form-control" name="Message" rows="5" id="message"
+                            placeholder="Type your message..." required></textarea>
+
+                        <button type="submit" class="btn mt-4" id="submit">Send Message</button>
                     </form>
                 </div>
             </div>
         </div>
-     </div>
+    </div>
 </section>
 
+
+<style>
+    body {
+        overflow-x: hidden;
+        /* Prevent horizontal scrolling */
+    }
+
+    #submit-form, #title {
+        color: white;
+    }
+    
+    .container{
+        background-color: rgb(7, 158, 172); 
+    }
+
+    #submit{
+        width: 100%;
+        background-color: rgb(7, 158, 172); 
+        color: white;
+        border-color: aliceblue;
+        border-width: 3px;
+        font-weight:bold;
+    }
+
+     #submit:hover{
+        background-color: white;
+        color: rgb(7, 158, 172); 
+     }
+      
+    
+</style>
 
 <script>
 
@@ -62,10 +100,3 @@
     })
 
 </script>
-
-<style>
-    body {
-        overflow-x: hidden;
-        /* Prevent horizontal scrolling */
-    }
-</style>
