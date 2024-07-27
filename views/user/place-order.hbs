@@ -70,7 +70,7 @@
 
                 <div class="col-md-5 mt-5 pt-4 mb-3 " >
                     <div class="container  checkout">
-                        <h5>Total Amount : ₹<span id="total"></span></h5>
+                        <h5>Total Amount : ₹<span id="totals"></span></h5>
                         <hr>
                         <div class="payment">
                             <p>Payment method</p>
@@ -104,7 +104,7 @@
     const totals = {{total}}; // Replace with your dynamic value
     
     // Format and display the total 
-    document.getElementById('total').textContent = formatNumber(totals);
+    document.getElementById('totals').textContent = formatNumber(totals);
 
 
     $("#checkout-form").submit((e) => {
@@ -141,9 +141,9 @@
                 verifyPayment(response,order)
             },
     "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
-                "name": {{user.First_Name}} {{user.Last_Name}}, //your customer's name
-                "email": {{user.Email}},
-                "contact": {{user.Phone}} //Provide the customer's phone number for better conversion rates 
+                 "name": "eASY Customer", //your customer's name
+                "email": "easycustomer@example.com",
+                "contact": "9000090000"  //Provide the customer's phone number for better conversion rates 
             },
             "notes": {
                 "address": "Razorpay Corporate Office"
@@ -208,4 +208,5 @@
     #checkoutBtn:hover{
         background-image: linear-gradient(to left, #1ba3a5, rgb(67, 187, 208)); 
     }
+   
 </style>

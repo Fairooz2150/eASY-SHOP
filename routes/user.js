@@ -155,8 +155,8 @@ router.get('/contact', async (req, res) => {
 })
 
 
-/*Get email page for submitting message inquiry*/
-router.get('/email', async (req, res) => {
+/* Get message page */
+router.get('/message', async (req, res) => {
   let cartCount = 0
   let user = req.session.user
   if (user) {
@@ -168,7 +168,7 @@ router.get('/email', async (req, res) => {
       cartCount = req.session.cart.length
     }
   }
-  res.render('user/email', { cartCount,user })
+  res.render('user/message', { cartCount,user })
 })
 
 

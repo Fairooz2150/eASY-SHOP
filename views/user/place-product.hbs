@@ -71,7 +71,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="container mt-5 ml-5 checkout">
-                        <h5>Total Amount : ₹{{total}}</h5>
+                        <h5>Total Amount : ₹<span id="totals"></span></h5>
                         <hr>
                         <div class="payment">
                             <p>Payment method</p>
@@ -93,6 +93,19 @@
 
 </section>
 <script>
+
+   // Function to format number with commas
+    function formatNumber(number) {
+      return number.toLocaleString('en-IN'); // 'en-IN' for Indian number formatting (₹ separation)
+    }
+
+    // total value (total amount of products )
+    const totals = {{total}}; // Replace with your dynamic value
+    
+    // Format and display the total 
+    document.getElementById('totals').textContent = formatNumber(totals);
+
+
   $("#checkout-form").submit((e) => {
     e.preventDefault();
     $.ajax({
@@ -132,9 +145,9 @@
                 verifyPayment(response,order)
             },
     "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
-                "name": {{user.First_Name}} {{user.Last_Name}}, //your customer's name
-                "email": {{user.Email}},
-                "contact": {{user.Phone}} //Provide the customer's phone number for better conversion rates 
+                "name": "eASY Customer", //your customer's name
+                "email": "easycustomer@example.com",
+                "contact": "9000090000" //Provide the customer's phone number for better conversion rates 
             },
             "notes": {
                 "address": "Razorpay Corporate Office"
