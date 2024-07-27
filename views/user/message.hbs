@@ -15,7 +15,7 @@
                                     <input type="text" class="form-control" id="Name" name="Name"
                                          placeholder="Full Name" value="{{user.First_Name}}" required>
                                 </div>
-                                
+
                                 <!-- Send User ID -->
                                 {{#if user}}
                                   <input type="text" name="UserId" value="{{user._id}}" hidden>
@@ -25,7 +25,7 @@
 
                                 <div class="form-group col-md-6 col-lg-4">
                                     <label for="mobile">Mobile</label>
-                                    <input type="tel" class="form-control" id="mhone" name="Phone" placeholder="Mobile"
+                                    <input type="tel" class="form-control" id="mobile" name="Phone" placeholder="Mobile"
                                         value="{{user.Phone}}" required>
                                 </div>
 
@@ -51,8 +51,72 @@
             </div>
         </div>
     </div>
+
+    
+  <!-- Confirmation Modal -->
+ <div id="alertModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>Message Sent Successfully! <br>
+        Our team will respond to your inquiry soon.</p>
+        <a href="/contact"><button id="alert" class="btn confirmBtn">ok</button></a>
+    </div>
+</div>
+
 </section>
 
+<script>
+
+    
+  // Get the modal for Showing 'Message Send Successfully'
+var modal = document.getElementById("alertModal");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// Get the button that closes the modal
+var confirmRemove = document.getElementById("alert");
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks on the button, close the modal
+confirmRemove.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+
+
+    $("#submit-form").submit((e) => {
+        e.preventDefault()
+        $.ajax({
+            url: '/send-message',
+            data: $("#submit-form").serialize(),
+            method: "post",
+            success: (response) =>{
+
+                 if (response.send) {
+                    modal.style.display = "block";  //shows when user sends message successfully
+                 } else { 
+                     alert("Message not send")
+                     window.location.reload()
+                }
+               
+            }
+            
+        })
+    })
+
+</script>
 
 <style>
     body {
@@ -82,30 +146,52 @@
         color: rgb(7, 158, 172); 
      }
       
+     /* Modal Content/Box */
+  .modal-content {
+    background-color: #fefefe;
+    margin: 18% auto;
+    /* 1*% from the top and centered */
+    padding: 20px;
+    border-radius: 10px;  
+    box-shadow: 0 0 15px rgba(203, 220, 222, 0.5);
+    width: 80%;
+    /* Could be more or less, depending on screen size */
+    max-width: 400px;
+    /* Maximum width */
+    text-align: center;
+  }
+ 
+  /* The Close Button */
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: rgb(7, 63, 68);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .confirmBtn {
+    background-image: linear-gradient(to left, #107c8f, rgb(61, 172, 186));
+    color: white;
+    border: none;
+    margin-top: 25px;
+    border-radius: 20px;
+    height:40px;
+    width: 100%;
+  }
+  
+  .confirmBtn:hover{
+  background-image: linear-gradient(to right, #107c8f, rgb(61, 172, 186));
+    color: white;
+  }
+
+
     
 </style>
-
-<script>
-
-    $("#submit-form").submit((e) => {
-        e.preventDefault()
-        $.ajax({
-            url: '/send-message',
-            data: $("#submit-form").serialize(),
-            method: "post",
-            success: (response) =>{
-
-                 if (response.send) {
-                    alert("Message  send")
-                    location.href = '/contact'
-                 } else { 
-                     alert("Message not send")
-                     window.location.reload()
-                }
-               
-            }
-            
-        })
-    })
-
-</script>
