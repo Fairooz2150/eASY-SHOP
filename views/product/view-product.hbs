@@ -563,8 +563,33 @@ function addToCart(proId) {
     color: white;
     background-image: linear-gradient(to right, #16b656, rgb(4, 231, 125));
     box-shadow: 0 2px 8px rgba(10, 118, 35, 0.5);
-    
+     position: relative;
   }
+
+   .ADC:hover{
+    background-image: linear-gradient(to left, #16b656, rgb(4, 231, 125));  
+    color: white;
+  }
+ 
+   .ADC::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    padding-top: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-70%, -50%) scale(0);
+    opacity: 0;
+    transition: transform 1s, opacity 1s;
+  }
+
+  .ADC:active::after {
+    transform: translate(-70%, -50%) scale(1);
+    opacity: 1;
+    transition: 0s;
+  }
+
 
   .BN {
     width: 10rem;
@@ -574,25 +599,17 @@ function addToCart(proId) {
     background-image: linear-gradient(to right, #1da3ba, rgb(114, 209, 228));
     box-shadow: 0 2px 8px rgba(21, 119, 146, 0.5);
   }
+   
+  .BN:hover{
+    background-image: linear-gradient(to left, #1da3ba, rgb(114, 209, 228));
+    color: white;
+  }
 
   .ADC-text,
   .BN-text {
     transform: skew(-13deg);
   }
- 
-  .BN:hover{
-    background-image: linear-gradient(to left, #1da3ba, rgb(114, 209, 228));
-    color: white;
-  }
   
-  .ADC:hover{
-    background-image: linear-gradient(to left, #16b656, rgb(4, 231, 125));  
-    color: white;
-  }
-   #addtoCart, #buyNow {
-    position: relative;
-    display: inline-block;
-  }
 
  .outofStock{
   color: #c2c0be;
