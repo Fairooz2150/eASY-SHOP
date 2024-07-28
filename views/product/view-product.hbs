@@ -279,13 +279,28 @@
             <h6>Powered by</h6>
             <div class="seller-info ml-2">
               <img src="/images/eASY-SHOP-logo.png" class="eASY-logo" alt="eASY SHOP" title="eASY SHOP"> <br>
+
               <p class="eASY-description mt-2">Discover our exclusive range of products at <b>eASY SHOP</b>, where
                 quality meets convenience <i class="bi bi-shop-window"></i>. <br>
+
                 <span class="contact mt-1"> For any inquiries, 24/7 customer support; we'll be happy to assist you! <br>
-                  <a href="tel:0478-2255"><i class="bi bi-headset"></i> talk with us!</a> &ensp; &emsp; <a
-                    href="https://wa.me/+919142111304"><i class="bi bi-whatsapp"></i> chat with us!</a>
+                  <a href="tel:0478-2255"><i class="bi bi-headset"></i> talk with us!</a> &ensp; &emsp; 
+
+                  {{#if user}}                 
+                <a href="https://wa.me/+919142111304?text=Hi%20I%27m%20{{user.First_Name}}%20{{user.Last_Name}},
+                %0A%0Auser%20Id:%20{{user._id}}.%0A%0AI%27m%20interested%20in%20the%20product%20{{product.Name}},
+                %0A%0A(product%20Id%3A%20{{product._id}}).%0A%0Aand%20would%20like%20to%20know%20more%20details.">
+                  {{else}}
+
+                  <a href="https://wa.me/+919142111304?text=Hi,%20I%27m%20interested%20in%20the%20product%20{{product.Name}},
+                %0A%0A(product%20Id%3A%20{{product._id}}).%0A%0Aand%20would%20like%20to%20know%20more%20details."> 
+                  {{/if}}
+                  
+                  <i class="bi bi-whatsapp"></i> chat with us!</a>
+
                   &ensp; &emsp; <a href="mailto:easyshop@email.com?subject=Inquiry%20about%20'{{product.Name}}'"><i
                       class="bi bi-envelope"></i> email us!</a></span>
+
               </p>
             </div>
           </div>

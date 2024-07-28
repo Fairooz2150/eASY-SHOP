@@ -3,7 +3,11 @@
         <h2 class="text-center mt-5">eASY Shop Help Center: Here for You 24x7</h2>
         <div class="row">
 
-           <a href="https://wa.me/+919142111304"> 
+        {{#if user}}
+        <a href="https://wa.me/+919142111304?text=Hi%20I%20am%20{{user.First_Name}}%20{{user.Last_Name}},%0A%0Auser%20Id:%20{{user._id}}">
+        {{else}}
+        <a href="https://wa.me/+919142111304"> 
+        {{/if}}
             <div class="card  ">
                 <div class="card-body ">
                     <div class=" text-center">
@@ -17,9 +21,10 @@
                     <p class="card-subtitle mb-2 text-muted mt-2" >Chat with our friendly eASY support team on WhatsApp anytime for prompt assistance and solutions.</p>
                 </div> 
             </div>
+            
            </a>
            
-       <a href="tel:0478-2255"> 
+       <a href="tel:0484-2255369"> 
          <div class="card  " >
                <div class="card-body ">
                     <div class="text-center ">
