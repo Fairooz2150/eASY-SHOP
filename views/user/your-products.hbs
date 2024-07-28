@@ -31,7 +31,14 @@
                 <span class="title" title="{{this.Name}}">{{this.Name}} </span><br>
                 <span class="category " title="{{this.Category}}">{{this.Category}}</span>
                 <br> <span class="prodId text-muted" title="Product Id">{{this._id}}</span>
-                <br><b>Stock:</b> {{this.Stock_Count}}
+                
+                <br>
+                {{#ifCond this.Stock_Count '<' 1}}
+                <span class="outofStock">Out of Stock</span>
+                {{else}}
+                  <b>Stock:</b> {{this.Stock_Count}}
+                {{/ifCond}}
+                
             </div>
 
           </td>
@@ -324,5 +331,8 @@
     -webkit-box-orient: vertical;
     max-width: 40em;
   }
-
+  .outofStock{
+    font-weight: bold;
+    color: #f07b0d;
+  }
 </style>
