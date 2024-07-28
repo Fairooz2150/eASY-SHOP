@@ -259,33 +259,8 @@ module.exports={
         return new Promise((resolve,reject)=>{
             let Date = moment().format('DD MMM YYYY');
             let Time = moment().format('hh:mmA');
-            if(product.Status==='Pending'){
-                 
-                db.get().collection(collection.USER_PRODUCTS_COLLECTION).updateOne({_id:objectId(proId)},{
-                    $set:{
-                        
-                            Name: product.Name,
-                            Category: product.Category,
-                            Actual_Price: product.Actual_Price,
-                            Product_Owner:product.Product_Owner,
-                            Offer_Price: product.Offer_Price,
-                            Offer_Percentage: product.Offer_Percentage,
-                            Description: product.Description,                              
-                            Shop_Address:product.Shop_Address,  
-                            Stock_Count:product.Stock_Count,   
-                            Phone:product.Phone,     
-                            Email:product.Email,
-                            Whatsapp:product.Whatsapp,                 
-                            Carted:product.Carted,
-                            Updations:product.Updations,
-                            UpdatedDate: Date,
-                            UpdatedTime: Time               
-                    }
-                })
-    
-            }else{
-
-            db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:objectId(proId)},{
+            if(product.Status==='Approved'){
+              db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:objectId(proId)},{
                 $set:{
                     
                        
@@ -330,9 +305,36 @@ module.exports={
                     UpdatedTime: Time               
                 }
             })
+              
+            }else{
+
+            db.get().collection(collection.USER_PRODUCTS_COLLECTION).updateOne({_id:objectId(proId)},{
+              $set:{
+                  
+                      Name: product.Name,
+                      Category: product.Category,
+                      Actual_Price: product.Actual_Price,
+                      Product_Owner:product.Product_Owner,
+                      Offer_Price: product.Offer_Price,
+                      Offer_Percentage: product.Offer_Percentage,
+                      Description: product.Description,                              
+                      Shop_Address:product.Shop_Address,  
+                      Stock_Count:product.Stock_Count,
+                      Status:product.Status,   
+                      Phone:product.Phone,     
+                      Email:product.Email,
+                      Whatsapp:product.Whatsapp,                 
+                      Carted:product.Carted,
+                      Updations:product.Updations,
+                      UpdatedDate: Date,
+                      UpdatedTime: Time               
+              }
+          })
+
         }
         })
     },
+    
     searchProducts: (query) => {
         return new Promise(async (resolve, reject) => {
             try {

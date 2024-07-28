@@ -19,25 +19,7 @@
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.css" />
     <link rel="stylesheet" href="/path/to/your/datatables/css">
-
-    <style>
-        html,
-        body {
-            height: 100%;
-            margin: 0;
-            
-        }
-
-        .wrapper {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        main {
-            flex: 1;
-        }
-    </style>
+    <link rel="stylesheet" href="/stylesheets/style.css">
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -51,6 +33,11 @@
 </head>
 
 <body>
+        <!-- Preloader -->
+    <div id="preloader">
+        <img src="/images/loading.gif" alt="Loading...">
+    </div>
+
 
     <div class="wrapper">
         {{#if admin}}

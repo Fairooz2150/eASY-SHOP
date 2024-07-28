@@ -68,7 +68,7 @@
 <script>
 
     
-  // Get the modal for Showing 'Message Send Successfully'
+  // Get the modal for Showing 'Message Sent Successfully'
 var modal = document.getElementById("alertModal");
 
 // Get the <span> element that closes the modal
@@ -105,7 +105,7 @@ window.onclick = function(event) {
             success: (response) =>{
 
                  if (response.send) {
-                    modal.style.display = "block";  //shows when user sends message successfully
+                    modal.style.display = "block";  //shows when user sent message successfully
                  } else { 
                      alert("Message not send")
                      window.location.reload()
