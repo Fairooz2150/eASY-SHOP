@@ -38,12 +38,12 @@
               <p class="card-text"><span id="orderId">Order Id: </span><br> {{this._id}}</p>
               <p class="card-text"><span  id="orderStatus">Order Status: </span> <span id="status-{{this._id}}">{{this.status}}</span></p>
             </div>
-            <div class="address">
+            <address class="address">
               <span id="address">Delivery Address:</span><br>{{newlineToBr this.deliveryDetails.address}}, <br>
               {{this.deliveryDetails.district}}  {{this.deliveryDetails.pincode}},
               <br> {{this.deliveryDetails.state}}
               <br> <i class="bi bi-telephone"></i>  {{this.deliveryDetails.mobile}}
-            </div>
+            </address>
             <div class="status-image" >
                
                 {{#ifEquals this.status 'placed'}}
