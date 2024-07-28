@@ -1,6 +1,6 @@
 <section>
   <div class="bg-container container-fluid pl-5 pr-5 ">
-    <div class="ft-container container-fluid ml-2 mr-2">
+    <div class="ft-container container-fluid ml-2 mr-2 mb-5">
       <div class="row  pt-5">
 
         <div class="left-content text-center  pl-5 mb-3 pr-5 col-md-5">
@@ -180,7 +180,9 @@
 
           <div class="description mt-4">
             <h6>Product Description</h6>
-            <p class="ml-2"> {{newlineToBr product.Description}}</p>
+            <p class="ml-2">
+            {{newlineToBr product.Description}}</p> <br>
+             <b>Product Id </b><span >{{product._id}} </span>
           </div>
           <hr>
 
@@ -261,16 +263,42 @@
           <div class="seller mt-4">
             <h6>About the Seller </h6>
             <div class="seller-info ml-2">
-              <p><span class="seller-name"> {{product.Seller_First_Name}} {{product.Seller_Last_Name}}
+              <span class="seller-name"> {{product.Seller_First_Name}} {{product.Seller_Last_Name}}
                   <i class="bi bi-patch-check-fill"></i> </span> <br>
+                  
                 <span class="eASY-description "> {{newlineToBr product.Shop_Address}} <br>
-                  <span class="contact mt-1"> For any inquiries, contact: <br>
-                    <a href="tel:+91{{product.Seller_Phone}}"><i class="bi bi-headset"></i> {{product.Phone}}</a>
-                    &ensp; &emsp; <a href="https://wa.me/{{product.Whatsapp}}"><i class="bi bi-whatsapp"></i> chat
-                      with seller!</a> &ensp; &emsp;
-                    <a href="mailto:{{product.Email}}?subject=Inquiry%20about%20'{{product.Name}}'"><i
-                        class="bi bi-envelope"></i> {{product.Email}}</a></span></span>
-              </p>
+                   For any inquiries, contact: <br>
+                  <span class="contact row mt-1 ml-2"> 
+                    
+                    <div>
+                      <a href="tel:+91{{product.Seller_Phone}}"><i class="bi bi-headset"></i> {{product.Phone}}</a>
+                    </div>
+                    
+                    <div>
+                        {{#if user}}                 
+                <a href="https://wa.me/{{product.Whatsapp}}?text=Hi%20I%27m%20{{user.First_Name}}%20{{user.Last_Name}},
+                %0A%0Auser%20Id:%20{{user._id}}.%0A%0AI%27m%20interested%20in%20the%20product%20{{product.Name}},
+                %0A%0A(product%20Id%3A%20{{product._id}}).%0A%0Aand%20would%20like%20to%20know%20more%20details.">
+                  {{else}}
+
+                  <a href="https://wa.me/{{product.Whatsapp}}?text=Hi,%20I%27m%20interested%20in%20the%20product%20{{product.Name}},
+                %0A%0A(product%20Id%3A%20{{product._id}}).%0A%0Aand%20would%20like%20to%20know%20more%20details."> 
+                  {{/if}}
+                    <i class="bi bi-whatsapp"></i> chat with seller!</a> 
+                    </div>
+
+                    <div>
+                      <a href="mailto:{{product.Email}}?subject=Inquiry%20about%20'{{product.Name}}'"><i
+                            class="bi bi-envelope"></i> {{product.Email}}</a>
+                    </div>
+                                        
+                    <div>
+                      <a href="/message"><i class="bi bi-send"></i> Send your inquiry to eASY</a> 
+                        
+                    </div>
+                    </span></span>
+
+              
             </div>
           </div>
 
@@ -280,13 +308,17 @@
             <div class="seller-info ml-2">
               <img src="/images/eASY-SHOP-logo.png" class="eASY-logo" alt="eASY SHOP" title="eASY SHOP"> <br>
 
-              <p class="eASY-description mt-2">Discover our exclusive range of products at <b>eASY SHOP</b>, where
+              <span class="eASY-description mt-2">Discover our exclusive range of products at <a href="/"><span class="eASY">eASY SHOP</span></a>, where
                 quality meets convenience <i class="bi bi-shop-window"></i>. <br>
 
-                <span class="contact mt-1"> For any inquiries, 24/7 customer support; we'll be happy to assist you! <br>
-                  <a href="tel:0478-2255"><i class="bi bi-headset"></i> talk with us!</a> &ensp; &emsp; 
-
-                  {{#if user}}                 
+                 For any inquiries, 24/7 customer support; we'll be happy to assist you! <br>
+                <span class="contact row mt-1 ml-2">
+                    <div>
+                        <a href="tel:0478-2255369"><i class="bi bi-headset"></i> talk with us!</a> 
+                    </div>
+                  
+                    <div>
+                       {{#if user}}                 
                 <a href="https://wa.me/+919142111304?text=Hi%20I%27m%20{{user.First_Name}}%20{{user.Last_Name}},
                 %0A%0Auser%20Id:%20{{user._id}}.%0A%0AI%27m%20interested%20in%20the%20product%20{{product.Name}},
                 %0A%0A(product%20Id%3A%20{{product._id}}).%0A%0Aand%20would%20like%20to%20know%20more%20details.">
@@ -297,11 +329,20 @@
                   {{/if}}
                   
                   <i class="bi bi-whatsapp"></i> chat with us!</a>
+                    </div>
+                 
+                 <div>
+                     <a href="mailto:easyshop@email.com?subject=Inquiry%20about%20'{{product.Name}}'"><i
+                      class="bi bi-envelope"></i> email us!</a>
+                 </div>
+                
+                      
+                  <div>
+                      <a href="/message"><i class="bi bi-send"></i>Send your inquiry to eASY</a> 
+                  </div> 
+                      </span>
 
-                  &ensp; &emsp; <a href="mailto:easyshop@email.com?subject=Inquiry%20about%20'{{product.Name}}'"><i
-                      class="bi bi-envelope"></i> email us!</a></span>
-
-              </p>
+              </span>
             </div>
           </div>
           {{/ifEquals}}
@@ -1043,7 +1084,12 @@ function addToCart(proId) {
     font-size: smaller;
   }
 
+  .eASY{
+     color: #0097b2;
+     font-weight: bold;
+  }
   .contact {
     font-family: 'Times New Roman', Times, serif;
+    gap: 15px;
   }
 </style>
