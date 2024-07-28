@@ -262,13 +262,13 @@
           {{#ifEquals product.Product_Owner 'User'}}
           <div class="seller mt-4">
             <h6>About the Seller </h6>
-            <div class="seller-info ml-2">
+            <address class="seller-info ml-2">
               <span class="seller-name"> {{product.Seller_First_Name}} {{product.Seller_Last_Name}}
                   <i class="bi bi-patch-check-fill"></i> </span> <br>
                   
                 <span class="eASY-description "> {{newlineToBr product.Shop_Address}} <br>
                    For any inquiries, contact: <br>
-                  <span class="contact row mt-1 ml-2"> 
+                  <span class="contact row mt-2 ml-1"> 
                     
                     <div>
                       <a href="tel:+91{{product.Seller_Phone}}"><i class="bi bi-headset"></i> {{product.Phone}}</a>
@@ -299,20 +299,20 @@
                     </span></span>
 
               
-            </div>
+            </address>
           </div>
 
           {{else}}
           <div class="seller mt-4">
             <h6>Powered by</h6>
-            <div class="seller-info ml-2">
-              <img src="/images/eASY-SHOP-logo.png" class="eASY-logo" alt="eASY SHOP" title="eASY SHOP"> <br>
+            <address class="seller-info ml-2">
+             <a href="/"><img src="/images/eASY-SHOP-logo.png" class="eASY-logo" alt="eASY SHOP" title="eASY SHOP"></a> <br>
 
               <span class="eASY-description mt-2">Discover our exclusive range of products at <a href="/"><span class="eASY">eASY SHOP</span></a>, where
                 quality meets convenience <i class="bi bi-shop-window"></i>. <br>
 
                  For any inquiries, 24/7 customer support; we'll be happy to assist you! <br>
-                <span class="contact row mt-1 ml-2">
+                <span class="contact row mt-2 ml-1">
                     <div>
                         <a href="tel:0478-2255369"><i class="bi bi-headset"></i> talk with us!</a> 
                     </div>
@@ -343,7 +343,7 @@
                       </span>
 
               </span>
-            </div>
+            </address>
           </div>
           {{/ifEquals}}
 
