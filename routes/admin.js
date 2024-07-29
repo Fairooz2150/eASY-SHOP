@@ -14,18 +14,17 @@ const verifyLogin = (req, res, next) => { //verify Admin login
   }
 }
 
-/* GET users listing. */
+/* GET all Products. */
 router.get('/', verifyLogin, async (req, res, next) => {
   try {
     let products = await productHelpers.getAllProducts();
-    console.log(products);
-
     res.render('admin/view-products', { admin: true, products });
   } catch (error) {
     console.error('Error fetching products:', error);
     res.render('admin/view-products', { admin: true, error: 'Failed to fetch products' });
   }
 });
+
 
 router.get('/login', (req, res) => {
   if (req.session.admin) {
