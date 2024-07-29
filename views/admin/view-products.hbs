@@ -1,128 +1,159 @@
+<section>
+  <div class="container-fluid mt-2">
 
-  <section>
-    <div class="container-fluid">
-       <h2 class="text-center pt-3">eASY Products</h2>
-      <div class="row mt-4">
-        <a href="/admin/add-product" class="btn btn-success ml-auto">Add Product</a>
-      </div>
-      <table class="table mt-5" id="productsTable">
-        <thead>
-          <tr>
-            <th scope="col">No</th>
-            <th scope="col">Items</th>           
-            <th scope="col">Description</th>
-            <th scope="col">Carted</th>
-            <th scope="col">Stock</th>
-            <th scope="col">Price</th>
-           
-            <th>Options</th>
-          </tr>
-        </thead>
-        <tbody>
-          {{#each products}}
-          <tr>
-            <th scope="row"> <span class="mr-2">{{incrementedIndex @index}} </span></th>
-                      <td>
-                        <div class="row">
-                            <div>
-                                <img style="width: 70px; height: 75px;" src="/product-images/{{this._id}}_0.jpg" class="ml-2"
-                                     alt="">
-                            </div>
-                        
-                        <div class="product_details ml-3">
-                            {{this.Name}} <br>
-                            <span class="text-muted">{{this.Category}}</span> 
+      <h2 class="text-center pt-3">eASY Products</h2>
 
-                        </div>
-                        
-                        </div>
-                    </td>            
-            <td> 
-                {{newlineToBr this.Description}}
-              
-             </td>
-             <td> 
-           
-              <span class="ml-4">{{this.Carted}}</span>
-          
-             </td>
-             <td>
-              {{this.Stock_Count}}
-             </td>
-             
-
-            <td ><span class="mr-2">{{this.Offer_Price}} </span></td>
-            <td>
-              <a href="/admin/edit-product/{{this._id}}" class="btn btn-primary">Edit</a>
-             <button class="btn btn-danger" onclick="deleteProduct('{{this._id}}', '{{this.Name}}')">Delete</button>
-            </td>
-          </tr>
-          {{/each}}
-        </tbody>
-      </table>
+    <div class="row mr-2 mb-2">
+      <a href="/admin/add-product"  class="btn btn-success ml-auto" id="sellProd"><i class="bi bi-bag-plus"></i>  Add Product</a>
     </div>
 
-    <!-- Confirmation Modal -->
-<div id="confirmationModal" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <p id="modalMessage">Are you sure?</p>
-    <button id="confirmRemove" class="btn btn-danger">OK</button>
-    <button id="cancelRemove" class="btn btn-secondary">Cancel</button>
+    <table class="table mt-3" id="productsTable">
+      <thead>
+        <tr>
+          <th scope="col">No</th>
+          <th scope="col">Product</th>
+          <th scope="col">Price</th>
+          <th>Options</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each products}}
+        <tr>
+          <th scope="row">{{incrementedIndex @index}}</th>
+
+          <td>
+          
+            <div class="row">
+
+              <div class="m-2">
+                <img  src="/product-images/{{this._id}}_0.jpg" class="img ml-2"
+                  alt="Image not available" onerror="this.onerror=null; this.src='/images/no-images-available.png';">
+              </div>
+
+              <div class="product_details ml-3">
+                <span class="title" title="{{this.Name}}">{{this.Name}} </span><br>
+                <span class="category " title="{{this.Category}}">{{this.Category}}</span>            
+                <br><span class="productId" >
+                  <span class="prodId text-muted" title="Product Id">{{this._id}}</span>
+                    {{#ifCond this.Product_Owner '===' 'Admin'}}
+                       <i class="bi bi-patch-check" title="eASY Product"></i>
+                     {{/ifCond}}   
+                  </span> 
+
+                <br>
+                {{#ifCond this.Stock_Count '<' 1}}
+                <span class="outofStock">Out of Stock</span>
+                {{else}}
+                  <b>Stock:</b> {{this.Stock_Count}}
+                {{/ifCond}}
+                
+            </div>
+
+          </td>
+
+          <td><span id="offer-price">{{this.Offer_Price}}</span></td>
+
+          <td>
+           
+            <a href="/admin/edit-product/{{this._id}}" class="btn p-1 mr-1" id="edit"><i class="bi bi-pencil-square"></i></a>
+
+            <button class="btn p-1" onclick="deleteProduct('{{this._id}}', '{{this.Name}}')" id="delete"><i
+                class="bi bi-trash3"></i></button>
+            
+          </td>
+
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
   </div>
-</div>
+  <!-- Confirmation Modal -->
+  <div id="confirmationModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <p id="modalMessage">Are you sure?</p>
+      <button id="confirmRemove" class="btn ">Yes</button>
+      <button id="cancelRemove" class="btn ">Cancel</button>
+    </div>
+  </div>
 
-  </section>
+</section>
 
-  <script>
-    $(function () {
-      $('#productsTable').DataTable();
+<script>
+  $(function () {
+    $('#productsTable').DataTable();
+  });
+
+ // Function to format number with commas
+    function formatNumber(number) {
+      return number.toLocaleString('en-IN'); // 'en-IN' for Indian number formatting (₹ separation)
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const offerPrices = document.querySelectorAll('#offer-price');
+      offerPrices.forEach(element => {
+        const priceString = element.textContent.trim();
+        const price = parseFloat(priceString.replace(/[^\d.-]/g, ''));
+        if (!isNaN(price)) {
+          element.textContent = formatNumber(price);
+        }
+      });
     });
 
-// Function to show the confirmation modal
-function showConfirmationModal(message, confirmCallback) {
-  // Get the modal
-  var modal = document.getElementById("confirmationModal");
 
-  // Get the <span> element that closes the modal
-  var span = document.getElementsByClassName("close")[0];
+  // Function to show the confirmation modal
+  function showConfirmationModal(message, confirmCallback) {
+    // Get the modal
+    var modal = document.getElementById("confirmationModal");
 
-  // Get the confirm and cancel buttons
-  var confirmButton = document.getElementById("confirmRemove");
-  var cancelButton = document.getElementById("cancelRemove");
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
 
-  // Set the modal message
-  document.getElementById("modalMessage").innerText = message;
+    // Get the confirm and cancel buttons
+    var confirmButton = document.getElementById("confirmRemove");
+    var cancelButton = document.getElementById("cancelRemove");
 
-  // Show the modal
-  modal.style.display = "block";
+    // Set the modal message
+    const modalMessage = document.getElementById('modalMessage');
+    
+    // Apply the message with styled productName
+    modalMessage.innerHTML = message;
+    modalMessage.style.overflow = 'hidden';
+    modalMessage.style.textOverflow = 'ellipsis';
+    modalMessage.style.webkitLineClamp = '3';
+    modalMessage.style.display = '-webkit-box';
+    modalMessage.style.webkitBoxOrient = 'vertical';
 
-  // When the user clicks on <span> (x), close the modal
-  span.onclick = function() {
-    modal.style.display = "none";
-  }
+    // Show the modal
+    modal.style.display = "block";
 
-  // When the user clicks on confirm button
-  confirmButton.onclick = function() {
-    modal.style.display = "none";
-    confirmCallback();
-  }
-
-  // When the user clicks on cancel button
-  cancelButton.onclick = function() {
-    modal.style.display = "none";
-  }
-
-  // When the user clicks anywhere outside of the modal, close it
-  window.onclick = function(event) {
-    if (event.target == modal) {
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
       modal.style.display = "none";
     }
-  }
-}
 
-function deleteProduct(productId, productName) {
-  showConfirmationModal(`Are you sure you want to delete ${productName}?`, function() {
+    // When the user clicks on confirm button
+    confirmButton.onclick = function () {
+      modal.style.display = "none";
+      confirmCallback();
+    }
+
+    // When the user clicks on cancel button
+    cancelButton.onclick = function () {
+      modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+  }
+  
+
+  function deleteProduct(productId, productName) {
+  showConfirmationModal(`Are you sure you want to delete <span id="styledProductName">${productName}</span>?`, function() {
     $.ajax({
       url: '/admin/delete-product/' + productId,
       method: 'DELETE',
@@ -138,65 +169,182 @@ function deleteProduct(productId, productName) {
         console.error('Error:', error);
         alert('An error occurred while deleting the product');
       }
-    });
-  });
+    });
+  });
 }
-  </script>
+
+
+</script>
 
 <style>
-    /* The Modal (background) */
-.modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  /* The Modal (background) */
+  .modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+  }
+
+  /* Modal Content/Box */
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    /* 15% from the top and centered */
+    padding: 20px;
+    border-radius: 10px; 
+    box-shadow: 0 0 20px rgba(18, 155, 150, 0.5);
+    width: 80%;
+    /* Could be more or less, depending on screen size */
+    max-width: 400px;
+    /* Maximum width */
+    text-align: center;
+  }
+
+  /* The Close Button */
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: rgb(6, 51, 53);
+    text-decoration: none;
+    cursor: pointer;
+  }
+ #styledProductName {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 3;
+    display: -webkit-box;
+    -webkit-box-orient: vertical; 
+    font-weight: bold;
 }
 
-/* Modal Content/Box */
-.modal-content {
-  background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
-  max-width: 400px; /* Maximum width */
-  text-align: center;
-}
+  #confirmRemove {
+    padding: 10px 20px;
+    margin: 10px;
+    background-image: linear-gradient(to left, #f07b0d, rgb(245, 157, 64));
+    color: white;
+    border: none;
+    border-radius: 20px;
+  }
+  #cancelRemove{
+    padding: 10px 20px;
+    margin: 10px;
+    background-image: linear-gradient(to left, #309db0, rgb(71, 172, 209));
+    color: white;
+    border: none;
+    border-radius: 20px;
+  }
+   #cancelRemove:hover{
+    background-image: linear-gradient(to right, #309db0, rgb(71, 172, 209));
+    color: white;
+  }
+  #confirmRemove:hover{
+   background-image: linear-gradient(to right, #f07b0d, rgb(245, 157, 64));
+    color: white;
+  }
 
-/* The Close Button */
-.close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
+  #delete{
+    box-shadow: 0 0 4px rgba(5, 78, 75, 0.5);
+    color: #e2740e;
+  }
+  #edit{
+    box-shadow: 0 0 4px rgba(5, 78, 75, 0.5);
+    color:rgb(39, 163, 195);
+  }
+  #delete:hover{
+    background-color: #e2740e;
+    color: white;
+  }
+  #edit:hover{
+      background-color:rgb(39, 163, 195);
+      color:  white;
+    }
 
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
+    a {
+    color: black;
+    text-decoration: none;
+    /* Remove underline by default */
+  }
 
+  a:hover {
+    color: black;
+    text-decoration: none;
+    /* Ensure underline does not appear on hover */
+  }
+  .img {
+     width: 9em; 
+     height: 8em;
+  }
+  .title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    max-width: 45em;
+    min-width: 7em;
+    font-weight: bold;
+  }
 
-.btn-danger {
-  background-color: red;
-  color: white;
-  border: none;
-}
+  .container-fluid h2{
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 40px;
+    font-weight: bold;
+    
+  }
 
-.btn-secondary {
-  background-color: grey;
-  color: white;
-  border: none;
-}
+   #sellProd{
+    border-radius: 25px; 
+    color: white; 
+    background-image: linear-gradient(to right, #1e8f4b, rgb(2, 164, 89));
+    
+  }
+  #sellProd:hover{
+      background-image: linear-gradient(to left, #1e8f4b, rgb(2, 164, 89));
+      color: white;
+  }
 
-
-
+  .category { 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    max-width: 40em;
+  }
+  .prodId{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    max-width: 40em;
+    margin-right: 5px;
+  }
+  .productId{
+    display: inline-flex;
+  }
+  .outofStock{
+    font-weight: bold;
+    color: #e2740e;
+  }
 </style>

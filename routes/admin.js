@@ -16,12 +16,18 @@ const verifyLogin = (req, res, next) => { //verify Admin login
 
 /* GET all Products. */
 router.get('/', verifyLogin, async (req, res, next) => {
-  try {
-    let products = await productHelpers.getAllProducts();
-    res.render('admin/view-products', { admin: true, products });
-  } catch (error) {
-    console.error('Error fetching products:', error);
-    res.render('admin/view-products', { admin: true, error: 'Failed to fetch products' });
+  try{
+    
+    await productHelpers.getAllProducts().then((products)=>{
+      res.render('admin/view-products', { admin: true, products });
+      }).catch((err)=>{
+      console.error('Error fetching products:', err);
+      res.render('admin/empty/empty-shop', { admin: true});
+    })
+
+  }catch(error){
+    console.error(error);
+    res.status(500).send(error);
   }
 });
 
