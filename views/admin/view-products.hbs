@@ -24,7 +24,7 @@
           <td>
           
             <div class="row">
-
+              <a href="/view-product/{{this._id}}">
               <div class="m-2">
                 <img  src="/product-images/{{this._id}}_0.jpg" class="img ml-2"
                   alt="Image not available" onerror="this.onerror=null; this.src='/images/no-images-available.png';">
@@ -46,9 +46,10 @@
                 {{else}}
                   <b>Stock:</b> {{this.Stock_Count}}
                 {{/ifCond}}
-                
+                 </a>
             </div>
-
+          </div>
+                
           </td>
 
           <td><span id="offer-price">{{this.Offer_Price}}</span></td>
@@ -300,7 +301,7 @@
     -webkit-line-clamp: 1;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    max-width: 45em;
+    max-width: 50em;
     min-width: 7em;
     font-weight: bold;
   }
