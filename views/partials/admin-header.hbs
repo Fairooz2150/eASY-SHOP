@@ -2,54 +2,57 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
       aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+      <span class="bi bi-list-nested ml-1 mb-1"></span>
     </button>
 
     <a class="navbar-brand" href="/admin/"><span>Admin Panel</span></a>
 
-    <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+    <div class="collapse navbar-collapse mt-1" id="navbarTogglerDemo03">
+      <ul class="navbar-nav mr-auto mt-2 mt-lg-0 flex-row">
+        
+                
         {{#if userOption}}
         <li></li>
         {{else}}
-        <li class="nav-item">
-          <a class="nav-link" href="/admin/">Home</a>
+        <li class="nav-item pr-3">
+          <a class="nav-link" href="/admin/" id="header-links"><i class="bi bi-house-gear"></i> Home</a>
         </li>
 
-        <li class="nav-item">
-          <a class="nav-link" href="/admin/product-requests">Requests</a>
+        <li class="nav-item pr-3">
+          <a class="nav-link" href="/admin/product-requests" id="header-links"><i class="bi bi-list-check"></i> Requests</a>
         </li>
 
-        <li class="nav-item">
-          <a class="nav-link" href="/admin/all-orders">Orders</a>
+        <li class="nav-item pr-3">
+          <a class="nav-link" href="/admin/all-orders" id="header-links"><i class="bi bi-bag-heart"></i> Orders</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/admin/all-users">Users</a>
+        <li class="nav-item pr-3">
+          <a class="nav-link" href="/admin/all-users" id="header-links"><i class="bi bi-people"></i> Users</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/admin/all-messages">Messages</a>
+        <li class="nav-item pr-3">
+          <a class="nav-link" href="/admin/all-messages" id="header-links"><i class="bi bi-chat-quote"></i> Messages</a>
         </li>
         {{/if}}
       </ul>
 
-      <div class="nav-item dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+      <div class="nav-item dropdown mt-1 mr-2">
+        <button class="btn  dropdown-toggle p-2" type="button" id="dropdownMenuButton" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">
           {{#if userOption}}
-          Login
+         <i class="bi bi-person-circle mr-1"></i> Login
           {{else}}
-          Admin
+          Admin <i class="bi bi-patch-check ml-1"></i>
           {{/if}}
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
           {{#if userOption}}
-          <a class="dropdown-item" href="/admin/login">Login</a>
-          <a class="dropdown-item" href="/login">User</a>
-          <a class="dropdown-item" href="/about"><i class="bi bi-info-circle-fill"></i> About Us</a>
+          <a class="dropdown-item" href="/admin/login"><i class="bi bi-box-arrow-in-left"></i> Login</a>
+          <a class="dropdown-item" href="/"><i class="bi bi-shop-window"></i> eASY SHOP</a>
+          <a class="dropdown-item" href="/about"><i class="bi bi-info-circle"></i> About Us</a>
           {{else}}
-          <a class="dropdown-item" href="/admin/add-product">Add Product</a>
-          <a class="dropdown-item" href="/about"><i class="bi bi-info-circle-fill"></i> About Us</a>
-          <a class="dropdown-item" href="/admin/logout">Logout</a>
+          <a class="dropdown-item" href="/admin/add-product"><i class="bi bi-bag-plus"></i> Add Product</a>
+           <a class="dropdown-item" href="/"><i class="bi bi-shop-window"></i> eASY SHOP</a>
+          <a class="dropdown-item" href="/about"><i class="bi bi-info-circle"></i> About Us</a>
+          <a class="dropdown-item" href="/admin/logout"><i class="bi bi-box-arrow-left"></i> Logout</a>
           {{/if}}
         </div>
       </div>
@@ -58,6 +61,12 @@
 </header>
 
 <script>
+   //for navbar-toggler outline removing(none)
+    const button = document.querySelector('.navbar-toggler');
+    button.addEventListener('focus', (event) => {
+        event.target.style.outline = 'none';
+    });
+
   document.addEventListener("DOMContentLoaded", function () {
     var lastScrollTop = 0;
     var header = document.querySelector("header");
@@ -95,6 +104,20 @@
     
   }
 
+  .dropdown-toggle {
+        background-color: #35a8b7;
+        box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
+        border-radius: 20px;
+        color: white;
+        min-width: 140px;
+        border: none;
+        
+    }
+
+    .dropdown-toggle:hover {
+        background-color: white;
+        color: #35a8b7;
+    }
 
   .navbar-brand span {
     font-weight: bold;
@@ -105,5 +128,49 @@
 
   .nav-item.dropdown:hover .dropdown-menu {
     display: block;
+    border-radius: 10px;
+  
   }
+
+     .navbar-toggler {
+        border-radius: 10px;     
+        padding: 1px;
+        border: none;
+        outline: none;
+       
+    } 
+
+   .bi-list-nested{
+        color: #217f8f;
+        font-size: larger;
+       
+    }
+
+    
+     .dropdown-item {
+        color: #217f8f;
+    }
+
+    .dropdown-item:hover {
+        color: rgb(32, 161, 190);
+        background-color: rgba(176, 213, 238, 0.125);
+    }
+
+       .dropdown-item {
+        color: #217f8f;
+    }
+
+   #header-links {
+        color: #3391a2;
+        font-weight: 500;
+        font-family: 'Times New Roman', Times, serif;
+        font-size: large;
+        margin-left: 10px;
+
+    }
+
+    #header-links:hover {
+        color: #52b4c6;
+    }
+   
 </style>
