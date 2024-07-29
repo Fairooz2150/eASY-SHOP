@@ -17,13 +17,9 @@ const verifyLogin = (req, res, next) => { //verify Admin login
 /* GET users listing. */
 router.get('/', verifyLogin, async (req, res, next) => {
   try {
-    const productsWoQnty = await productHelpers.getAllProducts();
-    const productQuantity = await productHelpers.getCartedProductQuantity();
-    let stockCount = await productHelpers.getAllProducts();
-
-    const products = await productHelpers.getAllProductswithQuantity(productsWoQnty,stockCount, productQuantity);
-
+    let products = await productHelpers.getAllProducts();
     console.log(products);
+
     res.render('admin/view-products', { admin: true, products });
   } catch (error) {
     console.error('Error fetching products:', error);
@@ -35,7 +31,7 @@ router.get('/login', (req, res) => {
   if (req.session.admin) {
     res.redirect('/admin/')
   } else {
-    res.render('admin/login', { admin: true, userOption: true })
+    res.render('admin/login', { admin: true, loginPage: true })
     req.session.adminLoginErr = false
   }
 })

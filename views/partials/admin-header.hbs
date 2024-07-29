@@ -11,7 +11,7 @@
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0 flex-row">
         
                 
-        {{#if userOption}}
+        {{#if loginPage}}
         <li></li>
         {{else}}
         <li class="nav-item pr-3">
@@ -35,16 +35,16 @@
       </ul>
 
       <div class="nav-item dropdown mt-1 mr-2">
-        <button class="btn  dropdown-toggle p-2" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+        <button class="btn  dropdown-toggle " type="button" id="dropdownMenuButton" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">
-          {{#if userOption}}
-         <i class="bi bi-person-circle mr-1"></i> Login
+          {{#if loginPage}}
+         <i class="bi bi-person-circle mr-1 "></i> <span class="admin"> Login</span>
           {{else}}
-          Admin <i class="bi bi-patch-check ml-1"></i>
+         <span class="admin"> Admin </span> <i class="bi bi-patch-check ml-1"></i>
           {{/if}}
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          {{#if userOption}}
+          {{#if loginPage}}
           <a class="dropdown-item" href="/admin/login"><i class="bi bi-box-arrow-in-left"></i> Login</a>
           <a class="dropdown-item" href="/"><i class="bi bi-shop-window"></i> eASY SHOP</a>
           <a class="dropdown-item" href="/about"><i class="bi bi-info-circle"></i> About Us</a>
@@ -144,6 +144,10 @@
         color: #217f8f;
         font-size: larger;
        
+    }
+
+    .admin{
+      font-size: large;
     }
 
     
