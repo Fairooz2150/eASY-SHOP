@@ -4,11 +4,12 @@ const fs = require('fs');
 const path = require('path');
 const adminHelpers = require('../helpers/admin-helpers');
 const productHelpers = require('../helpers/product-helpers');
-const { log } = require('console');
-const verifyLogin = (req, res, next) => {
+
+const verifyLogin = (req, res, next) => { //verify Admin login
   if (req.session.adminLoggedIn) {
     next()
   } else {
+    req.session.returnTo = req.originalUrl; // Store the original URL
     res.redirect('/admin/login')
   }
 }
@@ -34,29 +35,35 @@ router.get('/login', (req, res) => {
   if (req.session.admin) {
     res.redirect('/admin/')
   } else {
-    res.render('admin/login', { admin: true, "loginErr": req.session.adminLoginErr, userOption: true })
+    res.render('admin/login', { admin: true, userOption: true })
     req.session.adminLoginErr = false
   }
 })
 
-router.post('/login', (req, res) => {
-  adminHelpers.doLogin(req.body).then((response) => {
-    if (response.status) {
-      req.session.admin = response.admin
-      req.session.adminLoggedIn = true
-      res.redirect('/admin/')
-    } else {
-      req.session.adminLoginErr = "Invalid Username or Password"
-      res.redirect('/admin/login')
-    }
-  })
-})
+/* return to recent URL after Login */
+router.post('/login', async (req, res) => {
+
+ await adminHelpers.doLogin(req.body).then((response) => {
+
+  if (response.status) {
+    req.session.adminLoggedIn = true;
+    req.session.admin = response.admin;
+
+    const returnTo = req.session.returnTo || '/admin/'; // Default to home if no return URL
+    delete req.session.returnTo; // Clear the return URL from session
+
+    res.json({ success: true, redirectUrl: returnTo });
+  } else {
+    res.json({ success: false });
+  }})
+});
 
 router.get('/logout', (req, res) => {
   req.session.admin = null
   req.session.adminLoggedIn = false
   res.redirect('/admin/login')
 })
+
 
 router.get('/all-users', verifyLogin, (req, res) => {
   adminHelpers.getAllUsers().then((users) => {

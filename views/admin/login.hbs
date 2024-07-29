@@ -1,31 +1,70 @@
 <section>
-
-
-<div class="row mt-5">
-    <div class="col-md-6 m-auto pt-4">
-        <div class="container mt-5 pl-5">
-            <h2 class="text-center">Admin Login</h2>
-            <form action="/admin/login" method="post">
-            {{#if loginErr}}
-            <p class="error">{{loginErr}}</p>
-            {{/if}}
-                <div class="form-group">
-                    <label for="">Email address</label>
-                    <input type="email" class="form-control" name="Email" placeholder="Enter email">
-                    
-                </div>
-                <div class="form-group">
-                    <label for="">Password</label>
-                    <input type="password" class="form-control" name="Password" placeholder="Password">
-                </div>
-               
-                <button type="submit" id="login" class="btn float-right">Admin Login</button>
-            </form>
+    <div class="row mt-5">
+        <div class="col-md-6 m-auto pt-4">
+            <div class="container mt-3">
+                <h2 class="title text-center " >Admin Login</h2>
+                <form action="/admin/login" id="login-form" method="post" >
+                    <p class="error" id="login-error"></p>
+                    <div class="form-group">
+                        <label for="" >Email address</label>
+                        <input type="email" class="form-control" id="email" name="Email" placeholder="Enter email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="" >Password</label>
+                        <input type="password" id="password" class="form-control" name="Password" placeholder="Password" required>
+                    </div>
+        
+                    <button type="submit" id="login" class="btn float-right" title="Do login">Login</button>
+                </form>
+            </div>
         </div>
     </div>
-</div>
-
 </section>
+<script>
+  document.getElementById('login-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const errorElement = document.getElementById('login-error');
+
+      if (!email || !password) {
+        errorElement.textContent = 'Please fill out all fields.';
+        errorElement.style.display = 'block';
+        return;
+      } else {
+        errorElement.style.display = 'none';
+      }
+
+      const form = event.target;
+      const formData = new FormData(form);
+      const formObject = {};
+      formData.forEach((value, key) => formObject[key] = value);
+
+      fetch('/admin/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formObject)
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          window.location.href = data.redirectUrl;
+        } else {
+          errorElement.textContent = 'Login failed. Please check your email and password.';
+          errorElement.style.display = 'block';
+        }
+      })
+      .catch(error => {
+        errorElement.textContent = 'An error occurred. Please try again.';
+        errorElement.style.display = 'block';
+        console.error('Error:', error);
+      });
+    });
+</script>
+
 <style>
  body {
     margin: 0;
@@ -34,25 +73,48 @@
     height: 100%;
     overflow-x: hidden; /* Prevent horizontal scrolling */
 }
- section {
-    background-image: url('/images/8.jpg');
+
+#login {
+    background-image: linear-gradient(to left, #40aec2, rgb(22, 153, 189));
+    color: aliceblue;
+    box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
+    font-weight: bold;
+    border-radius: 25px;
+}
+
+section {
+    background-image: url('/images/admin.png');
     height: 100vh;
-    background-size: cover;
+    background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    padding-top: 60px ;
+    margin-top: 3em;
+    padding-top: 70px ;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
 }
+
+
 .container{
      color: rgb(61, 150, 185);
 
 }
-#login {
-    background-color: rgb(26, 175, 212);
-    color: white;
-    font-weight: bold;
-    border-radius: 25px;
-}
+
 .form-control{
-    border-radius: 25px;  
+    border-radius: 25px;
+    background-color: transparent;
+    border-width: 1px;
+    border-color: #36a3b7;
+    box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
+   
 }
+
+a{
+    color: rgb(61, 150, 185);
+}
+a:hover {
+  color: rgb(106, 197, 233); 
+    text-decoration: none;
+    /* Ensure underline does not appear on hover */
+}
+
 </style>
