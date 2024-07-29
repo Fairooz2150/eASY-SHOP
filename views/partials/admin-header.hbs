@@ -5,7 +5,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <a class="navbar-brand" href="/admin/">Admin Panel</a>
+    <a class="navbar-brand" href="/admin/"><span>Admin Panel</span></a>
 
     <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
@@ -36,7 +36,7 @@
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">
           {{#if userOption}}
-          Account
+          Login
           {{else}}
           Admin
           {{/if}}
@@ -45,10 +45,11 @@
           {{#if userOption}}
           <a class="dropdown-item" href="/admin/login">Login</a>
           <a class="dropdown-item" href="/login">User</a>
-          <a class="dropdown-item" href="/">Guest</a>
+          <a class="dropdown-item" href="/about"><i class="bi bi-info-circle-fill"></i> About Us</a>
           {{else}}
-          <a class="dropdown-item" href="/admin/logout">Logout</a>
           <a class="dropdown-item" href="/admin/add-product">Add Product</a>
+          <a class="dropdown-item" href="/about"><i class="bi bi-info-circle-fill"></i> About Us</a>
+          <a class="dropdown-item" href="/admin/logout">Logout</a>
           {{/if}}
         </div>
       </div>
@@ -57,42 +58,52 @@
 </header>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-  var lastScrollTop = 0;
-  var header = document.querySelector("header");
+  document.addEventListener("DOMContentLoaded", function () {
+    var lastScrollTop = 0;
+    var header = document.querySelector("header");
 
-  window.addEventListener("scroll", function() {
-    var currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+    window.addEventListener("scroll", function () {
+      var currentScroll = window.pageYOffset || document.documentElement.scrollTop;
 
-    if (currentScroll > lastScrollTop) {
-      // Downscroll
-      header.style.top = "-60px"; // Adjust the value if the header height is different
-    } else {
-      // Upscroll
-      header.style.top = "0";
-    }
+      if (currentScroll > lastScrollTop) {
+        // Downscroll
+        header.style.top = "-60px"; // Adjust the value if the header height is different
+      } else {
+        // Upscroll
+        header.style.top = "0";
+      }
 
-    lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; // For Mobile or negative scrolling
-  }, false);
-});
+      lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; // For Mobile or negative scrolling
+    }, false);
+  });
 </script>
 
 <style>
   body {
-    padding-top: 60px; /* Adjust this value to match the height of your header */
+    padding-top: 60px;
+    /* Adjust this value to match the height of your header */
   }
 
   header {
     position: fixed;
-    background-color: #1b2994;
     width: 100%;
     z-index: 1;
     top: 0;
-    transition: top 0.3s; /* Smooth transition */
+    font-family: 'Times New Roman', Times, serif;
+    transition: top 0.3s;
+    /* Smooth transition */
+    
+  }
+
+
+  .navbar-brand span {
+    font-weight: bold;
+    font-size: x-large;
+    color: rgb(61, 150, 185);
+   
   }
 
   .nav-item.dropdown:hover .dropdown-menu {
     display: block;
   }
 </style>
-
