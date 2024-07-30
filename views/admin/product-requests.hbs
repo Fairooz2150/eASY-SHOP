@@ -118,15 +118,15 @@
       </div>
       <div class="card-footer">
         <div class="footer-content">
-          <div id="action-buttons-{{this._id}}" class="approval row">
+          <div id="action-buttons-{{this._id}}" class="actions row">
             {{#ifEquals this.Status 'Pending'}}
-            <button onclick="updateUserProdStatus('{{this._id}}', 'Declined')" class="btn btn-primary mr-3"
-              id="decline-btn-{{this._id}}">Declined</button>
-            <button onclick="updateUserProdStatus('{{this._id}}', 'Approved')" class="btn btn-primary"
-              id="approve-btn-{{this._id}}">Approved</button>
-            {{else ifEquals this.Status 'Declined'}}
-            <button onclick="updateUserProdStatus('{{this._id}}', 'Approved')" class="btn btn-primary"
-              id="approve-btn-{{this._id}}">Approved</button>
+            <button onclick="updateUserProdStatus('{{this._id}}', 'Declined')" class="btn decline mr-3"
+              id="decline-btn-{{this._id}}">Decline</button>
+            <button onclick="updateUserProdStatus('{{this._id}}', 'Approved')" class="btn approve"
+              id="approve-btn-{{this._id}}">Approve</button>
+            {{else}}
+            <button onclick="updateUserProdStatus('{{this._id}}', 'Approved')" class="btn approve"
+              id="approve-btn-{{this._id}}">Approve</button>
             {{/ifEquals}}
           </div>
         </div>
@@ -286,13 +286,40 @@
       font-size: large;
     }
 
-  .approval {
+  .actions {
     margin-left: auto;
+    margin-right: 10px;
   }
 
-  .btn-primary {
-    margin: 0;
-  }
+
+   .approve {
+    background-color: white;
+    color: #278a9b;
+    font-weight: bold;
+    width: 6em;
+    border-radius: 20px;
+    box-shadow: 0 6px 10px rgba(49, 133, 158, 0.5);
+    transition: all 0.3s ease;
+   } 
+    .approve:hover{
+      color: #278a9b;
+    transform: scale(1.1);
+    }
+
+       .decline {
+    background-color: white;
+    color: #c77a37;
+    font-weight: bold;
+    width: 6em;
+    border-radius: 20px;
+    box-shadow: 0 6px 10px rgba(49, 133, 158, 0.5);
+    transition: all 0.3s ease;
+   } 
+    .decline:hover{
+      color: #c77a37;
+    transform: scale(1.1);
+    }
+
 
   .date{
     padding: 0 15px;
