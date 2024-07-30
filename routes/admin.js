@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const adminHelpers = require('../helpers/admin-helpers');
 const productHelpers = require('../helpers/product-helpers');
+const { log } = require('console');
 
 /* verify Admin login */
 const verifyLogin = (req, res, next) => { 
@@ -16,7 +17,7 @@ const verifyLogin = (req, res, next) => {
 }
 
 
-/* GET Admin Home page, get all products. */
+/* GET Admin Home page, get all products */
 router.get('/', verifyLogin, async (req, res, next) => {
   try {
 
@@ -34,7 +35,7 @@ router.get('/', verifyLogin, async (req, res, next) => {
 });
 
 
-//GET Login page
+/* GET Login page */
 router.get('/login', (req, res) => {
   if (req.session.admin) {
     res.redirect('/admin/')
@@ -73,10 +74,11 @@ router.get('/logout', (req, res) => {
 })
 
 
-/* GET all users product requests for selling */
+/* GET all Users Product Requests for selling */
 router.get('/product-requests', verifyLogin, async (req, res) => {
   try {
     let products = await productHelpers.getAllUserProducts();
+    console.log("Userrproducts",products);
     res.render('admin/product-requests', { admin: true, products });
   } catch (error) {
     console.error('Error fetching products:', error);
@@ -85,7 +87,7 @@ router.get('/product-requests', verifyLogin, async (req, res) => {
 })
 
 
-/* update-user-products-status */
+/* Update User Products Status */
 router.post('/update-user-products-status', (req, res) => {
   let { Id, Status } = req.body;
   adminHelpers.updateUserProdStatus(Id, Status).then(() => {

@@ -413,6 +413,7 @@ module.exports={
                 Seller_Id: objectId(product.User_Id),
                 Seller_First_Name: product.User_First_Name,
                 Seller_Last_Name: product.User_Last_Name,
+                Gender:product.Gender,
                 Phone:product.Phone,     
                 Email:product.Email,
                 Whatsapp:product.Whatsapp,       

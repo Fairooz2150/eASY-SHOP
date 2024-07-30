@@ -1,14 +1,21 @@
 <section>
   <div class="container">
-    <h2 class="main-heading">User Products</h2>
+    <h2 class="main-heading">User Product Requests</h2>
     <div id="orders-container">
        {{#each products}}
       <div class="card">
         <div class="card-header">
           <div class="row header-content">
             <div class="chip">
-              <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Person" width="96" height="96">
-              {{this.Seller_First_Name}} {{this.Seller_Last_Name}}
+            {{#ifEquals this.userDetails.Gender 'Male'}}
+                <img src="/images/male-icon.jpg" alt="Male Icon">
+              {{else}}
+                {{#ifEquals this.userDetails.Gender 'Female'}}
+                  <img src="/images/female-icon.jpg" alt="Female Icon">
+                {{else}}
+                  <img src="/images/trans-icon.jpg" alt="Trans Icon">
+                {{/ifEquals}}
+              {{/ifEquals}}              {{this.Seller_First_Name}} {{this.Seller_Last_Name}}
             </div>
             <div class="date row">
               {{#ifEquals this.Updations 'Updated'}}
