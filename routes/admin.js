@@ -78,7 +78,7 @@ router.get('/logout', (req, res) => {
 router.get('/product-requests', verifyLogin, async (req, res) => {
   try {
     let products = await productHelpers.getAllUserProducts();
-    console.log("Userrproducts",products);
+    products.sort((a, b) => new Date(b.date) - new Date(a.date));
     res.render('admin/product-requests', { admin: true, products });
   } catch (error) {
     console.error('Error fetching products:', error);
