@@ -86,14 +86,15 @@ router.delete('/delete-user/:id', verifyLogin, (req, res) => {
 })
 
 
-router.delete('/delete-product/:id', verifyLogin, (req, res) => {
-  let proId = req.params.id;
-  productHelpers.deleteProduct(proId).then((response) => {
-    res.json({ success: true });
-  }).catch((err) => {
+router.delete('/delete-product/:id', verifyLogin, async (req, res) => {
+  try {
+    let proId = req.params.id;
+    let response = await productHelpers.deleteProduct(proId);
+    res.json({ success: true, response });
+  } catch (err) {
     console.error('Error deleting product:', err);
-    res.json({ success: false });
-  });
+    res.status(500).json({ success: false, error: 'Failed to delete product' });
+  }
 });
 
 

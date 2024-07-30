@@ -123,12 +123,18 @@ module.exports={
       },
       
     deleteProduct:(prodId)=>{
-        return new Promise((resolve,reject)=>{
+        return new Promise(async(resolve,reject)=>{
             console.log(prodId);
             console.log(objectId(prodId));
-            db.get().collection(collection.PRODUCT_COLLECTION).removeOne({_id:objectId(prodId)}).then((response)=>{
-               //console.log(response);
-                resolve(response)
+            await db.get().collection(collection.PRODUCT_COLLECTION).removeOne({_id:objectId(prodId)}).then(async(response)=>{
+              
+              await db.get().collection(collection.USER_PRODUCTS_COLLECTION).updateOne({_id:objectId(prodId)},{
+                $set:{
+                  Status:'Removed'
+                }
+            })
+              resolve(response)
+            
             }).catch((err) => {
                 reject(err);
               });
