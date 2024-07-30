@@ -131,7 +131,7 @@ router.post('/add-product', verifyLogin, (req, res) => {
 });
 
 
-
+/*GET Edit Product page*/
 router.get('/edit-product/:id', verifyLogin, async (req, res) => {
   try {
     let product = await productHelpers.getProductDetails(req.params.id);

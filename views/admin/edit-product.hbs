@@ -2,44 +2,54 @@
   <div class="container mt-4">
     <div class="row">
       <div class="col-md-12">
-        <h2 class="text-center">Edit Product</h2>
+        <h2 class="title text-center mb-4">Edit Product</h2>
         <form action="/admin/edit-product/{{product._id}}" method="post" enctype="multipart/form-data">
+
           <label for="">Name</label>
-          <input type="text" name="Name" class="form-control" value="{{product.Name}}" required>
+          <input type="text" name="Name" class="form-control mb-1" placeholder="Enter product name" value="{{product.Name}}" required>
+
+                 <!-- Set Product Owner -->
            {{#ifEquals product.Product_Owner 'Admin'}}
           <input type="text" name="Product_Owner" value="Admin" hidden>
           {{else}}
           <input type="text" name="Product_Owner" value="User" hidden>
           {{/ifEquals}}
-          <label for="">Category</label>
-          <input type="text" name="Category" class="form-control" value="{{product.Category}}" required>
 
-         <div class="row">
+          <label for="">Category</label>
+          <input type="text" name="Category" class="form-control mb-1" placeholder="Enter product category" value="{{product.Category}}" required>
+
+         <div class="row mb-1">
+
                         <div class="ml-3">
                             <label for=""> Actual Price</label>
-                            <input type="number" name="Actual_Price" class="form-control "  value="{{product.Actual_Price}}" required>
+                            <input type="number" name="Actual_Price" class="form-control " placeholder="Actual price" value="{{product.Actual_Price}}" required>
                         </div>
+
                         <div class="ml-3">
                             <label for="">Offer Percentage</label>
-                            <input type="number" name="Offer_Percentage" class="form-control " value="{{product.Offer_Percentage}}" required>
-                            
+                            <input type="number" name="Offer_Percentage" class="form-control" placeholder="Offer percentage" value="{{product.Offer_Percentage}}" required>                          
                         </div>
+
                         <div class="ml-3">
                             <label for="">Offer Price</label>
-                            <input type="number" name="Offer_Price" class="form-control" value="{{product.Offer_Price}}" required>
+                            <input type="number" name="Offer_Price" class="form-control" placeholder="Offer price" value="{{product.Offer_Price}}" required>
                         </div>
+
                          <div class="ml-3">
                             <label for="stock-count">Stock Count</label>
-                            <input type="number" name="Stock_Count" class="form-control" id="stock-count" value="{{product.Stock_Count}}" required>
+                            <input type="number" name="Stock_Count" class="form-control" id="stock-count" placeholder="Stock count" value="{{product.Stock_Count}}" required>
                         </div>
 
-            </div>
+           </div>
 
           <label for="">Description</label>
-          <textarea class="form-control" type="text" name="Description"  rows="3" required>{{ product.Description}}</textarea>
+          <textarea class="form-control mb-1" type="text" name="Description" placeholder="Enter product description"  rows="4" required>{{ product.Description}}</textarea>
       
+          
+                    <div class="row mb-4">
+                        <button type="submit" class="btn btn-success mt-4 ml-auto mr-1" id="submit">Submit</button>
+                    </div>
 
-          <button type="submit" class="btn btn-success mt-4">Submit</button>
         </form>
       </div>
     </div>
@@ -51,3 +61,20 @@
     document.getElementById('imgView').src = URL.createObjectURL(event.target.files[0]);
   }
 </script>
+
+<style>
+   .title{
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 35px;
+    font-weight: bold;
+    }
+    #submit {
+        background-image: linear-gradient(to right, #109545, rgb(2, 164, 89));
+        border-radius: 20px;
+        inline-size: 100px;
+    }
+
+    #submit:hover {
+        background-image: linear-gradient(to left, #109545, rgb(2, 164, 89));
+    }
+</style>
