@@ -36,8 +36,10 @@
                 <br><span class="productId" >
                   <span class="prodId text-muted" title="Product Id">{{this._id}}</span>
                     {{#ifCond this.Product_Owner '===' 'Admin'}}
-                      <p hidden>easy product</p>
+                      <p hidden>easy products</p>
                        <i class="bi bi-patch-check" title="eASY Product"></i>
+                       {{else}}
+                       <p hidden>User products</p>
                      {{/ifCond}}   
                   </span> 
 
