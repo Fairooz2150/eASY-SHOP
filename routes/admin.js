@@ -159,7 +159,7 @@ router.post('/edit-product/:id', (req, res) => {
 router.get('/add-more-images/:id', verifyLogin, async (req, res) => {
   try {
     let product = await productHelpers.getProductImages(req.params.id);
-    res.render('admin/addMoreImages', { product, admin: true });
+    res.render('admin/edit-images', { product, admin: true });
   } catch (error) {
     console.error(error);
     res.status(500).send(error);

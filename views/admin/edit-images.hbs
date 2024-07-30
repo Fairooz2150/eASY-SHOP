@@ -4,7 +4,9 @@
             <div class="col-md-12">
                 <h2 class="text-center pb-4">Images</h2>
                 <form action="/admin/add-more-images/{{product._id}}" method="post" enctype="multipart/form-data" id="addImagesForm">
+
                     <div id="imageContainer" class="row mt-4">
+
                         <!-- Existing Images -->
                         {{#each product.images}}
                         <div class="image-group mb-2 ml-5">
@@ -20,9 +22,12 @@
                             <input type="file" name="editImages" class="form-control d-none" id="editImageInput_{{@index}}" data-image-name="{{this}}" onchange="uploadEditedImage(event, '{{this}}')">
                         </div>
                         {{/each}}
+
                     </div>
+
                     <!-- New Images -->
                     <div id="newImageContainer" class="row mt-4"></div>
+
                     <div class="row">
                         <div class="addImages">
                             <button type="button" class="btn btn-primary mt-4 ml-3" id="addImageButton">Add Images</button>
@@ -30,6 +35,7 @@
                         <div class="submit">
                             <button type="submit" class="btn btn-success mt-4 mr-5">Submit</button>
                         </div>
+                        
                     </div>
                 </form>
             </div>
