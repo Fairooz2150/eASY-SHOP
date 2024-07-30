@@ -54,10 +54,16 @@
                     
                       <div class="seller-details">                  
                           <b>Seller Details:</b><br>
-                          <span title="Seller/User ID"> <b>Id</b> {{this.Seller_Id}} </span> <br>
-                          <span title="Phone"><i class="bi bi-telephone"></i> {{this.Phone}} </span> <br>
-                          <span title="Email Id"><i class="bi bi-envelope"></i> {{this.Email}} </span> <br>
-                          <span title="WhatsApp"><i class="bi bi-whatsapp"></i> {{this.Whatsapp}} </span> 
+                              <span title="Seller/User ID"> <b>Id</b> {{this.Seller_Id}} </span> <br>
+
+                              <a href="tel:+91{{this.Phone}}"><span title="Phone">
+                                <i class="bi bi-telephone"></i> {{this.Phone}} </span></a> <br>
+                                
+                              <a href="mailto:{{this.Email}}"><span title="Email Id">
+                                <i class="bi bi-envelope"></i> {{this.Email}} </span></a> <br>
+                              
+                              <a href="https://wa.me/{{this.Whatsapp}}"> <span title="WhatsApp">
+                                <i class="bi bi-whatsapp"></i> {{this.Whatsapp}} </span> </a>
                       </div>
                     
 
@@ -99,9 +105,9 @@
 
                 <td>
                    <div class="Price" >
-                    <b>Offer Price: </b>{{this.Offer_Price}} <br>
+                    <b>Offer Price: </b><span id="Price">{{this.Offer_Price}}</span> <br>
                     ({{this.Offer_Percentage}}% Off) <br>
-                    <b>Net Price: </b>{{this.Actual_Price}}
+                    <b>Net Price: </b><span id="Price">{{this.Actual_Price}}</span>
                   </div> 
               </td>
 
@@ -132,6 +138,26 @@
 </section>
 
 <script>
+
+
+  // Function to format number with commas
+    function formatNumber(number) {
+      return number.toLocaleString('en-IN'); // 'en-IN' for Indian number formatting 
+    }
+
+  // format offer price number with commas
+     document.addEventListener('DOMContentLoaded', function() {
+      const Prices = document.querySelectorAll('#Price');
+      Prices.forEach(element => {
+        const priceString = element.textContent.trim();
+        const price = parseFloat(priceString.replace(/[^\d.-]/g, ''));
+        if (!isNaN(price)) {
+          element.textContent = '₹' + formatNumber(price);
+        }
+      });
+    });
+
+
   function updateUserProdStatus(Id, Status) {
     $.ajax({
       url: '/admin/update-user-products-status',
@@ -166,6 +192,18 @@
 </script>
 
 <style>
+  a {
+    color: black;
+    text-decoration: none;
+    /* Remove underline by default */
+  }
+
+  a:hover {
+   color: #309db0;
+    text-decoration: none;
+    /* Ensure underline does not appear on hover */
+  }
+
   .main-heading {
     text-align: center;
     margin-top: 30px;
