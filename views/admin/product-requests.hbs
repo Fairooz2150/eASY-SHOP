@@ -2,146 +2,186 @@
   <div class="container">
     <h2 class="main-heading">User Product Requests</h2>
     <div id="orders-container">
-       {{#each products}}
+
+      {{#each products}}
       <div class="card">
+
         <div class="card-header">
           <div class="row header-content">
-            <div class="chip">
-            {{#ifEquals this.userDetails.Gender 'Male'}}
+
+              <div class="chip">
+                {{#ifEquals this.Gender 'Male'}}
                 <img src="/images/male-icon.jpg" alt="Male Icon">
-              {{else}}
-                {{#ifEquals this.userDetails.Gender 'Female'}}
-                  <img src="/images/female-icon.jpg" alt="Female Icon">
                 {{else}}
-                  <img src="/images/trans-icon.jpg" alt="Trans Icon">
+                {{#ifEquals this.Gender 'Female'}}
+                <img src="/images/female-icon.jpg" alt="Female Icon">
+                {{else}}
+                <img src="/images/trans-icon.jpg" alt="Trans Icon">
                 {{/ifEquals}}
-              {{/ifEquals}}              {{this.Seller_First_Name}} {{this.Seller_Last_Name}}
-            </div>
-            <div class="date row">
-              {{#ifEquals this.Updations 'Updated'}}
-              <div class="mr-4 mt-2">
-                <span ><b>Updated</b></span>
-              
+                {{/ifEquals}}
+
+               <span title="Seller/User Name"> {{this.Seller_First_Name}} {{this.Seller_Last_Name}}</span>
               </div>
-                <div>
-                  <span style="font-weight:bold"> Date: </span> {{this.UpdatedDate}} <br>
-              <span style="font-weight:bold"> Time: </span> {{this.UpdatedTime}}
-                </div>
-                  {{/ifEquals}}
-              </div>
-                
-            </div>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="Date">
-              <span style="font-weight:bold"> Date: </span> {{this.Date}} <br>
-              <span style="font-weight:bold"> Time: </span> {{this.Time}}
-              <p class="card-text mt-2"><span style="font-weight:bold">Status: </span> <span id="status-{{this._id}}">{{this.Status}}</span></p>
-            </div>
-            <div class="address">
-              <span style="font-weight: bold;"> Address:</span><br>{{newlineToBr this.Shop_Address}}
-              <br>Ph: {{this.Phone}}
-            </div>
-          </div>
-          <div>
-            <table class="table mt-5" id="productsTable">
-              <thead>
-                <tr>
-                  <th scope="col">Item</th>
-                  <th scope="col">Price</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <div class="row">
-                      <div>
-                        <img src="/product-images/{{this._id}}_0.jpg" style="width:100x;height:120px" alt="" class="product_image">
-                      </div>
-                      <div class="product_details ml-5">
-                        {{this.Name}} <br>
-                       <span class="text-muted">{{this.Category}}</span> <br>
-                        {{newlineToBr this.Description}}
-                      </div>
+
+            <div class="date row">       
+                  {{#ifEquals this.Updations 'Updated'}}
+
+                    <div class="mr-4 mt-2">
+                      <b>Updated</b>
                     </div>
-                  </td>
-                  <td>Offer Price: ₹{{this.Offer_Price}} <br>({{this.Offer_Percentage}}% off) <br> Net Price: ₹{{this.Actual_Price}} </td> 
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="card-footer">
-          <div class="footer-content">
-            <div id="action-buttons-{{this._id}}" class="approval row">
-              {{#ifEquals this.Status 'Pending'}}
-                <button onclick="updateUserProdStatus('{{this._id}}', 'Declined')" class="btn btn-primary mr-3" id="decline-btn-{{this._id}}">Declined</button>
-                <button onclick="updateUserProdStatus('{{this._id}}', 'Approved')" class="btn btn-primary" id="approve-btn-{{this._id}}">Approved</button>
-              {{else ifEquals this.Status 'Declined'}} 
-                <button onclick="updateUserProdStatus('{{this._id}}', 'Approved')" class="btn btn-primary" id="approve-btn-{{this._id}}">Approved</button>
-              {{/ifEquals}}
+
+                    <div>
+                      <b> Date: </b> {{this.UpdatedDate}} <br>
+                      <b> Time: </b> {{this.UpdatedTime}}
+                    </div>
+
+                  {{/ifEquals}}
             </div>
+
           </div>
         </div>
+
       
+      <div class="card-body">
+
+              <div class="row mb-3">
+                    <div class="Date ml-2">
+                      <b> Date: </b> {{this.Date}} <br>
+                      <b> Time: </b> {{this.Time}}
+                      <p class="card-text mt-2"><b>Status: </b> <span id="status-{{this._id}}">{{this.Status}}</span></p>
+                    </div>
+
+                    
+                      <div class="seller-details">                  
+                          <b>Seller Details:</b><br>
+                          <span title="Seller/User ID"> <b>Id</b> {{this.Seller_Id}} </span> <br>
+                          <span title="Phone"><i class="bi bi-telephone"></i> {{this.Phone}} </span> <br>
+                          <span title="Email Id"><i class="bi bi-envelope"></i> {{this.Email}} </span> <br>
+                          <span title="WhatsApp"><i class="bi bi-whatsapp"></i> {{this.Whatsapp}} </span> 
+                      </div>
+                    
+
+                    <address class="address">
+                      <b>Shop Address:</b><br>
+                      {{newlineToBr this.Shop_Address}}               
+                    </address>
+              </div>
+
+        <div>
+
+          <table class="table mt-5" id="productsTable">
+                <thead>
+                    <tr>
+                        <th scope="col">Item</th>
+                        <th scope="col">Price</th>
+                    </tr>
+                </thead>
+
+            <tbody>  
+              <tr>
+                <td>
+                    <div class="row">
+                      
+                      <div>
+                        <img src="/product-images/{{this._id}}_0.jpg"  alt="Image not available"
+                        onerror="this.onerror=null; this.src='/images/no-images-available.png';" class="product_image">
+                      </div>
+
+                      <div class="product_details ml-3 ">
+                          <b title="Title">{{this.Name}} </b> <br>
+                          <span class="text-muted" title="Category">{{this.Category}}</span> <br>
+                          <span title="Stock Count"><b>Stock: </b> {{this.Stock_Count}}</span> <br>
+                          <span title="Description">{{newlineToBr this.Description}}</span>
+                      </div>
+      
+                    </div>
+                </td>
+
+                <td>
+                   <div class="Price" >
+                    <b>Offer Price: </b>{{this.Offer_Price}} <br>
+                    ({{this.Offer_Percentage}}% Off) <br>
+                    <b>Net Price: </b>{{this.Actual_Price}}
+                  </div> 
+              </td>
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="footer-content">
+          <div id="action-buttons-{{this._id}}" class="approval row">
+            {{#ifEquals this.Status 'Pending'}}
+            <button onclick="updateUserProdStatus('{{this._id}}', 'Declined')" class="btn btn-primary mr-3"
+              id="decline-btn-{{this._id}}">Declined</button>
+            <button onclick="updateUserProdStatus('{{this._id}}', 'Approved')" class="btn btn-primary"
+              id="approve-btn-{{this._id}}">Approved</button>
+            {{else ifEquals this.Status 'Declined'}}
+            <button onclick="updateUserProdStatus('{{this._id}}', 'Approved')" class="btn btn-primary"
+              id="approve-btn-{{this._id}}">Approved</button>
+            {{/ifEquals}}
+          </div>
+        </div>
+      </div>
+    </div>
       {{/each}}
     </div>
   </div>
 </section>
 
 <script>
-function  updateUserProdStatus(Id, Status) {
-  $.ajax({
-    url: '/admin/update-user-products-status',
-    method: 'POST',
-    data: { Id: Id, Status: Status },
-    success: function(response) {
-      if (response.success) {
-        alert(`User Product status updated to ${Status}`);
-        document.getElementById('status-' + Id).innerText = Status;
+  function updateUserProdStatus(Id, Status) {
+    $.ajax({
+      url: '/admin/update-user-products-status',
+      method: 'POST',
+      data: { Id: Id, Status: Status },
+      success: function (response) {
+        if (response.success) {
+          alert(`User Product status updated to ${Status}`);
+          document.getElementById('status-' + Id).innerText = Status;
 
-        var approveBtn = document.getElementById('approve-btn-' + Id);
-        var declineBtn = document.getElementById('decline-btn-' + Id);
+          var approveBtn = document.getElementById('approve-btn-' + Id);
+          var declineBtn = document.getElementById('decline-btn-' + Id);
 
-        if (Status === 'Approved') {
-          if (approveBtn) approveBtn.style.display = 'none';
-          if (declineBtn) declineBtn.style.display = 'none';
-        } else if (Status === 'Declined') {
-          if (declineBtn) declineBtn.style.display = 'none';
-          if (approveBtn) approveBtn.style.display = 'inline-block';
+          if (Status === 'Approved') {
+            if (approveBtn) approveBtn.style.display = 'none';
+            if (declineBtn) declineBtn.style.display = 'none';
+          } else if (Status === 'Declined') {
+            if (declineBtn) declineBtn.style.display = 'none';
+            if (approveBtn) approveBtn.style.display = 'inline-block';
+          }
+        } else {
+          alert('Failed to update user product status');
         }
-      } else {
-        alert('Failed to update user product status');
+      },
+      error: function (error) {
+        console.error('Error:', error);
+        alert('An error occurred while updating the user product status');
       }
-    },
-    error: function(error) {
-      console.error('Error:', error);
-      alert('An error occurred while updating the user product status');
-    }
-  });
-}
- 
+    });
+  }
+
 </script>
 
 <style>
+  .main-heading {
+    text-align: center;
+    margin-top: 30px;
+  }
 
-    .main-heading {
-      text-align: center;
-      margin-top: 30px;
-    }
-
-    .card {
+ .card {
       margin-top: 65px;
+      border-radius: 20px;
+      overflow: hidden; 
+      margin-bottom: 50px;
+      box-shadow: 0 14px 16px rgba(21, 105, 131, 0.5);
     }
-
-    .payment-header {
-      font-weight: bold;
-    }
-
-    .address {
-      margin-left: 5rem;
+    
+    .card-header{
+      background-color: #278a9b96;
+      color: white;
     }
 
     .chip {
@@ -152,6 +192,9 @@ function  updateUserProdStatus(Id, Status) {
       line-height: 50px;
       border-radius: 25px;
       background-color: #f1f1f1;
+      color: #309db0;
+      font-weight: 500;
+      font-size: large;
     }
   
     .chip img {
@@ -169,10 +212,32 @@ function  updateUserProdStatus(Id, Status) {
       width: 100%;
     }
 
+  .Date{
+    width: 15em;
+  }
+
+  .seller-details{
+      width: 20em;
+  }
+
+   .address {
+      margin-bottom: 2em;
+      width: 25em;
+    }
+
+  .product_image{
+    height: 120px;
+    width: 130px;
+     box-shadow: 0 4px 12px rgba(21, 105, 131, 0.5);
+  }
+
     .card-footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      background-color: #278a9b96;
+      color: white;
+      height: 4em;
     }
 
     .footer-content {
@@ -180,25 +245,25 @@ function  updateUserProdStatus(Id, Status) {
       width: 100%;
       justify-content: space-between;
       align-items: center;
+      font-size: large;
     }
 
-    .approval {
-      margin-left: auto;
-    }
+  .approval {
+    margin-left: auto;
+  }
 
-    .btn-primary {
-      margin: 0;
-    }
+  .btn-primary {
+    margin: 0;
+  }
 
-    .date, .payment {
-      padding: 0 15px;
-    }
-    .total{
-      margin-left: auto;
-    }
-    .product_details{
-      margin-left: 10px;
-    }
-  </style>
+  .date{
+    padding: 0 15px;
+  }
 
-
+  .product_details {
+    width: 45em;
+  }
+  .Price{
+    width: 10em;
+  }
+</style>

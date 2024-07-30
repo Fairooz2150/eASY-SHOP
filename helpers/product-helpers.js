@@ -419,8 +419,7 @@ module.exports={
                 Whatsapp:product.Whatsapp,       
                 Shop_Address:product.Shop_Address,
                 Stock_Count:product.Stock_Count,
-                Status: product.Status,
-                Carted:product.Carted,
+                Status: product.Status,                
                 Updations:product.Updations,
                 Date: Date,
                 Time: Time
