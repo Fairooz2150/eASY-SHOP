@@ -6,7 +6,8 @@ var objectId = require('mongodb').ObjectID
 var productHelpers = require('../helpers/product-helpers');
 const userHelpers = require('../helpers/user-helpers');
 
-const verifyLogin = (req, res, next) => {  //verify User login
+/* verify User login */
+const verifyLogin = (req, res, next) => {
   if (req.session.userLoggedIn) {
     next();
   } else {

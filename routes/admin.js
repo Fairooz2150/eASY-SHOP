@@ -5,7 +5,8 @@ const path = require('path');
 const adminHelpers = require('../helpers/admin-helpers');
 const productHelpers = require('../helpers/product-helpers');
 
-const verifyLogin = (req, res, next) => { //verify Admin login
+/* verify Admin login */
+const verifyLogin = (req, res, next) => { 
   if (req.session.adminLoggedIn) {
     next()
   } else {
@@ -81,9 +82,10 @@ router.get('/product-requests', verifyLogin, async (req, res) => {
     console.error('Error fetching products:', error);
     res.status(500).send('Server error');
   }
-});
+})
 
 
+/* update-user-products-status */
 router.post('/update-user-products-status', (req, res) => {
   let { Id, Status } = req.body;
   adminHelpers.updateUserProdStatus(Id, Status).then(() => {
