@@ -16,16 +16,16 @@ const verifyLogin = (req, res, next) => { //verify Admin login
 
 /* GET all Products. */
 router.get('/', verifyLogin, async (req, res, next) => {
-  try{
-    
-    await productHelpers.getAllProducts().then((products)=>{
+  try {
+
+    await productHelpers.getAllProducts().then((products) => {
       res.render('admin/view-products', { admin: true, products });
-      }).catch((err)=>{
+    }).catch((err) => {
       console.error('Error fetching products:', err);
-      res.render('admin/empty/empty-shop', { admin: true});
+      res.render('admin/empty/empty-shop', { admin: true });
     })
 
-  }catch(error){
+  } catch (error) {
     console.error(error);
     res.status(500).send(error);
   }
@@ -41,23 +41,26 @@ router.get('/login', (req, res) => {
   }
 })
 
+
 /* return to recent URL after Login */
 router.post('/login', async (req, res) => {
 
- await adminHelpers.doLogin(req.body).then((response) => {
+  await adminHelpers.doLogin(req.body).then((response) => {
 
-  if (response.status) {
-    req.session.adminLoggedIn = true;
-    req.session.admin = response.admin;
+    if (response.status) {
+      req.session.adminLoggedIn = true;
+      req.session.admin = response.admin;
 
-    const returnTo = req.session.returnTo || '/admin/'; // Default to home if no return URL
-    delete req.session.returnTo; // Clear the return URL from session
+      const returnTo = req.session.returnTo || '/admin/'; // Default to home if no return URL
+      delete req.session.returnTo; // Clear the return URL from session
 
-    res.json({ success: true, redirectUrl: returnTo });
-  } else {
-    res.json({ success: false });
-  }})
+      res.json({ success: true, redirectUrl: returnTo });
+    } else {
+      res.json({ success: false });
+    }
+  })
 });
+
 
 router.get('/logout', (req, res) => {
   req.session.admin = null
@@ -104,27 +107,16 @@ router.get('/all-orders', verifyLogin, (req, res) => {
   })
 })
 
-router.get('/add-product', verifyLogin, function (req, res) {
+
+/*GET Add Product page*/
+router.get('/add-product', verifyLogin, (req, res)=> {
   res.render('admin/add-product', { admin: true })
 })
 
 
-
-router.post('/add-product', (req, res) => {
-  let product = {
-    Name: req.body.Name,
-    Category: req.body.Category,
-    Actual_Price: req.body.Actual_Price,
-    Offer_Price: req.body.Offer_Price,
-    Offer_Percentage: req.body.Offer_Percentage,
-    Description: req.body.Description,
-    Product_Owner: req.body.Product_Owner,
-    Carted: req.body.Carted,
-    Stock_Count:req.body.Stock_Count
-  };
-  
-
-  productHelpers.addProduct(product).then((productId) => {
+/*POST product details for adding new product*/
+router.post('/add-product', verifyLogin, (req, res) => {
+  productHelpers.addProduct(req.body).then((productId) => {
     if (req.files) {
       if (Array.isArray(req.files.Image)) {
         req.files.Image.forEach((image, index) => {
@@ -137,7 +129,6 @@ router.post('/add-product', (req, res) => {
     res.redirect('/admin/')
   });
 });
-
 
 
 
@@ -182,49 +173,49 @@ router.post('/add-more-images/:id', async (req, res) => {
   let uploadPromises = [];
 
   if (req.body.skip) {
-     return res.redirect('/admin/');
+    return res.redirect('/admin/');
   }
 
   if (req.files && req.files.Images) {
-     let images = req.files.Images;
-     if (!Array.isArray(images)) {
-        images = [images];
-     }
+    let images = req.files.Images;
+    if (!Array.isArray(images)) {
+      images = [images];
+    }
 
-     let product = await productHelpers.getProductImages(productId);
-     let productLength = product.images.length;
+    let product = await productHelpers.getProductImages(productId);
+    let productLength = product.images.length;
 
-     images.forEach((image, index) => {
-        uploadPromises.push(new Promise((resolve, reject) => {
-           let newIndex = productLength + index;
-           let filePath = path.join(__dirname, '../public/product-images', `${productId}_${newIndex}.jpg`);
+    images.forEach((image, index) => {
+      uploadPromises.push(new Promise((resolve, reject) => {
+        let newIndex = productLength + index;
+        let filePath = path.join(__dirname, '../public/product-images', `${productId}_${newIndex}.jpg`);
 
-           image.mv(filePath, (err) => {
-              if (err) {
-                 return reject(err);
-              }
-              resolve();
-           });
-        }));
-     });
+        image.mv(filePath, (err) => {
+          if (err) {
+            return reject(err);
+          }
+          resolve();
+        });
+      }));
+    });
   }
 
   Promise.all(uploadPromises)
-     .then(async () => {
-        const imageDir = path.join(__dirname, '../public/product-images');
-        let imageFiles = fs.readdirSync(imageDir).filter(file => file.startsWith(productId)).sort();
-        imageFiles = imageFiles.map((file, index) => {
-           const newFileName = `${productId}_${index}.jpg`;
-           fs.renameSync(path.join(imageDir, file), path.join(imageDir, newFileName));
-           return newFileName;
-        });
-        await productHelpers.updateProductImages(productId, imageFiles);
-        res.redirect('/admin/');
-     })
-     .catch((err) => {
-        console.error(err);
-        res.status(500).send(err);
-     });
+    .then(async () => {
+      const imageDir = path.join(__dirname, '../public/product-images');
+      let imageFiles = fs.readdirSync(imageDir).filter(file => file.startsWith(productId)).sort();
+      imageFiles = imageFiles.map((file, index) => {
+        const newFileName = `${productId}_${index}.jpg`;
+        fs.renameSync(path.join(imageDir, file), path.join(imageDir, newFileName));
+        return newFileName;
+      });
+      await productHelpers.updateProductImages(productId, imageFiles);
+      res.redirect('/admin/');
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send(err);
+    });
 });
 
 
@@ -238,25 +229,25 @@ router.delete('/delete-image', verifyLogin, async (req, res) => {
   const filePath = path.join(__dirname, '../public/product-images', imageName);
 
   fs.unlink(filePath, async (err) => {
-     if (err) {
-        console.error(err);
-        return res.status(500).send(err);
-     }
+    if (err) {
+      console.error(err);
+      return res.status(500).send(err);
+    }
 
-     try {
-        const imageDir = path.join(__dirname, '../public/product-images');
-        let imageFiles = fs.readdirSync(imageDir).filter(file => file.startsWith(productId)).sort();
-        imageFiles = imageFiles.map((file, index) => {
-           const newFileName = `${productId}_${index}.jpg`;
-           fs.renameSync(path.join(imageDir, file), path.join(imageDir, newFileName));
-           return newFileName;
-        });
-        await productHelpers.updateProductImages(productId, imageFiles);
-        res.sendStatus(200);
-     } catch (error) {
-        console.error('Error renumbering images:', error);
-        res.status(500).send(error);
-     }
+    try {
+      const imageDir = path.join(__dirname, '../public/product-images');
+      let imageFiles = fs.readdirSync(imageDir).filter(file => file.startsWith(productId)).sort();
+      imageFiles = imageFiles.map((file, index) => {
+        const newFileName = `${productId}_${index}.jpg`;
+        fs.renameSync(path.join(imageDir, file), path.join(imageDir, newFileName));
+        return newFileName;
+      });
+      await productHelpers.updateProductImages(productId, imageFiles);
+      res.sendStatus(200);
+    } catch (error) {
+      console.error('Error renumbering images:', error);
+      res.status(500).send(error);
+    }
   });
 });
 

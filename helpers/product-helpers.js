@@ -9,9 +9,20 @@ const fs = require('fs');
 var objectId=require('mongodb').ObjectID
 module.exports={
 
-    addProduct: (product) => {
+    addProduct: (productDetails) => {
         return new Promise( (resolve, reject) => {
-            
+          let product = {
+            Name: productDetails.Name,
+            Category: productDetails.Category,
+            Actual_Price: productDetails.Actual_Price,
+            Offer_Price: productDetails.Offer_Price,
+            Offer_Percentage: productDetails.Offer_Percentage,
+            Description: productDetails.Description,
+            Product_Owner: productDetails.Product_Owner,
+            Carted: productDetails.Carted,
+            Stock_Count: productDetails.Stock_Count
+          };  
+
             db.get().collection(collection.PRODUCT_COLLECTION).insertOne(product).then((data) => {
                 resolve(data.insertedId);
                 console.log(data.insertedId);
