@@ -14,7 +14,8 @@ const verifyLogin = (req, res, next) => { //verify Admin login
   }
 }
 
-/* GET all Products. */
+
+/* GET Admin Home page, get all products. */
 router.get('/', verifyLogin, async (req, res, next) => {
   try {
 
@@ -32,6 +33,7 @@ router.get('/', verifyLogin, async (req, res, next) => {
 });
 
 
+//GET Login page
 router.get('/login', (req, res) => {
   if (req.session.admin) {
     res.redirect('/admin/')
@@ -62,10 +64,34 @@ router.post('/login', async (req, res) => {
 });
 
 
+/* For Logout */
 router.get('/logout', (req, res) => {
   req.session.admin = null
   req.session.adminLoggedIn = false
   res.redirect('/admin/login')
+})
+
+
+/* GET all users product requests for selling */
+router.get('/product-requests', verifyLogin, async (req, res) => {
+  try {
+    let products = await productHelpers.getAllUserProducts();
+    res.render('admin/product-requests', { admin: true, products });
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    res.status(500).send('Server error');
+  }
+});
+
+
+router.post('/update-user-products-status', (req, res) => {
+  let { Id, Status } = req.body;
+  adminHelpers.updateUserProdStatus(Id, Status).then(() => {
+    res.json({ success: true });
+  }).catch((err) => {
+    console.error('Error updating user products status:', err);
+    res.json({ success: false });
+  });
 })
 
 
@@ -87,18 +113,6 @@ router.delete('/delete-user/:id', verifyLogin, (req, res) => {
     res.json({ success: false });
   });
 })
-
-
-router.delete('/delete-product/:id', verifyLogin, async (req, res) => {
-  try {
-    let proId = req.params.id;
-    let response = await productHelpers.deleteProduct(proId);
-    res.json({ success: true, response });
-  } catch (err) {
-    console.error('Error deleting product:', err);
-    res.status(500).json({ success: false, error: 'Failed to delete product' });
-  }
-});
 
 
 router.get('/all-orders', verifyLogin, (req, res) => {
@@ -131,7 +145,20 @@ router.post('/add-product', verifyLogin, (req, res) => {
 });
 
 
-/*GET Edit Product page*/
+/* Delete product */
+router.delete('/delete-product/:id', verifyLogin, async (req, res) => {
+  try {
+    let proId = req.params.id;
+    let response = await productHelpers.deleteProduct(proId);
+    res.json({ success: true, response });
+  } catch (err) {
+    console.error('Error deleting product:', err);
+    res.status(500).json({ success: false, error: 'Failed to delete product' });
+  }
+})
+
+
+/* Route to handle the product update and redirect to edit product images */
 router.get('/edit-product/:id', verifyLogin, async (req, res) => {
   try {
     let product = await productHelpers.getProductDetails(req.params.id);
@@ -143,20 +170,20 @@ router.get('/edit-product/:id', verifyLogin, async (req, res) => {
 });
 
 
+/* Route to handle the Product Update and redirect to Edit product images */
 router.post('/edit-product/:id', (req, res) => {
   let id = req.params.id;
   productHelpers.updateProduct(req.params.id, req.body).then(() => {
-
-    res.redirect(`/admin/add-more-images/${id}`);
-
+    res.redirect(`/admin/edit-images/${id}`);
   }).catch((err) => {
     console.error(err);
     res.status(500).send(err);
   });
 });
 
-// Route to render the add more images page
-router.get('/add-more-images/:id', verifyLogin, async (req, res) => {
+
+// GET the Edit images page
+router.get('/edit-images/:id', verifyLogin, async (req, res) => {
   try {
     let product = await productHelpers.getProductImages(req.params.id);
     res.render('admin/edit-images', { product, admin: true });
@@ -168,7 +195,7 @@ router.get('/add-more-images/:id', verifyLogin, async (req, res) => {
 
 
 // Route to handle the image upload and skip actions
-router.post('/add-more-images/:id', async (req, res) => {
+router.post('/edit-images/:id', async (req, res) => {
   let productId = req.params.id;
   let uploadPromises = [];
 
@@ -219,11 +246,7 @@ router.post('/add-more-images/:id', async (req, res) => {
 });
 
 
-
-
-
-// Route for deleting images
-// Route for deleting images
+// Route for Deleting images
 router.delete('/delete-image', verifyLogin, async (req, res) => {
   const { imageName, productId } = req.body;
   const filePath = path.join(__dirname, '../public/product-images', imageName);
@@ -251,7 +274,8 @@ router.delete('/delete-image', verifyLogin, async (req, res) => {
   });
 });
 
-// Route for editing images
+
+// Route for upload Changed Images in the Edit images page
 router.post('/edit-image', verifyLogin, (req, res) => {
   if (!req.files || !req.files.newImage) {
     return res.status(400).send('No new image file uploaded.');
@@ -283,49 +307,6 @@ router.post('/update-order-status', (req, res) => {
     res.json({ success: false });
   });
 });
-
-router.post('/update-user-products-status', (req, res) => {
-  let { Id, Status } = req.body;
-  adminHelpers.updateUserProdStatus(Id, Status).then(() => {
-    res.json({ success: true });
-  }).catch((err) => {
-    console.error('Error updating user products status:', err);
-    res.json({ success: false });
-  });
-});
-
-
-
-router.get('/product-requests', verifyLogin, async (req, res) => {
-  try {
-    let products = await productHelpers.getAllUserProducts();
-    res.render('admin/product-requests', { admin: true, products });
-  } catch (error) {
-    console.error('Error fetching products:', error);
-    res.status(500).send('Server error');
-  }
-});
-
-router.post('/sort-orders', verifyLogin, async (req, res) => {
-  try {
-    const { order } = req.body;
-
-    let sortedOrders;
-    if (order === 'asc') {
-      sortedOrders = await adminHelpers.getAllOrdersAscending();
-    } else if (order === 'desc') {
-      sortedOrders = await adminHelpers.getAllOrdersDescending();
-    } else {
-      return res.status(400).json({ success: false, message: 'Invalid sorting order' });
-    }
-
-    res.json({ success: true, orders: sortedOrders });
-  } catch (error) {
-    console.error('Error sorting orders:', error);
-    res.status(500).json({ success: false, message: 'Internal server error' });
-  }
-});
-
 
 
 

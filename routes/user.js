@@ -91,7 +91,7 @@ router.post('/signup', (req, res) => {
 });
 
 
-/* Login  */
+/* Login */
 router.get('/login', (req, res) => {
   if (req.session.user) {
     res.redirect('/')
@@ -554,7 +554,7 @@ router.delete('/delete-user-pendingprod/:id', verifyLogin, (req, res) => {
 });
 
 
-/* Route to render the edit user selling product page */
+/* Route to render the Edit User's selling product page */
 router.get('/edit-user-product/:id', verifyLogin, async (req, res) => {
   let user = req.session.user;
   let prodId = req.params.id;
@@ -570,7 +570,7 @@ router.get('/edit-user-product/:id', verifyLogin, async (req, res) => {
 });
 
 
-/* Route to handle the product update */
+/* Route to handle the Product Update and redirect to Edit product images */
 router.post('/edit-user-product/:id', verifyLogin, (req, res) => {
   let id = req.params.id;
   productHelpers.updateUserProduct(req.params.id, req.body)
