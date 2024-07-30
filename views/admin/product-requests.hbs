@@ -125,8 +125,10 @@
             <button onclick="updateUserProdStatus('{{this._id}}', 'Approved')" class="btn approve"
               id="approve-btn-{{this._id}}">Approve</button>
             {{else}}
+            {{#ifEquals this.Status 'Declined'}}
             <button onclick="updateUserProdStatus('{{this._id}}', 'Approved')" class="btn approve"
               id="approve-btn-{{this._id}}">Approve</button>
+            {{/ifEquals}}
             {{/ifEquals}}
           </div>
         </div>
@@ -135,6 +137,17 @@
       {{/each}}
     </div>
   </div>
+
+   <!-- Confirmation Modal -->
+  <div id="confirmationModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <p id="modalMessage">Are you sure?</p>
+      <button id="confirmRemove" class="btn ">Yes</button>
+      <button id="cancelRemove" class="btn ">Cancel</button>
+    </div>
+  </div>
+
 </section>
 
 <script>
@@ -157,15 +170,68 @@
       });
     });
 
+    
+  // Function to show the confirmation modal
+  function showConfirmationModal(message, confirmCallback) {
+    // Get the modal
+    var modal = document.getElementById("confirmationModal");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // Get the confirm and cancel buttons
+    var confirmButton = document.getElementById("confirmRemove");
+    var cancelButton = document.getElementById("cancelRemove");
+
+    // Set the modal message
+    const modalMessage = document.getElementById('modalMessage');
+    
+    // Apply the message with styled productName
+    modalMessage.innerHTML = message;
+    modalMessage.style.overflow = 'hidden';
+    modalMessage.style.textOverflow = 'ellipsis';
+    modalMessage.style.webkitLineClamp = '3';
+    modalMessage.style.display = '-webkit-box';
+    modalMessage.style.webkitBoxOrient = 'vertical';
+
+    // Show the modal
+    modal.style.display = "block";
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+      modal.style.display = "none";
+    }
+
+    // When the user clicks on confirm button
+    confirmButton.onclick = function () {
+      modal.style.display = "none";
+      confirmCallback();
+    }
+
+    // When the user clicks on cancel button
+    cancelButton.onclick = function () {
+      modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+  }
+  
+
+
 
   function updateUserProdStatus(Id, Status) {
+      showConfirmationModal(`User Product status updated to <span style="font-weight:bold">${Status}</span>`, function() {
     $.ajax({
       url: '/admin/update-user-products-status',
       method: 'POST',
       data: { Id: Id, Status: Status },
       success: function (response) {
         if (response.success) {
-          alert(`User Product status updated to ${Status}`);
           document.getElementById('status-' + Id).innerText = Status;
 
           var approveBtn = document.getElementById('approve-btn-' + Id);
@@ -186,6 +252,7 @@
         console.error('Error:', error);
         alert('An error occurred while updating the user product status');
       }
+    });
     });
   }
 
@@ -330,5 +397,82 @@
   }
   .Price{
     width: 10em;
+  }
+
+   /* The Modal (background) */
+  .modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+  }
+
+  /* Modal Content/Box */
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    /* 15% from the top and centered */
+    padding: 20px;
+    border-radius: 10px; 
+    box-shadow: 0 0 20px rgba(18, 155, 150, 0.5);
+    width: 80%;
+    /* Could be more or less, depending on screen size */
+    max-width: 400px;
+    /* Maximum width */
+    text-align: center;
+  }
+
+  /* The Close Button */
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: rgb(6, 51, 53);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  #confirmRemove {
+    padding: 10px 20px;
+    margin: 10px;
+    background-image: linear-gradient(to left, #f07b0d, rgb(245, 157, 64));
+    color: white;
+    border: none;
+    border-radius: 20px;
+  }
+  #cancelRemove{
+    padding: 10px 20px;
+    margin: 10px;
+    background-image: linear-gradient(to left, #309db0, rgb(71, 172, 209));
+    color: white;
+    border: none;
+    border-radius: 20px;
+  }
+   #cancelRemove:hover{
+    background-image: linear-gradient(to right, #309db0, rgb(71, 172, 209));
+    color: white;
+  }
+  #confirmRemove:hover{
+   background-image: linear-gradient(to right, #f07b0d, rgb(245, 157, 64));
+    color: white;
   }
 </style>
