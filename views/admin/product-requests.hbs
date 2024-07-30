@@ -137,6 +137,11 @@
       {{/each}}
     </div>
   </div>
+  
+     <!-- Scroll Up -->
+  <div id="back-top" >
+        <button  title="Go to Top" onclick="topFunction()" id="topBtn"> <i class="bi bi-arrow-up-circle-fill"></i> </button>
+    </div>
 
    <!-- Confirmation Modal -->
   <div id="confirmationModal" class="modal">
@@ -169,6 +174,29 @@
         }
       });
     });
+
+
+      // Get the button for go to top
+    let mybutton = document.getElementById("topBtn");
+
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function() {scrollFunction()};
+
+    function scrollFunction() {
+      if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        mybutton.style.display = "block";
+      } else {
+        mybutton.style.display = "none";
+      }
+    }
+
+    // When the user clicks on the button, scroll to the top of the document
+    function topFunction() {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    }
+
+
 
     
   // Function to show the confirmation modal
@@ -271,9 +299,12 @@
     /* Ensure underline does not appear on hover */
   }
 
-  .main-heading {
+  .main-heading{
     text-align: center;
     margin-top: 30px;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 35px;
+    font-weight: bold;
   }
 
  .card {
@@ -475,4 +506,26 @@
    background-image: linear-gradient(to right, #f07b0d, rgb(245, 157, 64));
     color: white;
   }
+
+   
+    #topBtn {
+      display: none;
+      position: fixed;
+      bottom: 40px;
+      right: 30px;
+      z-index: 99;
+      font-size: 25px;
+      border: none;
+      outline: none;
+      border-radius: 50%;
+      color: white;
+      background-image: linear-gradient(to bottom, #309db0, rgb(71, 172, 209));
+       cursor: pointer;
+       box-shadow: 0 2px 12px rgba(21, 105, 131, 0.5);
+    }
+
+    #topBtn:hover {
+      background-image: linear-gradient(to top, #309db0, rgb(71, 172, 209));
+      box-shadow: 0 2px 18px rgba(13, 89, 112, 0.5);
+    }
 </style>
