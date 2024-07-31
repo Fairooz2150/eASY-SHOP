@@ -1,6 +1,8 @@
-<section>
-    <div class="container mt-5">
-        <table class="table" id="usersTable">
+<section class="bg-section">
+  
+    <div class="container">
+       <h2 class="title">eASY Users</h2>
+        <table class="table " id="usersTable">
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">No</th>
@@ -20,12 +22,13 @@
                     <td>{{this.Phone}}</td>
                     <td>{{this.Email}}</td>
                     <td>
-                     <button class="btn btn-danger" onclick="deleteUser('{{this._id}}',  '{{this.First_Name}}', '{{this.Last_Name}}')">Remove</button>
+                     <button class="btn rmvBtn " onclick="deleteUser('{{this._id}}',  '{{this.First_Name}}', '{{this.Last_Name}}')">Remove</button>
                     </td>
                 </tr>
                 {{/each}}
             </tbody>
         </table>
+        
     </div>
 
     <!-- Confirmation Modal -->
@@ -117,6 +120,40 @@ function deleteUser(UserId, FirstName, LastName) {
 }
   </script>
 <style>
+    .bg-section {
+    background-image: url('/images/users.png');
+    background-size: 50em;
+    min-height: 100vh;
+     display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  section .container {
+    background: rgba(240, 243, 243, 0.81);
+    padding: 20px;
+    border-radius: 10px;
+  }
+  .title {
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
+    margin-bottom: 30px;
+    font-size: 35px;
+    font-weight: bold;
+  }
+
+  .rmvBtn {
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(21, 105, 131, 0.5);
+    border-radius: 20px;
+    color: rgb(218, 125, 74);
+    font-weight: bold;
+  }
+
+  .rmvBtn:hover {
+    background-color: rgb(218, 125, 74);
+    color: white;
+  }
 
    /* The Modal (background) */
   .modal {
