@@ -12,11 +12,11 @@
               {{this.userDetails.First_Name}} {{this.userDetails.Last_Name}}
             </div>
             <div class="date">
-              <span style="font-weight:bold"> Date: </span> {{this.date}} <br>
-              <span style="font-weight:bold"> Time: </span> {{this.time}}
+              <b> Date: </b> {{this.date}} <br>
+              <b> Time: </b> {{this.time}}
             </div>
             <div class="payment">
-              <span style="font-weight:bold">Payment: </span>
+              <b>Payment: </b>
               <br> {{this.paymentMethod}}
             </div>
           </div>
@@ -24,11 +24,11 @@
         <div class="card-body">
           <div class="row">
             <div class="orderid">
-              <p class="card-text"><span style="font-weight:bold">Order Id: </span><br> {{this._id}}</p>
-              <p class="card-text"><span style="font-weight:bold">Order Status: </span> <span id="status-{{this._id}}">{{this.status}}</span></p>
+              <p class="card-text"><b>Order Id: </b><br> {{this._id}}</p>
+              <p class="card-text"><b>Order Status: </b> <span id="status-{{this._id}}">{{this.status}}</span></p>
             </div>
             <div class="address">
-              <span style="font-weight: bold;"> Address:</span><br>{{newlineToBr this.deliveryDetails.address}}
+              <b> Address:</b><br>{{newlineToBr this.deliveryDetails.address}}
               <br> {{this.deliveryDetails.pincode}}
               <br> {{this.deliveryDetails.mobile}}
             </div>
@@ -50,7 +50,8 @@
                   <td>
                     <div class="row">
                       <div>
-                        <img src="/product-images/{{this.item}}_0.jpg" style="width:70px;height:70px" alt="" class="product_image">
+                        <img src="/product-images/{{this.item}}_0.jpg"  alt="Image not available"
+                        onerror="this.onerror=null; this.src='/images/no-images-available.png';" class="product_image">
                       </div>
                       <div class="product_details">
                         {{this.productName}} <br>
@@ -189,6 +190,13 @@ function updateOrderStatus(orderId, status) {
     font-family: 'Times New Roman', Times, serif;
     font-size: 35px;
     font-weight: bold;
+  }
+
+  
+  .product_image{
+    height: 120px;
+    width: 130px;
+     box-shadow: 0 4px 12px rgba(21, 105, 131, 0.5);
   }
     .card {
       margin-top: 65px;
