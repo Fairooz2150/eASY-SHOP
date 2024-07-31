@@ -250,7 +250,7 @@ router.post('/edit-images/:id', async (req, res) => {
 });
 
 
-// Route for Deleting images
+// Route for Deleting images from Edit Images page
 router.delete('/delete-image', verifyLogin, async (req, res) => {
   const { imageName, productId } = req.body;
   const filePath = path.join(__dirname, '../public/product-images', imageName);
