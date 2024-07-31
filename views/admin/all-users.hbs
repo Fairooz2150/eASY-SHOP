@@ -1,5 +1,5 @@
 <section>
-    <div class="container mt-4">
+    <div class="container mt-5">
         <table class="table" id="usersTable">
             <thead class="thead-dark">
                 <tr>
@@ -42,60 +42,67 @@
 
 <script>
     
+/* Arrange table */    
 $(function () {
       $('#usersTable').DataTable();
     });
 
-// Function to show the confirmation modal
-function showConfirmationModal(message, confirmCallback) {
-  // Get the modal
-  var modal = document.getElementById("confirmationModal");
 
-  // Get the <span> element that closes the modal
-  var span = document.getElementsByClassName("close")[0];
 
-  // Get the confirm and cancel buttons
-  var confirmButton = document.getElementById("confirmRemove");
-  var cancelButton = document.getElementById("cancelRemove");
+  /* Function to show the confirmation modal */
+  function showConfirmationModal(message, confirmCallback) {
+    // Get the modal
+    var modal = document.getElementById("confirmationModal");
 
-  // Set the modal message
-  document.getElementById("modalMessage").innerText = message;
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
 
-  // Show the modal
-  modal.style.display = "block";
+    // Get the confirm and cancel buttons
+    var confirmButton = document.getElementById("confirmRemove");
+    var cancelButton = document.getElementById("cancelRemove");
 
-  // When the user clicks on <span> (x), close the modal
-  span.onclick = function() {
-    modal.style.display = "none";
-  }
+    // Set the modal message
+    const modalMessage = document.getElementById('modalMessage');
+    
+    // Apply the message with styled productName
+    modalMessage.innerHTML = message;
+   
 
-  // When the user clicks on confirm button
-  confirmButton.onclick = function() {
-    modal.style.display = "none";
-    confirmCallback();
-  }
+    // Show the modal
+    modal.style.display = "block";
 
-  // When the user clicks on cancel button
-  cancelButton.onclick = function() {
-    modal.style.display = "none";
-  }
-
-  // When the user clicks anywhere outside of the modal, close it
-  window.onclick = function(event) {
-    if (event.target == modal) {
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
       modal.style.display = "none";
     }
+
+    // When the user clicks on confirm button
+    confirmButton.onclick = function () {
+      modal.style.display = "none";
+      confirmCallback();
+    }
+
+    // When the user clicks on cancel button
+    cancelButton.onclick = function () {
+      modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
   }
-}
+  
 
 function deleteUser(UserId, FirstName, LastName) {
-  showConfirmationModal(`Are you sure you want to remove ${FirstName} ${LastName}?`, function() {
+  showConfirmationModal(`Are you sure you want to remove <b>${FirstName} ${LastName}</b>?`, function() {
     $.ajax({
       url: '/admin/delete-user/' + UserId,
       method: 'DELETE',
       success: function(response) {
         if (response.success) {
-          console.log('User deleted successfully');
           location.reload(); // Refresh the page or update the DOM as needed
         } else {
           alert('Failed to delete the User');
@@ -110,61 +117,81 @@ function deleteUser(UserId, FirstName, LastName) {
 }
   </script>
 <style>
-    /* The Modal (background) */
-.modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-}
 
-/* Modal Content/Box */
-.modal-content {
-  background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
-  max-width: 400px; /* Maximum width */
-  text-align: center;
-}
+   /* The Modal (background) */
+  .modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+  }
 
-/* The Close Button */
-.close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
+  /* Modal Content/Box */
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    /* 15% from the top and centered */
+    padding: 20px;
+    border-radius: 10px; 
+    box-shadow: 0 0 20px rgba(18, 155, 150, 0.5);
+    width: 80%;
+    /* Could be more or less, depending on screen size */
+    max-width: 400px;
+    /* Maximum width */
+    text-align: center;
+  }
 
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
+  /* The Close Button */
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
 
-.btn {
-  padding: 10px 20px;
-  margin: 10px;
-}
+  .close:hover,
+  .close:focus {
+    color: rgb(6, 51, 53);
+    text-decoration: none;
+    cursor: pointer;
+  }
 
-.btn-danger {
-  background-color: red;
-  color: white;
-  border: none;
-}
-
-.btn-secondary {
-  background-color: grey;
-  color: white;
-  border: none;
-}
-
+  #confirmRemove {
+    padding: 10px 20px;
+    margin: 10px;
+    background-image: linear-gradient(to left, #f07b0d, rgb(245, 157, 64));
+    color: white;
+    border: none;
+    border-radius: 20px;
+  }
+  #cancelRemove{
+    padding: 10px 20px;
+    margin: 10px;
+    background-image: linear-gradient(to left, #309db0, rgb(71, 172, 209));
+    color: white;
+    border: none;
+    border-radius: 20px;
+  }
+   #cancelRemove:hover{
+    background-image: linear-gradient(to right, #309db0, rgb(71, 172, 209));
+    color: white;
+  }
+  #confirmRemove:hover{
+   background-image: linear-gradient(to right, #f07b0d, rgb(245, 157, 64));
+    color: white;
+  }
 </style>
