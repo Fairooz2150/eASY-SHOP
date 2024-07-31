@@ -1,1 +1,548 @@
-<h2>All messages</h2>
+<section>
+  <div class="container mb-5">
+    <h2 class="main-heading">All Orders</h2>
+    <div id="orders-container">
+
+      {{#each messages}}
+      <div class="card">
+
+        <div class="card-header">
+
+          <div class="row header-content" title="Placed by:">
+
+            <div class="chip">         
+              <img src="/images/person.png" alt="Perso">
+              {{this.Name}} 
+            </div>
+
+            <div class="date">
+              <b> Date: </b> {{this.Date}} <br>
+              <b> Time: </b> {{this.Time}}
+            </div>
+            <div class="payment">
+              <b>Payment: </b>
+              <br> {{this.paymentMethod}}
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="row ml-2">
+
+            <div class="orderInfo">
+              <p class="card-text"><b>Order Id: </b><br> {{this._id}}</p>
+              <p class="card-text"><b>User Id: </b><br> {{this.userDetails._id}}</p>
+              <p class="card-text"><b>Order Status: </b> <span id="status-{{this._id}}">{{this.status}}</span></p>
+            </div>
+
+
+            <address class="address" title="Deliver to">
+              <b> Ship To:</b>
+              <br><b title="Recipient">{{this.deliveryDetails.name}}</b>
+
+              <br> <span title="Home Address">{{newlineToBr this.deliveryDetails.address}},</span>
+
+              <br> <span title="District">{{this.deliveryDetails.district}} </span>
+              <span title="Pincode">{{this.deliveryDetails.pincode}},</span>
+
+              <br> <span title="State">{{this.deliveryDetails.state}}</span>
+
+              <br> <a href="tel:+91{{this.deliveryDetails.mobile}}" title="Call">
+                <i class="bi bi-telephone"></i> {{this.deliveryDetails.mobile}} </a>
+            </address>
+
+
+            <div class="status-image">
+              {{#ifEquals this.status 'placed'}}
+              <img src="/images/order-placed.png" alt="Order Placed">
+              <p>Order Received!</p>
+              {{else}}
+
+              {{#ifEquals this.status 'pending'}}
+              <img src="/images/order-pending.png" alt="Order Pending">
+              <p>Payment Issue!</p>
+              {{else}}
+
+              {{#ifEquals this.status 'Shipped'}}
+              <img src="/images/deliver-soon.png" alt="Order Shipped">
+              <p>Order Shipped!</p>
+              {{else}}
+
+              <img src="/images/order-delivered.png" alt="Order Delivered">
+              <p>Order Delivered!</p>
+
+              {{/ifEquals}}
+              {{/ifEquals}}
+              {{/ifEquals}}
+            </div>
+
+          </div>
+
+          <div>
+            {{#each products}}
+            <table class="table mt-5" id="productsTable">
+              <thead>
+                <tr>
+                  <th scope="col">No</th>
+                  <th scope="col">Item</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Quantity</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr>
+                  <th scope="row">{{incrementedIndex @index}}</th>
+
+                  <td>
+                    <a href="/view-product/{{this.item}}">
+                      <div class="row">
+                        <div>
+                          <img src="/product-images/{{this.item}}_0.jpg" alt="Image not available"
+                            onerror="this.onerror=null; this.src='/images/no-images-available.png';"
+                            class="product_image m-2">
+                        </div>
+
+                        <div class="product_details ml-2">
+                          <b title="Product Name" class="title">{{this.productName}}</b> <br>
+                          <span title="Category" class="category">{{this.category}}</span> <br>
+                          <span class="text-muted" title="Priduct ID"> Product Id {{this.item}}</span>
+                        </div>
+                      </div>
+                    </a>
+                  </td>
+
+                  <td><span id="Price">{{this.price}}</span></td>
+
+                  <td>{{this.quantity}}</td>
+
+                </tr>
+              </tbody>
+            </table>
+            {{/each}}
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <div class="footer-content">
+
+            <div class="total"><b>Total: </b><span id="Price">{{this.totalAmount}}</span></div>
+
+            <div id="action-buttons-{{this._id}}" class="actions">
+              {{#ifEquals this.status 'placed'}}
+              <button onclick="updateOrderStatus('{{this._id}}', 'Shipped')" class="btn ">Shipped</button>
+              {{/ifEquals}}
+              {{#ifEquals this.status 'Shipped'}}
+              <button onclick="updateOrderStatus('{{this._id}}', 'Delivered')" class="btn ">Delivered</button>
+              {{/ifEquals}}
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+      {{/each}}
+
+    </div>
+  </div>
+
+  <!-- Scroll Up -->
+  <div id="back-top">
+    <button title="Go to Top" onclick="topFunction()" id="topBtn"> <i class="bi bi-arrow-up-circle-fill"></i> </button>
+  </div>
+  
+   <!-- Confirmation Modal -->
+  <div id="confirmationModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <p id="modalMessage">Are you sure?</p>
+      <button id="confirmRemove" class="btn ">Yes</button>
+      <button id="cancelRemove" class="btn ">Cancel</button>
+    </div>
+  </div>
+
+</section>
+
+<script>
+
+  /* Function to format number with commas */
+  function formatNumber(number) {
+    return number.toLocaleString('en-IN'); // 'en-IN' for Indian number formatting 
+  }
+
+  // format offer price number with commas
+  document.addEventListener('DOMContentLoaded', function () {
+    const Prices = document.querySelectorAll('#Price');
+    Prices.forEach(element => {
+      const priceString = element.textContent.trim();
+      const price = parseFloat(priceString.replace(/[^\d.-]/g, ''));
+      if (!isNaN(price)) {
+        element.textContent = '₹' + formatNumber(price);
+      }
+    });
+  });
+
+
+  /* Get the button for go to top */
+  let mybutton = document.getElementById("topBtn");
+
+  // When the user scrolls down 20px from the top of the document, show the button
+  window.onscroll = function () { scrollFunction() };
+
+  function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+      mybutton.style.display = "block";
+    } else {
+      mybutton.style.display = "none";
+    }
+  }
+
+  // When the user clicks on the button, scroll to the top of the document
+  function topFunction() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+  }
+
+  
+  /* Function to show the confirmation modal */
+  function showConfirmationModal(message, confirmCallback) {
+    // Get the modal
+    var modal = document.getElementById("confirmationModal");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // Get the confirm and cancel buttons
+    var confirmButton = document.getElementById("confirmRemove");
+    var cancelButton = document.getElementById("cancelRemove");
+
+    // Set the modal message
+    const modalMessage = document.getElementById('modalMessage');
+    
+    // Apply the message with styled productName
+    modalMessage.innerHTML = message;
+   
+
+    // Show the modal
+    modal.style.display = "block";
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+      modal.style.display = "none";
+    }
+
+    // When the user clicks on confirm button
+    confirmButton.onclick = function () {
+      modal.style.display = "none";
+      confirmCallback();
+    }
+
+    // When the user clicks on cancel button
+    cancelButton.onclick = function () {
+      modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+  }
+  
+
+  /* Update Order Status */
+  function updateOrderStatus(orderId, status) {
+      showConfirmationModal(`Order status updated to <b>${status}</b>`, function() {
+    $.ajax({
+      url: '/admin/update-order-status',
+      method: 'POST',
+      data: { orderId: orderId, status: status },
+      success: function (response) {
+        if (response.success) {
+         
+          document.getElementById('status-' + orderId).innerText = status;
+
+          // Update button text and behavior
+          var shipButton = document.querySelector(`#action-buttons-${orderId} button[onclick*="updateOrderStatus('${orderId}', 'Shipped')"]`);
+          var deliverButton = document.querySelector(`#action-buttons-${orderId} button[onclick*="updateOrderStatus('${orderId}', 'Delivered')"]`);
+
+          if (status === 'Shipped') {
+            // Change Ship button to Deliver button
+            shipButton.innerText = 'Delivered';
+            shipButton.setAttribute('onclick', `updateOrderStatus('${orderId}', 'Delivered')`);
+            deliverButton.style.display = 'none';
+          } else if (status === 'Delivered') {
+            // Hide Deliver button after updating status to Delivered
+            deliverButton.style.display = 'none';
+          }
+        } else {
+          alert('Failed to update order status');
+        }
+      },
+      error: function (error) {
+        console.error('Error:', error);
+        alert('An error occurred while updating the order status');
+      }
+    });
+     });
+  }
+
+
+</script>
+
+<style>
+  a {
+    color: black;
+    text-decoration: none;
+    /* Remove underline by default */
+  }
+
+  a:hover {
+    color: #309db0;
+    text-decoration: none;
+    /* Ensure underline does not appear on hover */
+  }
+
+  .main-heading {
+    text-align: center;
+    margin-top: 30px;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 35px;
+    font-weight: bold;
+  }
+
+  .card {
+    margin-top: 65px;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 50px;
+    box-shadow: 0 14px 16px rgba(21, 105, 131, 0.5);
+  }
+
+  .card-header {
+    background-color: #278a9b96;
+    color: white;
+  }
+
+  .chip {
+    display: inline-block;
+    padding: 0 25px;
+    height: 50px;
+    font-size: 16px;
+    line-height: 50px;
+    border-radius: 25px;
+    background-color: #f1f1f1;
+    color: #309db0;
+    font-weight: 500;
+    font-size: large;
+  }
+
+  .chip img {
+    float: left;
+    margin: 0 10px 0 -25px;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+  }
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .date,
+  .payment {
+    padding: 0 15px;
+  }
+
+  .orderInfo {
+    width: 20em;
+
+  }
+
+  .address {
+    width: 25em;
+
+  }
+
+  .status-image p {
+    text-align: center;
+  }
+
+  .status-image img {
+    height: 250px;
+    width: 20em;
+  }
+
+  .product_image {
+    width: 8em;
+    height: 7em;
+  }
+
+  .title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    max-width: 35em;
+    min-width: 8em;
+    font-size: large;
+  }
+
+  .title:hover {
+    color: rgb(40, 155, 155);
+  }
+
+  .category {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    max-width: 35em;
+    min-width: 8em;
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #278a9b96;
+    color: white;
+    height: 4em;
+  }
+
+  .footer-content {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    font-size: large;
+  }
+
+  .actions {
+    margin-left: auto;
+  }
+
+  .actions button {
+    background-color: white;
+    color: #278a9b;
+    font-weight: bold;
+    width: 6em;
+    border-radius: 20px;
+    box-shadow: 0 6px 10px rgba(49, 133, 158, 0.5);
+    transition: all 0.3s ease;
+  }
+
+  .actions button:hover {
+    color: #278a9b;
+    transform: scale(1.1);
+  }
+
+  .total {
+    margin-left: auto;
+
+  }
+
+  #topBtn {
+    display: none;
+    position: fixed;
+    bottom: 60px;
+    right: 30px;
+    z-index: 99;
+    font-size: 25px;
+    border: none;
+    outline: none;
+    border-radius: 50%;
+    color: white;
+    background-image: linear-gradient(to bottom, #309db0, rgb(71, 172, 209));
+    cursor: pointer;
+    box-shadow: 0 2px 12px rgba(21, 105, 131, 0.5);
+  }
+
+  #topBtn:hover {
+    background-image: linear-gradient(to top, #309db0, rgb(71, 172, 209));
+    box-shadow: 0 2px 18px rgba(13, 89, 112, 0.5);
+  }
+  
+   /* The Modal (background) */
+  .modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+  }
+
+  /* Modal Content/Box */
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    /* 15% from the top and centered */
+    padding: 20px;
+    border-radius: 10px; 
+    box-shadow: 0 0 20px rgba(18, 155, 150, 0.5);
+    width: 80%;
+    /* Could be more or less, depending on screen size */
+    max-width: 400px;
+    /* Maximum width */
+    text-align: center;
+  }
+
+  /* The Close Button */
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: rgb(6, 51, 53);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  #confirmRemove {
+    padding: 10px 20px;
+    margin: 10px;
+    background-image: linear-gradient(to left, #f07b0d, rgb(245, 157, 64));
+    color: white;
+    border: none;
+    border-radius: 20px;
+  }
+  #cancelRemove{
+    padding: 10px 20px;
+    margin: 10px;
+    background-image: linear-gradient(to left, #309db0, rgb(71, 172, 209));
+    color: white;
+    border: none;
+    border-radius: 20px;
+  }
+   #cancelRemove:hover{
+    background-image: linear-gradient(to right, #309db0, rgb(71, 172, 209));
+    color: white;
+  }
+  #confirmRemove:hover{
+   background-image: linear-gradient(to right, #f07b0d, rgb(245, 157, 64));
+    color: white;
+  }
+</style>

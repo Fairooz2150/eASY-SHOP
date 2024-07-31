@@ -144,7 +144,7 @@ router.delete('/delete-user/:id', verifyLogin, (req, res) => {
 /* Get all messages from eASY SHOP */
 router.get('/all-messages', verifyLogin, (req, res) => {
   adminHelpers.getAllMessages().then((messages) => {
-    console.log('messagess:',messages);
+    messages.sort((a, b) => new Date(b.date) - new Date(a.date));
     res.render('admin/all-messages', { admin: true, messages });
   }).catch((error) => {
     console.error("Error fetching messages:", error);
