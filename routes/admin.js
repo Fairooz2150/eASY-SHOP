@@ -102,6 +102,7 @@ router.post('/update-user-products-status', (req, res) => {
 /* GET All Users orders */
 router.get('/all-orders', verifyLogin, (req, res) => {
   adminHelpers.getAllOrders().then((orders) => {
+    orders.sort((a, b) => new Date(b.date) - new Date(a.date));
     res.render('admin/all-orders', { admin: true, orders })
   })
 })
