@@ -58,7 +58,7 @@
                       </div>
                     </div>
                   </td>
-                  <td>₹{{this.price}}</td>
+                  <td><span id="Price">{{this.price}}</span></td>
                   <td>{{this.quantity}}</td>
                 </tr>
               </tbody>
@@ -68,7 +68,7 @@
         </div>
         <div class="card-footer">
           <div class="footer-content">
-            <div class="total">Total: ₹{{this.totalAmount}}</div>
+            <div class="total">Total: <span id="Price">{{this.totalAmount}}</span></div>
             <div id="action-buttons-{{this._id}}" class="ship">
               {{#ifEquals this.status 'placed'}}
                 <button onclick="updateOrderStatus('{{this._id}}', 'Shipped')" class="btn btn-primary">Ship</button>
@@ -93,7 +93,6 @@
 
 <script>
 
-  
   // Function to format number with commas
     function formatNumber(number) {
       return number.toLocaleString('en-IN'); // 'en-IN' for Indian number formatting 
@@ -132,7 +131,7 @@
       document.documentElement.scrollTop = 0;
     }
 
-    
+
 function updateOrderStatus(orderId, status) {
   $.ajax({
     url: '/admin/update-order-status',
