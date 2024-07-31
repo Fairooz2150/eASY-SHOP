@@ -35,15 +35,15 @@
                 </div>
                 {{/ifEquals}}
               </div>
-              <div class="row mb-2">
-                <div class="ml-3 mt-2">
+              <div class="row ml-1 mb-2" >
+                <div class="mt-2">
                   <p class="card-text" title="Offer percentage" id="offer-percentage"><b> {{this.Offer_Percentage}}%
                     </b><small>off</small></p>
                 </div>
-                <div class="ml-3 ">
+                <div class="ml-1 ">
                   <b class="card-text" title="Offer price" id="offer-price">{{this.Offer_Price}}</b>
                 </div>
-                <div class="ml-3 mt-2">
+                <div class="ml-1 mt-2">
                   <p class="card-text text-muted" id="actualPrice" title="M.R.P."><small><del
                         id="actual-price">{{this.Actual_Price}}</del></small></p>
                 </div>
@@ -52,7 +52,7 @@
 
           <p hidden>{{this.Description}}</p>
           {{#if (gt this.Stock_Count 0)}}
-          <button onclick="addToCart('{{this._id}}')" class="btn" id="addtoCart" title="Add to Cart">Add to
+          <button onclick="addToCart('{{this._id}}')" class="btn " id="addtoCart" title="Add to Cart">Add to
             cart</button>
           {{else}}
           <button class="btn" id="out0fStock" title="Out of Stock">Out of Stock</button>
@@ -322,8 +322,9 @@
   .card {
     box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
     width: 14em;
-    height: 22.2em
+    height: 22em
   }
+  
 
   .card:hover {
     box-shadow: 0 2px 18px rgba(19, 111, 139, 0.5);
@@ -382,6 +383,7 @@
     cursor: pointer;
     position: relative;
     overflow: hidden;
+   
   }
 
   #addtoCart:hover {
