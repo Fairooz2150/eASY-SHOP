@@ -4,7 +4,6 @@ const fs = require('fs');
 const path = require('path');
 const adminHelpers = require('../helpers/admin-helpers');
 const productHelpers = require('../helpers/product-helpers');
-const { log } = require('console');
 
 /* verify Admin login */
 const verifyLogin = (req, res, next) => { 
@@ -120,6 +119,7 @@ router.post('/update-order-status', (req, res) => {
 });
 
 
+/* Get the all Users */
 router.get('/all-users', verifyLogin, (req, res) => {
   adminHelpers.getAllUsers().then((users) => {
     res.render('admin/all-users', { admin: true, users: users });
@@ -129,6 +129,8 @@ router.get('/all-users', verifyLogin, (req, res) => {
   });
 });
 
+
+/* Delete User by Admin */
 router.delete('/delete-user/:id', verifyLogin, (req, res) => {
   let userId = req.params.id
   adminHelpers.deleteUser(userId).then((response) => {
@@ -138,6 +140,17 @@ router.delete('/delete-user/:id', verifyLogin, (req, res) => {
     res.json({ success: false });
   });
 })
+
+/* Get all messages from eASY SHOP */
+router.get('/all-messages', verifyLogin, (req, res) => {
+  adminHelpers.getAllMessages().then((messages) => {
+    console.log('messagess:',messages);
+    res.render('admin/all-messages', { admin: true, messages });
+  }).catch((error) => {
+    console.error("Error fetching messages:", error);
+    res.status(500).send("Error fetching messages");
+  });
+});
 
 
 /*GET Add Product page*/

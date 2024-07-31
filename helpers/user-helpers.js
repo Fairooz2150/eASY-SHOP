@@ -593,6 +593,11 @@ module.exports = {
     //upload user message 
     uploadMsg: (message)=>{
         return new Promise(async (resolve, reject) => {
+            let Date = moment().format('DD MMM YYYY');
+            let Time = moment().format('hh:mmA');
+            message.Date=Date;
+            message.Time=Time;
+            
             await db.get().collection(collection.MESSAGE_COLLECTION).insertOne(message).then(()=>{
                 resolve();
             }).catch((error)=>{

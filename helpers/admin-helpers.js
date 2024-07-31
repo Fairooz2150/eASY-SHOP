@@ -143,8 +143,6 @@ module.exports={
             });
         });
     },
-    
-
 
     updateUserProdStatus : (Id, Status) => {
         return new Promise((resolve, reject) => {
@@ -197,8 +195,7 @@ module.exports={
                 reject(err);
             });
         });
-    },
-    
+    },   
 
   getAllOrdersAscending: () => {
     return new Promise((resolve, reject) => {
@@ -218,5 +215,16 @@ module.exports={
         reject(error);
       });
     });
-  }
+  },
+
+  getAllMessages: () => {
+    return new Promise(async(resolve, reject) => {
+        await db.get().collection(collection.MESSAGE_COLLECTION).find().toArray().then((messages) => {
+        resolve(messages);
+      }).catch((error) => {
+        reject(error);
+      });
+    });
+  },
+  
       }
