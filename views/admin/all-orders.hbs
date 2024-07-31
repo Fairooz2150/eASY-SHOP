@@ -44,6 +44,7 @@
               <p class="card-text"><b>Order Status: </b> <span id="status-{{this._id}}">{{this.status}}</span></p>
             </div>
 
+
             <address class="address" title="Deliver to">
               <b> Ship To:</b>
               <br><b title="Recipient">{{this.deliveryDetails.name}}</b>
@@ -58,6 +59,7 @@
               <br> <a href="tel:+91{{this.deliveryDetails.mobile}}" title="Call">
                 <i class="bi bi-telephone"></i> {{this.deliveryDetails.mobile}} </a>
             </address>
+
 
             <div class="status-image">
               {{#ifEquals this.status 'placed'}}
@@ -84,6 +86,7 @@
             </div>
 
           </div>
+
           <div>
             {{#each products}}
             <table class="table mt-5" id="productsTable">
@@ -95,45 +98,60 @@
                   <th scope="col">Quantity</th>
                 </tr>
               </thead>
+
               <tbody>
                 <tr>
                   <th scope="row">{{incrementedIndex @index}}</th>
+
                   <td>
-                    <div class="row">
-                      <div>
-                        <img src="/product-images/{{this.item}}_0.jpg" alt="Image not available"
-                          onerror="this.onerror=null; this.src='/images/no-images-available.png';"
-                          class="product_image">
+                    <a href="/view-product/{{this.item}}">
+                      <div class="row">
+                        <div>
+                          <img src="/product-images/{{this.item}}_0.jpg" alt="Image not available"
+                            onerror="this.onerror=null; this.src='/images/no-images-available.png';"
+                            class="product_image m-2">
+                        </div>
+
+                        <div class="product_details ml-2">
+                          <b title="Product Name" class="title">{{this.productName}}</b> <br>
+                          <span title="Category" class="category">{{this.category}}</span> <br>
+                          <span class="text-muted" title="Priduct ID"> Product Id {{this.item}}</span>
+                        </div>
                       </div>
-                      <div class="product_details">
-                        {{this.productName}} <br>
-                        <div class="text-muted"> Product Id {{this.item}}</div>
-                      </div>
-                    </div>
+                    </a>
                   </td>
+
                   <td><span id="Price">{{this.price}}</span></td>
+
                   <td>{{this.quantity}}</td>
+
                 </tr>
               </tbody>
             </table>
             {{/each}}
           </div>
         </div>
+
         <div class="card-footer">
           <div class="footer-content">
-            <div class="total">Total: <span id="Price">{{this.totalAmount}}</span></div>
-            <div id="action-buttons-{{this._id}}" class="ship">
+
+            <div class="total"><b>Total: </b><span id="Price">{{this.totalAmount}}</span></div>
+
+            <div id="action-buttons-{{this._id}}" class="actions">
               {{#ifEquals this.status 'placed'}}
-              <button onclick="updateOrderStatus('{{this._id}}', 'Shipped')" class="btn btn-primary">Ship</button>
+              <button onclick="updateOrderStatus('{{this._id}}', 'Shipped')" class="btn ">Shipped</button>
               {{/ifEquals}}
               {{#ifEquals this.status 'Shipped'}}
-              <button onclick="updateOrderStatus('{{this._id}}', 'Delivered')" class="btn btn-primary">Deliver</button>
+              <button onclick="updateOrderStatus('{{this._id}}', 'Delivered')" class="btn ">Delivered</button>
               {{/ifEquals}}
             </div>
+
           </div>
         </div>
+
       </div>
       {{/each}}
+
     </div>
   </div>
 
@@ -141,12 +159,22 @@
   <div id="back-top">
     <button title="Go to Top" onclick="topFunction()" id="topBtn"> <i class="bi bi-arrow-up-circle-fill"></i> </button>
   </div>
+  
+   <!-- Confirmation Modal -->
+  <div id="confirmationModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <p id="modalMessage">Are you sure?</p>
+      <button id="confirmRemove" class="btn ">Yes</button>
+      <button id="cancelRemove" class="btn ">Cancel</button>
+    </div>
+  </div>
 
 </section>
 
 <script>
 
-  // Function to format number with commas
+  /* Function to format number with commas */
   function formatNumber(number) {
     return number.toLocaleString('en-IN'); // 'en-IN' for Indian number formatting 
   }
@@ -164,7 +192,7 @@
   });
 
 
-  // Get the button for go to top
+  /* Get the button for go to top */
   let mybutton = document.getElementById("topBtn");
 
   // When the user scrolls down 20px from the top of the document, show the button
@@ -184,15 +212,64 @@
     document.documentElement.scrollTop = 0;
   }
 
+  
+  /* Function to show the confirmation modal */
+  function showConfirmationModal(message, confirmCallback) {
+    // Get the modal
+    var modal = document.getElementById("confirmationModal");
 
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // Get the confirm and cancel buttons
+    var confirmButton = document.getElementById("confirmRemove");
+    var cancelButton = document.getElementById("cancelRemove");
+
+    // Set the modal message
+    const modalMessage = document.getElementById('modalMessage');
+    
+    // Apply the message with styled productName
+    modalMessage.innerHTML = message;
+   
+
+    // Show the modal
+    modal.style.display = "block";
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+      modal.style.display = "none";
+    }
+
+    // When the user clicks on confirm button
+    confirmButton.onclick = function () {
+      modal.style.display = "none";
+      confirmCallback();
+    }
+
+    // When the user clicks on cancel button
+    cancelButton.onclick = function () {
+      modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+  }
+  
+
+  /* Update Order Status */
   function updateOrderStatus(orderId, status) {
+      showConfirmationModal(`Order status updated to <b>${status}</b>`, function() {
     $.ajax({
       url: '/admin/update-order-status',
       method: 'POST',
       data: { orderId: orderId, status: status },
       success: function (response) {
         if (response.success) {
-          alert(`Order status updated to ${status}`);
+         
           document.getElementById('status-' + orderId).innerText = status;
 
           // Update button text and behavior
@@ -201,7 +278,7 @@
 
           if (status === 'Shipped') {
             // Change Ship button to Deliver button
-            shipButton.innerText = 'Deliver';
+            shipButton.innerText = 'Delivered';
             shipButton.setAttribute('onclick', `updateOrderStatus('${orderId}', 'Delivered')`);
             deliverButton.style.display = 'none';
           } else if (status === 'Delivered') {
@@ -217,6 +294,7 @@
         alert('An error occurred while updating the order status');
       }
     });
+     });
   }
 
 
@@ -243,21 +321,18 @@
     font-weight: bold;
   }
 
-
-  .product_image {
-    height: 120px;
-    width: 130px;
-    box-shadow: 0 4px 12px rgba(21, 105, 131, 0.5);
-  }
-
   .card {
     margin-top: 65px;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 50px;
+    box-shadow: 0 14px 16px rgba(21, 105, 131, 0.5);
   }
 
-  .payment-header {
-    font-weight: bold;
+  .card-header {
+    background-color: #278a9b96;
+    color: white;
   }
-
 
   .chip {
     display: inline-block;
@@ -267,6 +342,9 @@
     line-height: 50px;
     border-radius: 25px;
     background-color: #f1f1f1;
+    color: #309db0;
+    font-weight: 500;
+    font-size: large;
   }
 
   .chip img {
@@ -284,14 +362,9 @@
     width: 100%;
   }
 
-
-  .status-image p {
-    text-align: center;
-  }
-
-  .status-image img {
-    height: 250px;
-    width: 20em;
+  .date,
+  .payment {
+    padding: 0 15px;
   }
 
   .orderInfo {
@@ -304,11 +377,52 @@
 
   }
 
+  .status-image p {
+    text-align: center;
+  }
+
+  .status-image img {
+    height: 250px;
+    width: 20em;
+  }
+
+  .product_image {
+    width: 8em;
+    height: 7em;
+  }
+
+  .title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    max-width: 35em;
+    min-width: 8em;
+    font-size: large;
+  }
+
+  .title:hover {
+    color: rgb(40, 155, 155);
+  }
+
+  .category {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    max-width: 35em;
+    min-width: 8em;
+  }
 
   .card-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: #278a9b96;
+    color: white;
+    height: 4em;
   }
 
   .footer-content {
@@ -316,29 +430,32 @@
     width: 100%;
     justify-content: space-between;
     align-items: center;
+    font-size: large;
   }
 
-  .ship {
+  .actions {
     margin-left: auto;
   }
 
-  .btn-primary {
-    margin: 0;
+  .actions button {
+    background-color: white;
+    color: #278a9b;
+    font-weight: bold;
+    width: 6em;
+    border-radius: 20px;
+    box-shadow: 0 6px 10px rgba(49, 133, 158, 0.5);
+    transition: all 0.3s ease;
   }
 
-  .date,
-  .payment {
-    padding: 0 15px;
+  .actions button:hover {
+    color: #278a9b;
+    transform: scale(1.1);
   }
 
   .total {
     margin-left: auto;
-  }
 
-  .product_details {
-    margin-left: 10px;
   }
-
 
   #topBtn {
     display: none;
@@ -359,5 +476,82 @@
   #topBtn:hover {
     background-image: linear-gradient(to top, #309db0, rgb(71, 172, 209));
     box-shadow: 0 2px 18px rgba(13, 89, 112, 0.5);
+  }
+  
+   /* The Modal (background) */
+  .modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+  }
+
+  /* Modal Content/Box */
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    /* 15% from the top and centered */
+    padding: 20px;
+    border-radius: 10px; 
+    box-shadow: 0 0 20px rgba(18, 155, 150, 0.5);
+    width: 80%;
+    /* Could be more or less, depending on screen size */
+    max-width: 400px;
+    /* Maximum width */
+    text-align: center;
+  }
+
+  /* The Close Button */
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: rgb(6, 51, 53);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  #confirmRemove {
+    padding: 10px 20px;
+    margin: 10px;
+    background-image: linear-gradient(to left, #f07b0d, rgb(245, 157, 64));
+    color: white;
+    border: none;
+    border-radius: 20px;
+  }
+  #cancelRemove{
+    padding: 10px 20px;
+    margin: 10px;
+    background-image: linear-gradient(to left, #309db0, rgb(71, 172, 209));
+    color: white;
+    border: none;
+    border-radius: 20px;
+  }
+   #cancelRemove:hover{
+    background-image: linear-gradient(to right, #309db0, rgb(71, 172, 209));
+    color: white;
+  }
+  #confirmRemove:hover{
+   background-image: linear-gradient(to right, #f07b0d, rgb(245, 157, 64));
+    color: white;
   }
 </style>
