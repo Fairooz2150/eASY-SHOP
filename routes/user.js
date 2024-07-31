@@ -115,9 +115,18 @@ router.post('/login', async (req, res) => {
 
     // Merge session cart with user's cart
     const sessionCart = req.session.cart || [];
+ 
     for (let productId of sessionCart) {
-      await userHelpers.addToCart(productId, response.user._id);
+      let product = await productHelpers.getProductDetails(productId); 
+      // Check if the product is still available
+      if (product === null) { 
+        continue; // Skip the rest of this iteration and continue with the next one
+      } else {
+        await userHelpers.addToCart(productId, response.user._id);
+        //if the product was still available, add to Cart from Session Cart
+      }
     }
+    
     delete req.session.cart; // Clear session cart
 
     const returnTo = req.session.returnTo || '/'; // Default to home if no return URL

@@ -144,6 +144,11 @@ module.exports={
                   Status:'Removed'
                 }
             })
+            
+            await db.get().collection(collection.CART_COLLECTION).updateMany(
+              {},
+              { $pull: { products: { item: objectId(prodId) } } }
+          );
               resolve(response)
             
             }).catch((err) => {
