@@ -113,6 +113,7 @@ module.exports={
                         'userDetails.First_Name': 1,
                         'userDetails.Last_Name': 1,
                         'userDetails.Email': 1,
+                        'userDetails.Gender': 1,
                         deliveryDetails: 1,
                         products: 1
                     }

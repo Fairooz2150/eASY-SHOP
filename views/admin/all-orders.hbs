@@ -1,16 +1,29 @@
 <section>
-  <div class="container">
+  <div class="container mb-5">
     <h2 class="main-heading">All Orders</h2>
     <div id="orders-container">
-      
+
       {{#each orders}}
       <div class="card">
+
         <div class="card-header">
-          <div class="row header-content">
+
+          <div class="row header-content" title="Placed by:">
+
             <div class="chip">
-              <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Person" width="96" height="96">
+              {{#ifEquals this.userDetails.Gender 'Male'}}
+              <img src="/images/male-icon.jpg" alt="Male Icon">
+              {{else}}
+              {{#ifEquals this.userDetails.Gender 'Female'}}
+              <img src="/images/female-icon.jpg" alt="Female Icon">
+              {{else}}
+              <img src="/images/trans-icon.jpg" alt="Trans Icon">
+              {{/ifEquals}}
+              {{/ifEquals}}
+
               {{this.userDetails.First_Name}} {{this.userDetails.Last_Name}}
             </div>
+
             <div class="date">
               <b> Date: </b> {{this.date}} <br>
               <b> Time: </b> {{this.time}}
@@ -21,17 +34,55 @@
             </div>
           </div>
         </div>
+
         <div class="card-body">
-          <div class="row">
-            <div class="orderid">
+          <div class="row ml-2">
+
+            <div class="orderInfo">
               <p class="card-text"><b>Order Id: </b><br> {{this._id}}</p>
+              <p class="card-text"><b>User Id: </b><br> {{this.userDetails._id}}</p>
               <p class="card-text"><b>Order Status: </b> <span id="status-{{this._id}}">{{this.status}}</span></p>
             </div>
-            <div class="address">
-              <b> Address:</b><br>{{newlineToBr this.deliveryDetails.address}}
-              <br> {{this.deliveryDetails.pincode}}
-              <br> {{this.deliveryDetails.mobile}}
+
+            <address class="address" title="Deliver to">
+              <b> Ship To:</b>
+              <br><b title="Recipient">{{this.deliveryDetails.name}}</b>
+
+              <br> <span title="Home Address">{{newlineToBr this.deliveryDetails.address}},</span>
+
+              <br> <span title="District">{{this.deliveryDetails.district}} </span>
+              <span title="Pincode">{{this.deliveryDetails.pincode}},</span>
+
+              <br> <span title="State">{{this.deliveryDetails.state}}</span>
+
+              <br> <a href="tel:+91{{this.deliveryDetails.mobile}}" title="Call">
+                <i class="bi bi-telephone"></i> {{this.deliveryDetails.mobile}} </a>
+            </address>
+
+            <div class="status-image">
+              {{#ifEquals this.status 'placed'}}
+              <img src="/images/order-placed.png" alt="Order Placed">
+              <p>Order Received!</p>
+              {{else}}
+
+              {{#ifEquals this.status 'pending'}}
+              <img src="/images/order-pending.png" alt="Order Pending">
+              <p>Payment Issue!</p>
+              {{else}}
+
+              {{#ifEquals this.status 'Shipped'}}
+              <img src="/images/deliver-soon.png" alt="Order Shipped">
+              <p>Order Shipped!</p>
+              {{else}}
+
+              <img src="/images/order-delivered.png" alt="Order Delivered">
+              <p>Order Delivered!</p>
+
+              {{/ifEquals}}
+              {{/ifEquals}}
+              {{/ifEquals}}
             </div>
+
           </div>
           <div>
             {{#each products}}
@@ -50,8 +101,9 @@
                   <td>
                     <div class="row">
                       <div>
-                        <img src="/product-images/{{this.item}}_0.jpg"  alt="Image not available"
-                        onerror="this.onerror=null; this.src='/images/no-images-available.png';" class="product_image">
+                        <img src="/product-images/{{this.item}}_0.jpg" alt="Image not available"
+                          onerror="this.onerror=null; this.src='/images/no-images-available.png';"
+                          class="product_image">
                       </div>
                       <div class="product_details">
                         {{this.productName}} <br>
@@ -72,10 +124,10 @@
             <div class="total">Total: <span id="Price">{{this.totalAmount}}</span></div>
             <div id="action-buttons-{{this._id}}" class="ship">
               {{#ifEquals this.status 'placed'}}
-                <button onclick="updateOrderStatus('{{this._id}}', 'Shipped')" class="btn btn-primary">Ship</button>
+              <button onclick="updateOrderStatus('{{this._id}}', 'Shipped')" class="btn btn-primary">Ship</button>
               {{/ifEquals}}
               {{#ifEquals this.status 'Shipped'}}
-                <button onclick="updateOrderStatus('{{this._id}}', 'Delivered')" class="btn btn-primary">Deliver</button>
+              <button onclick="updateOrderStatus('{{this._id}}', 'Delivered')" class="btn btn-primary">Deliver</button>
               {{/ifEquals}}
             </div>
           </div>
@@ -85,106 +137,105 @@
     </div>
   </div>
 
-     <!-- Scroll Up -->
-  <div id="back-top" >
-        <button  title="Go to Top" onclick="topFunction()" id="topBtn"> <i class="bi bi-arrow-up-circle-fill"></i> </button>
-    </div>
+  <!-- Scroll Up -->
+  <div id="back-top">
+    <button title="Go to Top" onclick="topFunction()" id="topBtn"> <i class="bi bi-arrow-up-circle-fill"></i> </button>
+  </div>
 
 </section>
 
 <script>
 
   // Function to format number with commas
-    function formatNumber(number) {
-      return number.toLocaleString('en-IN'); // 'en-IN' for Indian number formatting 
-    }
+  function formatNumber(number) {
+    return number.toLocaleString('en-IN'); // 'en-IN' for Indian number formatting 
+  }
 
   // format offer price number with commas
-     document.addEventListener('DOMContentLoaded', function() {
-      const Prices = document.querySelectorAll('#Price');
-      Prices.forEach(element => {
-        const priceString = element.textContent.trim();
-        const price = parseFloat(priceString.replace(/[^\d.-]/g, ''));
-        if (!isNaN(price)) {
-          element.textContent = '₹' + formatNumber(price);
-        }
-      });
+  document.addEventListener('DOMContentLoaded', function () {
+    const Prices = document.querySelectorAll('#Price');
+    Prices.forEach(element => {
+      const priceString = element.textContent.trim();
+      const price = parseFloat(priceString.replace(/[^\d.-]/g, ''));
+      if (!isNaN(price)) {
+        element.textContent = '₹' + formatNumber(price);
+      }
     });
-
-
-      // Get the button for go to top
-    let mybutton = document.getElementById("topBtn");
-
-    // When the user scrolls down 20px from the top of the document, show the button
-    window.onscroll = function() {scrollFunction()};
-
-    function scrollFunction() {
-      if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-        mybutton.style.display = "block";
-      } else {
-        mybutton.style.display = "none";
-      }
-    }
-
-    // When the user clicks on the button, scroll to the top of the document
-    function topFunction() {
-      document.body.scrollTop = 0;
-      document.documentElement.scrollTop = 0;
-    }
-
-
-function updateOrderStatus(orderId, status) {
-  $.ajax({
-    url: '/admin/update-order-status',
-    method: 'POST',
-    data: { orderId: orderId, status: status },
-    success: function(response) {
-      if (response.success) {
-        alert(`Order status updated to ${status}`);
-        document.getElementById('status-' + orderId).innerText = status;
-
-        // Update button text and behavior
-        var shipButton = document.querySelector(`#action-buttons-${orderId} button[onclick*="updateOrderStatus('${orderId}', 'Shipped')"]`);
-        var deliverButton = document.querySelector(`#action-buttons-${orderId} button[onclick*="updateOrderStatus('${orderId}', 'Delivered')"]`);
-        
-        if (status === 'Shipped') {
-          // Change Ship button to Deliver button
-          shipButton.innerText = 'Deliver';
-          shipButton.setAttribute('onclick', `updateOrderStatus('${orderId}', 'Delivered')`);
-          deliverButton.style.display = 'none';
-        } else if (status === 'Delivered') {
-          // Hide Deliver button after updating status to Delivered
-          deliverButton.style.display = 'none';
-        }
-      } else {
-        alert('Failed to update order status');
-      }
-    },
-    error: function(error) {
-      console.error('Error:', error);
-      alert('An error occurred while updating the order status');
-    }
   });
-}
+
+
+  // Get the button for go to top
+  let mybutton = document.getElementById("topBtn");
+
+  // When the user scrolls down 20px from the top of the document, show the button
+  window.onscroll = function () { scrollFunction() };
+
+  function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+      mybutton.style.display = "block";
+    } else {
+      mybutton.style.display = "none";
+    }
+  }
+
+  // When the user clicks on the button, scroll to the top of the document
+  function topFunction() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+  }
+
+
+  function updateOrderStatus(orderId, status) {
+    $.ajax({
+      url: '/admin/update-order-status',
+      method: 'POST',
+      data: { orderId: orderId, status: status },
+      success: function (response) {
+        if (response.success) {
+          alert(`Order status updated to ${status}`);
+          document.getElementById('status-' + orderId).innerText = status;
+
+          // Update button text and behavior
+          var shipButton = document.querySelector(`#action-buttons-${orderId} button[onclick*="updateOrderStatus('${orderId}', 'Shipped')"]`);
+          var deliverButton = document.querySelector(`#action-buttons-${orderId} button[onclick*="updateOrderStatus('${orderId}', 'Delivered')"]`);
+
+          if (status === 'Shipped') {
+            // Change Ship button to Deliver button
+            shipButton.innerText = 'Deliver';
+            shipButton.setAttribute('onclick', `updateOrderStatus('${orderId}', 'Delivered')`);
+            deliverButton.style.display = 'none';
+          } else if (status === 'Delivered') {
+            // Hide Deliver button after updating status to Delivered
+            deliverButton.style.display = 'none';
+          }
+        } else {
+          alert('Failed to update order status');
+        }
+      },
+      error: function (error) {
+        console.error('Error:', error);
+        alert('An error occurred while updating the order status');
+      }
+    });
+  }
 
 
 </script>
 
 <style>
-
-    a {
+  a {
     color: black;
     text-decoration: none;
     /* Remove underline by default */
   }
 
   a:hover {
-   color: #309db0;
+    color: #309db0;
     text-decoration: none;
     /* Ensure underline does not appear on hover */
   }
 
-  .main-heading{
+  .main-heading {
     text-align: center;
     margin-top: 30px;
     font-family: 'Times New Roman', Times, serif;
@@ -192,101 +243,121 @@ function updateOrderStatus(orderId, status) {
     font-weight: bold;
   }
 
-  
-  .product_image{
+
+  .product_image {
     height: 120px;
     width: 130px;
-     box-shadow: 0 4px 12px rgba(21, 105, 131, 0.5);
+    box-shadow: 0 4px 12px rgba(21, 105, 131, 0.5);
   }
-    .card {
-      margin-top: 65px;
-    }
 
-    .payment-header {
-      font-weight: bold;
-    }
+  .card {
+    margin-top: 65px;
+  }
 
-    .address {
-      margin-left: 5rem;
-    }
-
-    .chip {
-      display: inline-block;
-      padding: 0 25px;
-      height: 50px;
-      font-size: 16px;
-      line-height: 50px;
-      border-radius: 25px;
-      background-color: #f1f1f1;
-    }
-  
-    .chip img {
-      float: left;
-      margin: 0 10px 0 -25px;
-      height: 50px;
-      width: 50px;
-      border-radius: 50%;
-    }
-
-    .header-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-    }
-
-    .card-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .footer-content {
-      display: flex;
-      width: 100%;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .ship {
-      margin-left: auto;
-    }
-
-    .btn-primary {
-      margin: 0;
-    }
-
-    .date, .payment {
-      padding: 0 15px;
-    }
-    .total{
-      margin-left: auto;
-    }
-    .product_details{
-      margin-left: 10px;
-    }
-
-    
-    #topBtn {
-      display: none;
-      position: fixed;
-      bottom: 40px;
-      right: 30px;
-      z-index: 99;
-      font-size: 25px;
-      border: none;
-      outline: none;
-      border-radius: 50%;
-      color: white;
-      background-image: linear-gradient(to bottom, #309db0, rgb(71, 172, 209));
-       cursor: pointer;
-       box-shadow: 0 2px 12px rgba(21, 105, 131, 0.5);
-    }
-
-    #topBtn:hover {
-      background-image: linear-gradient(to top, #309db0, rgb(71, 172, 209));
-      box-shadow: 0 2px 18px rgba(13, 89, 112, 0.5);
-    }
-  </style>
+  .payment-header {
+    font-weight: bold;
+  }
 
 
+  .chip {
+    display: inline-block;
+    padding: 0 25px;
+    height: 50px;
+    font-size: 16px;
+    line-height: 50px;
+    border-radius: 25px;
+    background-color: #f1f1f1;
+  }
+
+  .chip img {
+    float: left;
+    margin: 0 10px 0 -25px;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+  }
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+
+  .status-image p {
+    text-align: center;
+  }
+
+  .status-image img {
+    height: 250px;
+    width: 20em;
+  }
+
+  .orderInfo {
+    width: 20em;
+
+  }
+
+  .address {
+    width: 25em;
+
+  }
+
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-content {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .ship {
+    margin-left: auto;
+  }
+
+  .btn-primary {
+    margin: 0;
+  }
+
+  .date,
+  .payment {
+    padding: 0 15px;
+  }
+
+  .total {
+    margin-left: auto;
+  }
+
+  .product_details {
+    margin-left: 10px;
+  }
+
+
+  #topBtn {
+    display: none;
+    position: fixed;
+    bottom: 60px;
+    right: 30px;
+    z-index: 99;
+    font-size: 25px;
+    border: none;
+    outline: none;
+    border-radius: 50%;
+    color: white;
+    background-image: linear-gradient(to bottom, #309db0, rgb(71, 172, 209));
+    cursor: pointer;
+    box-shadow: 0 2px 12px rgba(21, 105, 131, 0.5);
+  }
+
+  #topBtn:hover {
+    background-image: linear-gradient(to top, #309db0, rgb(71, 172, 209));
+    box-shadow: 0 2px 18px rgba(13, 89, 112, 0.5);
+  }
+</style>

@@ -99,6 +99,26 @@ router.post('/update-user-products-status', (req, res) => {
 })
 
 
+/* GET All Users orders */
+router.get('/all-orders', verifyLogin, (req, res) => {
+  adminHelpers.getAllOrders().then((orders) => {
+    res.render('admin/all-orders', { admin: true, orders })
+  })
+})
+
+
+/* Update User Order Status */
+router.post('/update-order-status', (req, res) => {
+  let { orderId, status } = req.body;
+  adminHelpers.updateOrderStatus(orderId, status).then(() => {
+    res.json({ success: true });
+  }).catch((err) => {
+    console.error('Error updating order status:', err);
+    res.json({ success: false });
+  });
+});
+
+
 router.get('/all-users', verifyLogin, (req, res) => {
   adminHelpers.getAllUsers().then((users) => {
     res.render('admin/all-users', { admin: true, users: users });
@@ -116,13 +136,6 @@ router.delete('/delete-user/:id', verifyLogin, (req, res) => {
     console.error('Error deleting user:', err);
     res.json({ success: false });
   });
-})
-
-
-router.get('/all-orders', verifyLogin, (req, res) => {
-  adminHelpers.getAllOrders().then((orders) => {
-    res.render('admin/all-orders', { admin: true, orders })
-  })
 })
 
 
@@ -298,17 +311,6 @@ router.post('/edit-image', verifyLogin, (req, res) => {
     }
 
     res.sendStatus(200);
-  });
-});
-
-
-router.post('/update-order-status', (req, res) => {
-  let { orderId, status } = req.body;
-  adminHelpers.updateOrderStatus(orderId, status).then(() => {
-    res.json({ success: true });
-  }).catch((err) => {
-    console.error('Error updating order status:', err);
-    res.json({ success: false });
   });
 });
 
