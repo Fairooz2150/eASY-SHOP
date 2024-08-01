@@ -253,7 +253,7 @@
 
 
   function updateUserProdStatus(Id, Status) {
-      showConfirmationModal(`User Product status updated to <span style="font-weight:bold">${Status}</span>`, function() {
+      showConfirmationModal(`User Product status updated to <b>${Status}</b>`, function() {
     $.ajax({
       url: '/admin/update-user-products-status',
       method: 'POST',

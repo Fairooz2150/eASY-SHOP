@@ -262,7 +262,7 @@
 
   /* Update Order Status */
   function updateOrderStatus(orderId, status) {
-      showConfirmationModal(`Order status updated to <b>${status}</b>`, function() {
+      showConfirmationModal(`Do you want to update the order status for <b>${status}</b>`, function() {
     $.ajax({
       url: '/admin/update-order-status',
       method: 'POST',
