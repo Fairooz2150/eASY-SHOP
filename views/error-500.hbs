@@ -1,33 +1,44 @@
-<section class="page_500">
-    <div class="container-fluid mt-2">
+<section class="page_500 ">
+    <div class="container-fluid ">
+
 
         <div class="error">
-            <span class='error-num'>5</span>
-            <div class='eye'></div>
-            <div class='eye'></div>
+            <span class='error-num '>5</span>
+            <div class='eye '></div>
+            <div class='eye '></div>
             <p class='sub-text'>Oh eyeballs! Something went wrong. We're <i>looking</i> to see what happened.</p>
-            <a href='javascript:history.back()' class="toHome">Go back</a>
+            <a href='javascript:history.back()' class="toBack">Go Back</a>
         </div>
+
+        <img src="/images/error-500.png" alt="Server Repair" class="image mt-2">
+
+
 
     </div>
 </section>
 
 <style>
     .page_500 {
-        background-image: linear-gradient(to bottom, rgb(46, 142, 171),rgb(147, 194, 214)) ;
-        
+        background: #d8f0f6e1;
+        background-position: center;
         height: 100vh;
-        color: white;
+        width: 100%;
         font-family: 'Arial Black';
         text-align: center;
         display: flex;
         justify-content: center;
-        align-items: center;
+        overflow: hidden;
+    }
 
+    .image {
+        width: 30em;
+        
     }
 
     .error-num {
         font-size: 8em;
+        color: #fff;
+        text-shadow: 0 6px 10px rgba(21, 105, 131, 0.5);
     }
 
     .eye {
@@ -37,6 +48,7 @@
         height: 100px;
         position: relative;
         width: 100px;
+        box-shadow: 0 6px 10px rgba(21, 105, 131, 0.5);
     }
 
     .eye::after {
@@ -48,20 +60,24 @@
         position: absolute;
         right: 33px;
         width: 33px;
+
     }
 
     .sub-text {
         margin-bottom: 4em;
+        color: rgb(63, 173, 198);
+
     }
 
-    .toHome {
-        color: white;
+    .toBack {
+        color: rgb(63, 173, 198);
         text-decoration: none;
         text-transform: uppercase;
     }
 
-    .toHome:hover {
-        color: lightgray;
+    .toBack:hover {
+        color: rgba(117, 204, 201, 0.91);
+        text-decoration: none;
     }
 </style>
 

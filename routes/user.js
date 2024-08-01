@@ -34,7 +34,7 @@ router.get('/', async function (req, res, next) {
 
     try {
       let products = await productHelpers.getAllProducts();
-      res.render('error-404', { products, user, cartCount, search: true });
+      res.render('product/view-products', { products, user, cartCount, search: true });
     } catch (err) {
       console.error(err);
       res.render('user/empty/empty-shop', { user, cartCount });
@@ -70,7 +70,7 @@ router.get('/view-product/:id', async (req, res) => {
 
 /* Route Signup page. */
 router.get('/signup', (req, res) => {
-  res.render('user/signup',{hide:true});
+  res.render('error-500',{hide:true});
 });
 
 
