@@ -108,8 +108,14 @@ app.use(function (req, res, next) {
 app.use(function (err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-  res.status(err.status || 500);
-  res.render('error');
+
+  console.error(err);
+  // Render specific error pages based on the status code
+  if (err.status === 404) {
+    res.status(404).render('error-404');
+  } else {
+    res.status(err.status || 500).render('error-500');
+  }
 });
 
 module.exports = app;
