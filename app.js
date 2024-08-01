@@ -112,9 +112,9 @@ app.use(function (err, req, res, next) {
   console.error(err);
   // Render specific error pages based on the status code
   if (err.status === 404) {
-    res.status(404).render('error-404');
+    res.status(404).render('error-404',{hide:true});
   } else {
-    res.status(err.status || 500).render('error-500');
+    res.status(err.status || 500).render('error-500',{hide:true});
   }
 });
 

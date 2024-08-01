@@ -70,7 +70,7 @@ router.get('/view-product/:id', async (req, res) => {
 
 /* Route Signup page. */
 router.get('/signup', (req, res) => {
-  res.render('user/signup');
+  res.render('user/signup',{hide:true});
 });
 
 
@@ -99,7 +99,7 @@ router.get('/login', (req, res) => {
     res.redirect('/')
   }
   else {
-    res.render('user/login')
+    res.render('user/login',{hide:true})
     req.session.userLoginErr = false
   }
 })
@@ -179,7 +179,7 @@ router.get('/message', async (req, res) => {
       cartCount = req.session.cart.length
     }
   }
-  res.render('user/message', { cartCount,user })
+  res.render('user/message', { cartCount,user,hide:true })
 })
 
 
