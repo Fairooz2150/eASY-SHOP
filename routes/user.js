@@ -31,14 +31,16 @@ router.get('/', async function (req, res, next) {
         cartCount = req.session.cart.length;
       }
     }
-
-    try {
+    
       let products = await productHelpers.getAllProducts();
-      res.render('product/view-products', { products, user, cartCount, search: true });
-    } catch (err) {
-      console.error(err);
-      res.render('user/empty/empty-shop', { user, cartCount });
-    }
+      if(products.length === 0){
+        res.render('user/empty/empty-shop', { user, cartCount });
+        
+      }else{
+        res.render('product/view-products', { products, user, cartCount, search: true });
+      }
+     
+
   } catch (err) {
     console.error(err);
     res.status(500).send('Internal Server Error');
@@ -70,7 +72,7 @@ router.get('/view-product/:id', async (req, res) => {
 
 /* Route Signup page. */
 router.get('/signup', (req, res) => {
-  res.render('error-500',{hide:true});
+  res.render('user/signup',{hide:true});
 });
 
 

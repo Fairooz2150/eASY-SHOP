@@ -40,12 +40,12 @@
                   <p class="card-text" title="Offer percentage" id="offer-percentage"><b> {{this.Offer_Percentage}}%
                     </b><small>off</small></p>
                 </div>
-                <div class="ml-1 mt-1">
+                <div class="ml-2 ">
                   <b class="card-text" title="Offer price" id="offer-price">{{this.Offer_Price}}</b>
                 </div>
-                <div class="ml-2 mt-2">
-                  <p class="card-text text-muted" id="actualPrice" title="M.R.P."><small><del
-                        id="actual-price">{{this.Actual_Price}}</del></small></p>
+                <div class="ml-1 mt-2">
+                  <p class="card-text text-muted" id="actualPrice" title="M.R.P."><small><small><del
+                        id="actual-price">{{this.Actual_Price}}</del></small></small></p>
                 </div>
               </div>
           </a>
@@ -255,6 +255,7 @@
   function displaySearchResults(products) {
     const productContainer = document.getElementById('product-container');
     productContainer.innerHTML = ''; // Clear previous results
+    
     if (products.length === 0) {
       productContainer.innerHTML = `
         <div class="d-flex justify-content-center pb-5 col-12">
@@ -296,7 +297,7 @@
                 <b class="card-text" title="Offer price" id="offer-price">₹${product.Offer_Price}</b>
               </div>
               <div class="ml-3 mt-2">
-                <p class="card-text text-muted" title="M.R.P."><small><del id="actual-price">₹${product.Actual_Price}</del></small></p>
+                <p class="card-text text-muted" title="M.R.P."><small><small><del id="actual-price">₹${product.Actual_Price}</del></small></small></p>
               </div>
             </div>
           </a>
@@ -370,9 +371,9 @@
   }
 
   #offer-price {
-    font-size: 22px;
+    font-size: 25px;
     color: rgb(4, 149, 149);
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-family: 'Times New Roman', Times, serif
   }
 
 

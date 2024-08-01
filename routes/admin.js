@@ -20,16 +20,16 @@ const verifyLogin = (req, res, next) => {
 router.get('/', verifyLogin, async (req, res, next) => {
   try {
 
-    await productHelpers.getAllProducts().then((products) => {
-      res.render('admin/view-products', { admin: true, products });
-    }).catch((err) => {
-      console.error('Error fetching products:', err);
-      res.render('admin/empty/empty-shop', { admin: true });
-    })
-
-  } catch (error) {
-    console.error(error);
-    res.status(500).send(error);
+   let products= await productHelpers.getAllProducts()
+   if(products.length === 0){
+    res.render('admin/empty/empty-shop', { admin: true });
+   }else{
+    res.render('admin/view-products', { admin: true, products });
+   }
+    
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err);
   }
 });
 
