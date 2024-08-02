@@ -228,6 +228,7 @@ module.exports={
                 .findOneAndUpdate(
                   { _id: objectId(proId) },
                   [{ $set: { Stock_Count: { $subtract: [{ $toInt: "$Stock_Count" }, 1] } } }],
+                  { returnOriginal: false }
                   
                 )
               if (result.value) {

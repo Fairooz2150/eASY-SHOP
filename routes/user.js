@@ -536,6 +536,7 @@ router.get('/your-products', verifyLogin, async (req, res) => {
   try {
     //User selling Products details
     let products = await userHelpers.getUserRequestProds(user._id);
+    
     res.render('user/your-products', { user, products, cartCount });
   } catch (error) {
     res.render('user/empty/no-products', { error, user, cartCount });
