@@ -7,6 +7,7 @@ var objectId = require('mongodb').ObjectID
 
 module.exports = {
 
+  //Add products to eASY Shop
   addProduct: (productDetails) => { 
     return new Promise((resolve, reject) => {
       let product = {
@@ -28,6 +29,7 @@ module.exports = {
     });
   },
 
+  //Get the all eASY products from product collection
   getAllProducts: () => { 
     return new Promise(async (resolve, reject) => {
       try {
@@ -39,8 +41,7 @@ module.exports = {
     });
   },
 
- 
-
+  //Get all user submited products to sell in eASY Shop
   getAllUserProducts: () => { 
     return new Promise(async (resolve, reject) => {
       try {
@@ -55,6 +56,7 @@ module.exports = {
     });
   },
 
+  //Delete eASY Products from product collection and status changed to remove for user products collection, and remove that item from users cart
   deleteProduct: (prodId) => { 
     return new Promise(async (resolve, reject) => {
       console.log(prodId);
@@ -78,6 +80,8 @@ module.exports = {
       });
     })
   },
+
+  //Delete user selling products by user 
   deleteUserProduct: (prodId) => { 
     return new Promise(async (resolve, reject) => {
       try {
@@ -97,6 +101,7 @@ module.exports = {
     });
   },
 
+  //Delete Pending products(Not approved) or products of status:pending 
   deletePendingProduct: (prodId) => { 
     return new Promise((resolve, reject) => {
       console.log(prodId);
@@ -111,6 +116,7 @@ module.exports = {
     })
   },
  
+  //Remove Items(products) from cart
   removeCartProducts: (userId) => { 
     return new Promise((resolve, reject) => {
       db.get().collection(collection.CART_COLLECTION).removeOne({ user: objectId(userId) }).then(() => {
@@ -118,6 +124,8 @@ module.exports = {
       })
     })
   },
+
+  //Get Products Full details
   getProductDetails: (proId) => { 
     return new Promise((resolve, reject) => {
       db.get().collection(collection.PRODUCT_COLLECTION).findOne({ _id: objectId(proId) }).then((product) => {
@@ -132,6 +140,7 @@ module.exports = {
     })
   },
 
+  //Change the Stock Count of Products
   changeStockCount: (proId) => { 
     return new Promise((resolve, reject) => {
       db.get().collection(collection.PRODUCT_COLLECTION)
@@ -160,6 +169,7 @@ module.exports = {
     });
   },
 
+  //Reduce Stock Count of product by adding items to cart
   reduceStockCount: (proId) => { 
     return new Promise((resolve, reject) => {
       db.get().collection(collection.PRODUCT_COLLECTION)
@@ -177,6 +187,7 @@ module.exports = {
     });
   },
 
+  //Save the edited product details by Admin
   updateProduct: (proId, proDetails) => { 
     return new Promise((resolve, reject) => {
       db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ _id: objectId(proId) }, {
@@ -195,6 +206,8 @@ module.exports = {
       })
     })
   },
+
+  //Update User's Selling Product Details
   updateUserProduct: (proId, product) => { 
     return new Promise((resolve, reject) => {
       let Date = moment().format('DD MMM YYYY');
@@ -202,7 +215,6 @@ module.exports = {
       if (product.Status === 'Approved') {
         db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ _id: objectId(proId) }, {
           $set: {
-
 
             Name: product.Name,
             Category: product.Category,
@@ -226,7 +238,6 @@ module.exports = {
 
         db.get().collection(collection.USER_PRODUCTS_COLLECTION).updateOne({ _id: objectId(proId) }, {
           $set: {
-
 
             Name: product.Name,
             Category: product.Category,
@@ -277,6 +288,7 @@ module.exports = {
     })
   },
 
+  //Get search results
   searchProducts: (query) => { 
     return new Promise(async (resolve, reject) => {
       try {
@@ -322,6 +334,7 @@ module.exports = {
     });
   },
 
+  //Add User selling products to user collection for get approve from adming
   addUserProduct: (product) => { 
     return new Promise((resolve, reject) => {
       let Date = moment().format('DD MMM YYYY');
@@ -357,6 +370,8 @@ module.exports = {
     });
   },
 
+
+  //Get the Product full uploaded images 
   /**
    * Get product details including images stored in the public folder
    * @param {String} productId - The ID of the product
@@ -388,6 +403,7 @@ module.exports = {
     })
   },
 
+  //Get the Status:Pending Product Images
   getPndgProductImages: (productId) => { 
     return new Promise(async (resolve, reject) => {
       try {
@@ -413,6 +429,7 @@ module.exports = {
     })
   },
 
+  //Update/upload new Product Images by editing
   updateProductImages: (productId, updatedImages) => { 
     return new Promise((resolve, reject) => {
       db.get().collection(collection.PRODUCT_COLLECTION).updateOne(
@@ -429,6 +446,8 @@ module.exports = {
       });
     });
   },
+
+  //Update/upload new Product Images by editing (not Approved)
   updatePndgProductImages: (productId, updatedImages) => { 
     return new Promise((resolve, reject) => {
       db.get().collection(collection.USER_PRODUCTS_COLLECTION).updateOne(

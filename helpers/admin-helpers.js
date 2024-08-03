@@ -5,6 +5,8 @@ const { log } = require('console')
 var objectId = require('mongodb').ObjectID
 
 module.exports = {
+
+    //verify the Admin-login details
     doLogin: (adminData) => { 
         return new Promise(async (resolve, reject) => {
             let loginStatus = false
@@ -28,6 +30,8 @@ module.exports = {
             }
         })
     },
+
+    //get all eASY users with details
     getAllUsers: () => { 
         return new Promise(async (resolve, reject) => {
             try {
@@ -38,6 +42,8 @@ module.exports = {
             }
         });
     },
+
+    //For delete user
     deleteUser: (userId) => { 
         return new Promise((resolve, reject) => {
 
@@ -47,6 +53,8 @@ module.exports = {
             })
         })
     },
+
+    //get all the orders
     getAllOrders: () => { 
         return new Promise((resolve, reject) => {
             db.get().collection(collection.ORDER_COLLECTION).aggregate([
@@ -130,6 +138,8 @@ module.exports = {
             });
         });
     },
+
+    //update the user order status from placed->shipped->deliver
     updateOrderStatus: (orderId, status) => { 
         return new Promise((resolve, reject) => {
             db.get().collection(collection.ORDER_COLLECTION).updateOne(
@@ -144,6 +154,7 @@ module.exports = {
         });
     },
 
+    //update the user products to approved or declined by admin
     updateUserProdStatus: (Id, Status) => { 
         return new Promise((resolve, reject) => {
             db.get().collection(collection.USER_PRODUCTS_COLLECTION).updateOne(
@@ -197,8 +208,7 @@ module.exports = {
         });
     },
 
-  
-  
+    //get the all messages from contact page by users
     getAllMessages: () => { 
         return new Promise(async (resolve, reject) => {
             await db.get().collection(collection.MESSAGE_COLLECTION).find().toArray().then((messages) => {

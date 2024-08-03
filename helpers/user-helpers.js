@@ -8,7 +8,10 @@ var instance = new Razorpay({
     key_id: 'rzp_test_Eiq5plL9zWA6bb',
     key_secret: 'NxHqrxegFsANJL3mBznh2YvY',
 });
+
 module.exports = {
+    
+    //Save the User signup details with bcrypting password
     doSignup: (userData) => { 
         return new Promise(async (resolve, reject) => {
             userData.Password = await bcrypt.hash(userData.Password, 10)
@@ -19,6 +22,7 @@ module.exports = {
         })
     },
 
+    //Verify the user login details
     doLogin: (userData) => { 
         return new Promise(async (resolve, reject) => {
             let loginStatus = false
@@ -43,6 +47,7 @@ module.exports = {
         })
     },
 
+    //Add item to cart collection of user
     addToCart: (proId, userId) => { 
         let proObj = {
             item: objectId(proId),
@@ -89,6 +94,7 @@ module.exports = {
         })
     },
 
+    //Get the Carted products with quantity of each items carted
     getCartProducts: (userId) => { 
         return new Promise(async (resolve, reject) => {
             let cartItems = await db.get().collection(collection.CART_COLLECTION).aggregate([
@@ -123,6 +129,7 @@ module.exports = {
         })
     },
 
+    //Get User Products (requested for selling)
     getUserRequestProds: (userId) => { 
         return new Promise(async (resolve, reject) => {
             let products = await db.get().collection(collection.USER_PRODUCTS_COLLECTION).find({ Seller_Id: objectId(userId) }).toArray();
@@ -134,6 +141,7 @@ module.exports = {
         });
     },
 
+    //Get Count of products in the cart
     getCartCount: (userId) => { 
         return new Promise(async (resolve, reject) => {
             try {
@@ -152,6 +160,7 @@ module.exports = {
         });
     },
 
+    //Change Product quantity of each product in the cart
     changeProductQuantity: (details) => { 
         details.count = parseInt(details.count);
         details.quantity = parseInt(details.quantity);
@@ -193,6 +202,7 @@ module.exports = {
         });
     },
 
+    //Delet Products from Cart Collection
     deleteCartProduct: (prodId, quantity, userId) => { 
         return new Promise(async (resolve, reject) => {
             await db.get().collection(collection.CART_COLLECTION).updateOne({ user: objectId(userId) }, { $pull: { products: { item: objectId(prodId) } } }).then((response) => {
@@ -206,6 +216,7 @@ module.exports = {
         });
     },
 
+    //Get total amount of Products in the Cart
     getTotalAmount: (userId) => { 
         return new Promise(async (resolve, reject) => {
             try {
@@ -266,6 +277,7 @@ module.exports = {
         });
     },
 
+    //Place Order by user with date and time 
     placeOrder: (order, products, total) => { 
         return new Promise((resolve, reject) => {
             console.log(order, products, total);
@@ -298,6 +310,7 @@ module.exports = {
         });
     },
 
+    //Place/Order single product by Buy Now option
     placeProduct: (order, products, total) => { 
         return new Promise((resolve, reject) => {
             console.log(order, products, total);
@@ -330,6 +343,7 @@ module.exports = {
         });
     },
 
+    //Get carted products list for user
     getCartProductList: (userId) => { 
         return new Promise(async (resolve, reject) => {
             let cart = await db.get().collection(collection.CART_COLLECTION).findOne({ user: objectId(userId) })
@@ -337,8 +351,7 @@ module.exports = {
         })
     },
 
-  
-
+    //Get All Order details of user
     getAllUserOrders: (userId) => { 
         return new Promise((resolve, reject) => {
             db.get().collection(collection.ORDER_COLLECTION).aggregate([
@@ -443,7 +456,7 @@ module.exports = {
         });
     },
 
-   
+   //For generating razorpay for online payment on placing order
     generateRazorpay: (orderId, total) => { 
         return new Promise((resolve, reject) => {
             var options = {
@@ -464,6 +477,7 @@ module.exports = {
         })
     },
 
+    //Verify the payment success for placing order
     verifypayment: (details, userId) => { 
         return new Promise((resolve, reject) => {
             const crypto = require('crypto');
@@ -478,6 +492,7 @@ module.exports = {
         })
     },
 
+    //Change payment status of order after successful payment
     changePaymentStatus: (orderId) => { 
         return new Promise((resolve, reject) => {
             db.get().collection(collection.ORDER_COLLECTION)
@@ -493,6 +508,7 @@ module.exports = {
         })
     },
 
+    //Get User details for user
     userDetails: (user) => { 
         return new Promise(async (resolve, reject) => {
             let userId = user._id
@@ -502,6 +518,7 @@ module.exports = {
         })
     },
 
+    //Verify password of user on log in
     verifyPassword: async (userId, enteredPassword) => { 
 
         try {
@@ -514,7 +531,7 @@ module.exports = {
         }
     },
 
-    // Update account details
+    // Update account details by editing account details by User
     updateAccount: (userId, updates) => { 
         return new Promise(async (resolve, reject) => {
             try {
@@ -539,7 +556,7 @@ module.exports = {
         });
     },
 
-    // Delete account
+    // Delete User account by user itself
     deleteAccount: async (userId) => { 
         try {
             await db.get().collection(collection.USER_COLLECTION).deleteOne({ _id: objectId(userId) });
@@ -549,7 +566,7 @@ module.exports = {
         }
     },
 
-    //upload user message 
+    //upload User messages 
     uploadMsg: (message) => { 
         return new Promise(async (resolve, reject) => {
             let Date = moment().format('DD MMM YYYY');
