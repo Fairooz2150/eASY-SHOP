@@ -20,7 +20,7 @@ const verifyLogin = (req, res, next) => {
 router.get('/', verifyLogin, async (req, res, next) => {
   try {
 
-    let products = await productHelpers.getAllProducts()
+    let products = await productHelpers.getAllProducts() 
     if (products.length === 0) {
       res.render('admin/empty/empty-shop', { admin: true });
     } else {
@@ -48,7 +48,7 @@ router.get('/login', (req, res) => {
 /* return to recent URL after Login */
 router.post('/login', async (req, res) => {
 
-  await adminHelpers.doLogin(req.body).then((response) => {
+  await adminHelpers.doLogin(req.body).then((response) => { 
 
     if (response.status) {
       req.session.adminLoggedIn = true;
@@ -76,7 +76,7 @@ router.get('/logout', (req, res) => {
 /* GET all Users Product Requests for selling */
 router.get('/product-requests', verifyLogin, async (req, res) => {
   try {
-    let products = await productHelpers.getAllUserProducts();
+    let products = await productHelpers.getAllUserProducts(); 
     products.sort((a, b) => new Date(b.date) - new Date(a.date));
     res.render('admin/product-requests', { admin: true, products });
   } catch (error) {
@@ -89,7 +89,7 @@ router.get('/product-requests', verifyLogin, async (req, res) => {
 /* Update User Products Status */
 router.post('/update-user-products-status', (req, res) => {
   let { Id, Status } = req.body;
-  adminHelpers.updateUserProdStatus(Id, Status).then(() => {
+  adminHelpers.updateUserProdStatus(Id, Status).then(() => { 
     res.json({ success: true });
   }).catch((err) => {
     console.error('Error updating user products status:', err);
@@ -100,7 +100,7 @@ router.post('/update-user-products-status', (req, res) => {
 
 /* GET All Users orders */
 router.get('/all-orders', verifyLogin, (req, res) => {
-  adminHelpers.getAllOrders().then((orders) => {
+  adminHelpers.getAllOrders().then((orders) => { 
     orders.sort((a, b) => new Date(b.date) - new Date(a.date));
     res.render('admin/all-orders', { admin: true, orders })
   })
@@ -110,7 +110,7 @@ router.get('/all-orders', verifyLogin, (req, res) => {
 /* Update User Order Status */
 router.post('/update-order-status', (req, res) => {
   let { orderId, status } = req.body;
-  adminHelpers.updateOrderStatus(orderId, status).then(() => {
+  adminHelpers.updateOrderStatus(orderId, status).then(() => { 
     res.json({ success: true });
   }).catch((err) => {
     console.error('Error updating order status:', err);
@@ -121,7 +121,7 @@ router.post('/update-order-status', (req, res) => {
 
 /* Get the all Users */
 router.get('/all-users', verifyLogin, (req, res) => {
-  adminHelpers.getAllUsers().then((users) => {
+  adminHelpers.getAllUsers().then((users) => { 
     res.render('admin/all-users', { admin: true, users: users });
   }).catch((error) => {
     console.error("Error fetching users:", error);
@@ -133,7 +133,7 @@ router.get('/all-users', verifyLogin, (req, res) => {
 /* Delete User by Admin */
 router.delete('/delete-user/:id', verifyLogin, (req, res) => {
   let userId = req.params.id
-  adminHelpers.deleteUser(userId).then((response) => {
+  adminHelpers.deleteUser(userId).then((response) => { 
     res.json({ success: true });
   }).catch((err) => {
     console.error('Error deleting user:', err);
@@ -143,7 +143,7 @@ router.delete('/delete-user/:id', verifyLogin, (req, res) => {
 
 /* Get all messages from eASY SHOP */
 router.get('/all-messages', verifyLogin, (req, res) => {
-  adminHelpers.getAllMessages().then((messages) => {
+  adminHelpers.getAllMessages().then((messages) => { 
     messages.sort((a, b) => new Date(b.date) - new Date(a.date));
     res.render('admin/all-messages', { admin: true, messages });
   }).catch((error) => {
@@ -161,7 +161,7 @@ router.get('/add-product', verifyLogin, (req, res) => {
 
 /*POST product details for adding new product*/
 router.post('/add-product', verifyLogin, (req, res) => {
-  productHelpers.addProduct(req.body).then((productId) => {
+  productHelpers.addProduct(req.body).then((productId) => { 
     if (req.files) {
       if (Array.isArray(req.files.Image)) {
         req.files.Image.forEach((image, index) => {
@@ -180,7 +180,7 @@ router.post('/add-product', verifyLogin, (req, res) => {
 router.delete('/delete-product/:id', verifyLogin, async (req, res) => {
   try {
     let proId = req.params.id;
-    let response = await productHelpers.deleteProduct(proId);
+    let response = await productHelpers.deleteProduct(proId); 
     res.json({ success: true, response });
   } catch (err) {
     console.error('Error deleting product:', err);
@@ -192,7 +192,7 @@ router.delete('/delete-product/:id', verifyLogin, async (req, res) => {
 /* Route to handle the product update and redirect to edit product images */
 router.get('/edit-product/:id', verifyLogin, async (req, res) => {
   try {
-    let product = await productHelpers.getProductDetails(req.params.id);
+    let product = await productHelpers.getProductDetails(req.params.id); 
     res.render('admin/edit-product', { product, admin: true });
   } catch (error) {
     console.error(error);
@@ -204,7 +204,7 @@ router.get('/edit-product/:id', verifyLogin, async (req, res) => {
 /* Route to handle the Product Update and redirect to Edit product images */
 router.post('/edit-product/:id', (req, res) => {
   let id = req.params.id;
-  productHelpers.updateProduct(req.params.id, req.body).then(() => {
+  productHelpers.updateProduct(req.params.id, req.body).then(() => { 
     res.redirect(`/admin/edit-images/${id}`);
   }).catch((err) => {
     console.error(err);
@@ -216,7 +216,7 @@ router.post('/edit-product/:id', (req, res) => {
 // GET the Edit images page
 router.get('/edit-images/:id', verifyLogin, async (req, res) => {
   try {
-    let product = await productHelpers.getProductImages(req.params.id);
+    let product = await productHelpers.getProductImages(req.params.id); 
     res.render('admin/edit-images', { product, admin: true });
   } catch (error) {
     console.error(error);
@@ -240,7 +240,7 @@ router.post('/edit-images/:id', async (req, res) => {
       images = [images];
     }
 
-    let product = await productHelpers.getProductImages(productId);
+    let product = await productHelpers.getProductImages(productId); 
     let productLength = product.images.length;
 
     images.forEach((image, index) => {
@@ -267,7 +267,7 @@ router.post('/edit-images/:id', async (req, res) => {
         fs.renameSync(path.join(imageDir, file), path.join(imageDir, newFileName));
         return newFileName;
       });
-      await productHelpers.updateProductImages(productId, imageFiles);
+      await productHelpers.updateProductImages(productId, imageFiles); 
       res.redirect('/admin/');
     })
     .catch((err) => {
@@ -296,7 +296,7 @@ router.delete('/delete-image', verifyLogin, async (req, res) => {
         fs.renameSync(path.join(imageDir, file), path.join(imageDir, newFileName));
         return newFileName;
       });
-      await productHelpers.updateProductImages(productId, imageFiles);
+      await productHelpers.updateProductImages(productId, imageFiles); 
       res.sendStatus(200);
     } catch (error) {
       console.error('Error renumbering images:', error);

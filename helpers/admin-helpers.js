@@ -5,7 +5,7 @@ const { log } = require('console')
 var objectId = require('mongodb').ObjectID
 
 module.exports = {
-    doLogin: (adminData) => {
+    doLogin: (adminData) => { 
         return new Promise(async (resolve, reject) => {
             let loginStatus = false
             let response = {}
@@ -28,7 +28,7 @@ module.exports = {
             }
         })
     },
-    getAllUsers: () => {
+    getAllUsers: () => { 
         return new Promise(async (resolve, reject) => {
             try {
                 let users = await db.get().collection(collection.USER_COLLECTION).find().toArray();
@@ -38,7 +38,7 @@ module.exports = {
             }
         });
     },
-    deleteUser: (userId) => {
+    deleteUser: (userId) => { 
         return new Promise((resolve, reject) => {
 
             db.get().collection(collection.USER_COLLECTION).removeOne({ _id: objectId(userId) }).then((response) => {
@@ -47,7 +47,7 @@ module.exports = {
             })
         })
     },
-    getAllOrders: () => {
+    getAllOrders: () => { 
         return new Promise((resolve, reject) => {
             db.get().collection(collection.ORDER_COLLECTION).aggregate([
                 {
@@ -130,7 +130,7 @@ module.exports = {
             });
         });
     },
-    updateOrderStatus: (orderId, status) => {
+    updateOrderStatus: (orderId, status) => { 
         return new Promise((resolve, reject) => {
             db.get().collection(collection.ORDER_COLLECTION).updateOne(
                 { _id: objectId(orderId) },
@@ -144,7 +144,7 @@ module.exports = {
         });
     },
 
-    updateUserProdStatus: (Id, Status) => {
+    updateUserProdStatus: (Id, Status) => { 
         return new Promise((resolve, reject) => {
             db.get().collection(collection.USER_PRODUCTS_COLLECTION).updateOne(
                 { _id: objectId(Id) },
@@ -197,27 +197,9 @@ module.exports = {
         });
     },
 
-    getAllOrdersAscending: () => {
-        return new Promise((resolve, reject) => {
-            db.get().collection('orders').find().sort({ date: 1 }).toArray().then((orders) => {
-                resolve(orders);
-            }).catch((error) => {
-                reject(error);
-            });
-        });
-    },
-
-    getAllOrdersDescending: () => {
-        return new Promise((resolve, reject) => {
-            db.get().collection('orders').find().sort({ date: -1 }).toArray().then((orders) => {
-                resolve(orders);
-            }).catch((error) => {
-                reject(error);
-            });
-        });
-    },
-
-    getAllMessages: () => {
+  
+  
+    getAllMessages: () => { 
         return new Promise(async (resolve, reject) => {
             await db.get().collection(collection.MESSAGE_COLLECTION).find().toArray().then((messages) => {
                 resolve(messages);

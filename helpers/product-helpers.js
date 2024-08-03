@@ -1,15 +1,13 @@
 var db = require('../config/connection')
 var collection = require('../config/collections')
-const { response } = require('express')
 const moment = require('moment');
-const { log } = require('console')
 const path = require('path');
 const fs = require('fs');
-
 var objectId = require('mongodb').ObjectID
+
 module.exports = {
 
-  addProduct: (productDetails) => {
+  addProduct: (productDetails) => { 
     return new Promise((resolve, reject) => {
       let product = {
         Name: productDetails.Name,
@@ -30,7 +28,7 @@ module.exports = {
     });
   },
 
-  getAllProducts: () => {
+  getAllProducts: () => { 
     return new Promise(async (resolve, reject) => {
       try {
         let products = await db.get().collection(collection.PRODUCT_COLLECTION).find().toArray();
@@ -41,85 +39,9 @@ module.exports = {
     });
   },
 
-  getCartedProductQuantity: () => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        let productQuantity = await db.get().collection(collection.CART_COLLECTION).aggregate([
-          {
-            $unwind: "$products"
-          },
-          {
-            $group: {
-              _id: "$products.item",
-              totalQuantity: { $sum: "$products.quantity" }
-            }
-          },
-          {
-            $project: {
-              _id: 0,
-              product_id: "$_id",
-              totalquantity: "$totalQuantity"
-            }
-          }
-        ]).toArray();
+ 
 
-        // Check if productQuantity is not an array, convert it to an array
-        if (!Array.isArray(productQuantity)) {
-          productQuantity = [productQuantity]; // Wrap in array
-        }
-
-        resolve(productQuantity);
-      } catch (error) {
-        console.error('Error in getCartedProductQuantity:', error);
-        reject(error);
-      }
-    });
-  },
-  getAllProductswithQuantity: (products, stockCount, productQuantity) => {
-    return new Promise((resolve, reject) => {
-      // Ensure productQuantity and stockCount are arrays
-      if (!Array.isArray(productQuantity)) {
-        productQuantity = [];
-      }
-      if (!Array.isArray(stockCount)) {
-        stockCount = [];
-      }
-
-      // First loop to add Carted quantity from productQuantity
-      products.forEach(product => {
-        if (product && product._id) {
-          const matchQuantity = productQuantity.find(pq => pq.product_id && pq.product_id.equals(product._id));
-          if (matchQuantity) {
-            product.Carted = matchQuantity.totalquantity;
-          } else {
-            product.Carted = 0;
-          }
-        } else {
-          product.Carted = 0; // Set default value if product or product._id is undefined
-        }
-      });
-
-      // Second loop to add Stock_Count from stockCount
-      products.forEach(product => {
-        if (product && product._id) {
-          const matchStock = stockCount.find(sc => sc._id && sc._id.equals(product._id)); // Adjust for _id comparison
-          if (matchStock) {
-            product.Stock_Count = matchStock.Stock_Count;
-          } else {
-            product.Stock_Count = 0;
-          }
-        } else {
-          product.Stock_Count = 0; // Set default value if product or product._id is undefined
-        }
-      });
-
-      resolve(products);
-    });
-  }
-  ,
-
-
-  getAllUserProducts: () => {
+  getAllUserProducts: () => { 
     return new Promise(async (resolve, reject) => {
       try {
         let products = await db.get().collection(collection.USER_PRODUCTS_COLLECTION)
@@ -133,7 +55,7 @@ module.exports = {
     });
   },
 
-  deleteProduct: (prodId) => {
+  deleteProduct: (prodId) => { 
     return new Promise(async (resolve, reject) => {
       console.log(prodId);
       console.log(objectId(prodId));
@@ -156,7 +78,7 @@ module.exports = {
       });
     })
   },
-  deleteUserProduct: (prodId) => {
+  deleteUserProduct: (prodId) => { 
     return new Promise(async (resolve, reject) => {
       try {
         console.log(prodId);
@@ -175,7 +97,7 @@ module.exports = {
     });
   },
 
-  deletePendingProduct: (prodId) => {
+  deletePendingProduct: (prodId) => { 
     return new Promise((resolve, reject) => {
       console.log(prodId);
       console.log(objectId(prodId));
@@ -188,21 +110,15 @@ module.exports = {
       });
     })
   },
-  getUserProductDetails: (proId) => {
-    return new Promise((resolve, reject) => {
-      db.get().collection(collection.USER_PRODUCTS_COLLECTION).findOne({ _id: objectId(proId) }).then((product) => {
-        resolve(product)
-      })
-    })
-  },
-  removeCartProducts: (userId) => {
+ 
+  removeCartProducts: (userId) => { 
     return new Promise((resolve, reject) => {
       db.get().collection(collection.CART_COLLECTION).removeOne({ user: objectId(userId) }).then(() => {
         resolve()
       })
     })
   },
-  getProductDetails: (proId) => {
+  getProductDetails: (proId) => { 
     return new Promise((resolve, reject) => {
       db.get().collection(collection.PRODUCT_COLLECTION).findOne({ _id: objectId(proId) }).then((product) => {
         if (product == null) {
@@ -216,7 +132,7 @@ module.exports = {
     })
   },
 
-  changeStockCount: (proId) => {
+  changeStockCount: (proId) => { 
     return new Promise((resolve, reject) => {
       db.get().collection(collection.PRODUCT_COLLECTION)
         .findOneAndUpdate(
@@ -244,7 +160,7 @@ module.exports = {
     });
   },
 
-  reduceStockCount: (proId) => {
+  reduceStockCount: (proId) => { 
     return new Promise((resolve, reject) => {
       db.get().collection(collection.PRODUCT_COLLECTION)
         .findOneAndUpdate(
@@ -261,7 +177,7 @@ module.exports = {
     });
   },
 
-  updateProduct: (proId, proDetails) => {
+  updateProduct: (proId, proDetails) => { 
     return new Promise((resolve, reject) => {
       db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ _id: objectId(proId) }, {
         $set: {
@@ -279,7 +195,7 @@ module.exports = {
       })
     })
   },
-  updateUserProduct: (proId, product) => {
+  updateUserProduct: (proId, product) => { 
     return new Promise((resolve, reject) => {
       let Date = moment().format('DD MMM YYYY');
       let Time = moment().format('hh:mmA');
@@ -361,7 +277,7 @@ module.exports = {
     })
   },
 
-  searchProducts: (query) => {
+  searchProducts: (query) => { 
     return new Promise(async (resolve, reject) => {
       try {
         const filter = {
@@ -406,7 +322,7 @@ module.exports = {
     });
   },
 
-  addUserProduct: (product) => {
+  addUserProduct: (product) => { 
     return new Promise((resolve, reject) => {
       let Date = moment().format('DD MMM YYYY');
       let Time = moment().format('hh:mmA');
@@ -447,7 +363,7 @@ module.exports = {
    * @returns {Object} - The product details including image file names
    */
 
-  getProductImages: (productId) => {
+  getProductImages: (productId) => { 
     return new Promise(async (resolve, reject) => {
       try {
         const productCollection = db.get().collection(collection.PRODUCT_COLLECTION); // Replace with your collection name
@@ -472,7 +388,7 @@ module.exports = {
     })
   },
 
-  getPndgProductImages: (productId) => {
+  getPndgProductImages: (productId) => { 
     return new Promise(async (resolve, reject) => {
       try {
         const productCollection = db.get().collection(collection.USER_PRODUCTS_COLLECTION); // Replace with your collection name
@@ -497,7 +413,7 @@ module.exports = {
     })
   },
 
-  updateProductImages: (productId, updatedImages) => {
+  updateProductImages: (productId, updatedImages) => { 
     return new Promise((resolve, reject) => {
       db.get().collection(collection.PRODUCT_COLLECTION).updateOne(
         { _id: objectId(productId) },
@@ -513,7 +429,7 @@ module.exports = {
       });
     });
   },
-  updatePndgProductImages: (productId, updatedImages) => {
+  updatePndgProductImages: (productId, updatedImages) => { 
     return new Promise((resolve, reject) => {
       db.get().collection(collection.USER_PRODUCTS_COLLECTION).updateOne(
         { _id: objectId(productId) },

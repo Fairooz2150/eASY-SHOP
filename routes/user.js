@@ -24,7 +24,7 @@ router.get('/', async function (req, res, next) {
 
   try {
     if (user) {
-      cartCount = await userHelpers.getCartCount(user._id);
+      cartCount = await userHelpers.getCartCount(user._id); 
     } else {
       // If user is not logged in, calculate cart count from session storage
       if (req.session.cart) {
@@ -32,7 +32,7 @@ router.get('/', async function (req, res, next) {
       }
     }
 
-    let products = await productHelpers.getAllProducts();
+    let products = await productHelpers.getAllProducts(); 
     if (products.length === 0) {
       res.render('user/empty/empty-shop', { user, cartCount });
 
@@ -52,12 +52,12 @@ router.get('/', async function (req, res, next) {
 router.get('/view-product/:id', async (req, res) => {
   let user = req.session.user
   let Id = req.params.id
-  let product = await productHelpers.getProductDetails(Id)
-  let prodImages = await productHelpers.getProductImages(Id);
+  let product = await productHelpers.getProductDetails(Id) 
+  let prodImages = await productHelpers.getProductImages(Id); 
   let images = prodImages.images;
   let cartCount = 0;
   if (user) {
-    cartCount = await userHelpers.getCartCount(user._id)
+    cartCount = await userHelpers.getCartCount(user._id) 
   }
   else {
     // If User is not logged in, calculate cart count from session storage
@@ -85,7 +85,7 @@ router.post('/signup', (req, res) => {
     return res.render('user/signup', { error: 'Password must be 6-16 characters long, include at least one alphabetic letter, one numeric digit, and one special character.' });
   }
 
-  userHelpers.doSignup(req.body).then((response) => {
+  userHelpers.doSignup(req.body).then((response) => { 
     req.session.user = response;
     req.session.userLoggedIn = true;
     res.redirect('/');
@@ -110,7 +110,7 @@ router.get('/login', (req, res) => {
 /* return to recent URL after Login */
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
-  const response = await userHelpers.doLogin(req.body);
+  const response = await userHelpers.doLogin(req.body); 
 
   if (response.status) {
     req.session.userLoggedIn = true;
@@ -120,12 +120,12 @@ router.post('/login', async (req, res) => {
     const sessionCart = req.session.cart || [];
 
     for (let productId of sessionCart) {
-      let product = await productHelpers.getProductDetails(productId);
+      let product = await productHelpers.getProductDetails(productId); 
       // Check if the product is still available
       if (product === null) {
         continue; // Skip the rest of this iteration and continue with the next one
       } else {
-        await userHelpers.addToCart(productId, response.user._id);
+        await userHelpers.addToCart(productId, response.user._id); 
         //if the product was still available, add to Cart from Session Cart
       }
     }
@@ -155,7 +155,7 @@ router.get('/contact', async (req, res) => {
   let cartCount = 0;
   let user = req.session.user;
   if (user) {
-    cartCount = await userHelpers.getCartCount(user._id)
+    cartCount = await userHelpers.getCartCount(user._id) 
   }
   else {
     // If User is not logged in, calculate cart count from session storage
@@ -173,7 +173,7 @@ router.get('/message', async (req, res) => {
   let cartCount = 0
   let user = req.session.user
   if (user) {
-    cartCount = await userHelpers.getCartCount(user._id)
+    cartCount = await userHelpers.getCartCount(user._id) 
   }
   else {
     // If User is not logged in, calculate cart count from session storage
@@ -187,7 +187,7 @@ router.get('/message', async (req, res) => {
 
 /*Post message from User */
 router.post('/send-message', async (req, res) => {
-  await userHelpers.uploadMsg(req.body).then(() => {
+  await userHelpers.uploadMsg(req.body).then(() => { 
     res.json({ send: true })
   }).catch((error) => {
     console.log('message not send', error);
@@ -201,7 +201,7 @@ router.get('/about', async (req, res) => {
   let cartCount = 0;
   let user = req.session.user;
   if (user) {
-    cartCount = await userHelpers.getCartCount(user._id)
+    cartCount = await userHelpers.getCartCount(user._id) 
   }
   else {
     // If User is not logged in, calculate cart count from session storage
@@ -216,12 +216,12 @@ router.get('/about', async (req, res) => {
 /* GET Cart  */
 router.get('/cart', verifyLogin, async (req, res) => {
   let user = req.session.user;
-  let products = await userHelpers.getCartProducts(req.session.user._id)
-  let cartCount = await userHelpers.getCartCount(req.session.user._id)
+  let products = await userHelpers.getCartProducts(req.session.user._id) 
+  let cartCount = await userHelpers.getCartCount(req.session.user._id) 
 
   let totalValue = 0;
   if (products.length > 0) {
-    totalValue = await userHelpers.getTotalAmount(req.session.user._id)
+    totalValue = await userHelpers.getTotalAmount(req.session.user._id) 
     res.render('user/cart', { products, user, totalValue, cartCount })
   } else {
     res.render('user/empty/empty-cart', { user, cartCount })
@@ -233,15 +233,15 @@ router.get('/cart', verifyLogin, async (req, res) => {
 router.get('/add-to-cart/:id', async (req, res) => {
   const productId = req.params.id;
   let userId = req.session.user ? req.session.user._id : null;
-  let product = await productHelpers.getProductDetails(productId);
+  let product = await productHelpers.getProductDetails(productId); 
 
   try {
 
     if (product.Stock_Count > 0) {
-      await productHelpers.changeStockCount(productId);
+      await productHelpers.changeStockCount(productId); 
 
       if (userId) {
-        await userHelpers.addToCart(productId, req.session.user._id);
+        await userHelpers.addToCart(productId, req.session.user._id); 
         res.json({ status: true });
       } else {
         // Store cart items in session storage if user is not logged in
@@ -269,9 +269,9 @@ router.delete('/delete-cart-product/:id/:quantity', verifyLogin, async (req, res
   const quantity = parseInt(req.params.quantity);
   const userId = req.session.user._id;
 
-  userHelpers.deleteCartProduct(proId, quantity, userId).then(async (response) => {
-    let total = await userHelpers.getTotalAmount(userId);
-    let cartCount = await userHelpers.getCartCount(req.session.user._id);
+  userHelpers.deleteCartProduct(proId, quantity, userId).then(async (response) => { 
+    let total = await userHelpers.getTotalAmount(userId); 
+    let cartCount = await userHelpers.getCartCount(req.session.user._id); 
     res.json({ success: true, cartCount: cartCount, total: total });
   }).catch((err) => {
     console.error('Error deleting product:', err);
@@ -284,8 +284,8 @@ router.delete('/delete-cart-product/:id/:quantity', verifyLogin, async (req, res
 router.post('/change-product-quantity', async (req, res, next) => {
 
   userHelpers.changeProductQuantity(req.body).then(async (response) => {
-    let total = await userHelpers.getTotalAmount(req.body.user);
-    let cartCount = await userHelpers.getCartCount(req.session.user._id);
+    let total = await userHelpers.getTotalAmount(req.body.user); 
+    let cartCount = await userHelpers.getCartCount(req.session.user._id); 
 
     if (response.removeProduct) {
       res.json({ removeProduct: true, cartCount: cartCount, total: total });
@@ -312,7 +312,7 @@ router.get('/buy-now/:id/:price', verifyLogin, async (req, res) => {
     let cartCount = await userHelpers.getCartCount(user._id);
 
     // Fetch product details
-    let product = await productHelpers.getProductDetails(prodId);
+    let product = await productHelpers.getProductDetails(prodId); 
 
     // Log product details for debugging purposes
     console.log("products", prodId, total, product);
@@ -322,7 +322,7 @@ router.get('/buy-now/:id/:price', verifyLogin, async (req, res) => {
       res.redirect('back');
     } else {
       // Reduce stock count and render the place-product page
-      await productHelpers.reduceStockCount(prodId);
+      await productHelpers.reduceStockCount(prodId); 
       res.render('user/place-product', { total, prodId, user, cartCount });
     }
   } catch (err) {
@@ -346,13 +346,13 @@ router.post('/place-product', async (req, res) => {
     const total = req.body.total;
 
     // Place the order
-    const orderId = await userHelpers.placeProduct(req.body, products, total);
+    const orderId = await userHelpers.placeProduct(req.body, products, total); 
 
     // Handle payment method
     if (paymentMethod === 'COD') {
       res.json({ codSuccess: true });
     } else {
-      const response = await userHelpers.generateRazorpay(orderId, total);
+      const response = await userHelpers.generateRazorpay(orderId, total); 
       res.json(response);
     }
   } catch (error) {
@@ -364,9 +364,9 @@ router.post('/place-product', async (req, res) => {
 
 /* Route to Place orders page*/
 router.get('/place-order', verifyLogin, async (req, res) => {
-  let total = await userHelpers.getTotalAmount(req.session.user._id);
+  let total = await userHelpers.getTotalAmount(req.session.user._id); 
   let user = req.session.user;
-  let cartCount = await userHelpers.getCartCount(req.session.user._id);
+  let cartCount = await userHelpers.getCartCount(req.session.user._id); 
 
   res.render('user/place-order', { total, user, cartCount })
 })
@@ -379,21 +379,21 @@ router.post('/place-order', async (req, res) => {
     const paymentMethod = req.body['payment-method'];
 
     // Get cart products and total price
-    const products = await userHelpers.getCartProductList(userId);
+    const products = await userHelpers.getCartProductList(userId); 
 
-    const totalPrice = await userHelpers.getTotalAmount(userId);
+    const totalPrice = await userHelpers.getTotalAmount(userId); 
 
     // Place the order
-    const orderId = await userHelpers.placeOrder(req.body, products, totalPrice);
+    const orderId = await userHelpers.placeOrder(req.body, products, totalPrice); 
 
     // Handle payment method
     if (paymentMethod === 'COD') {
-      await productHelpers.removeCartProducts(userId).then(() => {
+      await productHelpers.removeCartProducts(userId).then(() => { 
         res.json({ codSuccess: true });
       })
 
     } else {
-      const response = await userHelpers.generateRazorpay(orderId, totalPrice);
+      const response = await userHelpers.generateRazorpay(orderId, totalPrice); 
       res.json(response);
     }
   } catch (error) {
@@ -406,7 +406,7 @@ router.post('/place-order', async (req, res) => {
 /* order success page*/
 router.get('/order-success', verifyLogin, async (req, res) => {
   let user = req.session.user;
-  let cartCount = await userHelpers.getCartCount(user._id);
+  let cartCount = await userHelpers.getCartCount(user._id); 
 
   res.render('user/order-success', { user, cartCount });
 });
@@ -415,9 +415,9 @@ router.get('/order-success', verifyLogin, async (req, res) => {
 /* Orders*/
 router.get('/orders', verifyLogin, async (req, res) => {
   let user = req.session.user;
-  let cartCount = await userHelpers.getCartCount(user._id);
+  let cartCount = await userHelpers.getCartCount(user._id); 
 
-  userHelpers.getAllUserOrders(user._id).then((orders) => {
+  userHelpers.getAllUserOrders(user._id).then((orders) => { 
     // Sort orders by date in descending order
     orders.sort((a, b) => new Date(b.date) - new Date(a.date));
     if (orders.length === 0) {
@@ -435,9 +435,9 @@ router.get('/orders', verifyLogin, async (req, res) => {
 /* Verify payment for orders(for all cart products) */
 router.post('/verify-payments', (req, res) => {
   let userId = req.session.user._id
-  userHelpers.verifypayment(req.body, userId).then(() => {
-    userHelpers.changePaymentStatus(req.body['order[receipt]']).then(async () => {
-      await productHelpers.removeCartProducts(userId).then(() => {
+  userHelpers.verifypayment(req.body, userId).then(() => { 
+    userHelpers.changePaymentStatus(req.body['order[receipt]']).then(async () => { 
+      await productHelpers.removeCartProducts(userId).then(() => { 
         console.log('payment succesful');
         res.json({ status: true })
       })
@@ -454,7 +454,7 @@ router.post('/verify-payment', (req, res) => {
   console.log(req.body);
   let userId = req.session.user._id;
   userHelpers.verifypayment(req.body, userId).then(() => {
-    userHelpers.changePaymentStatus(req.body['order[receipt]']).then(() => {
+    userHelpers.changePaymentStatus(req.body['order[receipt]']).then(() => { 
       console.log('payment successful');
       res.json({ status: true });
     });
@@ -468,7 +468,7 @@ router.post('/verify-payment', (req, res) => {
 /* Your Account*/
 router.get('/your-account', verifyLogin, async (req, res) => {
   let user = req.session.user;
-  let cartCount = await userHelpers.getCartCount(req.session.user._id)
+  let cartCount = await userHelpers.getCartCount(req.session.user._id) 
   res.render('user/your-account', { user, cartCount })
 })
 
@@ -476,8 +476,8 @@ router.get('/your-account', verifyLogin, async (req, res) => {
 /* Account Settings */
 router.get('/account-settings', verifyLogin, async (req, res) => {
   let user = req.session.user;
-  let accountDetails = await userHelpers.userDetails(user);
-  let cartCount = await userHelpers.getCartCount(user._id)
+  let accountDetails = await userHelpers.userDetails(user); 
+  let cartCount = await userHelpers.getCartCount(user._id) 
   res.render('user/account-settings', { user, accountDetails, cartCount });
 });
 
@@ -487,7 +487,7 @@ router.post('/update-account', verifyLogin, async (req, res) => {
   const userId = req.session.user._id;
   let { First_Name, Last_Name, Email, Phone, Gender, Password } = req.body;
   try {
-    await userHelpers.updateAccount(userId, { First_Name, Last_Name, Email, Phone, Gender, Password });
+    await userHelpers.updateAccount(userId, { First_Name, Last_Name, Email, Phone, Gender, Password }); 
 
     // Update the session data
     req.session.user.First_Name = First_Name;
@@ -508,7 +508,7 @@ router.post('/verify-password', verifyLogin, async (req, res) => {
   const userId = req.session.user._id;
   const enteredPassword = req.body.password;
   try {
-    const isValid = await userHelpers.verifyPassword(userId, enteredPassword);
+    const isValid = await userHelpers.verifyPassword(userId, enteredPassword); 
     res.json({ success: isValid });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Server error' });
@@ -520,7 +520,7 @@ router.post('/verify-password', verifyLogin, async (req, res) => {
 router.post('/delete-account', verifyLogin, async (req, res) => {
   const userId = req.session.user._id;
   try {
-    await userHelpers.deleteAccount(userId);
+    await userHelpers.deleteAccount(userId); 
     req.session.destroy();
     res.json({ success: true });
   } catch (error) {
@@ -532,10 +532,10 @@ router.post('/delete-account', verifyLogin, async (req, res) => {
 /*Get User selling products*/
 router.get('/your-products', verifyLogin, async (req, res) => {
   let user = req.session.user;
-  let cartCount = await userHelpers.getCartCount(user._id);
+  let cartCount = await userHelpers.getCartCount(user._id); 
   try {
     //User selling Products details
-    let products = await userHelpers.getUserRequestProds(user._id);
+    let products = await userHelpers.getUserRequestProds(user._id); 
 
     res.render('user/your-products', { user, products, cartCount });
   } catch (error) {
@@ -547,7 +547,7 @@ router.get('/your-products', verifyLogin, async (req, res) => {
 /*Delete User approved selling product */
 router.delete('/delete-user-product/:id', verifyLogin, (req, res) => {
   let proId = req.params.id;
-  productHelpers.deleteUserProduct(proId).then((response) => {
+  productHelpers.deleteUserProduct(proId).then((response) => { 
     res.json({ success: true });
   }).catch((err) => {
     console.error('Error deleting user product:', err);
@@ -559,7 +559,7 @@ router.delete('/delete-user-product/:id', verifyLogin, (req, res) => {
 /*Delete User requested selling product */
 router.delete('/delete-user-pendingprod/:id', verifyLogin, (req, res) => {
   let proId = req.params.id;
-  productHelpers.deletePendingProduct(proId).then((response) => {
+  productHelpers.deletePendingProduct(proId).then((response) => { 
     res.json({ success: true });
   }).catch((err) => {
     console.error('Error deleting user pending product:', err);
@@ -572,9 +572,9 @@ router.delete('/delete-user-pendingprod/:id', verifyLogin, (req, res) => {
 router.get('/edit-user-product/:id', verifyLogin, async (req, res) => {
   let user = req.session.user;
   let prodId = req.params.id;
-  let cartCount = await userHelpers.getCartCount(user._id);
+  let cartCount = await userHelpers.getCartCount(user._id); 
   try {
-    let product = await productHelpers.getProductDetails(prodId);
+    let product = await productHelpers.getProductDetails(prodId); 
     console.log("Product details:", product);
     res.render('user/edit-user-product', { product, user, cartCount });
   } catch (error) {
@@ -587,7 +587,7 @@ router.get('/edit-user-product/:id', verifyLogin, async (req, res) => {
 /* Route to handle the Product Update and redirect to Edit product images */
 router.post('/edit-user-product/:id', verifyLogin, (req, res) => {
   let id = req.params.id;
-  productHelpers.updateUserProduct(req.params.id, req.body)
+  productHelpers.updateUserProduct(req.params.id, req.body) 
   res.redirect(`/user-product-images/${id}`);
 });
 
@@ -595,9 +595,9 @@ router.post('/edit-user-product/:id', verifyLogin, (req, res) => {
 /* Route to render the user-product-images page for editing */
 router.get('/user-product-images/:id', verifyLogin, async (req, res) => {
   let user = req.session.user;
-  let cartCount = await userHelpers.getCartCount(user._id)
+  let cartCount = await userHelpers.getCartCount(user._id) 
   try {
-    let product = await productHelpers.getProductImages(req.params.id);
+    let product = await productHelpers.getProductImages(req.params.id); 
     res.render('user/user-product-images', { product, user, cartCount });
   } catch (error) {
     console.error(error);
@@ -621,7 +621,7 @@ router.post('/user-product-images/:id', verifyLogin, async (req, res) => {
       images = [images];
     }
 
-    let product = await productHelpers.getProductImages(productId);
+    let product = await productHelpers.getProductImages(productId); 
     let productLength = product.images.length;
 
     images.forEach((image, index) => {
@@ -648,7 +648,7 @@ router.post('/user-product-images/:id', verifyLogin, async (req, res) => {
         fs.renameSync(path.join(imageDir, file), path.join(imageDir, newFileName));
         return newFileName;
       });
-      await productHelpers.updateProductImages(productId, imageFiles);
+      await productHelpers.updateProductImages(productId, imageFiles); 
       res.redirect('/your-account');
     })
     .catch((err) => {
@@ -677,7 +677,7 @@ router.delete('/delete-image', verifyLogin, async (req, res) => {
         fs.renameSync(path.join(imageDir, file), path.join(imageDir, newFileName));
         return newFileName;
       });
-      await productHelpers.updateProductImages(productId, imageFiles);
+      await productHelpers.updateProductImages(productId, imageFiles); 
       res.sendStatus(200);
     } catch (error) {
       console.error('Error renumbering images:', error);
@@ -712,9 +712,9 @@ router.post('/edit-image', verifyLogin, async (req, res) => {
 router.get('/edit-pending-product/:id', verifyLogin, async (req, res) => {
   let user = req.session.user;
   let prodId = req.params.id;
-  let cartCount = await userHelpers.getCartCount(user._id);
+  let cartCount = await userHelpers.getCartCount(user._id); 
   try {
-    let product = await productHelpers.getProductDetails(prodId);
+    let product = await productHelpers.getProductDetails(prodId); 
     console.log("Pending product details:", product);
     res.render('user/edit-pending-product', { product, user, cartCount });
   } catch (error) {
@@ -727,7 +727,7 @@ router.get('/edit-pending-product/:id', verifyLogin, async (req, res) => {
 /* Post edited images for pending products  */
 router.post('/edit-pending-product/:id', verifyLogin, (req, res) => {
   let id = req.params.id;
-  productHelpers.updateUserProduct(req.params.id, req.body)
+  productHelpers.updateUserProduct(req.params.id, req.body) 
   console.log('pending product updated');
   res.redirect(`/pending-product-images/${id}`);
 });
@@ -736,9 +736,9 @@ router.post('/edit-pending-product/:id', verifyLogin, (req, res) => {
 /* Route to pending-product-images for selling product (not approved products)*/
 router.get('/pending-product-images/:id', verifyLogin, async (req, res) => {
   let user = req.session.user;
-  let cartCount = await userHelpers.getCartCount(user._id)
+  let cartCount = await userHelpers.getCartCount(user._id) 
   try {
-    let product = await productHelpers.getPndgProductImages(req.params.id);
+    let product = await productHelpers.getPndgProductImages(req.params.id); 
     res.render('user/pending-product-images', { product, user, cartCount });
   } catch (error) {
     console.error(error);
@@ -762,7 +762,7 @@ router.post('/pending-product-images/:id', async (req, res) => {
       images = [images];
     }
 
-    let product = await productHelpers.getPndgProductImages(productId);
+    let product = await productHelpers.getPndgProductImages(productId); 
     let productLength = product.images.length;
 
     images.forEach((image, index) => {
@@ -789,7 +789,7 @@ router.post('/pending-product-images/:id', async (req, res) => {
         fs.renameSync(path.join(imageDir, file), path.join(imageDir, newFileName));
         return newFileName;
       });
-      await productHelpers.updatePndgProductImages(productId, imageFiles);
+      await productHelpers.updatePndgProductImages(productId, imageFiles); 
       res.redirect('/your-account');
     })
     .catch((err) => {
@@ -818,7 +818,7 @@ router.delete('/delete-pending-image', verifyLogin, async (req, res) => {
         fs.renameSync(path.join(imageDir, file), path.join(imageDir, newFileName));
         return newFileName;
       });
-      await productHelpers.updatePndgProductImages(productId, imageFiles);
+      await productHelpers.updatePndgProductImages(productId, imageFiles); 
       res.sendStatus(200);
     } catch (error) {
       console.error('Error renumbering images:', error);
@@ -832,7 +832,7 @@ router.delete('/delete-pending-image', verifyLogin, async (req, res) => {
 router.get('/sell-products', verifyLogin, async (req, res) => {
   try {
     let user = req.session.user;
-    let cartCount = await userHelpers.getCartCount(user._id);
+    let cartCount = await userHelpers.getCartCount(user._id); 
     res.render('user/sell-products', { user, cartCount });
   } catch (error) {
     console.error('Error fetching cart count:', error);
@@ -844,7 +844,7 @@ router.get('/sell-products', verifyLogin, async (req, res) => {
 /* Sell user products */
 router.post('/sell-product', (req, res) => {
   let product = req.body
-  productHelpers.addUserProduct(product).then((productId) => {
+  productHelpers.addUserProduct(product).then((productId) => { 
     if (req.files) {
       if (Array.isArray(req.files.Image)) {
         req.files.Image.forEach((image, index) => {
@@ -864,7 +864,7 @@ router.get('/search-products', async (req, res) => {
   const query = req.query.query;
 
   try {
-    const products = await productHelpers.searchProducts(query);
+    const products = await productHelpers.searchProducts(query); 
     res.json({ products });
   } catch (error) {
     console.error(error);
