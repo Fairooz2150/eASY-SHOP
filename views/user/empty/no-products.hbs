@@ -1,33 +1,33 @@
+<section class="bg-section">
 
-  <section class="bg-section">
-
-    <div class="container-fluid" id="bg" >
+    <div class="container-fluid" id="bg">
 
         <div class="pt-5 text-center">
             <h2>Start Selling on eASY Shop</h2>
-            
+
         </div>
 
-             <div class="d-flex justify-content-center pb-5 col-12" id="img">
-            <img src="/images/sell-product.png" alt="No Orders" > 
-            </div>
-                   <div class="text-center ">
-                    <p> Turn Your Products into Profits with Ease. <br> 
-                        Start selling today and enjoy the benefits of a platform built for your success.</p>
-                    <a href="/sell-products" class="btn btn-success ml-auto" id="sellProd"><i class="bi bi-arrow-right-square"></i> Sell Your Product </a>
-                   </div> 
+        <div class="d-flex justify-content-center pb-5 col-12" id="img">
+            <img src="/images/sell-product.png" alt="No Orders">
+        </div>
+        <div class="text-center ">
+            <p> Turn Your Products into Profits with Ease. <br>
+                Start selling today and enjoy the benefits of a platform built for your success.</p>
+            <a href="/sell-products" class="btn btn-success ml-auto" id="sellProd"><i
+                    class="bi bi-arrow-right-square"></i> Sell Your Product </a>
+        </div>
 
 
-            <!-- Advertisement section -->
+        <!-- Advertisement section -->
         <a href="/sell-products">
-        <div id="popup-sidebar" class="popup-sidebar" title="eASY Shop Ad">
-            <img id="popup-image" src="/images/sell-products-Ad2.gif" alt="eASY SHOP">
-        </div>
+            <div id="popup-sidebar" class="popup-sidebar" title="eASY Shop Ad">
+                <img id="popup-image" src="/images/sell-products-Ad2.gif" alt="eASY SHOP">
+            </div>
         </a>
 
     </div>
 
-</section> 
+</section>
 
 
 <script>
@@ -38,8 +38,8 @@
         const popupImage = document.getElementById('popup-image');
         const imageUrls = [
             "/images/sell-products-Ad2.gif",
-           "/images/sell-products-Ad1.gif",         
-           "/images/sell-products-Ad3.gif" 
+            "/images/sell-products-Ad1.gif",
+            "/images/sell-products-Ad3.gif"
 
         ];
         let currentIndex = 0;
@@ -70,22 +70,23 @@
 </script>
 
 <style>
-
     .eASY {
         color: rgb(40, 155, 155);
     }
-    #sellProd{
-    border-radius: 25px; 
-    color: white; 
-    background-image: linear-gradient(to right, #1e8f4b, rgb(2, 164, 89));
-    transition: all 0.3s ease;
-  }
-  #sellProd:hover{
-      background-image: linear-gradient(to left, #1e8f4b, rgb(2, 164, 89));
-      color: white;
-      transform: scale(1.1);
-  }
-    
+
+    #sellProd {
+        border-radius: 25px;
+        color: white;
+        background-image: linear-gradient(to right, #1e8f4b, rgb(2, 164, 89));
+        transition: all 0.3s ease;
+    }
+
+    #sellProd:hover {
+        background-image: linear-gradient(to left, #1e8f4b, rgb(2, 164, 89));
+        color: white;
+        transform: scale(1.1);
+    }
+
     /* Styles for the pop-up sidebar */
     .popup-sidebar {
         position: fixed;
@@ -115,26 +116,29 @@
         }
     }
 
-      a {
-    text-decoration: none;  /* Remove underline by default */
-    color: black;
+    a {
+        text-decoration: none;
+        /* Remove underline by default */
+        color: black;
     }
 
-  a:hover {
-    text-decoration: none; /* Ensure underline does not appear on hover */
-    color: black;
-  }
+    a:hover {
+        text-decoration: none;
+        /* Ensure underline does not appear on hover */
+        color: black;
+    }
 
-  #img img{
-    width: 40%;
-  }
+    #img img {
+        width: 40%;
+    }
 
-   #shop{
-    color: white; 
-    border-radius: 20px;
-    transition: all 0.3s ease;
-   } 
-    #shop:hover{
-    transform: scale(1.1);
+    #shop {
+        color: white;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+    }
+
+    #shop:hover {
+        transform: scale(1.1);
     }
 </style>

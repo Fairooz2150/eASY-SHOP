@@ -1,48 +1,48 @@
-var db=require('../config/connection')
-var collection=require('../config/collections')
-const bcrypt=require('bcrypt')
+var db = require('../config/connection')
+var collection = require('../config/collections')
+const bcrypt = require('bcrypt')
 const { log } = require('console')
-var objectId=require('mongodb').ObjectID
+var objectId = require('mongodb').ObjectID
 
-module.exports={
-    doLogin:(adminData)=>{
-        return new Promise(async(resolve,reject)=>{
-            let loginStatus=false
-            let response={}
-            let admin=await db.get().collection(collection.ADMIN_COLLECTION).findOne({Email:adminData.Email})
-            if(admin){
-                 bcrypt.compare(adminData.Password,admin.Password).then((status)=>{
-                    if(status){
+module.exports = {
+    doLogin: (adminData) => {
+        return new Promise(async (resolve, reject) => {
+            let loginStatus = false
+            let response = {}
+            let admin = await db.get().collection(collection.ADMIN_COLLECTION).findOne({ Email: adminData.Email })
+            if (admin) {
+                bcrypt.compare(adminData.Password, admin.Password).then((status) => {
+                    if (status) {
                         console.log('Admin Loggedin Successfully')
-                        response.admin=admin
-                        response.status=true
+                        response.admin = admin
+                        response.status = true
                         resolve(response)
-                    }else{
+                    } else {
                         console.log('Wrong password entered')
-                        resolve({status:false})
+                        resolve({ status: false })
                     }
-                 })
-            }else{
+                })
+            } else {
                 console.log('No admin in this email id')
-                resolve({status:false})
+                resolve({ status: false })
             }
         })
     },
     getAllUsers: () => {
         return new Promise(async (resolve, reject) => {
-          try {
-            let users = await db.get().collection(collection.USER_COLLECTION).find().toArray();
-            resolve(users);
-          } catch (error) {
-            reject(error);
-          }
+            try {
+                let users = await db.get().collection(collection.USER_COLLECTION).find().toArray();
+                resolve(users);
+            } catch (error) {
+                reject(error);
+            }
         });
-      },
-      deleteUser:(userId)=>{
-        return new Promise((resolve,reject)=>{
-           
-            db.get().collection(collection.USER_COLLECTION).removeOne({_id:objectId(userId)}).then((response)=>{
-               
+    },
+    deleteUser: (userId) => {
+        return new Promise((resolve, reject) => {
+
+            db.get().collection(collection.USER_COLLECTION).removeOne({ _id: objectId(userId) }).then((response) => {
+
                 resolve(response)
             })
         })
@@ -92,7 +92,7 @@ module.exports={
                         time: { $first: '$time' },
                         userDetails: { $first: '$userDetails' },
                         deliveryDetails: { $first: '$deliveryDetails' },
-                        products: { 
+                        products: {
                             $push: {
                                 item: '$products.item',
                                 quantity: '$products.quantity',
@@ -136,7 +136,7 @@ module.exports={
                 { _id: objectId(orderId) },
                 { $set: { status: status } }
             ).then((response) => {
-               
+
                 resolve(response);
             }).catch((err) => {
                 reject(err);
@@ -144,7 +144,7 @@ module.exports={
         });
     },
 
-    updateUserProdStatus : (Id, Status) => {
+    updateUserProdStatus: (Id, Status) => {
         return new Promise((resolve, reject) => {
             db.get().collection(collection.USER_PRODUCTS_COLLECTION).updateOne(
                 { _id: objectId(Id) },
@@ -154,7 +154,7 @@ module.exports={
                     try {
                         // Find the document in USER_PRODUCTS_COLLECTION
                         const product = await db.get().collection(collection.USER_PRODUCTS_COLLECTION).findOne({ _id: objectId(Id) });
-    
+
                         if (product) {
                             // Create the product data with the same _id
                             const productData = {
@@ -163,7 +163,7 @@ module.exports={
                                 Category: product.Category,
                                 Actual_Price: product.Actual_Price,
                                 Offer_Price: product.Offer_Price,
-                                Product_Owner:product.Product_Owner,
+                                Product_Owner: product.Product_Owner,
                                 Offer_Percentage: product.Offer_Percentage,
                                 Description: product.Description,
                                 Seller_Id: product.Seller_Id,
@@ -172,18 +172,18 @@ module.exports={
                                 Phone: product.Phone,
                                 Email: product.Email,
                                 Shop_Address: product.Shop_Address,
-                                Stock_Count:product.Stock_Count,
-                                Whatsapp:product.Whatsapp,
+                                Stock_Count: product.Stock_Count,
+                                Whatsapp: product.Whatsapp,
                                 Status: "Approved",
                                 Date: product.Date,
                                 Time: product.Time
-                               
+
                             };
-    
+
                             // Insert the product data into PRODUCT_COLLECTION
                             await db.get().collection(collection.PRODUCT_COLLECTION).insertOne(productData);
                         }
-    
+
                         resolve(response);
                     } catch (error) {
                         reject(error);
@@ -195,36 +195,36 @@ module.exports={
                 reject(err);
             });
         });
-    },   
+    },
 
-  getAllOrdersAscending: () => {
-    return new Promise((resolve, reject) => {
-      db.get().collection('orders').find().sort({ date: 1 }).toArray().then((orders) => {
-        resolve(orders);
-      }).catch((error) => {
-        reject(error);
-      });
-    });
-  },
+    getAllOrdersAscending: () => {
+        return new Promise((resolve, reject) => {
+            db.get().collection('orders').find().sort({ date: 1 }).toArray().then((orders) => {
+                resolve(orders);
+            }).catch((error) => {
+                reject(error);
+            });
+        });
+    },
 
-  getAllOrdersDescending: () => {
-    return new Promise((resolve, reject) => {
-      db.get().collection('orders').find().sort({ date: -1 }).toArray().then((orders) => {
-        resolve(orders);
-      }).catch((error) => {
-        reject(error);
-      });
-    });
-  },
+    getAllOrdersDescending: () => {
+        return new Promise((resolve, reject) => {
+            db.get().collection('orders').find().sort({ date: -1 }).toArray().then((orders) => {
+                resolve(orders);
+            }).catch((error) => {
+                reject(error);
+            });
+        });
+    },
 
-  getAllMessages: () => {
-    return new Promise(async(resolve, reject) => {
-        await db.get().collection(collection.MESSAGE_COLLECTION).find().toArray().then((messages) => {
-        resolve(messages);
-      }).catch((error) => {
-        reject(error);
-      });
-    });
-  },
-  
-      }
+    getAllMessages: () => {
+        return new Promise(async (resolve, reject) => {
+            await db.get().collection(collection.MESSAGE_COLLECTION).find().toArray().then((messages) => {
+                resolve(messages);
+            }).catch((error) => {
+                reject(error);
+            });
+        });
+    },
+
+}

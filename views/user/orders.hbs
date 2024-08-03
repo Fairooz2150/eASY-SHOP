@@ -2,19 +2,19 @@
   <div class="container">
     <h2 class="main-heading">Your Orders</h2>
     <div id="orders-container">
-    {{#each orders}}
+      {{#each orders}}
       <div class="card">
         <div class="card-header">
           <div class="row header-content">
             <div class="chip">
               {{#ifEquals this.userDetails.Gender 'Male'}}
-                <img src="/images/male-icon.jpg" alt="Male Icon">
+              <img src="/images/male-icon.jpg" alt="Male Icon">
               {{else}}
-                {{#ifEquals this.userDetails.Gender 'Female'}}
-                  <img src="/images/female-icon.jpg" alt="Female Icon">
-                {{else}}
-                  <img src="/images/trans-icon.jpg" alt="Trans Icon">
-                {{/ifEquals}}
+              {{#ifEquals this.userDetails.Gender 'Female'}}
+              <img src="/images/female-icon.jpg" alt="Female Icon">
+              {{else}}
+              <img src="/images/trans-icon.jpg" alt="Trans Icon">
+              {{/ifEquals}}
               {{/ifEquals}}
               {{this.deliveryDetails.name}}
             </div>
@@ -25,10 +25,10 @@
             <div class="payment">
               <span class="payment-title">Payment: </span>
               <br> {{#ifEquals this.paymentMethod 'ONLINE'}}
-                    <span title="Paid Successfully">Successful </span>
-                    {{else}}
-                    <span title="Cash on Delivery">COD </span> 
-                    {{/ifEquals}}
+              <span title="Paid Successfully">Successful </span>
+              {{else}}
+              <span title="Cash on Delivery">COD </span>
+              {{/ifEquals}}
             </div>
           </div>
         </div>
@@ -36,32 +36,33 @@
           <div class="row">
             <div class="orderInfo">
               <p class="card-text"><span id="orderId">Order Id: </span><br> {{this._id}}</p>
-              <p class="card-text"><span  id="orderStatus">Order Status: </span> <span id="status-{{this._id}}">{{this.status}}</span></p>
+              <p class="card-text"><span id="orderStatus">Order Status: </span> <span
+                  id="status-{{this._id}}">{{this.status}}</span></p>
             </div>
             <address class="address">
               <span id="address">Delivery Address:</span><br>{{newlineToBr this.deliveryDetails.address}}, <br>
-              {{this.deliveryDetails.district}}  {{this.deliveryDetails.pincode}},
+              {{this.deliveryDetails.district}} {{this.deliveryDetails.pincode}},
               <br> {{this.deliveryDetails.state}}
-              <br> <i class="bi bi-telephone"></i>  {{this.deliveryDetails.mobile}}
+              <br> <i class="bi bi-telephone"></i> {{this.deliveryDetails.mobile}}
             </address>
-            <div class="status-image" >
-               
-                {{#ifEquals this.status 'placed'}}
-              <img src="/images/order-placed.png"  alt="Order Placed">
+            <div class="status-image">
+
+              {{#ifEquals this.status 'placed'}}
+              <img src="/images/order-placed.png" alt="Order Placed">
               <p><small>We've received your order and it will be shipped shortly.</small></p>
-                {{else}}
-                 {{#ifEquals this.status 'pending'}}
-              <img src="/images/order-pending.png" alt="Order Pending">        
+              {{else}}
+              {{#ifEquals this.status 'pending'}}
+              <img src="/images/order-pending.png" alt="Order Pending">
               <p><small>We’re unable to process your order due to a payment issue.</small></p>
-                {{else}}
-                 {{#ifEquals this.status 'Shipped'}}
-                <img src="/images/deliver-soon.png" alt="Order Shipped">
-                 <p><small>Your order has been shipped and will be dispatched soon.</small></p>
-                {{else}}
-                <img src="/images/order-delivered.png"  alt="Order Delivered">
-                 <p><small>Your order has arrived. We hope you enjoy your purchase!</small></p>
-                 {{/ifEquals}}
-                 {{/ifEquals}}
+              {{else}}
+              {{#ifEquals this.status 'Shipped'}}
+              <img src="/images/deliver-soon.png" alt="Order Shipped">
+              <p><small>Your order has been shipped and will be dispatched soon.</small></p>
+              {{else}}
+              <img src="/images/order-delivered.png" alt="Order Delivered">
+              <p><small>Your order has arrived. We hope you enjoy your purchase!</small></p>
+              {{/ifEquals}}
+              {{/ifEquals}}
               {{/ifEquals}}
             </div>
           </div>
@@ -80,18 +81,18 @@
                 <tr>
                   <th scope="row">{{incrementedIndex @index}}</th>
                   <td>
-                     <a href="/view-product/{{this.item}}">
-              <div class="row">
-                <div class="m-2">
-                  <img src="/product-images/{{this.item}}_0.jpg" id="prodImg"
-                   alt="Image not available" onerror="this.onerror=null; this.src='/images/no-images-available.png';" >
-                </div>
-                <div class="ml-2 product_details">
-                  <span class="title" title="{{this.productName}}">{{this.productName}} </span> <br>
-                  <span class="text-muted"> Product Id {{this.item}}</span>
-                </div>
-              </div> 
-                  </a>
+                    <a href="/view-product/{{this.item}}">
+                      <div class="row">
+                        <div class="m-2">
+                          <img src="/product-images/{{this.item}}_0.jpg" id="prodImg" alt="Image not available"
+                            onerror="this.onerror=null; this.src='/images/no-images-available.png';">
+                        </div>
+                        <div class="ml-2 product_details">
+                          <span class="title" title="{{this.productName}}">{{this.productName}} </span> <br>
+                          <span class="text-muted"> Product Id {{this.item}}</span>
+                        </div>
+                      </div>
+                    </a>
                   </td>
                   <td>₹<span id="offerPrice">{{this.price}}</span></td>
                   <td>{{this.quantity}}</td>
@@ -103,16 +104,18 @@
         </div>
         <div class="card-footer">
           <div class="footer-content">
-            <div class="total"><span id="totalTitle"> Total: </span><span id="totalAmount">{{this.totalAmount}}</span></div>
+            <div class="total"><span id="totalTitle"> Total: </span><span id="totalAmount">{{this.totalAmount}}</span>
+            </div>
           </div>
         </div>
       </div>
       {{/each}}
     </div>
 
-     <!-- Scroll Up -->
-  <div id="back-top" >
-        <button  title="Go to Top" onclick="topFunction()" id="topBtn"> <i class="bi bi-arrow-up-circle-fill"></i> </button>
+    <!-- Scroll Up -->
+    <div id="back-top">
+      <button title="Go to Top" onclick="topFunction()" id="topBtn"> <i class="bi bi-arrow-up-circle-fill"></i>
+      </button>
     </div>
 
   </div>
@@ -120,102 +123,109 @@
 
 <script>
   // Get the button
-let mybutton = document.getElementById("topBtn");
+  let mybutton = document.getElementById("topBtn");
 
-// When the user scrolls down 20px from the top of the document, show the button
-window.onscroll = function() {scrollFunction()};
+  // When the user scrolls down 20px from the top of the document, show the button
+  window.onscroll = function () { scrollFunction() };
 
-function scrollFunction() {
-  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-    mybutton.style.display = "block";
-  } else {
-    mybutton.style.display = "none";
+  function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+      mybutton.style.display = "block";
+    } else {
+      mybutton.style.display = "none";
+    }
   }
-}
 
-// When the user clicks on the button, scroll to the top of the document
-function topFunction() {
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
-}
+  // When the user clicks on the button, scroll to the top of the document
+  function topFunction() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+  }
 
 
   // Function to format number with commas
-    function formatNumber(number) {
-      return number.toLocaleString('en-IN'); // 'en-IN' for Indian number formatting 
-    }
+  function formatNumber(number) {
+    return number.toLocaleString('en-IN'); // 'en-IN' for Indian number formatting 
+  }
 
   // format offer price number with commas
-     document.addEventListener('DOMContentLoaded', function() {
-      const offerPrices = document.querySelectorAll('#offerPrice');
-      offerPrices.forEach(element => {
-        const priceString = element.textContent.trim();
-        const price = parseFloat(priceString.replace(/[^\d.-]/g, ''));
-        if (!isNaN(price)) {
-          element.textContent = formatNumber(price);
-        }
-      });
+  document.addEventListener('DOMContentLoaded', function () {
+    const offerPrices = document.querySelectorAll('#offerPrice');
+    offerPrices.forEach(element => {
+      const priceString = element.textContent.trim();
+      const price = parseFloat(priceString.replace(/[^\d.-]/g, ''));
+      if (!isNaN(price)) {
+        element.textContent = formatNumber(price);
+      }
     });
+  });
 
   // format Total amount of an order with commas
-     document.addEventListener('DOMContentLoaded', function() {
-      const totalAmounts = document.querySelectorAll('#totalAmount');
-      totalAmounts.forEach(element => {
-        const priceString = element.textContent.trim();
-        const price = parseFloat(priceString.replace(/[^\d.-]/g, ''));
-        if (!isNaN(price)) {
-          element.textContent ='₹' + formatNumber(price);
-        }
-      });
+  document.addEventListener('DOMContentLoaded', function () {
+    const totalAmounts = document.querySelectorAll('#totalAmount');
+    totalAmounts.forEach(element => {
+      const priceString = element.textContent.trim();
+      const price = parseFloat(priceString.replace(/[^\d.-]/g, ''));
+      if (!isNaN(price)) {
+        element.textContent = '₹' + formatNumber(price);
+      }
     });
+  });
 
 
 </script>
 
 <style>
+  .main-heading {
+    text-align: center;
+    margin-top: 30px;
 
-    .main-heading {
-      text-align: center;
-      margin-top: 30px;
-      
-    }
+  }
 
-    .card {
-      margin-top: 65px;
-      border-radius: 20px;
-      overflow: hidden; 
-      margin-bottom: 50px;
-      box-shadow: 0 14px 16px rgba(21, 105, 131, 0.5);
-    }
-    .card-header{
-      background-color: #278a9b96;
-      color: white;
-    }
+  .card {
+    margin-top: 65px;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 50px;
+    box-shadow: 0 14px 16px rgba(21, 105, 131, 0.5);
+  }
 
-    .payment-header {
-      font-weight: bold;
-    }
-    .payment-title{
-      font-weight: bold;
-    }
-    .orderInfo{
-      margin-right: 10em;
-      margin-bottom: 2em;
-    }
-    .address {
-      margin-right: 10em;
-      margin-bottom: 2em;
-    }
-    #address{
-      font-weight: bold;
-    }
-    .status-image{
-       margin-bottom: 2em;
-    }
-    .status-image img{
-      height: 250px;
-    }
-    .title {
+  .card-header {
+    background-color: #278a9b96;
+    color: white;
+  }
+
+  .payment-header {
+    font-weight: bold;
+  }
+
+  .payment-title {
+    font-weight: bold;
+  }
+
+  .orderInfo {
+    margin-right: 10em;
+    margin-bottom: 2em;
+  }
+
+  .address {
+    margin-right: 10em;
+    margin-bottom: 2em;
+  }
+
+  #address {
+    font-weight: bold;
+  }
+
+  .status-image {
+    margin-bottom: 2em;
+  }
+
+  .status-image img {
+    height: 250px;
+  }
+
+  .title {
     overflow: hidden;
     text-overflow: ellipsis;
     -webkit-line-clamp: 1;
@@ -229,7 +239,8 @@ function topFunction() {
   .title:hover {
     color: rgb(40, 155, 155);
   }
-   a {
+
+  a {
     color: black;
     text-decoration: none;
     /* Remove underline by default */
@@ -240,102 +251,109 @@ function topFunction() {
     text-decoration: none;
     /* Ensure underline does not appear on hover */
   }
-  #prodImg{
-     width: 8em; 
-     height: 7em;
+
+  #prodImg {
+    width: 8em;
+    height: 7em;
   }
 
-    .chip {
-      display: inline-block;
-      padding: 0 25px;
-      height: 50px;
-      font-size: 16px;
-      line-height: 50px;
-      border-radius: 25px;
-      background-color: #f1f1f1;
-      color: #309db0;
-      font-weight: 500;
-      font-size: large;
-    }
-  
-    .chip img {
-      float: left;
-      margin: 0 10px 0 -25px;
-      height: 50px;
-      width: 50px;
-      border-radius: 50%;
-    }
+  .chip {
+    display: inline-block;
+    padding: 0 25px;
+    height: 50px;
+    font-size: 16px;
+    line-height: 50px;
+    border-radius: 25px;
+    background-color: #f1f1f1;
+    color: #309db0;
+    font-weight: 500;
+    font-size: large;
+  }
 
-    .header-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-    }
-    #date, #time{
-      font-weight:bold;
-    }
-    #orderId, #orderStatus{
-      font-weight:bold;
-    }
+  .chip img {
+    float: left;
+    margin: 0 10px 0 -25px;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+  }
 
-    .card-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #278a9b96;
-      color: white;
-    }
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
 
-    .footer-content {
-      display: flex;
-      width: 100%;
-      justify-content: space-between;
-      align-items: center;
-      font-size: large;
-    }
-    #totalTitle{
-       font-weight: bold;
-    }
+  #date,
+  #time {
+    font-weight: bold;
+  }
 
-    .ship {
-      margin-left: auto;
-    }
+  #orderId,
+  #orderStatus {
+    font-weight: bold;
+  }
 
-    .btn-primary {
-      margin: 0;
-    }
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #278a9b96;
+    color: white;
+  }
 
-    .date, .payment {
-      padding: 0 15px;
-    }
-    .total{
-      margin-left: auto;
-    }
-    .product_details{
-      margin-left: 10px;
-    }
-    
-    #topBtn {
-      display: none;
-      position: fixed;
-      bottom: 40px;
-      right: 30px;
-      z-index: 99;
-      font-size: 25px;
-      border: none;
-      outline: none;
-      border-radius: 50%;
-      color: white;
-      background-image: linear-gradient(to bottom, #309db0, rgb(71, 172, 209));
-       cursor: pointer;
-       box-shadow: 0 2px 12px rgba(21, 105, 131, 0.5);
-    }
+  .footer-content {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    font-size: large;
+  }
 
-    #topBtn:hover {
-      background-image: linear-gradient(to top, #309db0, rgb(71, 172, 209));
-      box-shadow: 0 2px 18px rgba(13, 89, 112, 0.5);
-    }
-  </style>
+  #totalTitle {
+    font-weight: bold;
+  }
 
+  .ship {
+    margin-left: auto;
+  }
 
+  .btn-primary {
+    margin: 0;
+  }
+
+  .date,
+  .payment {
+    padding: 0 15px;
+  }
+
+  .total {
+    margin-left: auto;
+  }
+
+  .product_details {
+    margin-left: 10px;
+  }
+
+  #topBtn {
+    display: none;
+    position: fixed;
+    bottom: 40px;
+    right: 30px;
+    z-index: 99;
+    font-size: 25px;
+    border: none;
+    outline: none;
+    border-radius: 50%;
+    color: white;
+    background-image: linear-gradient(to bottom, #309db0, rgb(71, 172, 209));
+    cursor: pointer;
+    box-shadow: 0 2px 12px rgba(21, 105, 131, 0.5);
+  }
+
+  #topBtn:hover {
+    background-image: linear-gradient(to top, #309db0, rgb(71, 172, 209));
+    box-shadow: 0 2px 18px rgba(13, 89, 112, 0.5);
+  }
+</style>

@@ -1,10 +1,11 @@
 <section>
   <div class="container-fluid mt-2">
 
-      <h2 class="text-center pt-3">eASY Products</h2>
+    <h2 class="text-center pt-3">eASY Products</h2>
 
     <div class="row mr-2 mb-2">
-      <a href="/admin/add-product"  class="btn btn-success ml-auto" id="sellProd"><i class="bi bi-bag-plus"></i>  Add Product</a>
+      <a href="/admin/add-product" class="btn btn-success ml-auto" id="sellProd"><i class="bi bi-bag-plus"></i> Add
+        Product</a>
     </div>
 
     <table class="table mt-3" id="productsTable">
@@ -22,54 +23,53 @@
           <th scope="row">{{incrementedIndex @index}}</th>
 
           <td>
-          
+
             <div class="row">
               <a href="/view-product/{{this._id}}">
-              <div class="m-2">
-                <img  src="/product-images/{{this._id}}_0.jpg" class="img ml-2"
-                  alt="Image not available" onerror="this.onerror=null; this.src='/images/no-images-available.png';">
-              </div>
+                <div class="m-2">
+                  <img src="/product-images/{{this._id}}_0.jpg" class="img ml-2" alt="Image not available"
+                    onerror="this.onerror=null; this.src='/images/no-images-available.png';">
+                </div>
 
-              <div class="product_details ml-3">
-                <span class="title" title="{{this.Name}}">{{this.Name}} </span><br>
-                <span class="category " title="{{this.Category}}">{{this.Category}}</span>            
-                <br><span class="productId" >
-                  <span class="prodId text-muted" title="Product Id">{{this._id}}</span>
+                <div class="product_details ml-3">
+                  <span class="title" title="{{this.Name}}">{{this.Name}} </span><br>
+                  <span class="category " title="{{this.Category}}">{{this.Category}}</span>
+                  <br><span class="productId">
+                    <span class="prodId text-muted" title="Product Id">{{this._id}}</span>
                     {{#ifCond this.Product_Owner '===' 'Admin'}}
-                      <p hidden>easy products</p>
-                       <i class="bi bi-patch-check" title="eASY Product"></i>
-                       {{else}}
-                       <p hidden>User products</p>
-                     {{/ifCond}}   
-                  </span> 
+                    <p hidden>easy products</p>
+                    <i class="bi bi-patch-check" title="eASY Product"></i>
+                    {{else}}
+                    <p hidden>User products</p>
+                    {{/ifCond}}
+                  </span>
 
-                <br>
-                {{#ifCond this.Stock_Count '<' 1}}
-                <span class="outofStock">Out of Stock</span>
-                {{else}}
-                  <b>Stock:</b> {{this.Stock_Count}}
-                {{/ifCond}}
-                 </a>
+                  <br>
+                  {{#ifCond this.Stock_Count '<' 1}} <span class="outofStock">Out of Stock</span>
+                    {{else}}
+                    <b>Stock:</b> {{this.Stock_Count}}
+                    {{/ifCond}}
+              </a>
             </div>
-          </div>
-                
-          </td>
+  </div>
 
-          <td><span id="offer-price">{{this.Offer_Price}}</span></td>
+  </td>
 
-          <td>
-           
-            <a href="/admin/edit-product/{{this._id}}" class="btn p-1 mr-1" id="edit"><i class="bi bi-pencil-square"></i></a>
+  <td><span id="offer-price">{{this.Offer_Price}}</span></td>
 
-            <button class="btn p-1" onclick="deleteProduct('{{this._id}}', '{{this.Name}}')" id="delete"><i
-                class="bi bi-trash3"></i></button>
-            
-          </td>
+  <td>
 
-        </tr>
-        {{/each}}
-      </tbody>
-    </table>
+    <a href="/admin/edit-product/{{this._id}}" class="btn p-1 mr-1" id="edit"><i class="bi bi-pencil-square"></i></a>
+
+    <button class="btn p-1" onclick="deleteProduct('{{this._id}}', '{{this.Name}}')" id="delete"><i
+        class="bi bi-trash3"></i></button>
+
+  </td>
+
+  </tr>
+  {{/each}}
+  </tbody>
+  </table>
   </div>
   <!-- Confirmation Modal -->
   <div id="confirmationModal" class="modal">
@@ -88,21 +88,21 @@
     $('#productsTable').DataTable();
   });
 
- // Function to format number with commas
-    function formatNumber(number) {
-      return number.toLocaleString('en-IN'); // 'en-IN' for Indian number formatting (₹ separation)
-    }
+  // Function to format number with commas
+  function formatNumber(number) {
+    return number.toLocaleString('en-IN'); // 'en-IN' for Indian number formatting (₹ separation)
+  }
 
-    document.addEventListener('DOMContentLoaded', function() {
-      const offerPrices = document.querySelectorAll('#offer-price');
-      offerPrices.forEach(element => {
-        const priceString = element.textContent.trim();
-        const price = parseFloat(priceString.replace(/[^\d.-]/g, ''));
-        if (!isNaN(price)) {
-          element.textContent = formatNumber(price);
-        }
-      });
+  document.addEventListener('DOMContentLoaded', function () {
+    const offerPrices = document.querySelectorAll('#offer-price');
+    offerPrices.forEach(element => {
+      const priceString = element.textContent.trim();
+      const price = parseFloat(priceString.replace(/[^\d.-]/g, ''));
+      if (!isNaN(price)) {
+        element.textContent = formatNumber(price);
+      }
     });
+  });
 
 
   // Function to show the confirmation modal
@@ -119,7 +119,7 @@
 
     // Set the modal message
     const modalMessage = document.getElementById('modalMessage');
-    
+
     // Apply the message with styled productName
     modalMessage.innerHTML = message;
     modalMessage.style.overflow = 'hidden';
@@ -154,28 +154,28 @@
       }
     }
   }
-  
+
 
   function deleteProduct(productId, productName) {
-  showConfirmationModal(`Are you sure you want to delete <span id="styledProductName">${productName}</span>?`, function() {
-    $.ajax({
-      url: '/admin/delete-product/' + productId,
-      method: 'DELETE',
-      success: function(response) {
-        if (response.success) {
-          console.log('Product deleted successfully');
-          location.reload(); // Refresh the page or update the DOM as needed
-        } else {
-          alert('Failed to delete product');
+    showConfirmationModal(`Are you sure you want to delete <span id="styledProductName">${productName}</span>?`, function () {
+      $.ajax({
+        url: '/admin/delete-product/' + productId,
+        method: 'DELETE',
+        success: function (response) {
+          if (response.success) {
+            console.log('Product deleted successfully');
+            location.reload(); // Refresh the page or update the DOM as needed
+          } else {
+            alert('Failed to delete product');
+          }
+        },
+        error: function (error) {
+          console.error('Error:', error);
+          alert('An error occurred while deleting the product');
         }
-      },
-      error: function(error) {
-        console.error('Error:', error);
-        alert('An error occurred while deleting the product');
-      }
-    });
-  });
-}
+      });
+    });
+  }
 
 
 </script>
@@ -209,7 +209,7 @@
     margin: 15% auto;
     /* 15% from the top and centered */
     padding: 20px;
-    border-radius: 10px; 
+    border-radius: 10px;
     box-shadow: 0 0 20px rgba(18, 155, 150, 0.5);
     width: 80%;
     /* Could be more or less, depending on screen size */
@@ -232,14 +232,15 @@
     text-decoration: none;
     cursor: pointer;
   }
- #styledProductName {
+
+  #styledProductName {
     overflow: hidden;
     text-overflow: ellipsis;
     -webkit-line-clamp: 3;
     display: -webkit-box;
-    -webkit-box-orient: vertical; 
+    -webkit-box-orient: vertical;
     font-weight: bold;
-}
+  }
 
   #confirmRemove {
     padding: 10px 20px;
@@ -249,7 +250,8 @@
     border: none;
     border-radius: 20px;
   }
-  #cancelRemove{
+
+  #cancelRemove {
     padding: 10px 20px;
     margin: 10px;
     background-image: linear-gradient(to left, #309db0, rgb(71, 172, 209));
@@ -257,33 +259,38 @@
     border: none;
     border-radius: 20px;
   }
-   #cancelRemove:hover{
+
+  #cancelRemove:hover {
     background-image: linear-gradient(to right, #309db0, rgb(71, 172, 209));
     color: white;
   }
-  #confirmRemove:hover{
-   background-image: linear-gradient(to right, #f07b0d, rgb(245, 157, 64));
+
+  #confirmRemove:hover {
+    background-image: linear-gradient(to right, #f07b0d, rgb(245, 157, 64));
     color: white;
   }
 
-  #delete{
+  #delete {
     box-shadow: 0 0 4px rgba(5, 78, 75, 0.5);
     color: #e2740e;
   }
-  #edit{
+
+  #edit {
     box-shadow: 0 0 4px rgba(5, 78, 75, 0.5);
-    color:rgb(39, 163, 195);
+    color: rgb(39, 163, 195);
   }
-  #delete:hover{
+
+  #delete:hover {
     background-color: #e2740e;
     color: white;
   }
-  #edit:hover{
-      background-color:rgb(39, 163, 195);
-      color:  white;
-    }
 
-    a {
+  #edit:hover {
+    background-color: rgb(39, 163, 195);
+    color: white;
+  }
+
+  a {
     color: black;
     text-decoration: none;
     /* Remove underline by default */
@@ -294,10 +301,12 @@
     text-decoration: none;
     /* Ensure underline does not appear on hover */
   }
+
   .img {
-     width: 9em; 
-     height: 8em;
+    width: 9em;
+    height: 8em;
   }
+
   .title {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -309,25 +318,26 @@
     font-weight: bold;
   }
 
-  .container-fluid h2{
+  .container-fluid h2 {
     font-family: 'Times New Roman', Times, serif;
     font-size: 40px;
     font-weight: bold;
-    
+
   }
 
-   #sellProd{
-    border-radius: 25px; 
-    color: white; 
+  #sellProd {
+    border-radius: 25px;
+    color: white;
     background-image: linear-gradient(to right, #1e8f4b, rgb(2, 164, 89));
-    
-  }
-  #sellProd:hover{
-      background-image: linear-gradient(to left, #1e8f4b, rgb(2, 164, 89));
-      color: white;
+
   }
 
-  .category { 
+  #sellProd:hover {
+    background-image: linear-gradient(to left, #1e8f4b, rgb(2, 164, 89));
+    color: white;
+  }
+
+  .category {
     overflow: hidden;
     text-overflow: ellipsis;
     -webkit-line-clamp: 1;
@@ -335,7 +345,8 @@
     -webkit-box-orient: vertical;
     max-width: 40em;
   }
-  .prodId{
+
+  .prodId {
     overflow: hidden;
     text-overflow: ellipsis;
     -webkit-line-clamp: 1;
@@ -344,10 +355,12 @@
     max-width: 40em;
     margin-right: 5px;
   }
-  .productId{
+
+  .productId {
     display: inline-flex;
   }
-  .outofStock{
+
+  .outofStock {
     font-weight: bold;
     color: #e2740e;
   }

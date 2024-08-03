@@ -6,7 +6,7 @@ const adminHelpers = require('../helpers/admin-helpers');
 const productHelpers = require('../helpers/product-helpers');
 
 /* verify Admin login */
-const verifyLogin = (req, res, next) => { 
+const verifyLogin = (req, res, next) => {
   if (req.session.adminLoggedIn) {
     next()
   } else {
@@ -20,13 +20,13 @@ const verifyLogin = (req, res, next) => {
 router.get('/', verifyLogin, async (req, res, next) => {
   try {
 
-   let products= await productHelpers.getAllProducts()
-   if(products.length === 0){
-    res.render('admin/empty/empty-shop', { admin: true });
-   }else{
-    res.render('admin/view-products', { admin: true, products });
-   }
-    
+    let products = await productHelpers.getAllProducts()
+    if (products.length === 0) {
+      res.render('admin/empty/empty-shop', { admin: true });
+    } else {
+      res.render('admin/view-products', { admin: true, products });
+    }
+
   } catch (err) {
     console.error(err);
     res.status(500).send(err);
@@ -154,7 +154,7 @@ router.get('/all-messages', verifyLogin, (req, res) => {
 
 
 /*GET Add Product page*/
-router.get('/add-product', verifyLogin, (req, res)=> {
+router.get('/add-product', verifyLogin, (req, res) => {
   res.render('admin/add-product', { admin: true })
 })
 

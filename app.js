@@ -32,7 +32,7 @@ const hbsInstance = hbs.create({
       }
       return text;
     }
-  
+
   },
   runtimeOptions: {
     allowProtoPropertiesByDefault: true, // Allow access to prototype properties
@@ -42,7 +42,7 @@ const hbsInstance = hbs.create({
 
 
 const handlebars = require('handlebars');
-handlebars.registerHelper('ifCond', function(v1, operator, v2, options) {
+handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
   switch (operator) {
     case '===':
       return (v1 === v2) ? options.fn(this) : options.inverse(this);
@@ -64,10 +64,10 @@ handlebars.registerHelper('ifCond', function(v1, operator, v2, options) {
       return options.inverse(this);
   }
 });
-handlebars.registerHelper('gt', function(a, b) {
+handlebars.registerHelper('gt', function (a, b) {
   return a > b;
 });
-handlebars.registerHelper('lt', function(a, b) {
+handlebars.registerHelper('lt', function (a, b) {
   return a < b;
 });
 
@@ -112,9 +112,9 @@ app.use(function (err, req, res, next) {
   console.error(err);
   // Render specific error pages based on the status code
   if (err.status === 404) {
-    res.status(404).render('error-404',{hide:true});
+    res.status(404).render('error-404', { hide: true });
   } else {
-    res.status(err.status || 500).render('error-500',{hide:true});
+    res.status(err.status || 500).render('error-500', { hide: true });
   }
 });
 

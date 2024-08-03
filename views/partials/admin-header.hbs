@@ -9,8 +9,8 @@
 
     <div class="collapse navbar-collapse mt-1" id="navbarTogglerDemo03">
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0 flex-row">
-        
-                
+
+
         {{#if loginPage}}
         <li></li>
         {{else}}
@@ -19,7 +19,8 @@
         </li>
 
         <li class="nav-item pr-3">
-          <a class="nav-link" href="/admin/product-requests" id="header-links"><i class="bi bi-list-check"></i> Requests</a>
+          <a class="nav-link" href="/admin/product-requests" id="header-links"><i class="bi bi-list-check"></i>
+            Requests</a>
         </li>
 
         <li class="nav-item pr-3">
@@ -38,9 +39,9 @@
         <button class="btn dropdown-toggle " type="button" id="dropdownMenuButton" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">
           {{#if loginPage}}
-         <i class="bi bi-person-circle mr-1 "></i> <span class="admin"> Login</span>
+          <i class="bi bi-person-circle mr-1 "></i> <span class="admin"> Login</span>
           {{else}}
-         <span class="admin"> Admin </span> <i class="bi bi-patch-check ml-1"></i>
+          <span class="admin"> Admin </span> <i class="bi bi-patch-check ml-1"></i>
           {{/if}}
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -50,7 +51,7 @@
           <a class="dropdown-item" href="/about"><i class="bi bi-info-circle"></i> About Us</a>
           {{else}}
           <a class="dropdown-item" href="/admin/add-product"><i class="bi bi-bag-plus"></i> Add Product</a>
-           <a class="dropdown-item" href="/"><i class="bi bi-shop-window"></i> eASY SHOP</a>
+          <a class="dropdown-item" href="/"><i class="bi bi-shop-window"></i> eASY SHOP</a>
           <a class="dropdown-item" href="/about"><i class="bi bi-info-circle"></i> About Us</a>
           <a class="dropdown-item" href="/admin/logout"><i class="bi bi-box-arrow-left"></i> Logout</a>
           {{/if}}
@@ -61,11 +62,11 @@
 </header>
 
 <script>
-   //for navbar-toggler outline removing(none)
-    const button = document.querySelector('.navbar-toggler');
-    button.addEventListener('focus', (event) => {
-        event.target.style.outline = 'none';
-    });
+  //for navbar-toggler outline removing(none)
+  const button = document.querySelector('.navbar-toggler');
+  button.addEventListener('focus', (event) => {
+    event.target.style.outline = 'none';
+  });
 
   document.addEventListener("DOMContentLoaded", function () {
     var lastScrollTop = 0;
@@ -101,80 +102,79 @@
     font-family: 'Times New Roman', Times, serif;
     transition: top 0.3s;
     /* Smooth transition */
-    
+
   }
 
   .dropdown-toggle {
-        background-color: #35a8b7;
-        box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
-        border-radius: 20px;
-        color: white;
-        min-width: 140px;
-        border: none;
-        
-    }
+    background-color: #35a8b7;
+    box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
+    border-radius: 20px;
+    color: white;
+    min-width: 140px;
+    border: none;
 
-    .dropdown-toggle:hover {
-        background-color: white;
-        color: #35a8b7;
-    }
+  }
+
+  .dropdown-toggle:hover {
+    background-color: white;
+    color: #35a8b7;
+  }
 
   .navbar-brand span {
     font-weight: bold;
     font-size: x-large;
     color: rgb(61, 150, 185);
-   
+
   }
 
   .nav-item.dropdown:hover .dropdown-menu {
     display: block;
     border-radius: 10px;
-  
+
   }
 
-     .navbar-toggler {
-        border-radius: 10px;     
-        padding: 1px;
-        border: none;
-        outline: none;
-       
-    } 
+  .navbar-toggler {
+    border-radius: 10px;
+    padding: 1px;
+    border: none;
+    outline: none;
 
-   .bi-list-nested{
-        color: #217f8f;
-        font-size: larger;
-       
-    }
+  }
 
-    .admin{
-      font-size: large;
-    }
+  .bi-list-nested {
+    color: #217f8f;
+    font-size: larger;
 
-    
-     .dropdown-item {
-        color: #217f8f;
-    }
+  }
 
-    .dropdown-item:hover {
-        color: rgb(32, 161, 190);
-        background-color: rgba(176, 213, 238, 0.125);
-    }
+  .admin {
+    font-size: large;
+  }
 
-       .dropdown-item {
-        color: #217f8f;
-    }
 
-   #header-links {
-        color: #3391a2;
-        font-weight: 500;
-        font-family: 'Times New Roman', Times, serif;
-        font-size: large;
-        margin-left: 10px;
+  .dropdown-item {
+    color: #217f8f;
+  }
 
-    }
+  .dropdown-item:hover {
+    color: rgb(32, 161, 190);
+    background-color: rgba(176, 213, 238, 0.125);
+  }
 
-    #header-links:hover {
-        color: #52b4c6;
-    }
-   
+  .dropdown-item {
+    color: #217f8f;
+  }
+
+  #header-links {
+    color: #3391a2;
+    font-weight: 500;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: large;
+    margin-left: 10px;
+
+  }
+
+  #header-links:hover {
+    color: #52b4c6;
+  }
 </style>

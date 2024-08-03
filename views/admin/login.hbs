@@ -1,53 +1,53 @@
 <section>
-    <div class="row mt-5">
-        <div class="col-md-6 m-auto pt-4">
-            <div class="container mt-3">
-                <h2 class="title text-center " >Admin Login</h2>
-                <form action="/admin/login" id="login-form" method="post" >
-                    <p class="error" id="login-error"></p>
-                    <div class="form-group">
-                        <label for="" >Email address</label>
-                        <input type="email" class="form-control" id="email" name="Email" placeholder="Enter email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="" >Password</label>
-                        <input type="password" id="password" class="form-control" name="Password" placeholder="Password" required>
-                    </div>
-        
-                    <button type="submit" id="login" class="btn float-right" title="Do login">Login</button>
-                </form>
-            </div>
-        </div>
+  <div class="row mt-5">
+    <div class="col-md-6 m-auto pt-4">
+      <div class="container mt-3">
+        <h2 class="title text-center ">Admin Login</h2>
+        <form action="/admin/login" id="login-form" method="post">
+          <p class="error" id="login-error"></p>
+          <div class="form-group">
+            <label for="">Email address</label>
+            <input type="email" class="form-control" id="email" name="Email" placeholder="Enter email" required>
+          </div>
+          <div class="form-group">
+            <label for="">Password</label>
+            <input type="password" id="password" class="form-control" name="Password" placeholder="Password" required>
+          </div>
+
+          <button type="submit" id="login" class="btn float-right" title="Do login">Login</button>
+        </form>
+      </div>
     </div>
+  </div>
 </section>
 <script>
-  document.getElementById('login-form').addEventListener('submit', function(event) {
-      event.preventDefault();
+  document.getElementById('login-form').addEventListener('submit', function (event) {
+    event.preventDefault();
 
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const errorElement = document.getElementById('login-error');
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const errorElement = document.getElementById('login-error');
 
-      if (!email || !password) {
-        errorElement.textContent = 'Please fill out all fields.';
-        errorElement.style.display = 'block';
-        return;
-      } else {
-        errorElement.style.display = 'none';
-      }
+    if (!email || !password) {
+      errorElement.textContent = 'Please fill out all fields.';
+      errorElement.style.display = 'block';
+      return;
+    } else {
+      errorElement.style.display = 'none';
+    }
 
-      const form = event.target;
-      const formData = new FormData(form);
-      const formObject = {};
-      formData.forEach((value, key) => formObject[key] = value);
+    const form = event.target;
+    const formData = new FormData(form);
+    const formObject = {};
+    formData.forEach((value, key) => formObject[key] = value);
 
-      fetch('/admin/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formObject)
-      })
+    fetch('/admin/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formObject)
+    })
       .then(response => response.json())
       .then(data => {
         if (data.success) {
@@ -62,56 +62,57 @@
         errorElement.style.display = 'block';
         console.error('Error:', error);
       });
-    });
+  });
 </script>
 
 <style>
- body {
+  body {
     margin: 0;
     padding: 0;
     width: 100%;
     height: 100%;
-    overflow-x: hidden; /* Prevent horizontal scrolling */
-}
+    overflow-x: hidden;
+    /* Prevent horizontal scrolling */
+  }
 
-#login {
+  #login {
     background-image: linear-gradient(to left, #40aec2, rgb(22, 153, 189));
     color: aliceblue;
     box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
     font-weight: bold;
     border-radius: 25px;
-}
-.title{
- 
-  font-size: 2.5em;
-  font-weight: bold;
-}
+  }
 
-section {
+  .title {
+
+    font-size: 2.5em;
+    font-weight: bold;
+  }
+
+  section {
     background-image: url('/images/admin.png');
     height: 100vh;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
     margin-top: 3em;
-    padding-top: 70px ;
+    padding-top: 70px;
     overflow-x: hidden;
-       font-family: 'Times New Roman', Times, serif; /* Prevent horizontal scrolling */
-}
+    font-family: 'Times New Roman', Times, serif;
+    /* Prevent horizontal scrolling */
+  }
 
 
-.container{
-     color: rgb(61, 150, 185);
-}
+  .container {
+    color: rgb(61, 150, 185);
+  }
 
-.form-control{
+  .form-control {
     border-radius: 25px;
     background-color: transparent;
     border-width: 1px;
     border-color: #36a3b7;
     box-shadow: 0 2px 6px rgba(21, 105, 131, 0.5);
-   
-}
 
-
+  }
 </style>

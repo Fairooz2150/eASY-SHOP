@@ -1,91 +1,99 @@
 <section>
 
-<div class="row mb-5">
-    <div class="col-md-8 m-auto ">
-        <div class="container mt-5 pl-5 ">
-           <div class="text-center avatar">
-            {{#ifCond user.Gender "===" "Male"}} 
-            <img src="/images/male-avatar.avif" alt="Male"  >
-            {{else}}
-            {{#ifCond user.Gender "===" "Female"}} 
-            <img src="/images/female-avatar.avif" alt="Female" >
-            {{else}}
-            <img src="/images/trans-avatar.jpg" alt="Person" >
-            {{/ifCond}}
-            {{/ifCond}}
+    <div class="row mb-5">
+        <div class="col-md-8 m-auto ">
+            <div class="container mt-5 pl-5 ">
+                <div class="text-center avatar">
+                    {{#ifCond user.Gender "===" "Male"}}
+                    <img src="/images/male-avatar.avif" alt="Male">
+                    {{else}}
+                    {{#ifCond user.Gender "===" "Female"}}
+                    <img src="/images/female-avatar.avif" alt="Female">
+                    {{else}}
+                    <img src="/images/trans-avatar.jpg" alt="Person">
+                    {{/ifCond}}
+                    {{/ifCond}}
 
-             <h2 class="pt-2 pb-5"> {{user.First_Name}} {{user.Last_Name}}</h2>
-           </div> 
-           
-            <form id="accountForm">
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label>First Name</label>
-                        <input type="text" class="form-control" name="First_Name" placeholder="First Name" value="{{user.First_Name}}" disabled required>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Last Name</label>
-                        <input type="text" class="form-control" name="Last_Name" placeholder="Last Name" value="{{user.Last_Name}}" disabled required>
-                    </div>
+                    <h2 class="pt-2 pb-5"> {{user.First_Name}} {{user.Last_Name}}</h2>
                 </div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" class="form-control" name="Email" placeholder="Email Address" value="{{user.Email}}" disabled required>
-                </div>
-                <div class="form-group">
-                    <label>Phone</label>
-                    <input type="phone" class="form-control" name="Phone" placeholder="Phone" value="{{user.Phone}}" disabled required>
-                </div>
-                <div class="form-group">
-                    <label>Gender</label>
-                    <br>
-                    <label class="radio-inline ml-2 mr-2" for="">
-                        Male<input type="radio" class="ml-2" name="Gender" value="Male" {{#ifCond user.Gender "===" "Male"}} checked {{/ifCond}} disabled>
-                    </label>
-                    <label for="" class="radio-inline ml-2 mr-2 mt-1">
-                        Female<input type="radio" class="ml-2" name="Gender" value="Female" {{#ifCond user.Gender "===" "Female"}} checked {{/ifCond}} disabled>
-                    </label>
-                    <label for="" class="radio-inline ml-2 mr-2 mt-1">
-                        Others<input type="radio" class="ml-2" name="Gender" value="Others" {{#ifCond user.Gender "===" "Others"}} checked {{/ifCond}} disabled>
-                    </label>
-                </div>
-                <div class="form-group">
-                    <label>New Password</label>
-                    <input type="password" class="form-control" name="Password" id="newpassword" disabled>
-                    <span id="passwordHelp" class="form-text "></span>
-                </div>
-                <div class="btns">
-                    <button type="button" class="btn btn-danger float-left" id="deleteAccountBtn">Delete Account</button>
-                    <button type="button" class="btn btn-primary float-right" id="editAccountBtn">Edit</button>
-                    <button type="submit" class="btn btn-success float-right" id="saveAccountBtn">Save</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
-<!-- Password Confirmation Modal -->
-<div class="modal fade" id="passwordModal" tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="passwordModalLabel">Confirm Password</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="passwordForm">
+                <form id="accountForm">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>First Name</label>
+                            <input type="text" class="form-control" name="First_Name" placeholder="First Name"
+                                value="{{user.First_Name}}" disabled required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Last Name</label>
+                            <input type="text" class="form-control" name="Last_Name" placeholder="Last Name"
+                                value="{{user.Last_Name}}" disabled required>
+                        </div>
+                    </div>
                     <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" class="form-control" id="password" required>
+                        <label>Email</label>
+                        <input type="email" class="form-control" name="Email" placeholder="Email Address"
+                            value="{{user.Email}}" disabled required>
                     </div>
-                    <button type="submit" class="btn btn-primary">Confirm</button>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="phone" class="form-control" name="Phone" placeholder="Phone" value="{{user.Phone}}"
+                            disabled required>
+                    </div>
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <br>
+                        <label class="radio-inline ml-2 mr-2" for="">
+                            Male<input type="radio" class="ml-2" name="Gender" value="Male" {{#ifCond
+                                user.Gender "===" "Male" }} checked {{/ifCond}} disabled>
+                        </label>
+                        <label for="" class="radio-inline ml-2 mr-2 mt-1">
+                            Female<input type="radio" class="ml-2" name="Gender" value="Female" {{#ifCond
+                                user.Gender "===" "Female" }} checked {{/ifCond}} disabled>
+                        </label>
+                        <label for="" class="radio-inline ml-2 mr-2 mt-1">
+                            Others<input type="radio" class="ml-2" name="Gender" value="Others" {{#ifCond
+                                user.Gender "===" "Others" }} checked {{/ifCond}} disabled>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" class="form-control" name="Password" id="newpassword" disabled>
+                        <span id="passwordHelp" class="form-text "></span>
+                    </div>
+                    <div class="btns">
+                        <button type="button" class="btn btn-danger float-left" id="deleteAccountBtn">Delete
+                            Account</button>
+                        <button type="button" class="btn btn-primary float-right" id="editAccountBtn">Edit</button>
+                        <button type="submit" class="btn btn-success float-right" id="saveAccountBtn">Save</button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
-</div>
+
+    <!-- Password Confirmation Modal -->
+    <div class="modal fade" id="passwordModal" tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="passwordModalLabel">Confirm Password</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="passwordForm">
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Confirm</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </section>
 
@@ -228,25 +236,27 @@
 </script>
 
 <style>
-   
-  .row{
-    width: 100%;
-  }
-  #saveAccountBtn{
-    display: none;
-  }
-  .btns button{
-     min-width: 70px;
-    border-radius: 20px;
-  }
-  .modal-dialog{
-    box-shadow: 0 2px 22px rgba(21, 105, 131, 0.5);
-  }
-  .avatar img{
-    border-radius: 50%; 
-    border-style: outset;
-    border-color: rgb(22, 119, 116); 
-    height:125px;
-  }
- 
+    .row {
+        width: 100%;
+    }
+
+    #saveAccountBtn {
+        display: none;
+    }
+
+    .btns button {
+        min-width: 70px;
+        border-radius: 20px;
+    }
+
+    .modal-dialog {
+        box-shadow: 0 2px 22px rgba(21, 105, 131, 0.5);
+    }
+
+    .avatar img {
+        border-radius: 50%;
+        border-style: outset;
+        border-color: rgb(22, 119, 116);
+        height: 125px;
+    }
 </style>

@@ -1,6 +1,6 @@
 <section class="bg-section">
   <div class="container pt-5">
-  
+
     <table class="table mt-5 " id="productsTable">
       <thead>
         <tr>
@@ -19,8 +19,8 @@
             <a href="/view-product/{{this.product._id}}">
               <div class="row">
                 <div class="m-2 img">
-                  <img src="/product-images/{{this.product._id}}_0.jpg"
-                   alt="Image not available" onerror="this.onerror=null; this.src='/images/no-images-available.png';">
+                  <img src="/product-images/{{this.product._id}}_0.jpg" alt="Image not available"
+                    onerror="this.onerror=null; this.src='/images/no-images-available.png';">
                 </div>
                 <div class="ml-2">
                   <span class="title" title="{{this.product.Name}}">{{this.product.Name}} </span><br>
@@ -52,16 +52,16 @@
       </tbody>
     </table>
     <hr>
-   
-    <div class="row float-right pr-5" >
+
+    <div class="row float-right pr-5">
       <div>
         <h5 class="float-left mr-5 mt-4">Total: ₹<span id="total"></span></h5>
       </div>
       <div>
-        <a href="/place-order" class="btn btn-success placeOrder mt-3 "  title="Place Order" ><b>Place Order</b></a>
+        <a href="/place-order" class="btn btn-success placeOrder mt-3 " title="Place Order"><b>Place Order</b></a>
       </div>
     </div>
-  
+
   </div>
 
   <!-- Confirmation Modal -->
@@ -74,174 +74,174 @@
     </div>
   </div>
 
- <div id="alertModal2" class="modal">
+  <div id="alertModal2" class="modal">
     <div class="modal-content">
-        <span class="close">&times;</span>
-        <p>Product was out of stock</p>
-        <button id="alert" class="btn confirmBtn">ok</button>
+      <span class="close">&times;</span>
+      <p>Product was out of stock</p>
+      <button id="alert" class="btn confirmBtn">ok</button>
     </div>
-</div>
+  </div>
 
 </section>
 
 <script>
 
   // Get the modal for alerting user to Product was Out of Stock
-var modal = document.getElementById("alertModal2");
+  var modal = document.getElementById("alertModal2");
 
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close")[0];
 
-// Get the button that closes the modal
-var confirmRemove = document.getElementById("alert");
+  // Get the button that closes the modal
+  var confirmRemove = document.getElementById("alert");
 
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function () {
     modal.style.display = "none";
-}
+  }
 
-// When the user clicks on the button, close the modal
-confirmRemove.onclick = function() {
+  // When the user clicks on the button, close the modal
+  confirmRemove.onclick = function () {
     modal.style.display = "none";
-}
+  }
 
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function (event) {
     if (event.target == modal) {
-        modal.style.display = "none";
+      modal.style.display = "none";
     }
-}
+  }
 
 
 
-// For cart table design
+  // For cart table design
   $(function () {
     $('#productsTable').DataTable();
   });
 
 
-   // Function to format number with commas
-    function formatNumber(number) {
-      return number.toLocaleString('en-IN'); // 'en-IN' for Indian number formatting (₹ separation)
-    }
+  // Function to format number with commas
+  function formatNumber(number) {
+    return number.toLocaleString('en-IN'); // 'en-IN' for Indian number formatting (₹ separation)
+  }
 
-    document.addEventListener('DOMContentLoaded', function() {
-      const offerPrices = document.querySelectorAll('#Offer-price');
-      offerPrices.forEach(element => {
-        const priceString = element.textContent.trim();
-        const price = parseFloat(priceString.replace(/[^\d.-]/g, ''));
-        if (!isNaN(price)) {
-          element.textContent = formatNumber(price);
-        }
-      });
+  document.addEventListener('DOMContentLoaded', function () {
+    const offerPrices = document.querySelectorAll('#Offer-price');
+    offerPrices.forEach(element => {
+      const priceString = element.textContent.trim();
+      const price = parseFloat(priceString.replace(/[^\d.-]/g, ''));
+      if (!isNaN(price)) {
+        element.textContent = formatNumber(price);
+      }
     });
-
-  
-    // total value (total amount of products in the cart)
-    const totals = {{totalValue}}; // Replace with your dynamic value
-    
-    // Format and display the total value
-    document.getElementById('total').textContent = formatNumber(totals);
+  });
 
 
-//Change the product quantity
-   function changeQuantity(cartId, proId, userId, count) {
+  // total value (total amount of products in the cart)
+  const totals = {{ totalValue }}; // Replace with your dynamic value
+
+  // Format and display the total value
+  document.getElementById('total').textContent = formatNumber(totals);
+
+
+  //Change the product quantity
+  function changeQuantity(cartId, proId, userId, count) {
     let quantityElement = document.getElementById(proId);
     let quantity = parseInt(quantityElement.innerHTML);
     count = parseInt(count);
-  if (quantity === 1 && count === -1) {
+    if (quantity === 1 && count === -1) {
 
-        showConfirmationModal(() => {
-            $.ajax({
-                url: '/change-product-quantity',
-                data: {
-                    user: userId,
-                    cart: cartId,
-                    product: proId,
-                    count: count,
-                    quantity: quantity
-                },
-                method: 'post',
-                success: (response) => {
-                    if (response.removeProduct) {
-                        $(`#${proId}`).closest('tr').remove();
-                           let cartnumber = $('#cart-count').html();
-                    cartnumber = parseInt(cartnumber) + count;
-                    $("#cart-count").html(cartnumber);
+      showConfirmationModal(() => {
+        $.ajax({
+          url: '/change-product-quantity',
+          data: {
+            user: userId,
+            cart: cartId,
+            product: proId,
+            count: count,
+            quantity: quantity
+          },
+          method: 'post',
+          success: (response) => {
+            if (response.removeProduct) {
+              $(`#${proId}`).closest('tr').remove();
+              let cartnumber = $('#cart-count').html();
+              cartnumber = parseInt(cartnumber) + count;
+              $("#cart-count").html(cartnumber);
 
-                    } else {
-                        quantityElement.innerHTML = quantity + count;
-                         
-                    }
-                    document.getElementById('total').textContent = formatNumber(response.total);
-                    checkCartCount(response.cartCount);
-                     $(`#${proId}`).closest('tr').remove();
-                }
-            });
+            } else {
+              quantityElement.innerHTML = quantity + count;
+
+            }
+            document.getElementById('total').textContent = formatNumber(response.total);
+            checkCartCount(response.cartCount);
+            $(`#${proId}`).closest('tr').remove();
+          }
         });
+      });
     } else {
-        $.ajax({
-            url: '/change-product-quantity',
-            data: {
-                user: userId,
-                cart: cartId,
-                product: proId,
-                count: count,
-                quantity: quantity
-            },
-            method: 'post',
-            success: (response) => {
-                if (response.outOfStock) {
-                    
-                modal.style.display = "block"; //shows when product was out of stock
-                } else {
-                    let cartnumber = $('#cart-count').html();
-                    cartnumber = parseInt(cartnumber) + count;
-                    $("#cart-count").html(cartnumber);
-                    if (response.removeProduct) {
-                        $(`#${proId}`).closest('tr').remove();
-                    } else {
-                        quantityElement.innerHTML = quantity + count;
-                    }
-                    document.getElementById('total').textContent = formatNumber(response.total);
-                    checkCartCount(response.cartCount);
-                }
-            }
-        });
-    }
-}
+      $.ajax({
+        url: '/change-product-quantity',
+        data: {
+          user: userId,
+          cart: cartId,
+          product: proId,
+          count: count,
+          quantity: quantity
+        },
+        method: 'post',
+        success: (response) => {
+          if (response.outOfStock) {
 
-function checkCartCount(cartCount) {
+            modal.style.display = "block"; //shows when product was out of stock
+          } else {
+            let cartnumber = $('#cart-count').html();
+            cartnumber = parseInt(cartnumber) + count;
+            $("#cart-count").html(cartnumber);
+            if (response.removeProduct) {
+              $(`#${proId}`).closest('tr').remove();
+            } else {
+              quantityElement.innerHTML = quantity + count;
+            }
+            document.getElementById('total').textContent = formatNumber(response.total);
+            checkCartCount(response.cartCount);
+          }
+        }
+      });
+    }
+  }
+
+  function checkCartCount(cartCount) {
     if (cartCount === 0) {
-        location.reload();
+      location.reload();
     }
-}
+  }
 
-function deleteCartProduct(productId) {
+  function deleteCartProduct(productId) {
     showConfirmationModal(() => {
-        let quantity = parseInt(document.getElementById(productId).innerHTML);
-        $.ajax({
-            url: '/delete-cart-product/' + productId + '/' + quantity,
-            method: 'DELETE',
-            success: function (response) {
-                if (response.success) {
-                    document.getElementById('product-container-' + productId).remove();
-                    document.getElementById('total').textContent = formatNumber(response.total);
-                    cartnumber = parseInt(response.cartCount) 
-                    $("#cart-count").html(cartnumber);
-                    
-                } else {
-                    alert('Failed to delete product');
-                }
-                checkCartCount(response.cartCount);
-            },
-            error: function (error) {
-                console.error('Error:', error);
-                alert('An error occurred while deleting the product');
-            }
-        });
+      let quantity = parseInt(document.getElementById(productId).innerHTML);
+      $.ajax({
+        url: '/delete-cart-product/' + productId + '/' + quantity,
+        method: 'DELETE',
+        success: function (response) {
+          if (response.success) {
+            document.getElementById('product-container-' + productId).remove();
+            document.getElementById('total').textContent = formatNumber(response.total);
+            cartnumber = parseInt(response.cartCount)
+            $("#cart-count").html(cartnumber);
+
+          } else {
+            alert('Failed to delete product');
+          }
+          checkCartCount(response.cartCount);
+        },
+        error: function (error) {
+          console.error('Error:', error);
+          alert('An error occurred while deleting the product');
+        }
+      });
     });
-}
+  }
 
 
 
@@ -316,13 +316,16 @@ function deleteCartProduct(productId) {
     text-decoration: none;
     /* Ensure underline does not appear on hover */
   }
-  .img:hover{
-     box-shadow: 0 2px 8px rgba(19, 111, 139, 0.5);
+
+  .img:hover {
+    box-shadow: 0 2px 8px rgba(19, 111, 139, 0.5);
   }
-  .img img{
-     width: 8em; 
-     height: 7em;
+
+  .img img {
+    width: 8em;
+    height: 7em;
   }
+
   .title {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -332,7 +335,7 @@ function deleteCartProduct(productId) {
     max-width: 35em;
     min-width: 7em;
     font-weight: bold;
-    
+
   }
 
   .title:hover {
@@ -350,25 +353,29 @@ function deleteCartProduct(productId) {
 
   .bi-caret-left-fill:hover {
     color: rgb(194, 119, 21);
-   
+
   }
 
   .bi-caret-right-fill:hover {
     color: rgb(40, 155, 155);
   }
-  .placeOrder{
-    width: 100%; 
-    border-radius: 25px; 
-    color: white; 
+
+  .placeOrder {
+    width: 100%;
+    border-radius: 25px;
+    color: white;
     background-image: linear-gradient(to right, #109545, rgb(2, 164, 89));
-    
+
   }
-  .placeOrder:hover{
-      background-image: linear-gradient(to left, #109545,  rgb(2, 164, 89));
-      color: white;
+
+  .placeOrder:hover {
+    background-image: linear-gradient(to left, #109545, rgb(2, 164, 89));
+    color: white;
   }
+
   /* The Modal (background) */
-  .modal, .modal2 {
+  .modal,
+  .modal2 {
     display: none;
     /* Hidden by default */
     position: fixed;
@@ -387,7 +394,7 @@ function deleteCartProduct(productId) {
     /* Fallback color */
     background-color: rgba(0, 0, 0, 0.4);
     /* Black w/ opacity */
-   
+
   }
 
   /* Modal Content/Box */
@@ -396,7 +403,7 @@ function deleteCartProduct(productId) {
     margin: 15% auto;
     /* 15% from the top and centered */
     padding: 20px;
-    border-radius: 10px;  
+    border-radius: 10px;
     box-shadow: 0 0 20px rgba(18, 155, 150, 0.5);
     width: 80%;
     /* Could be more or less, depending on screen size */
@@ -429,9 +436,9 @@ function deleteCartProduct(productId) {
     padding: 10px 20px;
     margin: 10px;
   }
-  
-  .confirmBtn:hover{
-   background-image: linear-gradient(to right, #f07b0d, rgb(245, 157, 64));
+
+  .confirmBtn:hover {
+    background-image: linear-gradient(to right, #f07b0d, rgb(245, 157, 64));
     color: white;
   }
 
@@ -444,11 +451,12 @@ function deleteCartProduct(productId) {
     padding: 10px 20px;
     margin: 10px;
   }
-  .cancelBtn:hover{
+
+  .cancelBtn:hover {
     background-image: linear-gradient(to right, #309db0, rgb(71, 172, 209));
     color: white;
   }
-  
+
   .dltBtn {
     background-color: white;
     box-shadow: 0 2px 8px rgba(21, 105, 131, 0.5);

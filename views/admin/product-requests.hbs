@@ -9,141 +9,142 @@
         <div class="card-header">
           <div class="row header-content">
 
-              <div class="chip">
-                {{#ifEquals this.Gender 'Male'}}
-                <img src="/images/male-icon.jpg" alt="Male Icon">
-                {{else}}
-                {{#ifEquals this.Gender 'Female'}}
-                <img src="/images/female-icon.jpg" alt="Female Icon">
-                {{else}}
-                <img src="/images/trans-icon.jpg" alt="Trans Icon">
-                {{/ifEquals}}
-                {{/ifEquals}}
+            <div class="chip">
+              {{#ifEquals this.Gender 'Male'}}
+              <img src="/images/male-icon.jpg" alt="Male Icon">
+              {{else}}
+              {{#ifEquals this.Gender 'Female'}}
+              <img src="/images/female-icon.jpg" alt="Female Icon">
+              {{else}}
+              <img src="/images/trans-icon.jpg" alt="Trans Icon">
+              {{/ifEquals}}
+              {{/ifEquals}}
 
-               <span title="Seller/User Name"> {{this.Seller_First_Name}} {{this.Seller_Last_Name}}</span>
+              <span title="Seller/User Name"> {{this.Seller_First_Name}} {{this.Seller_Last_Name}}</span>
+            </div>
+
+            <div class="date row">
+              {{#ifEquals this.Updations 'Updated'}}
+
+              <div class="mr-4 mt-2">
+                <b>Updated</b>
               </div>
 
-            <div class="date row">       
-                  {{#ifEquals this.Updations 'Updated'}}
+              <div>
+                <b> Date: </b> {{this.UpdatedDate}} <br>
+                <b> Time: </b> {{this.UpdatedTime}}
+              </div>
 
-                    <div class="mr-4 mt-2">
-                      <b>Updated</b>
-                    </div>
-
-                    <div>
-                      <b> Date: </b> {{this.UpdatedDate}} <br>
-                      <b> Time: </b> {{this.UpdatedTime}}
-                    </div>
-
-                  {{/ifEquals}}
+              {{/ifEquals}}
             </div>
 
           </div>
         </div>
 
-      
-      <div class="card-body">
 
-              <div class="row mb-3">
-                    <div class="Date ml-2">
-                      <b> Date: </b> {{this.Date}} <br>
-                      <b> Time: </b> {{this.Time}}
-                      <p class="card-text mt-2"><b>Status: </b> <span id="status-{{this._id}}">{{this.Status}}</span></p>
-                    </div>
+        <div class="card-body">
 
-                    
-                      <div class="seller-details">                  
-                          <b>Seller Details:</b><br>
-                              <span title="Seller/User ID"> <b>Id</b> {{this.Seller_Id}} </span> <br>
+          <div class="row mb-3">
+            <div class="Date ml-2">
+              <b> Date: </b> {{this.Date}} <br>
+              <b> Time: </b> {{this.Time}}
+              <p class="card-text mt-2"><b>Status: </b> <span id="status-{{this._id}}">{{this.Status}}</span></p>
+            </div>
 
-                              <a href="tel:+91{{this.Phone}}"><span title="Phone">
-                                <i class="bi bi-telephone"></i> {{this.Phone}} </span></a> <br>
-                                
-                              <a href="mailto:{{this.Email}}"><span title="Email Id">
-                                <i class="bi bi-envelope"></i> {{this.Email}} </span></a> <br>
-                              
-                              <a href="https://wa.me/{{this.Whatsapp}}"> <span title="WhatsApp">
-                                <i class="bi bi-whatsapp"></i> {{this.Whatsapp}} </span> </a>
-                      </div>
-                    
 
-                    <address class="address">
-                      <b>Shop Address:</b><br>
-                      {{newlineToBr this.Shop_Address}}               
-                    </address>
-              </div>
+            <div class="seller-details">
+              <b>Seller Details:</b><br>
+              <span title="Seller/User ID"> <b>Id</b> {{this.Seller_Id}} </span> <br>
 
-        <div>
+              <a href="tel:+91{{this.Phone}}"><span title="Phone">
+                  <i class="bi bi-telephone"></i> {{this.Phone}} </span></a> <br>
 
-          <table class="table mt-5" id="productsTable">
-                <thead>
-                    <tr>
-                        <th scope="col">Item</th>
-                        <th scope="col">Price</th>
-                    </tr>
-                </thead>
+              <a href="mailto:{{this.Email}}"><span title="Email Id">
+                  <i class="bi bi-envelope"></i> {{this.Email}} </span></a> <br>
 
-            <tbody>  
-              <tr>
-                <td>
+              <a href="https://wa.me/{{this.Whatsapp}}"> <span title="WhatsApp">
+                  <i class="bi bi-whatsapp"></i> {{this.Whatsapp}} </span> </a>
+            </div>
+
+
+            <address class="address">
+              <b>Shop Address:</b><br>
+              {{newlineToBr this.Shop_Address}}
+            </address>
+          </div>
+
+          <div>
+
+            <table class="table mt-5" id="productsTable">
+              <thead>
+                <tr>
+                  <th scope="col">Item</th>
+                  <th scope="col">Price</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr>
+                  <td>
                     <div class="row">
-                      
+
                       <div>
-                        <img src="/product-images/{{this._id}}_0.jpg"  alt="Image not available"
-                        onerror="this.onerror=null; this.src='/images/no-images-available.png';" class="product_image">
+                        <img src="/product-images/{{this._id}}_0.jpg" alt="Image not available"
+                          onerror="this.onerror=null; this.src='/images/no-images-available.png';"
+                          class="product_image">
                       </div>
 
                       <div class="product_details ml-3 ">
-                          <b title="Title">{{this.Name}} </b> <br>
-                          <span class="text-muted" title="Category">{{this.Category}}</span> <br>
-                          <span title="Stock Count"><b>Stock: </b> {{this.Stock_Count}}</span> <br>
-                          <span title="Description">{{newlineToBr this.Description}}</span>
+                        <b title="Title">{{this.Name}} </b> <br>
+                        <span class="text-muted" title="Category">{{this.Category}}</span> <br>
+                        <span title="Stock Count"><b>Stock: </b> {{this.Stock_Count}}</span> <br>
+                        <span title="Description">{{newlineToBr this.Description}}</span>
                       </div>
-      
+
                     </div>
-                </td>
+                  </td>
 
-                <td>
-                   <div class="Price" >
-                    <b>Offer Price: </b><span id="Price">{{this.Offer_Price}}</span> <br>
-                    ({{this.Offer_Percentage}}% Off) <br>
-                    <b>Net Price: </b><span id="Price">{{this.Actual_Price}}</span>
-                  </div> 
-              </td>
+                  <td>
+                    <div class="Price">
+                      <b>Offer Price: </b><span id="Price">{{this.Offer_Price}}</span> <br>
+                      ({{this.Offer_Percentage}}% Off) <br>
+                      <b>Net Price: </b><span id="Price">{{this.Actual_Price}}</span>
+                    </div>
+                  </td>
 
-              </tr>
-            </tbody>
-          </table>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
-      <div class="card-footer">
-        <div class="footer-content">
-          <div id="action-buttons-{{this._id}}" class="actions row">
-            {{#ifEquals this.Status 'Pending'}}
-            <button onclick="updateUserProdStatus('{{this._id}}', 'Declined')" class="btn decline mr-3"
-              id="decline-btn-{{this._id}}">Decline</button>
-            <button onclick="updateUserProdStatus('{{this._id}}', 'Approved')" class="btn approve"
-              id="approve-btn-{{this._id}}">Approve</button>
-            {{else}}
-            {{#ifEquals this.Status 'Declined'}}
-            <button onclick="updateUserProdStatus('{{this._id}}', 'Approved')" class="btn approve"
-              id="approve-btn-{{this._id}}">Approve</button>
-            {{/ifEquals}}
-            {{/ifEquals}}
+        <div class="card-footer">
+          <div class="footer-content">
+            <div id="action-buttons-{{this._id}}" class="actions row">
+              {{#ifEquals this.Status 'Pending'}}
+              <button onclick="updateUserProdStatus('{{this._id}}', 'Declined')" class="btn decline mr-3"
+                id="decline-btn-{{this._id}}">Decline</button>
+              <button onclick="updateUserProdStatus('{{this._id}}', 'Approved')" class="btn approve"
+                id="approve-btn-{{this._id}}">Approve</button>
+              {{else}}
+              {{#ifEquals this.Status 'Declined'}}
+              <button onclick="updateUserProdStatus('{{this._id}}', 'Approved')" class="btn approve"
+                id="approve-btn-{{this._id}}">Approve</button>
+              {{/ifEquals}}
+              {{/ifEquals}}
+            </div>
           </div>
         </div>
       </div>
-    </div>
       {{/each}}
     </div>
   </div>
-  
-     <!-- Scroll Up -->
-  <div id="back-top" >
-        <button  title="Go to Top" onclick="topFunction()" id="topBtn"> <i class="bi bi-arrow-up-circle-fill"></i> </button>
-    </div>
 
-   <!-- Confirmation Modal -->
+  <!-- Scroll Up -->
+  <div id="back-top">
+    <button title="Go to Top" onclick="topFunction()" id="topBtn"> <i class="bi bi-arrow-up-circle-fill"></i> </button>
+  </div>
+
+  <!-- Confirmation Modal -->
   <div id="confirmationModal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
@@ -159,46 +160,46 @@
 
 
   // Function to format number with commas
-    function formatNumber(number) {
-      return number.toLocaleString('en-IN'); // 'en-IN' for Indian number formatting 
-    }
+  function formatNumber(number) {
+    return number.toLocaleString('en-IN'); // 'en-IN' for Indian number formatting 
+  }
 
   // format offer price number with commas
-     document.addEventListener('DOMContentLoaded', function() {
-      const Prices = document.querySelectorAll('#Price');
-      Prices.forEach(element => {
-        const priceString = element.textContent.trim();
-        const price = parseFloat(priceString.replace(/[^\d.-]/g, ''));
-        if (!isNaN(price)) {
-          element.textContent = '₹' + formatNumber(price);
-        }
-      });
-    });
-
-
-      // Get the button for go to top
-    let mybutton = document.getElementById("topBtn");
-
-    // When the user scrolls down 20px from the top of the document, show the button
-    window.onscroll = function() {scrollFunction()};
-
-    function scrollFunction() {
-      if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-        mybutton.style.display = "block";
-      } else {
-        mybutton.style.display = "none";
+  document.addEventListener('DOMContentLoaded', function () {
+    const Prices = document.querySelectorAll('#Price');
+    Prices.forEach(element => {
+      const priceString = element.textContent.trim();
+      const price = parseFloat(priceString.replace(/[^\d.-]/g, ''));
+      if (!isNaN(price)) {
+        element.textContent = '₹' + formatNumber(price);
       }
+    });
+  });
+
+
+  // Get the button for go to top
+  let mybutton = document.getElementById("topBtn");
+
+  // When the user scrolls down 20px from the top of the document, show the button
+  window.onscroll = function () { scrollFunction() };
+
+  function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+      mybutton.style.display = "block";
+    } else {
+      mybutton.style.display = "none";
     }
+  }
 
-    // When the user clicks on the button, scroll to the top of the document
-    function topFunction() {
-      document.body.scrollTop = 0;
-      document.documentElement.scrollTop = 0;
-    }
+  // When the user clicks on the button, scroll to the top of the document
+  function topFunction() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+  }
 
 
 
-    
+
   // Function to show the confirmation modal
   function showConfirmationModal(message, confirmCallback) {
     // Get the modal
@@ -213,7 +214,7 @@
 
     // Set the modal message
     const modalMessage = document.getElementById('modalMessage');
-    
+
     // Apply the message with styled productName
     modalMessage.innerHTML = message;
     modalMessage.style.overflow = 'hidden';
@@ -248,39 +249,39 @@
       }
     }
   }
-  
+
 
 
 
   function updateUserProdStatus(Id, Status) {
-      showConfirmationModal(`User Product status updated to <b>${Status}</b>`, function() {
-    $.ajax({
-      url: '/admin/update-user-products-status',
-      method: 'POST',
-      data: { Id: Id, Status: Status },
-      success: function (response) {
-        if (response.success) {
-          document.getElementById('status-' + Id).innerText = Status;
+    showConfirmationModal(`User Product status updated to <b>${Status}</b>`, function () {
+      $.ajax({
+        url: '/admin/update-user-products-status',
+        method: 'POST',
+        data: { Id: Id, Status: Status },
+        success: function (response) {
+          if (response.success) {
+            document.getElementById('status-' + Id).innerText = Status;
 
-          var approveBtn = document.getElementById('approve-btn-' + Id);
-          var declineBtn = document.getElementById('decline-btn-' + Id);
+            var approveBtn = document.getElementById('approve-btn-' + Id);
+            var declineBtn = document.getElementById('decline-btn-' + Id);
 
-          if (Status === 'Approved') {
-            if (approveBtn) approveBtn.style.display = 'none';
-            if (declineBtn) declineBtn.style.display = 'none';
-          } else if (Status === 'Declined') {
-            if (declineBtn) declineBtn.style.display = 'none';
-            if (approveBtn) approveBtn.style.display = 'inline-block';
+            if (Status === 'Approved') {
+              if (approveBtn) approveBtn.style.display = 'none';
+              if (declineBtn) declineBtn.style.display = 'none';
+            } else if (Status === 'Declined') {
+              if (declineBtn) declineBtn.style.display = 'none';
+              if (approveBtn) approveBtn.style.display = 'inline-block';
+            }
+          } else {
+            alert('Failed to update user product status');
           }
-        } else {
-          alert('Failed to update user product status');
+        },
+        error: function (error) {
+          console.error('Error:', error);
+          alert('An error occurred while updating the user product status');
         }
-      },
-      error: function (error) {
-        console.error('Error:', error);
-        alert('An error occurred while updating the user product status');
-      }
-    });
+      });
     });
   }
 
@@ -294,12 +295,12 @@
   }
 
   a:hover {
-   color: #309db0;
+    color: #309db0;
     text-decoration: none;
     /* Ensure underline does not appear on hover */
   }
 
-  .main-heading{
+  .main-heading {
     text-align: center;
     margin-top: 30px;
     font-family: 'Times New Roman', Times, serif;
@@ -307,82 +308,82 @@
     font-weight: bold;
   }
 
- .card {
-      margin-top: 65px;
-      border-radius: 20px;
-      overflow: hidden; 
-      margin-bottom: 50px;
-      box-shadow: 0 14px 16px rgba(21, 105, 131, 0.5);
-    }
-    
-    .card-header{
-      background-color: #278a9b96;
-      color: white;
-    }
+  .card {
+    margin-top: 65px;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 50px;
+    box-shadow: 0 14px 16px rgba(21, 105, 131, 0.5);
+  }
 
-    .chip {
-      display: inline-block;
-      padding: 0 25px;
-      height: 50px;
-      font-size: 16px;
-      line-height: 50px;
-      border-radius: 25px;
-      background-color: #f1f1f1;
-      color: #309db0;
-      font-weight: 500;
-      font-size: large;
-    }
-  
-    .chip img {
-      float: left;
-      margin: 0 10px 0 -25px;
-      height: 50px;
-      width: 50px;
-      border-radius: 50%;
-    }
+  .card-header {
+    background-color: #278a9b96;
+    color: white;
+  }
 
-    .header-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-    }
+  .chip {
+    display: inline-block;
+    padding: 0 25px;
+    height: 50px;
+    font-size: 16px;
+    line-height: 50px;
+    border-radius: 25px;
+    background-color: #f1f1f1;
+    color: #309db0;
+    font-weight: 500;
+    font-size: large;
+  }
 
-  .Date{
+  .chip img {
+    float: left;
+    margin: 0 10px 0 -25px;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+  }
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .Date {
     width: 15em;
   }
 
-  .seller-details{
-      width: 20em;
+  .seller-details {
+    width: 20em;
   }
 
-   .address {
-      margin-bottom: 2em;
-      width: 25em;
-    }
+  .address {
+    margin-bottom: 2em;
+    width: 25em;
+  }
 
-  .product_image{
+  .product_image {
     height: 120px;
     width: 130px;
-     box-shadow: 0 4px 12px rgba(21, 105, 131, 0.5);
+    box-shadow: 0 4px 12px rgba(21, 105, 131, 0.5);
   }
 
-    .card-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #278a9b96;
-      color: white;
-      height: 4em;
-    }
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #278a9b96;
+    color: white;
+    height: 4em;
+  }
 
-    .footer-content {
-      display: flex;
-      width: 100%;
-      justify-content: space-between;
-      align-items: center;
-      font-size: large;
-    }
+  .footer-content {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    font-size: large;
+  }
 
   .actions {
     margin-left: auto;
@@ -390,7 +391,7 @@
   }
 
 
-   .approve {
+  .approve {
     background-color: white;
     color: #278a9b;
     font-weight: bold;
@@ -398,13 +399,14 @@
     border-radius: 20px;
     box-shadow: 0 6px 10px rgba(49, 133, 158, 0.5);
     transition: all 0.3s ease;
-   } 
-    .approve:hover{
-      color: #278a9b;
-    transform: scale(1.1);
-    }
+  }
 
-       .decline {
+  .approve:hover {
+    color: #278a9b;
+    transform: scale(1.1);
+  }
+
+  .decline {
     background-color: white;
     color: #c77a37;
     font-weight: bold;
@@ -412,25 +414,27 @@
     border-radius: 20px;
     box-shadow: 0 6px 10px rgba(49, 133, 158, 0.5);
     transition: all 0.3s ease;
-   } 
-    .decline:hover{
-      color: #c77a37;
+  }
+
+  .decline:hover {
+    color: #c77a37;
     transform: scale(1.1);
-    }
+  }
 
 
-  .date{
+  .date {
     padding: 0 15px;
   }
 
   .product_details {
     width: 45em;
   }
-  .Price{
+
+  .Price {
     width: 10em;
   }
 
-   /* The Modal (background) */
+  /* The Modal (background) */
   .modal {
     display: none;
     /* Hidden by default */
@@ -458,7 +462,7 @@
     margin: 15% auto;
     /* 15% from the top and centered */
     padding: 20px;
-    border-radius: 10px; 
+    border-radius: 10px;
     box-shadow: 0 0 20px rgba(18, 155, 150, 0.5);
     width: 80%;
     /* Could be more or less, depending on screen size */
@@ -490,7 +494,8 @@
     border: none;
     border-radius: 20px;
   }
-  #cancelRemove{
+
+  #cancelRemove {
     padding: 10px 20px;
     margin: 10px;
     background-image: linear-gradient(to left, #309db0, rgb(71, 172, 209));
@@ -498,34 +503,36 @@
     border: none;
     border-radius: 20px;
   }
-   #cancelRemove:hover{
+
+  #cancelRemove:hover {
     background-image: linear-gradient(to right, #309db0, rgb(71, 172, 209));
     color: white;
   }
-  #confirmRemove:hover{
-   background-image: linear-gradient(to right, #f07b0d, rgb(245, 157, 64));
+
+  #confirmRemove:hover {
+    background-image: linear-gradient(to right, #f07b0d, rgb(245, 157, 64));
     color: white;
   }
 
-   
-    #topBtn {
-      display: none;
-      position: fixed;
-      bottom: 40px;
-      right: 30px;
-      z-index: 99;
-      font-size: 25px;
-      border: none;
-      outline: none;
-      border-radius: 50%;
-      color: white;
-      background-image: linear-gradient(to bottom, #309db0, rgb(71, 172, 209));
-       cursor: pointer;
-       box-shadow: 0 2px 12px rgba(21, 105, 131, 0.5);
-    }
 
-    #topBtn:hover {
-      background-image: linear-gradient(to top, #309db0, rgb(71, 172, 209));
-      box-shadow: 0 2px 18px rgba(13, 89, 112, 0.5);
-    }
+  #topBtn {
+    display: none;
+    position: fixed;
+    bottom: 40px;
+    right: 30px;
+    z-index: 99;
+    font-size: 25px;
+    border: none;
+    outline: none;
+    border-radius: 50%;
+    color: white;
+    background-image: linear-gradient(to bottom, #309db0, rgb(71, 172, 209));
+    cursor: pointer;
+    box-shadow: 0 2px 12px rgba(21, 105, 131, 0.5);
+  }
+
+  #topBtn:hover {
+    background-image: linear-gradient(to top, #309db0, rgb(71, 172, 209));
+    box-shadow: 0 2px 18px rgba(13, 89, 112, 0.5);
+  }
 </style>

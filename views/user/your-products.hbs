@@ -1,8 +1,9 @@
 <section>
   <div class="container-fluid mt-4">
-      <h2 class="text-center pt-3">Your Products</h2>
+    <h2 class="text-center pt-3">Your Products</h2>
     <div class="row mr-2 mb-2">
-      <a href="/sell-products" class="btn btn-success ml-auto" id="sellProd"><i class="bi bi-arrow-right-square"></i> Sell Your Product </a>
+      <a href="/sell-products" class="btn btn-success ml-auto" id="sellProd"><i class="bi bi-arrow-right-square"></i>
+        Sell Your Product </a>
     </div>
     <table class="table mt-3" id="productsTable">
       <thead>
@@ -19,27 +20,26 @@
           <th scope="row">{{incrementedIndex @index}}</th>
 
           <td>
-          
+
             <div class="row">
 
               <div class="m-2">
-                <img  src="/product-images/{{this._id}}_0.jpg" class="img ml-2"
-                  alt="Image not available" onerror="this.onerror=null; this.src='/images/no-images-available.png';">
+                <img src="/product-images/{{this._id}}_0.jpg" class="img ml-2" alt="Image not available"
+                  onerror="this.onerror=null; this.src='/images/no-images-available.png';">
               </div>
 
               <div class="product_details ml-3">
                 <span class="title" title="{{this.Name}}">{{this.Name}} </span><br>
                 <span class="category " title="{{this.Category}}">{{this.Category}}</span>
                 <br> <span class="prodId text-muted" title="Product Id">{{this._id}}</span>
-                
+
                 <br>
-                {{#ifCond this.Stock_Count '<' 1}}
-                <span class="outofStock">Out of Stock</span>
-                {{else}}
+                {{#ifCond this.Stock_Count '<' 1}} <span class="outofStock">Out of Stock</span>
+                  {{else}}
                   <b>Stock:</b> {{this.Stock_Count}}
-                {{/ifCond}}
-                
-            </div>
+                  {{/ifCond}}
+
+              </div>
 
           </td>
 
@@ -47,12 +47,14 @@
 
           <td>
             {{#ifEquals this.Status 'Approved'}}
-            <a href="/edit-user-product/{{this._id}}" class="btn p-1 mr-1" id="edit"><i class="bi bi-pencil-square"></i></a>
+            <a href="/edit-user-product/{{this._id}}" class="btn p-1 mr-1" id="edit"><i
+                class="bi bi-pencil-square"></i></a>
             <button class="btn p-1" onclick="deleteUserProduct('{{this._id}}', '{{this.Name}}')" id="delete"><i
                 class="bi bi-trash3"></i></button>
             {{else}}
 
-            <a href="/edit-pending-product/{{this._id}}" class="btn p-1 mr-1 " id="edit"><i class="bi bi-pencil-square"></i></a>
+            <a href="/edit-pending-product/{{this._id}}" class="btn p-1 mr-1 " id="edit"><i
+                class="bi bi-pencil-square"></i></a>
             <button class="btn p-1" onclick="deletePendingProduct('{{this._id}}', '{{this.Name}}')" id="delete"><i
                 class="bi bi-trash3"></i></button>
             {{/ifEquals}}
@@ -94,7 +96,7 @@
 
     // Set the modal message
     const modalMessage = document.getElementById('modalMessage');
-    
+
     // Apply the message with styled productName
     modalMessage.innerHTML = message;
     modalMessage.style.overflow = 'hidden';
@@ -203,7 +205,7 @@
     margin: 15% auto;
     /* 15% from the top and centered */
     padding: 20px;
-    border-radius: 10px; 
+    border-radius: 10px;
     box-shadow: 0 0 20px rgba(18, 155, 150, 0.5);
     width: 80%;
     /* Could be more or less, depending on screen size */
@@ -226,14 +228,15 @@
     text-decoration: none;
     cursor: pointer;
   }
- #styledProductName {
+
+  #styledProductName {
     overflow: hidden;
     text-overflow: ellipsis;
     -webkit-line-clamp: 3;
     display: -webkit-box;
-    -webkit-box-orient: vertical; 
+    -webkit-box-orient: vertical;
     font-weight: bold;
-}
+  }
 
   #confirmRemove {
     padding: 10px 20px;
@@ -243,7 +246,8 @@
     border: none;
     border-radius: 20px;
   }
-  #cancelRemove{
+
+  #cancelRemove {
     padding: 10px 20px;
     margin: 10px;
     background-image: linear-gradient(to left, #309db0, rgb(71, 172, 209));
@@ -251,33 +255,38 @@
     border: none;
     border-radius: 20px;
   }
-   #cancelRemove:hover{
+
+  #cancelRemove:hover {
     background-image: linear-gradient(to right, #309db0, rgb(71, 172, 209));
     color: white;
   }
-  #confirmRemove:hover{
-   background-image: linear-gradient(to right, #f07b0d, rgb(245, 157, 64));
+
+  #confirmRemove:hover {
+    background-image: linear-gradient(to right, #f07b0d, rgb(245, 157, 64));
     color: white;
   }
 
-  #delete{
+  #delete {
     box-shadow: 0 0 4px rgba(5, 78, 75, 0.5);
     color: #e2740e;
   }
-  #edit{
+
+  #edit {
     box-shadow: 0 0 4px rgba(5, 78, 75, 0.5);
-    color:rgb(39, 163, 195);
+    color: rgb(39, 163, 195);
   }
-  #delete:hover{
+
+  #delete:hover {
     background-color: #e2740e;
     color: white;
   }
-  #edit:hover{
-      background-color:rgb(39, 163, 195);
-      color:  white;
-    }
 
-    a {
+  #edit:hover {
+    background-color: rgb(39, 163, 195);
+    color: white;
+  }
+
+  a {
     color: black;
     text-decoration: none;
     /* Remove underline by default */
@@ -288,10 +297,12 @@
     text-decoration: none;
     /* Ensure underline does not appear on hover */
   }
+
   .img {
-     width: 9em; 
-     height: 8em;
+    width: 9em;
+    height: 8em;
   }
+
   .title {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -301,21 +312,22 @@
     max-width: 45em;
     min-width: 7em;
     font-weight: bold;
-    
+
   }
 
-   #sellProd{
-    border-radius: 25px; 
-    color: white; 
+  #sellProd {
+    border-radius: 25px;
+    color: white;
     background-image: linear-gradient(to right, #1e8f4b, rgb(2, 164, 89));
-    
-  }
-  #sellProd:hover{
-      background-image: linear-gradient(to left, #1e8f4b, rgb(2, 164, 89));
-      color: white;
+
   }
 
-  .category { 
+  #sellProd:hover {
+    background-image: linear-gradient(to left, #1e8f4b, rgb(2, 164, 89));
+    color: white;
+  }
+
+  .category {
     overflow: hidden;
     text-overflow: ellipsis;
     -webkit-line-clamp: 1;
@@ -323,7 +335,8 @@
     -webkit-box-orient: vertical;
     max-width: 40em;
   }
-  .prodId{
+
+  .prodId {
     overflow: hidden;
     text-overflow: ellipsis;
     -webkit-line-clamp: 1;
@@ -331,7 +344,8 @@
     -webkit-box-orient: vertical;
     max-width: 40em;
   }
-  .outofStock{
+
+  .outofStock {
     font-weight: bold;
     color: #e2740e;
   }

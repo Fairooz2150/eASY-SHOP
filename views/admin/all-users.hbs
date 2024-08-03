@@ -1,54 +1,55 @@
 <section class="bg-section">
-  
-    <div class="container">
-       <h2 class="title">eASY Users</h2>
-        <table class="table " id="usersTable">
-            <thead class="thead-dark">
-                <tr>
-                    <th scope="col">No</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Gender</th>
-                    <th scope="col">Mobile</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Remove</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#each users}}
-                <tr>
-                    <th scope="row">{{incrementedIndex @index}}</th>
-                    <td>{{this.First_Name}} {{this.Last_Name}}</td>
-                    <td>{{this.Gender}}</td>
-                    <td>{{this.Phone}}</td>
-                    <td>{{this.Email}}</td>
-                    <td>
-                     <button class="btn rmvBtn " onclick="deleteUser('{{this._id}}',  '{{this.First_Name}}', '{{this.Last_Name}}')">Remove</button>
-                    </td>
-                </tr>
-                {{/each}}
-            </tbody>
-        </table>
-        
-    </div>
 
-    <!-- Confirmation Modal -->
-<div id="confirmationModal" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <p id="modalMessage">Are you sure?</p>
-    <button id="confirmRemove" class="btn btn-danger">Yes</button>
-    <button id="cancelRemove" class="btn btn-secondary">Cancel</button>
+  <div class="container">
+    <h2 class="title">eASY Users</h2>
+    <table class="table " id="usersTable">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">No</th>
+          <th scope="col">Name</th>
+          <th scope="col">Gender</th>
+          <th scope="col">Mobile</th>
+          <th scope="col">Email</th>
+          <th scope="col">Remove</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each users}}
+        <tr>
+          <th scope="row">{{incrementedIndex @index}}</th>
+          <td>{{this.First_Name}} {{this.Last_Name}}</td>
+          <td>{{this.Gender}}</td>
+          <td>{{this.Phone}}</td>
+          <td>{{this.Email}}</td>
+          <td>
+            <button class="btn rmvBtn "
+              onclick="deleteUser('{{this._id}}',  '{{this.First_Name}}', '{{this.Last_Name}}')">Remove</button>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
   </div>
-</div>
+
+  <!-- Confirmation Modal -->
+  <div id="confirmationModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <p id="modalMessage">Are you sure?</p>
+      <button id="confirmRemove" class="btn btn-danger">Yes</button>
+      <button id="cancelRemove" class="btn btn-secondary">Cancel</button>
+    </div>
+  </div>
 
 </section>
 
 <script>
-    
-/* Arrange table */    
-$(function () {
-      $('#usersTable').DataTable();
-    });
+
+  /* Arrange table */
+  $(function () {
+    $('#usersTable').DataTable();
+  });
 
 
 
@@ -66,10 +67,10 @@ $(function () {
 
     // Set the modal message
     const modalMessage = document.getElementById('modalMessage');
-    
+
     // Apply the message with styled productName
     modalMessage.innerHTML = message;
-   
+
 
     // Show the modal
     modal.style.display = "block";
@@ -97,34 +98,34 @@ $(function () {
       }
     }
   }
-  
 
-function deleteUser(UserId, FirstName, LastName) {
-  showConfirmationModal(`Are you sure you want to remove <b>${FirstName} ${LastName}</b>?`, function() {
-    $.ajax({
-      url: '/admin/delete-user/' + UserId,
-      method: 'DELETE',
-      success: function(response) {
-        if (response.success) {
-          location.reload(); // Refresh the page or update the DOM as needed
-        } else {
-          alert('Failed to delete the User');
+
+  function deleteUser(UserId, FirstName, LastName) {
+    showConfirmationModal(`Are you sure you want to remove <b>${FirstName} ${LastName}</b>?`, function () {
+      $.ajax({
+        url: '/admin/delete-user/' + UserId,
+        method: 'DELETE',
+        success: function (response) {
+          if (response.success) {
+            location.reload(); // Refresh the page or update the DOM as needed
+          } else {
+            alert('Failed to delete the User');
+          }
+        },
+        error: function (error) {
+          console.error('Error:', error);
+          alert('An error occurred while deleting User');
         }
-      },
-      error: function(error) {
-        console.error('Error:', error);
-        alert('An error occurred while deleting User');
-      }
+      });
     });
-  });
-}
-  </script>
+  }
+</script>
 <style>
-    .bg-section {
+  .bg-section {
     background-image: url('/images/users.png');
     background-size: 50em;
     min-height: 100vh;
-     display: flex;
+    display: flex;
     align-items: center;
     justify-content: center;
   }
@@ -134,6 +135,7 @@ function deleteUser(UserId, FirstName, LastName) {
     padding: 20px;
     border-radius: 10px;
   }
+
   .title {
     text-align: center;
     font-family: 'Times New Roman', Times, serif;
@@ -155,7 +157,7 @@ function deleteUser(UserId, FirstName, LastName) {
     color: white;
   }
 
-   /* The Modal (background) */
+  /* The Modal (background) */
   .modal {
     display: none;
     /* Hidden by default */
@@ -183,7 +185,7 @@ function deleteUser(UserId, FirstName, LastName) {
     margin: 15% auto;
     /* 15% from the top and centered */
     padding: 20px;
-    border-radius: 10px; 
+    border-radius: 10px;
     box-shadow: 0 0 20px rgba(18, 155, 150, 0.5);
     width: 80%;
     /* Could be more or less, depending on screen size */
@@ -215,7 +217,8 @@ function deleteUser(UserId, FirstName, LastName) {
     border: none;
     border-radius: 20px;
   }
-  #cancelRemove{
+
+  #cancelRemove {
     padding: 10px 20px;
     margin: 10px;
     background-image: linear-gradient(to left, #309db0, rgb(71, 172, 209));
@@ -223,12 +226,14 @@ function deleteUser(UserId, FirstName, LastName) {
     border: none;
     border-radius: 20px;
   }
-   #cancelRemove:hover{
+
+  #cancelRemove:hover {
     background-image: linear-gradient(to right, #309db0, rgb(71, 172, 209));
     color: white;
   }
-  #confirmRemove:hover{
-   background-image: linear-gradient(to right, #f07b0d, rgb(245, 157, 64));
+
+  #confirmRemove:hover {
+    background-image: linear-gradient(to right, #f07b0d, rgb(245, 157, 64));
     color: white;
   }
 </style>

@@ -1,32 +1,32 @@
-<section >
+<section>
   <div class="container-fluid mt-4">
 
     <div class=" text-center">
-            <h2 >No Products Available Right Now</h2>
-        </div>
+      <h2>No Products Available Right Now</h2>
+    </div>
 
-        <div class="d-flex justify-content-center pb-3 col-12" id="img">
-            <img src="/images/empty-shop.png" alt="Empty Cart" >
-            </div>
+    <div class="d-flex justify-content-center pb-3 col-12" id="img">
+      <img src="/images/empty-shop.png" alt="Empty Cart">
+    </div>
 
-            <div class="text-center mb-4">
-                <p>It seems we've run out of products for now. Check back soon to find something you'll love!</p>
-            </div>
+    <div class="text-center mb-4">
+      <p>It seems we've run out of products for now. Check back soon to find something you'll love!</p>
+    </div>
   </div>
 
-   <!-- Advertisement section -->
+  <!-- Advertisement section -->
 
   <div id="popup-sidebar" class="popup-sidebar" title="eASY SHOP Ad">
     <img id="popup-image" src="/images/ad-1.gif" alt="Product Advertisement">
   </div>
-    </section>
+</section>
 
-    <style>
-           #img img{
+<style>
+  #img img {
     width: 45%;
   }
 
-  
+
   /* Styles for the pop-up sidebar */
   .popup-sidebar {
     position: fixed;
@@ -35,7 +35,7 @@
     /* Initially hidden off-screen */
     width: 300px;
     background-color: #fff;
-    box-shadow: 0 2px 8px rgba(21, 105, 131, 0.5);  
+    box-shadow: 0 2px 8px rgba(21, 105, 131, 0.5);
     z-index: 1000;
     transition: right 1s ease-in-out;
     padding: 20px;
@@ -55,43 +55,42 @@
       /* Completely hidden on smaller screens */
     }
   }
+</style>
 
-    </style>
-
-    <script>
+<script>
 
   // Function for Advertisement
-function slidePopupSidebar() {
-      const popupSidebar = document.getElementById('popup-sidebar');
-      const popupImage = document.getElementById('popup-image');
-      const imageUrls = [
-        "/images/ad-1.gif",
-        "/images/ad-2.gif",
-        "/images/ad-3.gif",
-        "/images/ad-4.gif"
-      ];
-      let currentIndex = 0;
+  function slidePopupSidebar() {
+    const popupSidebar = document.getElementById('popup-sidebar');
+    const popupImage = document.getElementById('popup-image');
+    const imageUrls = [
+      "/images/ad-1.gif",
+      "/images/ad-2.gif",
+      "/images/ad-3.gif",
+      "/images/ad-4.gif"
+    ];
+    let currentIndex = 0;
 
-      // Slide in the popup sidebar immediately
+    // Slide in the popup sidebar immediately
+    popupSidebar.style.right = '0';
+    // Slide out after 3 seconds
+    setTimeout(() => {
+      popupSidebar.style.right = '-300px';
+    }, 3000);
+
+    // Change image every 3 seconds
+    setInterval(() => {
+      currentIndex = (currentIndex + 1) % imageUrls.length;
+      popupImage.src = imageUrls[currentIndex];
+      // Slide in the popup sidebar
       popupSidebar.style.right = '0';
       // Slide out after 3 seconds
       setTimeout(() => {
         popupSidebar.style.right = '-300px';
       }, 3000);
+    }, 10000);
+  }
 
-      // Change image every 3 seconds
-      setInterval(() => {
-        currentIndex = (currentIndex + 1) % imageUrls.length;
-        popupImage.src = imageUrls[currentIndex];
-        // Slide in the popup sidebar
-        popupSidebar.style.right = '0';
-        // Slide out after 3 seconds
-        setTimeout(() => {
-          popupSidebar.style.right = '-300px';
-        }, 3000);
-      }, 10000);
-    }
-
-    // Call the slidePopupSidebar function when the page is loaded
-    window.onload = slidePopupSidebar;
-    </script>
+  // Call the slidePopupSidebar function when the page is loaded
+  window.onload = slidePopupSidebar;
+</script>

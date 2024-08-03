@@ -3,120 +3,128 @@
         <h2 class="text-center mt-5">eASY Shop Help Center: Here for You 24x7</h2>
         <div class="row">
 
-        {{#if user}}
-        <a href="https://wa.me/+919142111304?text=Hi%20I%20am%20{{user.First_Name}}%20{{user.Last_Name}},%0A%0Auser%20Id:%20{{user._id}}">
-        {{else}}
-        <a href="https://wa.me/+919142111304"> 
-        {{/if}}
-            <div class="card  ">
-                <div class="card-body ">
-                    <div class=" text-center">
-                        <div class="content">
-                            <h5 class="card-title ">Chat with Us</h5>
-                        </div>
-                        <div class="icon ">
-                            <img src="/images/chat.png" alt="Chat">
-                        </div>
-                    </div>
-                    <p class="card-subtitle mb-2 text-muted mt-2" >Chat with our friendly eASY support team on WhatsApp anytime for prompt assistance and solutions.</p>
-                </div> 
-            </div>
-            
-           </a>
-           
-       <a href="tel:0484-2255369"> 
-         <div class="card  " >
-               <div class="card-body ">
-                    <div class="text-center ">
-                        <div class="content">
-                            <h5 class="card-title">Call our Support</h5>
-                        </div>
-                        <div class="icon">
-                            <img src="/images/calling.png"  alt="Call">
+            {{#if user}}
+            <a
+                href="https://wa.me/+919142111304?text=Hi%20I%20am%20{{user.First_Name}}%20{{user.Last_Name}},%0A%0Auser%20Id:%20{{user._id}}">
+                {{else}}
+                <a href="https://wa.me/+919142111304">
+                    {{/if}}
+                    <div class="card  ">
+                        <div class="card-body ">
+                            <div class=" text-center">
+                                <div class="content">
+                                    <h5 class="card-title ">Chat with Us</h5>
+                                </div>
+                                <div class="icon ">
+                                    <img src="/images/chat.png" alt="Chat">
+                                </div>
+                            </div>
+                            <p class="card-subtitle mb-2 text-muted mt-2">Chat with our friendly eASY support team on
+                                WhatsApp anytime for prompt assistance and solutions.</p>
                         </div>
                     </div>
-                    <p class="card-subtitle mb-2 text-muted mt-2">Speak directly with our eASY support team for personalized assistance over the phone.</p>
-                </div> 
-            </div> 
-        </a>
 
-        <a href="mailto:easyshop@email.com">
-            <div class="card " >
-              <div class="card-body ">
-                    <div class="text-center">
-                        <div class="content">
-                            <h5 class="card-title">Drop us an Email</h5>
-                        </div>
-                        <div class="icon">
-                            <img src="/images/email.png"  alt="Email">
-                        </div>
-                    </div>
-                    <p class="card-subtitle mb-2 text-muted mt-2">Reach out with an email, and we’ll get back to you as quickly as possible.</p>
-                </div>
-            </div>
-         </a> 
+                </a>
 
-         <a href="/message">
-            <div class="card " >
-              <div class="card-body ">
-                    <div class=" text-center">
-                        <div class="content">
-                            <h5 class="card-title">Send your Inquiry</h5>
-                        </div>
-                        <div class="icon">
-                            <img src="/images/message.png"  alt="Message">
+                <a href="tel:0484-2255369">
+                    <div class="card  ">
+                        <div class="card-body ">
+                            <div class="text-center ">
+                                <div class="content">
+                                    <h5 class="card-title">Call our Support</h5>
+                                </div>
+                                <div class="icon">
+                                    <img src="/images/calling.png" alt="Call">
+                                </div>
+                            </div>
+                            <p class="card-subtitle mb-2 text-muted mt-2">Speak directly with our eASY support team for
+                                personalized assistance over the phone.</p>
                         </div>
                     </div>
-                    <p class="card-subtitle mb-2 text-muted mt-2">Send us your thoughts or questions, and we'll reach out to you shortly.</p>
-                </div>
-            </div>
-         </a> 
+                </a>
+
+                <a href="mailto:easyshop@email.com">
+                    <div class="card ">
+                        <div class="card-body ">
+                            <div class="text-center">
+                                <div class="content">
+                                    <h5 class="card-title">Drop us an Email</h5>
+                                </div>
+                                <div class="icon">
+                                    <img src="/images/email.png" alt="Email">
+                                </div>
+                            </div>
+                            <p class="card-subtitle mb-2 text-muted mt-2">Reach out with an email, and we’ll get back to
+                                you as quickly as possible.</p>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="/message">
+                    <div class="card ">
+                        <div class="card-body ">
+                            <div class=" text-center">
+                                <div class="content">
+                                    <h5 class="card-title">Send your Inquiry</h5>
+                                </div>
+                                <div class="icon">
+                                    <img src="/images/message.png" alt="Message">
+                                </div>
+                            </div>
+                            <p class="card-subtitle mb-2 text-muted mt-2">Send us your thoughts or questions, and we'll
+                                reach out to you shortly.</p>
+                        </div>
+                    </div>
+                </a>
 
         </div>
     </div>
 </section>
 
 <style>
-    .row{
-     display: flex;
-     justify-content: center;
-     align-items: center;
-     margin-top: 100px;
-     margin-bottom: 70px;
-     gap: 50px;
-}
+    .row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 100px;
+        margin-bottom: 70px;
+        gap: 50px;
+    }
 
-     a {
-    color: black;
-    text-decoration: none;
-    /* Remove underline by default */
-  }
+    a {
+        color: black;
+        text-decoration: none;
+        /* Remove underline by default */
+    }
 
-  a:hover {
-    color: black;
-    text-decoration: none;
-    /* Ensure underline does not appear on hover */
-  }
+    a:hover {
+        color: black;
+        text-decoration: none;
+        /* Ensure underline does not appear on hover */
+    }
 
-  .card{
-    width: 17rem; 
-    height: 18rem; 
-    border-radius: 10px;
-    color: rgb(38, 141, 139);
-    border-color: rgb(28, 133, 117);
-  }
-  .card:hover{
-    box-shadow: 0 0 14px rgba(21, 105, 131, 0.5);
-  }
-  .card-title{
-    font-size: x-large;
-  }
-  .icon img{
-    block-size: 120px;
-  }
- .card-subtitle{
-    padding-top: 10px;
-    font-size: small;
-  }
-  
+    .card {
+        width: 17rem;
+        height: 18rem;
+        border-radius: 10px;
+        color: rgb(38, 141, 139);
+        border-color: rgb(28, 133, 117);
+    }
+
+    .card:hover {
+        box-shadow: 0 0 14px rgba(21, 105, 131, 0.5);
+    }
+
+    .card-title {
+        font-size: x-large;
+    }
+
+    .icon img {
+        block-size: 120px;
+    }
+
+    .card-subtitle {
+        padding-top: 10px;
+        font-size: small;
+    }
 </style>

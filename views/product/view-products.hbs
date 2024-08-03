@@ -35,7 +35,7 @@
                 </div>
                 {{/ifEquals}}
               </div>
-              <div class="row ml-1 mb-2" >
+              <div class="row ml-1 mb-2">
                 <div class="mt-2">
                   <p class="card-text" title="Offer percentage" id="offer-percentage"><b> {{this.Offer_Percentage}}%
                     </b><small>off</small></p>
@@ -45,7 +45,7 @@
                 </div>
                 <div class="ml-1 mt-2">
                   <p class="card-text text-muted" id="actualPrice" title="M.R.P."><small><small><del
-                        id="actual-price">{{this.Actual_Price}}</del></small></small></p>
+                          id="actual-price">{{this.Actual_Price}}</del></small></small></p>
                 </div>
               </div>
           </a>
@@ -73,11 +73,11 @@
   </a>
 
   <!-- Advertisement section -->
-<a href="/">
-  <div id="popup-sidebar" class="popup-sidebar" title="eASY SHOP Ad">
-    <img id="popup-image" src="/images/ad-1.gif" alt="Product Advertisement">
-  </div>
-</a>
+  <a href="/">
+    <div id="popup-sidebar" class="popup-sidebar" title="eASY SHOP Ad">
+      <img id="popup-image" src="/images/ad-1.gif" alt="Product Advertisement">
+    </div>
+  </a>
 
   <!-- Shows for product out of stock -->
   <div id="confirmationModal" class="modal">
@@ -255,7 +255,7 @@
   function displaySearchResults(products) {
     const productContainer = document.getElementById('product-container');
     productContainer.innerHTML = ''; // Clear previous results
-    
+
     if (products.length === 0) {
       productContainer.innerHTML = `
         <div class="d-flex justify-content-center pb-5 col-12">
@@ -325,7 +325,7 @@
     width: 14em;
     height: 22.2em;
   }
-  
+
 
   .card:hover {
     box-shadow: 0 2px 18px rgba(19, 111, 139, 0.5);
@@ -384,7 +384,7 @@
     cursor: pointer;
     position: relative;
     overflow: hidden;
-   
+
   }
 
   #addtoCart:hover {

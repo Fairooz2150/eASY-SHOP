@@ -43,7 +43,7 @@
             </button>
 
             <div class="collapse navbar-collapse justify-content-between " id="navbarTogglerDemo03">
-                    
+
                 <ul class="navbar-nav mt-2 mt-lg-0 flex-row">
                     {{#if hide}}
                     {{else}}
@@ -93,7 +93,8 @@
                             {{#if user}}
                             <a class="dropdown-item" href="/your-account"><i class="bi bi-person-circle"></i> Your
                                 Account</a>
-                            <a class="dropdown-item" href="/contact"><i class="bi bi-headset" id="icons"></i> Contact Us</a>
+                            <a class="dropdown-item" href="/contact"><i class="bi bi-headset" id="icons"></i> Contact
+                                Us</a>
                             <a class="dropdown-item" href="/about"><i class="bi bi-info-circle-fill"></i> About Us</a>
                             <a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-left"></i> Logout</a>
                             {{else}}
@@ -101,8 +102,10 @@
                                 Login</a>
                             <a class="dropdown-item" href="/signup"><i class="bi bi-cloud-arrow-up-fill" id="icons"></i>
                                 Sign Up</a>
-                            <a class="dropdown-item" href="/contact"><i class="bi bi-headset" id="icons"></i> Contact Us</a>
-                            <a class="dropdown-item" href="/about"><i class="bi bi-info-circle-fill" id="icons"></i> About</a>
+                            <a class="dropdown-item" href="/contact"><i class="bi bi-headset" id="icons"></i> Contact
+                                Us</a>
+                            <a class="dropdown-item" href="/about"><i class="bi bi-info-circle-fill" id="icons"></i>
+                                About</a>
                             <a class="dropdown-item" href="/admin/login"><i class="bi bi-person-fill-check"
                                     id="icons"></i> Admin</a>
                             {{/if}}
@@ -152,7 +155,7 @@
         searchInput.placeholder = placeholders[index];
         searchInputs.placeholder = placeholders[index];
         searchInputL.placeholder = placeholders[index];
-        
+
         index = (index + 1) % placeholders.length;
     }
 
@@ -165,7 +168,6 @@
 
 
 <style>
-
     .input-group {
         position: relative;
         display: inline-block;
@@ -189,7 +191,8 @@
 
 
     /*Search bar and eASY SHOP Logo for medium and Large screens */
-    #search-input, #search-inputL {
+    #search-input,
+    #search-inputL {
         border-radius: 20px;
         width: 22em;
         background-color: transparent;
@@ -226,7 +229,7 @@
 
     }
 
-    
+
     #search-inputs::placeholder {
         color: #217f8f;
     }
@@ -234,7 +237,7 @@
     #search-input::placeholder {
         color: #217f8f;
     }
-    
+
     #search-inputL::placeholder {
         color: #217f8f;
     }
@@ -281,18 +284,18 @@
         background-color: white;
         color: #35a8b7;
     }
-    
+
 
     .navbar-toggler {
-        border-radius: 10px;     
+        border-radius: 10px;
         padding: 1px;
         border: none;
         outline: none;
         font-size: 30px;
     }
-    
-    .bi-text-right{
-         color: rgb(224, 215, 215);
+
+    .bi-text-right {
+        color: rgb(224, 215, 215);
     }
 
     .dropdown-item {

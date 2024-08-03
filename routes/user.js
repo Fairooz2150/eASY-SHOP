@@ -31,15 +31,15 @@ router.get('/', async function (req, res, next) {
         cartCount = req.session.cart.length;
       }
     }
-    
-      let products = await productHelpers.getAllProducts();
-      if(products.length === 0){
-        res.render('user/empty/empty-shop', { user, cartCount });
-        
-      }else{
-        res.render('product/view-products', { products, user, cartCount, search: true });
-      }
-     
+
+    let products = await productHelpers.getAllProducts();
+    if (products.length === 0) {
+      res.render('user/empty/empty-shop', { user, cartCount });
+
+    } else {
+      res.render('product/view-products', { products, user, cartCount, search: true });
+    }
+
 
   } catch (err) {
     console.error(err);
@@ -65,14 +65,14 @@ router.get('/view-product/:id', async (req, res) => {
       cartCount = req.session.cart.length;
     }
   }
-  
+
   res.render('product/view-product', { user, product, images, cartCount })
 })
 
 
 /* Route Signup page. */
 router.get('/signup', (req, res) => {
-  res.render('user/signup',{hide:true});
+  res.render('user/signup', { hide: true });
 });
 
 
@@ -101,7 +101,7 @@ router.get('/login', (req, res) => {
     res.redirect('/')
   }
   else {
-    res.render('user/login',{hide:true})
+    res.render('user/login', { hide: true })
     req.session.userLoginErr = false
   }
 })
@@ -118,18 +118,18 @@ router.post('/login', async (req, res) => {
 
     // Merge session cart with user's cart
     const sessionCart = req.session.cart || [];
- 
+
     for (let productId of sessionCart) {
-      let product = await productHelpers.getProductDetails(productId); 
+      let product = await productHelpers.getProductDetails(productId);
       // Check if the product is still available
-      if (product === null) { 
+      if (product === null) {
         continue; // Skip the rest of this iteration and continue with the next one
       } else {
         await userHelpers.addToCart(productId, response.user._id);
         //if the product was still available, add to Cart from Session Cart
       }
     }
-    
+
     delete req.session.cart; // Clear session cart
 
     const returnTo = req.session.returnTo || '/'; // Default to home if no return URL
@@ -181,16 +181,16 @@ router.get('/message', async (req, res) => {
       cartCount = req.session.cart.length
     }
   }
-  res.render('user/message', { cartCount,user,hide:true })
+  res.render('user/message', { cartCount, user, hide: true })
 })
 
 
 /*Post message from User */
-router.post('/send-message',async(req,res)=>{
- await userHelpers.uploadMsg(req.body).then(() => {
+router.post('/send-message', async (req, res) => {
+  await userHelpers.uploadMsg(req.body).then(() => {
     res.json({ send: true })
-  }).catch((error)=>{
-   console.log('message not send',error);
+  }).catch((error) => {
+    console.log('message not send', error);
     res.status(500).send('Internal Server Error');
   })
 })
@@ -210,7 +210,7 @@ router.get('/about', async (req, res) => {
     }
   }
 
-  res.render('user/about', { cartCount,user,hide:true })
+  res.render('user/about', { cartCount, user, hide: true })
 })
 
 /* GET Cart  */
@@ -536,7 +536,7 @@ router.get('/your-products', verifyLogin, async (req, res) => {
   try {
     //User selling Products details
     let products = await userHelpers.getUserRequestProds(user._id);
-    
+
     res.render('user/your-products', { user, products, cartCount });
   } catch (error) {
     res.render('user/empty/no-products', { error, user, cartCount });

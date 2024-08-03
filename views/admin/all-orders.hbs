@@ -159,8 +159,8 @@
   <div id="back-top">
     <button title="Go to Top" onclick="topFunction()" id="topBtn"> <i class="bi bi-arrow-up-circle-fill"></i> </button>
   </div>
-  
-   <!-- Confirmation Modal -->
+
+  <!-- Confirmation Modal -->
   <div id="confirmationModal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
@@ -212,7 +212,7 @@
     document.documentElement.scrollTop = 0;
   }
 
-  
+
   /* Function to show the confirmation modal */
   function showConfirmationModal(message, confirmCallback) {
     // Get the modal
@@ -227,10 +227,10 @@
 
     // Set the modal message
     const modalMessage = document.getElementById('modalMessage');
-    
+
     // Apply the message with styled productName
     modalMessage.innerHTML = message;
-   
+
 
     // Show the modal
     modal.style.display = "block";
@@ -258,43 +258,43 @@
       }
     }
   }
-  
+
 
   /* Update Order Status */
   function updateOrderStatus(orderId, status) {
-      showConfirmationModal(`Do you want to update the order status for <b>${status}</b>`, function() {
-    $.ajax({
-      url: '/admin/update-order-status',
-      method: 'POST',
-      data: { orderId: orderId, status: status },
-      success: function (response) {
-        if (response.success) {
-         
-          document.getElementById('status-' + orderId).innerText = status;
+    showConfirmationModal(`Do you want to update the order status for <b>${status}</b>`, function () {
+      $.ajax({
+        url: '/admin/update-order-status',
+        method: 'POST',
+        data: { orderId: orderId, status: status },
+        success: function (response) {
+          if (response.success) {
 
-          // Update button text and behavior
-          var shipButton = document.querySelector(`#action-buttons-${orderId} button[onclick*="updateOrderStatus('${orderId}', 'Shipped')"]`);
-          var deliverButton = document.querySelector(`#action-buttons-${orderId} button[onclick*="updateOrderStatus('${orderId}', 'Delivered')"]`);
+            document.getElementById('status-' + orderId).innerText = status;
 
-          if (status === 'Shipped') {
-            // Change Ship button to Deliver button
-            shipButton.innerText = 'Delivered';
-            shipButton.setAttribute('onclick', `updateOrderStatus('${orderId}', 'Delivered')`);
-            deliverButton.style.display = 'none';
-          } else if (status === 'Delivered') {
-            // Hide Deliver button after updating status to Delivered
-            deliverButton.style.display = 'none';
+            // Update button text and behavior
+            var shipButton = document.querySelector(`#action-buttons-${orderId} button[onclick*="updateOrderStatus('${orderId}', 'Shipped')"]`);
+            var deliverButton = document.querySelector(`#action-buttons-${orderId} button[onclick*="updateOrderStatus('${orderId}', 'Delivered')"]`);
+
+            if (status === 'Shipped') {
+              // Change Ship button to Deliver button
+              shipButton.innerText = 'Delivered';
+              shipButton.setAttribute('onclick', `updateOrderStatus('${orderId}', 'Delivered')`);
+              deliverButton.style.display = 'none';
+            } else if (status === 'Delivered') {
+              // Hide Deliver button after updating status to Delivered
+              deliverButton.style.display = 'none';
+            }
+          } else {
+            alert('Failed to update order status');
           }
-        } else {
-          alert('Failed to update order status');
+        },
+        error: function (error) {
+          console.error('Error:', error);
+          alert('An error occurred while updating the order status');
         }
-      },
-      error: function (error) {
-        console.error('Error:', error);
-        alert('An error occurred while updating the order status');
-      }
+      });
     });
-     });
   }
 
 
@@ -477,8 +477,8 @@
     background-image: linear-gradient(to top, #309db0, rgb(71, 172, 209));
     box-shadow: 0 2px 18px rgba(13, 89, 112, 0.5);
   }
-  
-   /* The Modal (background) */
+
+  /* The Modal (background) */
   .modal {
     display: none;
     /* Hidden by default */
@@ -506,7 +506,7 @@
     margin: 15% auto;
     /* 15% from the top and centered */
     padding: 20px;
-    border-radius: 10px; 
+    border-radius: 10px;
     box-shadow: 0 0 20px rgba(18, 155, 150, 0.5);
     width: 80%;
     /* Could be more or less, depending on screen size */
@@ -538,7 +538,8 @@
     border: none;
     border-radius: 20px;
   }
-  #cancelRemove{
+
+  #cancelRemove {
     padding: 10px 20px;
     margin: 10px;
     background-image: linear-gradient(to left, #309db0, rgb(71, 172, 209));
@@ -546,12 +547,14 @@
     border: none;
     border-radius: 20px;
   }
-   #cancelRemove:hover{
+
+  #cancelRemove:hover {
     background-image: linear-gradient(to right, #309db0, rgb(71, 172, 209));
     color: white;
   }
-  #confirmRemove:hover{
-   background-image: linear-gradient(to right, #f07b0d, rgb(245, 157, 64));
+
+  #confirmRemove:hover {
+    background-image: linear-gradient(to right, #f07b0d, rgb(245, 157, 64));
     color: white;
   }
 </style>
