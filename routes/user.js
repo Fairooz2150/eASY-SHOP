@@ -210,7 +210,7 @@ router.get('/about', async (req, res) => {
     }
   }
 
-  res.render('user/about', { cartCount,user })
+  res.render('user/about', { cartCount,user,hide:true })
 })
 
 /* GET Cart  */
