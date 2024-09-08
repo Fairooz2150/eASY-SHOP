@@ -35,7 +35,7 @@
                 </div>
                 {{/ifEquals}}
               </div>
-              <div class="row ml-1 mb-2">
+              <div class="row ml-1 prices">
                 <div class="mt-2">
                   <p class="card-text" title="Offer percentage" id="offer-percentage"><b> {{this.Offer_Percentage}}%
                     </b><small>off</small></p>
@@ -325,7 +325,7 @@
     width: 14em;
     height: 22.2em;
   }
-
+ 
 
   .card:hover {
     box-shadow: 0 2px 18px rgba(19, 111, 139, 0.5);
@@ -360,6 +360,7 @@
     /* number of lines to show */
     -webkit-box-orient: vertical;
   }
+ 
 
   .eASY-assurance {
     height: 2rem;
@@ -375,7 +376,10 @@
     color: rgb(4, 149, 149);
     font-family: 'Times New Roman', Times, serif
   }
-
+ .prices{
+  margin-bottom: 7px;
+ }
+ 
 
   #addtoCart {
     background-image: linear-gradient(to left, #199cad, rgb(81, 176, 207));
@@ -386,6 +390,47 @@
     overflow: hidden;
 
   }
+ @media (max-width: 768px) {
+    .card{
+       width: 12em;
+       box-shadow: 0 2px 4px rgba(21, 105, 131, 0.5);
+       height: 19em;
+    }
+    
+    .card-title {
+    font-size: 12px;
+    height: 1.8rem;
+     overflow: hidden;
+   
+    }
+    .prices{
+      margin-top: -5px;
+  margin-bottom: -2px;
+ }
+    
+     .category {
+    width: 7.5em;
+    font-size: 12px;
+    }
+    .eASY-assurance {
+    height: 1.7rem;
+    width: 3.8rem;
+  }
+   #offer-price {
+    font-size: 20px;
+   }
+   #addtoCart {
+    width: 11.4em;
+   }
+   #actualPrice{
+    font-size: 17.5px;
+    margin-top: -5px;
+   }
+   #offer-percentage {
+    font-size: 12px;
+   }
+  }
+
 
   #addtoCart:hover {
     background-image: linear-gradient(to right, #199cad, rgb(81, 176, 207));
@@ -456,6 +501,7 @@
       width: 200px;
 
     }
+
   }
 
 
