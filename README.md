@@ -1,5 +1,5 @@
 
-# eASY Shop
+# eASY SHOP
 
 eASY Shop is a modern e-commerce platform designed to make it easy for users to shop and for sellers to manage and sell their products. Built with Node.js and Express, eASY Shop offers a streamlined experience for both customers and vendors.
 
