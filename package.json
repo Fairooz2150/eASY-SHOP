@@ -1,10 +1,12 @@
 {
   "name": "easy-shop",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
-    
+    "start": "node ./bin/www",
+    "dev": "nodemon ./bin/www",
+    "test": "echo \"No tests specified\" && exit 0",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@paypal/paypal-js": "^8.0.5",
@@ -42,4 +44,3 @@
     "node": ">=14.x"
   }
 }
-
