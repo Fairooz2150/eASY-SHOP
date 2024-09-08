@@ -77,21 +77,35 @@ router.get('/signup', (req, res) => {
 
 
 /* Save signup details and redirect to home page. */
-router.post('/signup', (req, res) => {
+/* Save signup details and redirect to home page. */
+router.post('/signup', async (req, res) => {
   const { Password } = req.body;
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,16}$/;
 
+  // Validate the password format
   if (!passwordRegex.test(Password)) {
-    return res.render('user/signup', { error: 'Password must be 6-16 characters long, include at least one alphabetic letter, one numeric digit, and one special character.' });
+    return res.render('user/signup', { 
+      error: 'Password must be 6-16 characters long, include at least one alphabetic letter, one numeric digit, and one special character.' 
+    });
   }
 
-  userHelpers.doSignup(req.body).then((response) => { 
-    req.session.user = response;
+  try {
+    // Attempt signup
+    const userId = await userHelpers.doSignup(req.body); // doSignup returns the insertedId
+
+    // Fetch the full user data by userId to store in session
+    const user = await userHelpers.userDetail(userId); // Assuming you have a getUserById method
+    
+    // Set session values
+    req.session.user = user[0];
     req.session.userLoggedIn = true;
+    
+    // Redirect to the home page
     res.redirect('/');
-  }).catch((err) => {
+  } catch (err) {
+    // Handle signup error
     res.render('user/signup', { error: 'Signup failed. Please try again.' });
-  });
+  }
 });
 
 
@@ -483,6 +497,7 @@ router.get('/your-account', verifyLogin, async (req, res) => {
 /* Account Settings */
 router.get('/account-settings', verifyLogin, async (req, res) => {
   let user = req.session.user;
+  
   let accountDetails = await userHelpers.userDetails(user); 
   let cartCount = await userHelpers.getCartCount(user._id) 
   res.render('user/account-settings', { user, accountDetails, cartCount });

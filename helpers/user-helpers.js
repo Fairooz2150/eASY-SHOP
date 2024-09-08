@@ -12,16 +12,19 @@ var instance = new Razorpay({
 module.exports = {
     
     //Save the User signup details with bcrypting password
-    doSignup: (userData) => { 
+    doSignup: (userData) => {
         return new Promise(async (resolve, reject) => {
-            userData.Password = await bcrypt.hash(userData.Password, 10)
-            db.get().collection(collection.USER_COLLECTION).insertOne(userData).then((data) => {
-                resolve(data.ops[0])
-            })
-
+            try {
+                userData.Password = await bcrypt.hash(userData.Password, 10)
+                const result = await db.get().collection(collection.USER_COLLECTION).insertOne(userData)
+                resolve(result.insertedId)  // Use insertedId to access the inserted document ID
+            } catch (error) {
+                reject(error)  // Handle errors
+            }
         })
-    },
-
+    }
+    ,
+    
     //Verify the user login details
     doLogin: (userData) => { 
         return new Promise(async (resolve, reject) => {
@@ -518,10 +521,16 @@ getAllUserOrders : (userId) => {
             let userId = user._id
             let userDetails = await db.get().collection(collection.USER_COLLECTION).find({ _id: new ObjectId(userId) }).toArray()
             resolve(userDetails)
-            console.log("ur acc:", userDetails);
         })
     },
 
+    userDetail: (userId) => { 
+        return new Promise(async (resolve, reject) => {
+            
+            let userDetails = await db.get().collection(collection.USER_COLLECTION).find({ _id: new ObjectId(userId) }).toArray()
+            resolve(userDetails)
+        })
+    },
     //Verify password of user on log in
     verifyPassword: async (userId, enteredPassword) => { 
 
