@@ -32,14 +32,12 @@ const hbsInstance = hbs.create({
       }
       return text;
     }
-
   },
   runtimeOptions: {
     allowProtoPropertiesByDefault: true, // Allow access to prototype properties
     allowProtoMethodsByDefault: true // Optionally, allow access to prototype methods
   }
 });
-
 
 const handlebars = require('handlebars');
 handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
@@ -71,12 +69,11 @@ handlebars.registerHelper('lt', function (a, b) {
   return a < b;
 });
 
-
-
 app.engine('hbs', hbsInstance.engine);
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
 
+// Middleware setup
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -91,20 +88,22 @@ app.use(session({
 }));
 app.use(nocache());
 
+// Database connection
 db.connect((err) => {
   if (err) console.log("Connection Error: " + err);
   else console.log("Database Connected to port 27017");
 });
 
+// Routes
 app.use('/', userRouter);
 app.use('/admin', adminRouter);
 
-// catch 404 and forward to error handler
+// Catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
 });
 
-// error handler
+// Error handler
 app.use(function (err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
