@@ -1,9 +1,10 @@
 var db = require('../config/connection')
-var collection = require('../config/collections')
+let collection = require('../config/collections')
 const moment = require('moment');
 const path = require('path');
 const fs = require('fs');
-var objectId = require('mongodb').ObjectID
+const { ObjectId } = require('mongodb');
+
 
 module.exports = {
 
@@ -59,11 +60,9 @@ module.exports = {
   //Delete eASY Products from product collection and status changed to remove for user products collection, and remove that item from users cart
   deleteProduct: (prodId) => { 
     return new Promise(async (resolve, reject) => {
-      console.log(prodId);
-      console.log(objectId(prodId));
-      await db.get().collection(collection.PRODUCT_COLLECTION).removeOne({ _id: objectId(prodId) }).then(async (response) => {
+      await db.get().collection(collection.PRODUCT_COLLECTION).deleteOne({ _id: new ObjectId(prodId) }).then(async (response) => {
 
-        await db.get().collection(collection.USER_PRODUCTS_COLLECTION).updateOne({ _id: objectId(prodId) }, {
+        await db.get().collection(collection.USER_PRODUCTS_COLLECTION).updateOne({ _id: new ObjectId(prodId) }, {
           $set: {
             Status: 'Removed'
           }
@@ -71,7 +70,7 @@ module.exports = {
 
         await db.get().collection(collection.CART_COLLECTION).updateMany(
           {},
-          { $pull: { products: { item: objectId(prodId) } } }
+          { $pull: { products: { item: new ObjectId(prodId) } } }
         );
         resolve(response)
 
@@ -85,13 +84,11 @@ module.exports = {
   deleteUserProduct: (prodId) => { 
     return new Promise(async (resolve, reject) => {
       try {
-        console.log(prodId);
-        console.log(objectId(prodId));
-        await db.get().collection(collection.USER_PRODUCTS_COLLECTION).removeOne({ _id: objectId(prodId) });
-        await db.get().collection(collection.PRODUCT_COLLECTION).removeOne({ _id: objectId(prodId) });
+        await db.get().collection(collection.USER_PRODUCTS_COLLECTION).deleteOne({ _id: new ObjectId(prodId) });
+        await db.get().collection(collection.PRODUCT_COLLECTION).deleteOne({ _id: new ObjectId(prodId) });
         await db.get().collection(collection.CART_COLLECTION).updateMany(
           {},
-          { $pull: { products: { item: objectId(prodId) } } }
+          { $pull: { products: { item: new ObjectId(prodId) } } }
         );
         resolve();
       } catch (error) {
@@ -104,11 +101,8 @@ module.exports = {
   //Delete Pending products(Not approved) or products of status:pending 
   deletePendingProduct: (prodId) => { 
     return new Promise((resolve, reject) => {
-      console.log(prodId);
-      console.log(objectId(prodId));
 
-      db.get().collection(collection.USER_PRODUCTS_COLLECTION).removeOne({ _id: objectId(prodId) }).then((response) => {
-        //console.log(response);
+      db.get().collection(collection.USER_PRODUCTS_COLLECTION).deleteOne({ _id: new ObjectId(prodId) }).then((response) => {
         resolve(response)
       }).catch((err) => {
         reject(err);
@@ -119,7 +113,7 @@ module.exports = {
   //Remove Items(products) from cart
   removeCartProducts: (userId) => { 
     return new Promise((resolve, reject) => {
-      db.get().collection(collection.CART_COLLECTION).removeOne({ user: objectId(userId) }).then(() => {
+      db.get().collection(collection.CART_COLLECTION).deleteOne({ user: new ObjectId(userId) }).then(() => {
         resolve()
       })
     })
@@ -128,9 +122,9 @@ module.exports = {
   //Get Products Full details
   getProductDetails: (proId) => { 
     return new Promise((resolve, reject) => {
-      db.get().collection(collection.PRODUCT_COLLECTION).findOne({ _id: objectId(proId) }).then((product) => {
+      db.get().collection(collection.PRODUCT_COLLECTION).findOne({ _id: new ObjectId(proId) }).then((product) => {
         if (product == null) {
-          db.get().collection(collection.USER_PRODUCTS_COLLECTION).findOne({ _id: objectId(proId) }).then((product) => {
+          db.get().collection(collection.USER_PRODUCTS_COLLECTION).findOne({ _id: new ObjectId(proId) }).then((product) => {
             resolve(product)
           })
         } else {
@@ -145,14 +139,14 @@ module.exports = {
     return new Promise((resolve, reject) => {
       db.get().collection(collection.PRODUCT_COLLECTION)
         .findOneAndUpdate(
-          { _id: objectId(proId) },
+          { _id: new ObjectId(proId) },
           [{ $set: { Stock_Count: { $subtract: [{ $toInt: "$Stock_Count" }, 1] } } }],
           { returnOriginal: false }
         )
         .then((result) => {
           db.get().collection(collection.USER_PRODUCTS_COLLECTION)
             .findOneAndUpdate(
-              { _id: objectId(proId) },
+              { _id: new ObjectId(proId) },
               [{ $set: { Stock_Count: { $subtract: [{ $toInt: "$Stock_Count" }, 1] } } }],
               { returnOriginal: false }
 
@@ -174,7 +168,7 @@ module.exports = {
     return new Promise((resolve, reject) => {
       db.get().collection(collection.PRODUCT_COLLECTION)
         .findOneAndUpdate(
-          { _id: objectId(proId) },
+          { _id: new ObjectId(proId) },
           [{ $set: { Stock_Count: { $subtract: [{ $toInt: "$Stock_Count" }, 1] } } }],
           { returnDocument: 'after' }
         )
@@ -190,7 +184,7 @@ module.exports = {
   //Save the edited product details by Admin
   updateProduct: (proId, proDetails) => { 
     return new Promise((resolve, reject) => {
-      db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ _id: objectId(proId) }, {
+      db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ _id: new ObjectId(proId) }, {
         $set: {
           Name: proDetails.Name,
           Description: proDetails.Description,
@@ -213,7 +207,7 @@ module.exports = {
       let Date = moment().format('DD MMM YYYY');
       let Time = moment().format('hh:mmA');
       if (product.Status === 'Approved') {
-        db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ _id: objectId(proId) }, {
+        db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ _id: new ObjectId(proId) }, {
           $set: {
 
             Name: product.Name,
@@ -236,7 +230,7 @@ module.exports = {
           }
         })
 
-        db.get().collection(collection.USER_PRODUCTS_COLLECTION).updateOne({ _id: objectId(proId) }, {
+        db.get().collection(collection.USER_PRODUCTS_COLLECTION).updateOne({ _id: new ObjectId(proId) }, {
           $set: {
 
             Name: product.Name,
@@ -261,7 +255,7 @@ module.exports = {
 
       } else {
 
-        db.get().collection(collection.USER_PRODUCTS_COLLECTION).updateOne({ _id: objectId(proId) }, {
+        db.get().collection(collection.USER_PRODUCTS_COLLECTION).updateOne({ _id: new ObjectId(proId) }, {
           $set: {
 
             Name: product.Name,
@@ -348,7 +342,7 @@ module.exports = {
         Offer_Price: product.Offer_Price,
         Offer_Percentage: product.Offer_Percentage,
         Description: product.Description,
-        Seller_Id: objectId(product.User_Id),
+        Seller_Id: new ObjectId(product.User_Id),
         Seller_First_Name: product.User_First_Name,
         Seller_Last_Name: product.User_Last_Name,
         Gender: product.Gender,
@@ -382,7 +376,7 @@ module.exports = {
     return new Promise(async (resolve, reject) => {
       try {
         const productCollection = db.get().collection(collection.PRODUCT_COLLECTION); // Replace with your collection name
-        const product = await productCollection.findOne({ _id: objectId(productId) });
+        const product = await productCollection.findOne({ _id: new ObjectId(productId) });
 
         if (!product) {
           throw new Error('Product not found');
@@ -408,7 +402,7 @@ module.exports = {
     return new Promise(async (resolve, reject) => {
       try {
         const productCollection = db.get().collection(collection.USER_PRODUCTS_COLLECTION); // Replace with your collection name
-        const product = await productCollection.findOne({ _id: objectId(productId) });
+        const product = await productCollection.findOne({ _id: new ObjectId(productId) });
 
         if (!product) {
           throw new Error('Pending Product not found');
@@ -433,7 +427,7 @@ module.exports = {
   updateProductImages: (productId, updatedImages) => { 
     return new Promise((resolve, reject) => {
       db.get().collection(collection.PRODUCT_COLLECTION).updateOne(
-        { _id: objectId(productId) },
+        { _id: new ObjectId(productId) },
         {
           $set: {
             images: updatedImages
@@ -451,7 +445,7 @@ module.exports = {
   updatePndgProductImages: (productId, updatedImages) => { 
     return new Promise((resolve, reject) => {
       db.get().collection(collection.USER_PRODUCTS_COLLECTION).updateOne(
-        { _id: objectId(productId) },
+        { _id: new ObjectId(productId) },
         {
           $set: {
             images: updatedImages

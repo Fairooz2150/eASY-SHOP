@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 const path = require('path');
 const fs = require('fs');
-var objectId = require('mongodb').ObjectID
+const { ObjectId } = require('mongodb');
 var productHelpers = require('../helpers/product-helpers');
 const userHelpers = require('../helpers/user-helpers');
 
@@ -340,7 +340,7 @@ router.post('/place-product', async (req, res) => {
     const paymentMethod = req.body['payment-method'];
 
     const products = [{
-      item: objectId(req.body.prodId),
+      item: new ObjectId(req.body.prodId),
       quantity: 1
     }];
     const total = req.body.total;
@@ -415,21 +415,28 @@ router.get('/order-success', verifyLogin, async (req, res) => {
 /* Orders*/
 router.get('/orders', verifyLogin, async (req, res) => {
   let user = req.session.user;
+  console.log("User from session:", user); // Log user data
   let cartCount = await userHelpers.getCartCount(user._id); 
+  console.log("Cart count:", cartCount);
 
-  userHelpers.getAllUserOrders(user._id).then((orders) => { 
+  try {
+    let orders = await userHelpers.getAllUserOrders(user._id);
+    console.log("Orders retrieved:", orders); // Log orders data
+    
     // Sort orders by date in descending order
     orders.sort((a, b) => new Date(b.date) - new Date(a.date));
+    
     if (orders.length === 0) {
       res.render('user/empty/no-orders', { user, cartCount });
     } else {
       res.render('user/orders', { user, cartCount, orders });
     }
-  }).catch((err) => {
-    console.error(err);
+  } catch (err) {
+    console.error("Error fetching orders:", err); // Log errors
     res.status(500).send("Internal Server Error");
-  });
+  }
 });
+
 
 
 /* Verify payment for orders(for all cart products) */

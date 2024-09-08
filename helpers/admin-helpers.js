@@ -2,7 +2,8 @@ var db = require('../config/connection')
 var collection = require('../config/collections')
 const bcrypt = require('bcrypt')
 const { log } = require('console')
-var objectId = require('mongodb').ObjectID
+const { ObjectId } = require('mongodb');
+
 
 module.exports = {
 
@@ -47,7 +48,7 @@ module.exports = {
     deleteUser: (userId) => { 
         return new Promise((resolve, reject) => {
 
-            db.get().collection(collection.USER_COLLECTION).removeOne({ _id: objectId(userId) }).then((response) => {
+            db.get().collection(collection.USER_COLLECTION).deleteOne({ _id: new ObjectId(userId) }).then((response) => {
 
                 resolve(response)
             })
@@ -55,9 +56,10 @@ module.exports = {
     },
 
     //get all the orders
-    getAllOrders: () => { 
+    getAllOrders: () => {
         return new Promise((resolve, reject) => {
             db.get().collection(collection.ORDER_COLLECTION).aggregate([
+                // Join with user collection
                 {
                     $lookup: {
                         from: collection.USER_COLLECTION,
@@ -67,11 +69,13 @@ module.exports = {
                     }
                 },
                 {
-                    $unwind: '$userDetails'
+                    $unwind: { path: '$userDetails', preserveNullAndEmptyArrays: true }
                 },
+                // Unwind products array
                 {
-                    $unwind: '$products'
+                    $unwind: { path: '$products', preserveNullAndEmptyArrays: true }
                 },
+                // Join with product collection
                 {
                     $lookup: {
                         from: collection.PRODUCT_COLLECTION,
@@ -81,15 +85,17 @@ module.exports = {
                     }
                 },
                 {
-                    $unwind: '$productDetails'
+                    $unwind: { path: '$productDetails', preserveNullAndEmptyArrays: true }
                 },
+                // Add product details to products array
                 {
                     $addFields: {
-                        'products.productName': '$productDetails.Name',
-                        'products.price': '$productDetails.Offer_Price',
-                        'products.category': '$productDetails.Category'
+                        'products.productName': { $ifNull: ['$productDetails.Name', 'Unknown'] },
+                        'products.price': { $ifNull: ['$productDetails.Offer_Price', 0] },
+                        'products.category': { $ifNull: ['$productDetails.Category', 'Uncategorized'] }
                     }
                 },
+                // Group by order _id to aggregate product details
                 {
                     $group: {
                         _id: '$_id',
@@ -111,6 +117,7 @@ module.exports = {
                         }
                     }
                 },
+                // Project fields to include in the final output
                 {
                     $project: {
                         _id: 1,
@@ -127,23 +134,28 @@ module.exports = {
                         deliveryDetails: 1,
                         products: 1
                     }
+                },
+                // Optional: Sort by date and time
+                {
+                    $sort: { date: -1, time: -1 }
                 }
-            ]).sort({ Date: -1, time: -1 }).toArray((err, orders) => {
+            ]).toArray((err, orders) => {
                 if (err) {
-                    reject(err);
-                } else {
-                    console.log(JSON.stringify(orders, null, 2)); // Log the output for verification
-                    resolve(orders);
+                    console.error("Error in aggregation:", err);
+                    return reject(err);
                 }
+                console.log("Aggregated Orders:", JSON.stringify(orders, null, 2)); // Log the output for verification
+                resolve(orders);
             });
         });
-    },
+    }
+,    
 
     //update the user order status from placed->shipped->deliver
     updateOrderStatus: (orderId, status) => { 
         return new Promise((resolve, reject) => {
             db.get().collection(collection.ORDER_COLLECTION).updateOne(
-                { _id: objectId(orderId) },
+                { _id: new ObjectId(orderId) },
                 { $set: { status: status } }
             ).then((response) => {
 
@@ -158,18 +170,18 @@ module.exports = {
     updateUserProdStatus: (Id, Status) => { 
         return new Promise((resolve, reject) => {
             db.get().collection(collection.USER_PRODUCTS_COLLECTION).updateOne(
-                { _id: objectId(Id) },
+                { _id: new ObjectId(Id) },
                 { $set: { Status: Status } }
             ).then(async (response) => {
                 if (Status === "Approved") {
                     try {
                         // Find the document in USER_PRODUCTS_COLLECTION
-                        const product = await db.get().collection(collection.USER_PRODUCTS_COLLECTION).findOne({ _id: objectId(Id) });
+                        const product = await db.get().collection(collection.USER_PRODUCTS_COLLECTION).findOne({ _id: new ObjectId(Id) });
 
                         if (product) {
                             // Create the product data with the same _id
                             const productData = {
-                                _id: objectId(product._id), // Same _id as in USER_PRODUCTS_COLLECTION
+                                _id: new ObjectId(product._id), // Same _id as in USER_PRODUCTS_COLLECTION
                                 Name: product.Name,
                                 Category: product.Category,
                                 Actual_Price: product.Actual_Price,
