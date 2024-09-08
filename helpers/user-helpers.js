@@ -357,111 +357,95 @@ module.exports = {
     },
 
     //Get All Order details of user
-   
-getAllUserOrders : (userId) => { 
-    return new Promise((resolve, reject) => {
-        db.get().collection(collection.ORDER_COLLECTION).aggregate([
-            {
-                $match: { userId: new ObjectId(userId) } // Filter orders by user ID
-            },
-            {
-                $lookup: {
-                    from: collection.USER_COLLECTION,
-                    localField: 'userId',
-                    foreignField: '_id',
-                    as: 'userDetails'
+    getAllUserOrders: (userId) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (!ObjectId.isValid(userId)) {
+                    throw new Error("Invalid userId");
                 }
-            },
-            {
-                $unwind: '$userDetails'
-            },
-            {
-                $project: {
-                    _id: 1,
-                    totalAmount: 1,
-                    paymentMethod: 1,
-                    status: 1,
-                    date: 1,
-                    time: 1,
-                    userDetails: 1,
-                    deliveryDetails: 1,
-                    products: {
-                        $cond: {
-                            if: { $isArray: "$products" },
-                            then: "$products",
-                            else: [{ item: "$products", quantity: 1 }] // Adjust quantity as needed
+    
+                console.log("Starting aggregation...");
+                const orders = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
+                    { $match: { userId: new ObjectId(userId) } },
+                    { $lookup: {
+                        from: collection.USER_COLLECTION,
+                        localField: 'userId',
+                        foreignField: '_id',
+                        as: 'userDetails'
+                    }},
+                    { $unwind: '$userDetails' },
+                    { $project: {
+                        _id: 1,
+                        totalAmount: 1,
+                        paymentMethod: 1,
+                        status: 1,
+                        date: 1,
+                        time: 1,
+                        userDetails: 1,
+                        deliveryDetails: 1,
+                        products: {
+                            $cond: {
+                                if: { $isArray: "$products" },
+                                then: "$products",
+                                else: [{ item: "$products", quantity: 1 }]
+                            }
                         }
-                    }
-                }
-            },
-            {
-                $unwind: '$products'
-            },
-            {
-                $lookup: {
-                    from: collection.PRODUCT_COLLECTION,
-                    localField: 'products.item',
-                    foreignField: '_id',
-                    as: 'productDetails'
-                }
-            },
-            {
-                $unwind: '$productDetails'
-            },
-            {
-                $addFields: {
-                    'products.productName': '$productDetails.Name',
-                    'products.price': '$productDetails.Offer_Price'
-                }
-            },
-            {
-                $group: {
-                    _id: '$_id',
-                    totalAmount: { $first: '$totalAmount' },
-                    paymentMethod: { $first: '$paymentMethod' },
-                    status: { $first: '$status' },
-                    date: { $first: '$date' },
-                    time: { $first: '$time' },
-                    userDetails: { $first: '$userDetails' },
-                    deliveryDetails: { $first: '$deliveryDetails' },
-                    products: {
-                        $push: {
-                            item: '$products.item',
-                            quantity: '$products.quantity',
-                            productName: '$products.productName',
-                            price: '$products.price'
+                    }},
+                    { $unwind: { path: '$products', preserveNullAndEmptyArrays: true }},
+                    { $lookup: {
+                        from: collection.PRODUCT_COLLECTION,
+                        localField: 'products.item',
+                        foreignField: '_id',
+                        as: 'productDetails'
+                    }},
+                    { $unwind: { path: '$productDetails', preserveNullAndEmptyArrays: true }},
+                    { $addFields: {
+                        'products.productName': '$productDetails.Name',
+                        'products.price': '$productDetails.Offer_Price'
+                    }},
+                    { $group: {
+                        _id: '$_id',
+                        totalAmount: { $first: '$totalAmount' },
+                        paymentMethod: { $first: '$paymentMethod' },
+                        status: { $first: '$status' },
+                        date: { $first: '$date' },
+                        time: { $first: '$time' },
+                        userDetails: { $first: '$userDetails' },
+                        deliveryDetails: { $first: '$deliveryDetails' },
+                        products: {
+                            $push: {
+                                item: '$products.item',
+                                quantity: '$products.quantity',
+                                productName: '$products.productName',
+                                price: '$products.price'
+                            }
                         }
-                    }
-                }
-            },
-            {
-                $project: {
-                    _id: 1,
-                    totalAmount: 1,
-                    paymentMethod: 1,
-                    status: 1,
-                    date: 1,
-                    time: 1,
-                    'userDetails._id': 1,
-                    'userDetails.First_Name': 1,
-                    'userDetails.Last_Name': 1,
-                    'userDetails.Email': 1,
-                    'userDetails.Gender': 1,
-                    deliveryDetails: 1,
-                    products: 1
-                }
-            }
-        ]).toArray((err, orders) => {
-            if (err) {
-                console.error("Error in aggregation:", err);
-                reject(err);
-            } else {
-                console.log("Aggregated Orders:", JSON.stringify(orders, null, 2)); // Log the output for verification
+                    }},
+                    { $project: {
+                        _id: 1,
+                        totalAmount: 1,
+                        paymentMethod: 1,
+                        status: 1,
+                        date: 1,
+                        time: 1,
+                        'userDetails._id': 1,
+                        'userDetails.First_Name': 1,
+                        'userDetails.Last_Name': 1,
+                        'userDetails.Email': 1,
+                        'userDetails.Gender': 1,
+                        deliveryDetails: 1,
+                        products: 1
+                    }}
+                ]).toArray();
+    
+                console.log("Aggregation complete.");
                 resolve(orders);
+            } catch (err) {
+                console.error("Error in getAllUserOrders:", err);
+                reject(err);
             }
         });
-    });
-},
+    },
 
    //For generating razorpay for online payment on placing order
     generateRazorpay: (orderId, total) => { 

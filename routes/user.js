@@ -426,30 +426,33 @@ router.get('/order-success', verifyLogin, async (req, res) => {
 });
 
 
-/* Orders*/
-router.get('/orders', verifyLogin, async (req, res) => {
-  let user = req.session.user;
-  console.log("User from session:", user); // Log user data
-  let cartCount = await userHelpers.getCartCount(user._id); 
-  console.log("Cart count:", cartCount);
+/* Orders*/router.get('/orders', verifyLogin, async (req, res) => {
+    let user = req.session.user;
+    console.log("User from session:", user);
 
-  try {
-    let orders = await userHelpers.getAllUserOrders(user._id);
-    console.log("Orders retrieved:", orders); // Log orders data
-    
-    // Sort orders by date in descending order
-    orders.sort((a, b) => new Date(b.date) - new Date(a.date));
-    
-    if (orders.length === 0) {
-      res.render('user/empty/no-orders', { user, cartCount });
-    } else {
-      res.render('user/orders', { user, cartCount, orders });
+    try {
+        console.log("Fetching cart count...");
+        let cartCount = await userHelpers.getCartCount(user._id);
+        console.log("Cart count:", cartCount);
+
+        console.log("Fetching orders...");
+        let orders = await userHelpers.getAllUserOrders(user._id);
+        console.log("Orders retrieved:", orders);
+
+        // Sort orders by date in descending order
+        orders.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        if (orders.length === 0) {
+            res.render('user/empty/no-orders', { user, cartCount });
+        } else {
+            res.render('user/orders', { user, cartCount, orders });
+        }
+    } catch (err) {
+        console.error("Error fetching orders:", err);
+        res.status(500).send("Internal Server Error");
     }
-  } catch (err) {
-    console.error("Error fetching orders:", err); // Log errors
-    res.status(500).send("Internal Server Error");
-  }
 });
+
 
 
 

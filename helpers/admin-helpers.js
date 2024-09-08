@@ -56,99 +56,99 @@ module.exports = {
 
     //get all the orders
     getAllOrders: () => {
-        return new Promise((resolve, reject) => {
-            db.get().collection(collection.ORDER_COLLECTION).aggregate([
-                // Join with user collection
-                {
-                    $lookup: {
-                        from: collection.USER_COLLECTION,
-                        localField: 'userId',
-                        foreignField: '_id',
-                        as: 'userDetails'
-                    }
-                },
-                {
-                    $unwind: { path: '$userDetails', preserveNullAndEmptyArrays: true }
-                },
-                // Unwind products array
-                {
-                    $unwind: { path: '$products', preserveNullAndEmptyArrays: true }
-                },
-                // Join with product collection
-                {
-                    $lookup: {
-                        from: collection.PRODUCT_COLLECTION,
-                        localField: 'products.item',
-                        foreignField: '_id',
-                        as: 'productDetails'
-                    }
-                },
-                {
-                    $unwind: { path: '$productDetails', preserveNullAndEmptyArrays: true }
-                },
-                // Add product details to products array
-                {
-                    $addFields: {
-                        'products.productName': { $ifNull: ['$productDetails.Name', 'Unknown'] },
-                        'products.price': { $ifNull: ['$productDetails.Offer_Price', 0] },
-                        'products.category': { $ifNull: ['$productDetails.Category', 'Uncategorized'] }
-                    }
-                },
-                // Group by order _id to aggregate product details
-                {
-                    $group: {
-                        _id: '$_id',
-                        totalAmount: { $first: '$totalAmount' },
-                        paymentMethod: { $first: '$paymentMethod' },
-                        status: { $first: '$status' },
-                        date: { $first: '$date' },
-                        time: { $first: '$time' },
-                        userDetails: { $first: '$userDetails' },
-                        deliveryDetails: { $first: '$deliveryDetails' },
-                        products: {
-                            $push: {
-                                item: '$products.item',
-                                quantity: '$products.quantity',
-                                productName: '$products.productName',
-                                price: '$products.price',
-                                category: '$products.category'
+        return new Promise(async (resolve, reject) => {
+            try {
+                console.log("Starting aggregation...");
+    
+                const orders = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
+                    // Join with user collection
+                    {
+                        $lookup: {
+                            from: collection.USER_COLLECTION,
+                            localField: 'userId',
+                            foreignField: '_id',
+                            as: 'userDetails'
+                        }
+                    },
+                    { $unwind: { path: '$userDetails', preserveNullAndEmptyArrays: true } },
+                    
+                    // Unwind products array
+                    { $unwind: { path: '$products', preserveNullAndEmptyArrays: true } },
+                    
+                    // Join with product collection
+                    {
+                        $lookup: {
+                            from: collection.PRODUCT_COLLECTION,
+                            localField: 'products.item',
+                            foreignField: '_id',
+                            as: 'productDetails'
+                        }
+                    },
+                    { $unwind: { path: '$productDetails', preserveNullAndEmptyArrays: true } },
+                    
+                    // Add product details to products array
+                    {
+                        $addFields: {
+                            'products.productName': { $ifNull: ['$productDetails.Name', 'Unknown'] },
+                            'products.price': { $ifNull: ['$productDetails.Offer_Price', 0] },
+                            'products.category': { $ifNull: ['$productDetails.Category', 'Uncategorized'] }
+                        }
+                    },
+                    
+                    // Group by order _id to aggregate product details
+                    {
+                        $group: {
+                            _id: '$_id',
+                            totalAmount: { $first: '$totalAmount' },
+                            paymentMethod: { $first: '$paymentMethod' },
+                            status: { $first: '$status' },
+                            date: { $first: '$date' },
+                            time: { $first: '$time' },
+                            userDetails: { $first: '$userDetails' },
+                            deliveryDetails: { $first: '$deliveryDetails' },
+                            products: {
+                                $push: {
+                                    item: '$products.item',
+                                    quantity: '$products.quantity',
+                                    productName: '$products.productName',
+                                    price: '$products.price',
+                                    category: '$products.category'
+                                }
                             }
                         }
-                    }
-                },
-                // Project fields to include in the final output
-                {
-                    $project: {
-                        _id: 1,
-                        totalAmount: 1,
-                        paymentMethod: 1,
-                        status: 1,
-                        date: 1,
-                        time: 1,
-                        'userDetails._id': 1,
-                        'userDetails.First_Name': 1,
-                        'userDetails.Last_Name': 1,
-                        'userDetails.Email': 1,
-                        'userDetails.Gender': 1,
-                        deliveryDetails: 1,
-                        products: 1
-                    }
-                },
-                // Optional: Sort by date and time
-                {
-                    $sort: { date: -1, time: -1 }
-                }
-            ]).toArray((err, orders) => {
-                if (err) {
-                    console.error("Error in aggregation:", err);
-                    return reject(err);
-                }
-                console.log("Aggregated Orders:", JSON.stringify(orders, null, 2)); // Log the output for verification
+                    },
+                    
+                    // Project fields to include in the final output
+                    {
+                        $project: {
+                            _id: 1,
+                            totalAmount: 1,
+                            paymentMethod: 1,
+                            status: 1,
+                            date: 1,
+                            time: 1,
+                            'userDetails._id': 1,
+                            'userDetails.First_Name': 1,
+                            'userDetails.Last_Name': 1,
+                            'userDetails.Email': 1,
+                            'userDetails.Gender': 1,
+                            deliveryDetails: 1,
+                            products: 1
+                        }
+                    },
+                    
+                    // Optional: Sort by date and time
+                    { $sort: { date: -1, time: -1 } }
+                ]).toArray();
+    
+                console.log("Aggregation complete.");
                 resolve(orders);
-            });
+            } catch (err) {
+                console.error("Error in getAllOrders:", err);
+                reject(err);
+            }
         });
-    }
-,    
+    },    
 
     //update the user order status from placed->shipped->deliver
     updateOrderStatus: (orderId, status) => { 

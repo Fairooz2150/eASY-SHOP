@@ -99,12 +99,21 @@ router.post('/update-user-products-status', (req, res) => {
 
 
 /* GET All Users orders */
-router.get('/all-orders', verifyLogin, (req, res) => {
-  adminHelpers.getAllOrders().then((orders) => { 
-    orders.sort((a, b) => new Date(b.date) - new Date(a.date));
-    res.render('admin/all-orders', { admin: true, orders })
-  })
-})
+router.get('/all-orders', verifyLogin, async (req, res) => {
+  try {
+      console.log("Fetching all orders...");
+
+      let orders = await adminHelpers.getAllOrders();
+      console.log("Orders retrieved:", orders);
+
+      orders.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      res.render('admin/all-orders', { admin: true, orders });
+  } catch (err) {
+      console.error("Error fetching orders:", err);
+      res.status(500).send("Internal Server Error");
+  }
+});
 
 
 /* Update User Order Status */
