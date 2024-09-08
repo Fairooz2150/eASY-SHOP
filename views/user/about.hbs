@@ -15,9 +15,10 @@
 
         <!-- Video Section -->
         <div class="video-container">
-          <video id="aboutUsVideo" controls loop>
-            <source src="/video/about-eASY.mp4" type="video/mp4">
-          </video>
+          <iframe src="https://www.youtube.com/embed/olYy3plOVB8?si=coypATxKtWmsCbVx" title="About eASY SHOP"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
 
         <h4>Why Choose eASY Shop?</h4>
@@ -173,25 +174,6 @@
 
 
 
-
-  document.addEventListener('DOMContentLoaded', function () {
-    const video = document.getElementById('aboutUsVideo');
-
-    // Pause video and mute by default
-    video.pause();
-    video.muted = true;
-
-    // Event listeners for hover
-    document.querySelector('.video-container').addEventListener('mouseover', function () {
-      video.muted = false;
-      video.play();
-    });
-
-    document.querySelector('.video-container').addEventListener('mouseout', function () {
-      video.muted = true;
-      video.pause();
-    });
-  });
 </script>
 
 
@@ -221,27 +203,38 @@
     margin-bottom: 50px;
   }
 
+  /* Container for responsive video */
   .video-container {
     position: relative;
-    padding: 50px;
+    padding-top: 56.25%;
+    /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+    background: #000;
+    margin: 0 auto;
   }
 
-  #aboutUsVideo {
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    height: auto;
-    display: block;
-    transition: opacity 0.3s ease;
-    opacity: 0.7;
-
+    height: 100%;
+    border: 0;
+    /* Removes default border */
   }
 
-  #aboutUsVideo:hover {
-    box-shadow: 0 0 16px rgba(6, 135, 117, 0.2);
+  @media (max-width: 768px) {
+    .section-title h2 {
+      font-size: 2rem;
+    }
+
+    .section-title p {
+      font-size: 1rem;
+    }
   }
 
-  .video-container:hover #aboutUsVideo {
-    opacity: 1;
-  }
 
   .card {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
