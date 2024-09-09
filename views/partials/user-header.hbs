@@ -11,7 +11,7 @@
                     class="eASY-logoS d-lg-none " alt="eASY SHOP"> </a>
 
             {{#if search}}
-            <div class="mx-auto d-md-none">
+            <div class="mx-auto d-md-none ">
                 <form class="form-inline my-2" onsubmit="searchProducts(event)">
                     <div class="input-group">
                         <input class="form-control" type="search" id="search-inputs" placeholder="Search..."
@@ -294,7 +294,7 @@
     }
 
     .bi-text-right {
-        color: rgb(224, 215, 215);
+        color: rgb(109, 189, 207);
     }
 
     .dropdown-item {
@@ -336,12 +336,18 @@
     
     @media (max-width: 768px) {
      .eASY-logoS {
-        margin-left: -20px;
-        height: 40px;
-        width: 90px;
+        margin-left: -24px;
+        height: 35px;
+        width: 77px;
     }
+    .d-md-none form{
+        margin-left: -15px;
+    }
+    
          #search-inputs {
-        width: 13.5em;
+        width: 13.8em;
+        height: 2.3em;
+        padding-left: 32px;
          }
          #navItem{
             font-size: small;
