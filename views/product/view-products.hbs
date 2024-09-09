@@ -2,7 +2,7 @@
   <div class="container-fluid mt-5">
     <div class="row " id="product-container">
       {{#each products}}
-      <div class="col-lg-2 col-md-4 col-6 pb-4 ">
+      <div class="col-lg-2 col-md-4 col-6 pb-4 " id="cards">
         <div class="card">
           <a href="/view-product/{{this._id}}">
             <div class="flip-card">
@@ -289,23 +289,23 @@
               </div>
               ${product.Product_Owner === 'Admin' ? '<div class="eASY-assurance ml-1"><img src="/images/eASY-assurance.png" class="eASY-assurance" alt="eASY-assurance"> <p hidden>easy-assurance</p> </div>' : ''}
             </div>
-            <div class="row mb-2">
-              <div class="ml-3 mt-2">
+            <div class="row mt-2">
+              <div class="ml-3 mt-1">
                 <p class="card-text" title="Offer percentage" id="offer-percentage"><b>${product.Offer_Percentage}%</b><small> off</small></p>
               </div>
               <div class="ml-3">
                 <b class="card-text" title="Offer price" id="offer-price">₹${product.Offer_Price}</b>
               </div>
-              <div class="ml-3 mt-2">
+              <div class="ml-3 mt-1">
                 <p class="card-text text-muted" title="M.R.P."><small><small><del id="actual-price">₹${product.Actual_Price}</del></small></small></p>
               </div>
             </div>
           </a>
            <p hidden>${product.Description}</p>
           ${product.Stock_Count > 0 ? `
-            <button onclick="addToCart('${product._id}')" class="btn" id="addtoCart">Add to cart</button>
+            <button onclick="addToCart('${product._id}')" class="btn  " id="addtoCart">Add to cart</button>
           ` : `
-            <button class="btn" id="outOfStock" disabled>Out of Stock</button> 
+            <button class="btn " id="outOfStock" disabled>Out of Stock</button> 
           `}
           <a href="/cart">
           <div id="Ad">Product added <img src="/images/grocery.gif" class="addcart" alt=""></div>
@@ -421,11 +421,15 @@
 
 
  
- @media (max-width: 768px) {
+ @media (max-width: 600px) {
     .card{
        width: 12em;
        box-shadow: 0 2px 4px rgba(21, 105, 131, 0.5);
        height: 19em;
+       
+    }
+    .container-fluid{
+      padding: 2px;
     }
     
     
@@ -500,14 +504,14 @@
   /* Adjustments for smaller screens */
   @media (max-width: 768px) {
     .popup-sidebar {
-      top: 70%;
+      top: 60%;
       right: -200px;
       transition: right 1s ease-in-out;
       padding: 10px;
       width: 200px;
 
     }
-
+   
   }
 
 
