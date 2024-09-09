@@ -1,5 +1,5 @@
 <section>
-  <div class="bg-container container-fluid pl-5 pr-5 ">
+  <div class="bg-container container-fluid pl-1 pr-1 ">
     <div class="ft-container container-fluid ml-2 mr-2 mb-5">
       <div class="row  pt-5">
 
@@ -63,14 +63,14 @@
         </div>
 
 
-        <div class="col-md-7  mt-3 pl-5" id="textContent">
+        <div class="col-md-7  mt-3 " id="textContent">
 
-          <div class="mb-4">
+          <div class="mb-4"  >
             <h3 title="Title" class="title">{{product.Name}}</h3>
-            <p class="text-muted" title="Category">{{product.Category}}</p>
+            <p class="text-muted category"  title="Category">{{product.Category}}</p>
             <div class="row ml-1">
 
-              <div class="mr-5" title="Rating">
+              <div class="mr-5" id="rating" title="Rating">
                 <span class="fa fa-star checked"></span>
                 <span class="fa fa-star checked"></span>
                 <span class="fa fa-star checked"></span>
@@ -101,12 +101,12 @@
 
                 <label class="tax ml-3"><i class="bi bi-tag-fill"></i>Inclusive of all taxes</label>
               </div>
-              <div class="ml-5 mt-1" title="Maximum Retail Price">
+              <div class="mt-1 mrp" title="Maximum Retail Price">
                 <p class="text-muted"> M.R.P: <br><span> <del id="actual-price">{{product.Actual_Price}} </del></span>
                 </p>
               </div>
 
-              <div class="ml-5 mt-1">
+              <div class="mt-1">
                 <p class="offerbadge "> {{product.Offer_Percentage}}% Off</p>
               </div>
             </div>
@@ -183,7 +183,7 @@
             <h6>Product Description</h6>
             <p class="ml-2">
               {{newlineToBr product.Description}}</p> <br>
-            <b>Product Id </b><span>{{product._id}} </span>
+            <b>Product Id </b><span id="prodId">{{product._id}} </span> <i class="bi bi-copy" title="copy to clipboard" onclick="copyToClipboard()"></i>
           </div>
           <hr>
 
@@ -371,6 +371,30 @@
     interval: 2000
   })
 
+  /* Product Id copy to clipboard */
+  function copyToClipboard() {
+      // Get the text from the paragraph
+      const textToCopy = document.getElementById("prodId").innerText;
+
+      // Create a temporary input element to hold the text
+      const tempInput = document.createElement("input");
+      document.body.appendChild(tempInput);
+      tempInput.value = textToCopy;
+
+      // Select the text inside the input element
+      tempInput.select();
+      tempInput.setSelectionRange(0, 99999); // For mobile devices
+
+      // Copy the text to clipboard
+      document.execCommand("copy");
+
+      // Remove the temporary input element from the DOM
+      document.body.removeChild(tempInput);
+    }
+
+
+
+  /*Format Price number with commas */
   function formatNumber(number) {
     return number.toLocaleString('en-IN'); // 'en-IN' for Indian number formatting (₹ separation)
   }
@@ -382,6 +406,8 @@
   document.getElementById('offer-price').textContent = '₹' + formatNumber(offerPrice);
   document.getElementById('actual-price').textContent = '₹' + formatNumber(actualPrice);
 
+
+/*eASY SHOP features showing scroll ad */
   document.addEventListener('DOMContentLoaded', function () {
     const scrollmenu = document.querySelector('.scrollmenu');
     const leftButton = document.querySelector('.left-button');
@@ -437,6 +463,7 @@
   });
 
 
+ /* For showing details of each features of easy by hovering */
   document.querySelectorAll('.scrollmenu div').forEach(item => {
     item.addEventListener('mouseenter', function () {
       let message = this.getAttribute('data-message');
@@ -453,6 +480,7 @@
       }
     });
   });
+
 
 
   //Get the modal
@@ -480,6 +508,7 @@
       modal.style.display = "none";
     }
   }
+
 
   function addToCart(proId) {
     $.ajax({
@@ -616,7 +645,7 @@
   }
 
   .ADC {
-    width: 10rem;
+    width: 14rem;
     font-weight: 500;
     transform: skew(13deg);
     color: white;
@@ -635,7 +664,7 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 300%;
+    width: 200%;
     padding-top: 50%;
     background: rgba(255, 255, 255, 0.3);
     transform: translate(-70%, -50%) scale(0);
@@ -651,7 +680,7 @@
 
 
   .BN {
-    width: 10rem;
+    width: 14rem;
     transform: skew(13deg);
     font-weight: 500;
     color: white;
@@ -813,23 +842,13 @@
 
   #textContent {
     max-height: 585px;
+    padding-left: 25px;
     overflow-y: auto;
   }
 
   .title {
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   }
-  
-  @media (max-width: 768px) {
-    .title {
-      font-size: 1.2rem;
-    }
-    .description p{
-      font-size: .8rem;
-    }
-    
-  }
-
   
 
   .assurance {
@@ -884,10 +903,17 @@
     font-size: small;
     font-weight: 500;
   }
+  .mrp{
+    margin-left: 40px;
+    margin-right: 60px;
+  }
 
   .stock {
     color: #e4941a;
     font-weight: bold;
+  }
+  .bi-copy:hover{
+    color: #1294ab;
   }
 
   .scrollmenu-images {
@@ -1109,4 +1135,61 @@
     font-family: 'Times New Roman', Times, serif;
     gap: 15px;
   }
+
+  
+  @media (max-width: 768px) {
+    .title {
+      font-size: 1.2rem;
+    }
+    #rating span{
+    font-size: 12px;
+    }
+    .assurance {
+    height: 25px;
+    width: 80px;
+    margin-left: 10px;
+  }
+    .description, h6, .seller {
+      font-size: .8rem;
+    }
+     .category{
+      font-size: 12px;
+     }
+     .offer-price {
+    font-size: 30px;
+    margin-top: -5px;
+     }
+     
+  .offer-label {
+    font-size: 12px;
+
+  }
+   .mrp{
+    font-size: 11px;
+    margin-left: 15px;
+  margin-top: -10px;
+    margin-right: 50px;
+   }
+  .tax{
+    font-size: x-small;
+  }
+  .offerbadge{
+    font-size: small;
+  margin-top: -5px;
+  }
+
+  .carousel-inner img {
+    width: 100%;
+    height: 18rem;
+  }
+.ADC {
+    width: 14rem;
+    margin-right: 7px;
+
+  }
+.BN{
+    width: 14rem;
+  margin-left: 7px;
+}
+
 </style>
