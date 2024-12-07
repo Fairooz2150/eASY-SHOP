@@ -106,15 +106,6 @@ Welcome to **eASY Shop**, your ultimate destination for a seamless online shoppi
 
 ---
 
-## Explore the Platform
-
-- **Admin Access:**
-  - Email: `admin@gmail.com`
-  - Password: `admin@123`
-- **Create Your Account:** Sign up as a new user to explore the platform features.
-- **About Section:** Navigate to the top-right toggle button to access the admin login, about page, or user login.
-
----
 
 ## GitHub and Hosted Links
 
